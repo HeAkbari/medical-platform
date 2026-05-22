@@ -1,0 +1,33 @@
+# dependencies
+node_modules
+
+# nx
+.nx/cache
+.nx/workspace-data
+
+# next.js
+.next
+out
+
+# build
+dist
+tmp
+
+# env
+.env
+.env*.local
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ide
+.idea
+.vscode
+*.swp
+*.swo
+
+# os
+.DS_Store
+Thumbs.db

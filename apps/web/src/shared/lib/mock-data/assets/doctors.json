@@ -1,0 +1,29 @@
+[
+  {
+    "id": "d4e5f6a7-b8c9-0123-def0-234567890123",
+    "firstName": "Emily",
+    "lastName": "Nguyen",
+    "specialty": "Family Medicine",
+    "email": "emily.nguyen@clinic.example.com",
+    "phone": "+1-555-0201",
+    "createdAt": "2025-12-01T08:00:00.000Z"
+  },
+  {
+    "id": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+    "firstName": "David",
+    "lastName": "Brooks",
+    "specialty": "Cardiology",
+    "email": "david.brooks@clinic.example.com",
+    "phone": "+1-555-0202",
+    "createdAt": "2025-12-01T08:00:00.000Z"
+  },
+  {
+    "id": "f6a7b8c9-d0e1-2345-f012-456789012345",
+    "firstName": "Sarah",
+    "lastName": "Kim",
+    "specialty": "Pediatrics",
+    "email": "sarah.kim@clinic.example.com",
+    "phone": "+1-555-0203",
+    "createdAt": "2025-12-01T08:00:00.000Z"
+  }
+]

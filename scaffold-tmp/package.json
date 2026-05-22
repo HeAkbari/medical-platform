@@ -1,0 +1,17 @@
+{
+  "name": "@scaffold-tmp/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "dependencies": {
+    "@nx/next": "22.3.3"
+  },
+  "devDependencies": {
+    "@nx/workspace": "22.3.3",
+    "nx": "22.3.3"
+  },
+  "workspaces": [
+    "apps/*"
+  ]
+}
