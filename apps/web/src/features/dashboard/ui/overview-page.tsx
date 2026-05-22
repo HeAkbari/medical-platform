@@ -1,15 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { DASHBOARD_BASE_PATH } from '@/config';
+import { useDashboardBasePath } from '@/hooks/use-dashboard-base-path';
 import {
   useAppointmentsQuery,
   useDoctorsQuery,
   usePatientsQuery,
-} from '@/shared/hooks';
-import { Badge, Card, ErrorState, LoadingState } from '@/shared/ui';
+} from '@/hooks';
+import { Badge, Card, ErrorState, LoadingState } from '@/components/ui';
 
 export function DashboardOverviewPage() {
+  const basePath = useDashboardBasePath();
   const patientsQuery = usePatientsQuery();
   const doctorsQuery = useDoctorsQuery();
   const appointmentsQuery = useAppointmentsQuery();
@@ -40,22 +41,22 @@ export function DashboardOverviewPage() {
     {
       label: 'Patients',
       value: patientsQuery.data?.total ?? 0,
-      href: `${DASHBOARD_BASE_PATH}/patients`,
+      href: `${basePath}/patients`,
     },
     {
       label: 'Doctors',
       value: doctorsQuery.data?.total ?? 0,
-      href: `${DASHBOARD_BASE_PATH}/doctors`,
+      href: `${basePath}/doctors`,
     },
     {
       label: 'Appointments',
       value: appointmentsQuery.data?.total ?? 0,
-      href: `${DASHBOARD_BASE_PATH}/appointments`,
+      href: `${basePath}/appointments`,
     },
     {
       label: 'Scheduled',
       value: scheduledCount,
-      href: `${DASHBOARD_BASE_PATH}/appointments`,
+      href: `${basePath}/appointments`,
     },
   ];
 
@@ -89,13 +90,13 @@ export function DashboardOverviewPage() {
         <h2 className="text-lg font-semibold text-slate-900">Quick links</h2>
         <div className="mt-4 flex flex-wrap gap-3">
           <Link
-            href={`${DASHBOARD_BASE_PATH}/appointments/new`}
+            href={`${basePath}/appointments/new`}
             className="rounded-lg bg-teal-700 px-4 py-2 text-sm font-medium text-white hover:bg-teal-800"
           >
             Book appointment
           </Link>
           <Link
-            href={`${DASHBOARD_BASE_PATH}/patients`}
+            href={`${basePath}/patients`}
             className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
           >
             View patients

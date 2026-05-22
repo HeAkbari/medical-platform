@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { DASHBOARD_BASE_PATH } from '@/config';
-import { useAppointmentsQuery } from '@/shared/hooks';
+import { useDashboardBasePath } from '@/hooks/use-dashboard-base-path';
+import { useAppointmentsQuery } from '@/hooks';
 import {
   Badge,
   Button,
@@ -11,7 +11,7 @@ import {
   EmptyState,
   ErrorState,
   LoadingState,
-} from '@/shared/ui';
+} from '@/components/ui';
 
 function statusVariant(status: string) {
   if (status === 'completed') {
@@ -26,6 +26,7 @@ function statusVariant(status: string) {
 }
 
 export function AppointmentsPage() {
+  const basePath = useDashboardBasePath();
   const { data, isLoading, isError } = useAppointmentsQuery();
 
   if (isLoading) {
@@ -45,7 +46,7 @@ export function AppointmentsPage() {
           title="Appointments"
           description="All appointments from the mock backend API."
           action={
-            <Link href={`${DASHBOARD_BASE_PATH}/appointments/new`}>
+            <Link href={`${basePath}/appointments/new`}>
               <Button>Book appointment</Button>
             </Link>
           }

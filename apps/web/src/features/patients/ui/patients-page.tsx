@@ -1,17 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { DASHBOARD_BASE_PATH } from '@/config';
-import { usePatientsQuery } from '@/shared/hooks';
+import { useDashboardBasePath } from '@/hooks/use-dashboard-base-path';
+import { usePatientsQuery } from '@/hooks';
 import {
   Card,
   CardHeader,
   EmptyState,
   ErrorState,
   LoadingState,
-} from '@/shared/ui';
+} from '@/components/ui';
 
 export function PatientsPage() {
+  const basePath = useDashboardBasePath();
   const { data, isLoading, isError } = usePatientsQuery();
 
   if (isLoading) {
@@ -52,7 +53,7 @@ export function PatientsPage() {
                   >
                     <td className="px-3 py-3">
                       <Link
-                        href={`${DASHBOARD_BASE_PATH}/patients/${patient.id}`}
+                        href={`${basePath}/patients/${patient.id}`}
                         className="font-medium text-teal-700 hover:underline"
                       >
                         {patient.firstName} {patient.lastName}

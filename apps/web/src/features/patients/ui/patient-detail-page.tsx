@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { DASHBOARD_BASE_PATH } from '@/config';
-import { useAppointmentsQuery, usePatientQuery } from '@/shared/hooks';
+import { useDashboardBasePath } from '@/hooks/use-dashboard-base-path';
+import { useAppointmentsQuery, usePatientQuery } from '@/hooks';
 import {
   Badge,
   Button,
@@ -11,11 +11,12 @@ import {
   CardHeader,
   ErrorState,
   LoadingState,
-} from '@/shared/ui';
+} from '@/components/ui';
 
 export function PatientDetailPage() {
   const params = useParams<{ id: string }>();
   const patientId = params.id;
+  const basePath = useDashboardBasePath();
 
   const patientQuery = usePatientQuery(patientId);
   const appointmentsQuery = useAppointmentsQuery({ patientId });
@@ -38,7 +39,7 @@ export function PatientDetailPage() {
           title={`${patient.firstName} ${patient.lastName}`}
           description="Patient profile and related appointments."
           action={
-            <Link href={`${DASHBOARD_BASE_PATH}/patients`}>
+            <Link href={`${basePath}/patients`}>
               <Button variant="secondary">Back</Button>
             </Link>
           }
@@ -67,7 +68,7 @@ export function PatientDetailPage() {
           description="Filtered by this patient from the mock API."
           action={
             <Link
-              href={`${DASHBOARD_BASE_PATH}/appointments/new?patientId=${patient.id}`}
+              href={`${basePath}/appointments/new?patientId=${patient.id}`}
             >
               <Button>Book appointment</Button>
             </Link>

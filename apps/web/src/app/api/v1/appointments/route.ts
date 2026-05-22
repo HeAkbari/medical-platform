@@ -3,12 +3,12 @@ import {
   internalErrorResponse,
   jsonResponse,
   listResponse,
-} from '@/shared/lib/api-response';
-import { appointmentService } from '@/shared/lib/server-services';
+} from '@/lib/api-response';
+import { appointmentService } from '@/lib/server-services';
 import {
   appointmentQuerySchema,
   createAppointmentSchema,
-} from '@/shared/lib/validators/schemas';
+} from '@medical-platform/domain/validation';
 
 export async function GET(request: Request) {
   const url = new URL(request.url);

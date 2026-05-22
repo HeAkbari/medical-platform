@@ -8,13 +8,23 @@
     "resolvePackageJsonExports": true,
     "resolvePackageJsonImports": true,
     "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022", "DOM"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "strict": true
+    "strict": true,
+    "noImplicitAny": true,
+    "paths": {
+      "@medical-platform/domain": ["packages/domain/src/index.ts"],
+      "@medical-platform/domain/validation": ["packages/domain/src/validation/schemas.ts"],
+      "@medical-platform/domain/*": ["packages/domain/src/*"],
+      "@medical-platform/auth": ["packages/auth/src/index.ts"],
+      "@medical-platform/policies": ["packages/policies/src/index.ts"],
+      "@medical-platform/db": ["packages/db/src/index.ts"],
+      "@medical-platform/observability": ["packages/observability/src/index.ts"]
+    }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["node_modules", "tmp", "dist", ".next"]
 }

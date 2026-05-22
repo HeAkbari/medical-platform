@@ -1,1 +1,1 @@
-export const authFeaturePlaceholder = true;
+export { LoginPage } from './ui/login-page';

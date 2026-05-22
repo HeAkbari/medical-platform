@@ -1,13 +1,13 @@
 'use client';
 
-import { useDoctorsQuery } from '@/shared/hooks';
+import { useDoctorsQuery } from '@/hooks';
 import {
   Card,
   CardHeader,
   EmptyState,
   ErrorState,
   LoadingState,
-} from '@/shared/ui';
+} from '@/components/ui';
 
 export function DoctorsPage() {
   const { data, isLoading, isError } = useDoctorsQuery();

@@ -1,0 +1,23 @@
+{
+  "name": "@medical-platform/db",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "db:generate": "echo \"Prisma generate — enable when backend is implemented\"",
+    "db:migrate": "echo \"Prisma migrate — enable when backend is implemented\"",
+    "db:seed": "echo \"DB seed — enable when backend is implemented\"",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@medical-platform/auth": "workspace:*",
+    "@medical-platform/domain": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.3"
+  }
+}

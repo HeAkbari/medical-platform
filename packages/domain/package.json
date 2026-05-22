@@ -1,0 +1,22 @@
+{
+  "name": "@medical-platform/domain",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./validation": "./src/validation/schemas.ts",
+    "./ports": "./src/ports/repositories.ts",
+    "./adapters/in-memory": "./src/adapters/in-memory/mock-repositories.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.3"
+  }
+}

@@ -1,8 +1,9 @@
 @import 'tailwindcss';
 
 @source "../features";
-@source "../shared";
-@source "../widgets";
+@source "../components";
+@source "../hooks";
+@source "../lib";
 
 @theme {
   --color-primary: #0f766e;

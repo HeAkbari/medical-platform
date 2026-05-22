@@ -1,0 +1,17 @@
+{
+  "common": {
+    "appName": "سامانه پزشکی",
+    "loading": "در حال بارگذاری...",
+    "error": "خطایی رخ داد"
+  },
+  "nav": {
+    "overview": "نمای کلی",
+    "patients": "بیماران",
+    "doctors": "پزشکان",
+    "appointments": "نوبت‌ها"
+  },
+  "dashboard": {
+    "title": "داشبورد کلینیک",
+    "description": "نسخه اولیه با API ماک JSON."
+  }
+}

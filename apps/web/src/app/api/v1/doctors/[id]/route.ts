@@ -1,8 +1,5 @@
-import {
-  jsonResponse,
-  notFoundResponse,
-} from '@/shared/lib/api-response';
-import { doctorService } from '@/shared/lib/server-services';
+import { jsonResponse, notFoundResponse } from '@/lib/api-response';
+import { doctorService } from '@/lib/server-services';
 
 interface RouteParams {
   params: Promise<{ id: string }>;

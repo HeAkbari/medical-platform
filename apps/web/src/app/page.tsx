@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
-import { DASHBOARD_BASE_PATH } from '@/config';
+import { DEFAULT_LOCALE } from '@/lib/env';
+import { dashboardPath } from '@/lib/routes';
 
 export default function HomePage() {
-  redirect(DASHBOARD_BASE_PATH);
+  redirect(dashboardPath(DEFAULT_LOCALE));
 }

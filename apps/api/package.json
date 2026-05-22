@@ -1,0 +1,23 @@
+{
+  "name": "@medical-platform/api",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "node --import tsx src/main.ts",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@medical-platform/auth": "workspace:*",
+    "@medical-platform/db": "workspace:*",
+    "@medical-platform/domain": "workspace:*",
+    "@medical-platform/observability": "workspace:*",
+    "@medical-platform/policies": "workspace:*",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.4",
+    "typescript": "~5.7.3"
+  }
+}

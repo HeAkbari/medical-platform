@@ -13,6 +13,13 @@
         "command": "next dev --hostname 127.0.0.1 --port 3001"
       }
     },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/web",
+        "command": "next build"
+      }
+    },
     "start": {
       "executor": "nx:run-commands",
       "continuous": true,

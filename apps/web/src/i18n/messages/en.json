@@ -1,0 +1,17 @@
+{
+  "common": {
+    "appName": "Medical Platform",
+    "loading": "Loading...",
+    "error": "Something went wrong"
+  },
+  "nav": {
+    "overview": "Overview",
+    "patients": "Patients",
+    "doctors": "Doctors",
+    "appointments": "Appointments"
+  },
+  "dashboard": {
+    "title": "Clinic dashboard",
+    "description": "UI-first MVP powered by mock JSON APIs."
+  }
+}

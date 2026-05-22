@@ -12,6 +12,12 @@ out
 # build
 dist
 tmp
+scaffold-tmp
+
+# lock files (bun is the package manager)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
 # env
 .env

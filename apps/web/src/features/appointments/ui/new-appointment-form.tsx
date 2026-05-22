@@ -3,24 +3,25 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import { DASHBOARD_BASE_PATH } from '@/config';
+import { createAppointmentSchema } from '@medical-platform/domain/validation';
+import { useDashboardBasePath } from '@/hooks/use-dashboard-base-path';
 import {
   useCreateAppointmentMutation,
   useDoctorsQuery,
   usePatientsQuery,
-} from '@/shared/hooks';
-import { createAppointmentSchema } from '@/shared/lib/validators/schemas';
+} from '@/hooks';
 import {
   Button,
   Card,
   CardHeader,
   ErrorState,
   LoadingState,
-} from '@/shared/ui';
+} from '@/components/ui';
 
 export function NewAppointmentForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const basePath = useDashboardBasePath();
   const patientsQuery = usePatientsQuery();
   const doctorsQuery = useDoctorsQuery();
   const createMutation = useCreateAppointmentMutation();
@@ -66,7 +67,7 @@ export function NewAppointmentForm() {
 
     try {
       await createMutation.mutateAsync(parsed.data);
-      router.push(`${DASHBOARD_BASE_PATH}/appointments`);
+      router.push(`${basePath}/appointments`);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'Could not create appointment';
@@ -81,7 +82,7 @@ export function NewAppointmentForm() {
           title="Book appointment"
           description="Creates a new appointment through the mock API."
           action={
-            <Link href={`${DASHBOARD_BASE_PATH}/appointments`}>
+            <Link href={`${basePath}/appointments`}>
               <Button variant="secondary">Back</Button>
             </Link>
           }

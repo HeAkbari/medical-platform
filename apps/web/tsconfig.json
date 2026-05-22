@@ -15,7 +15,12 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@medical-platform/domain": ["../../packages/domain/src/index.ts"],
+      "@medical-platform/domain/validation": ["../../packages/domain/src/validation/schemas.ts"],
+      "@medical-platform/domain/*": ["../../packages/domain/src/*"],
+      "@medical-platform/auth": ["../../packages/auth/src/index.ts"],
+      "@medical-platform/policies": ["../../packages/policies/src/index.ts"]
     }
   },
   "include": [

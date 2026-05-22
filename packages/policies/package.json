@@ -1,0 +1,19 @@
+{
+  "name": "@medical-platform/policies",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@medical-platform/auth": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.3"
+  }
+}
