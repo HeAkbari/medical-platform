@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useDashboardBasePath } from '@/hooks/use-dashboard-base-path';
 import { useAppointmentsQuery } from '@/hooks';
 import {
   Badge,
@@ -26,7 +25,6 @@ function statusVariant(status: string) {
 }
 
 export function AppointmentsPage() {
-  const basePath = useDashboardBasePath();
   const { data, isLoading, isError } = useAppointmentsQuery();
 
   if (isLoading) {
@@ -46,7 +44,7 @@ export function AppointmentsPage() {
           title="Appointments"
           description="All appointments from the mock API."
           action={
-            <Link href={`${basePath}/appointments/new`}>
+            <Link href="/dashboard/appointments/new">
               <Button fullWidth>Book appointment</Button>
             </Link>
           }

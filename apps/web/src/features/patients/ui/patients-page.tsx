@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useDashboardBasePath } from '@/hooks/use-dashboard-base-path';
 import { usePatientsQuery } from '@/hooks';
 import {
   Card,
@@ -12,7 +11,6 @@ import {
 } from '@/components/ui';
 
 export function PatientsPage() {
-  const basePath = useDashboardBasePath();
   const { data, isLoading, isError } = usePatientsQuery();
 
   if (isLoading) {
@@ -39,7 +37,7 @@ export function PatientsPage() {
             {patients.map((patient) => (
               <li key={patient.id}>
                 <Link
-                  href={`${basePath}/patients/${patient.id}`}
+                  href={`/dashboard/patients/${patient.id}`}
                   className="flex min-h-[4.5rem] flex-col justify-center gap-1 py-3 active:bg-slate-50 sm:py-4"
                 >
                   <p className="font-medium text-teal-700">

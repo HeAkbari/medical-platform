@@ -1,11 +1,5 @@
-const { FlatCompat } = require('@eslint/eslintrc');
-const js = require('@eslint/js');
 const nx = require('@nx/eslint-plugin');
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-});
+const nextCoreWebVitals = require('eslint-config-next/core-web-vitals');
 
 module.exports = [
   ...nx.configs['flat/base'],
@@ -13,7 +7,7 @@ module.exports = [
   {
     ignores: ['**/dist', '**/.next', '**/node_modules'],
   },
-  ...compat.extends('next/core-web-vitals').map((config) => ({
+  ...nextCoreWebVitals.map((config) => ({
     ...config,
     files: ['apps/web/**/*.{js,jsx,ts,tsx}'],
   })),

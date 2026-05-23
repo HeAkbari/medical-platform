@@ -2,27 +2,29 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useDashboardBasePath } from '@/hooks/use-dashboard-base-path';
 import { cn } from '@/components/ui';
 
 const navItems = [
-  { href: '', label: 'Overview', shortLabel: 'Home' },
-  { href: '/patients', label: 'Patients', shortLabel: 'Patients' },
-  { href: '/doctors', label: 'Doctors', shortLabel: 'Doctors' },
-  { href: '/appointments', label: 'Appointments', shortLabel: 'Appts' },
+  { href: '/home', label: 'Map', shortLabel: 'Map' },
+  { href: '/dashboard', label: 'Overview', shortLabel: 'Overview' },
+  { href: '/dashboard/patients', label: 'Patients', shortLabel: 'Patients' },
+  { href: '/dashboard/doctors', label: 'Doctors', shortLabel: 'Doctors' },
+  {
+    href: '/dashboard/appointments',
+    label: 'Appointments',
+    shortLabel: 'Appts',
+  },
 ] as const;
 
-function isNavActive(pathname: string, basePath: string, href: string) {
-  const fullHref = href ? `${basePath}${href}` : basePath;
-  if (href === '') {
-    return pathname === basePath;
+function isNavActive(pathname: string, href: string) {
+  if (href === '/dashboard') {
+    return pathname === '/dashboard';
   }
-  return pathname === fullHref || pathname.startsWith(`${fullHref}/`);
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const basePath = useDashboardBasePath();
 
   return (
     <div className="min-h-dvh bg-slate-100">
@@ -35,13 +37,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         </div>
         <nav className="space-y-1">
           {navItems.map((item) => {
-            const active = isNavActive(pathname, basePath, item.href);
-            const href = item.href ? `${basePath}${item.href}` : basePath;
+            const active = isNavActive(pathname, item.href);
 
             return (
               <Link
-                key={item.label}
-                href={href}
+                key={item.href}
+                href={item.href}
                 className={cn(
                   'block rounded-xl px-3 py-2.5 text-sm font-medium transition',
                   active
@@ -66,22 +67,21 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden"
         aria-label="Main navigation"
       >
-        <ul className="mx-auto grid max-w-lg grid-cols-4">
+        <ul className="mx-auto grid max-w-lg grid-cols-5">
           {navItems.map((item) => {
-            const active = isNavActive(pathname, basePath, item.href);
-            const href = item.href ? `${basePath}${item.href}` : basePath;
+            const active = isNavActive(pathname, item.href);
 
             return (
-              <li key={item.label}>
+              <li key={item.href}>
                 <Link
-                  href={href}
+                  href={item.href}
                   className={cn(
-                    'relative flex min-h-14 flex-col items-center justify-center gap-0.5 px-1 py-2 text-[11px] font-medium transition active:opacity-70',
+                    'relative flex min-h-14 flex-col items-center justify-center gap-0.5 px-1 py-2 text-[10px] font-medium transition active:opacity-70',
                     active ? 'text-teal-700' : 'text-slate-500'
                   )}
                 >
                   {active ? (
-                    <span className="absolute inset-x-3 top-0 h-0.5 rounded-full bg-teal-600" />
+                    <span className="absolute inset-x-1 top-0 h-0.5 rounded-full bg-teal-600" />
                   ) : null}
                   <span>{item.shortLabel}</span>
                 </Link>

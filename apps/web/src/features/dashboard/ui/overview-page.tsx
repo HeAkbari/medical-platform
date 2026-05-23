@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useDashboardBasePath } from '@/hooks/use-dashboard-base-path';
 import {
   useAppointmentsQuery,
   useDoctorsQuery,
@@ -10,7 +9,6 @@ import {
 import { Badge, Card, ErrorState, LoadingState } from '@/components/ui';
 
 export function DashboardOverviewPage() {
-  const basePath = useDashboardBasePath();
   const patientsQuery = usePatientsQuery();
   const doctorsQuery = useDoctorsQuery();
   const appointmentsQuery = useAppointmentsQuery();
@@ -41,22 +39,22 @@ export function DashboardOverviewPage() {
     {
       label: 'Patients',
       value: patientsQuery.data?.total ?? 0,
-      href: `${basePath}/patients`,
+      href: '/dashboard/patients',
     },
     {
       label: 'Doctors',
       value: doctorsQuery.data?.total ?? 0,
-      href: `${basePath}/doctors`,
+      href: '/dashboard/doctors',
     },
     {
       label: 'Appointments',
       value: appointmentsQuery.data?.total ?? 0,
-      href: `${basePath}/appointments`,
+      href: '/dashboard/appointments',
     },
     {
       label: 'Scheduled',
       value: scheduledCount,
-      href: `${basePath}/appointments`,
+      href: '/dashboard/appointments',
     },
   ];
 
@@ -91,13 +89,13 @@ export function DashboardOverviewPage() {
         </h2>
         <div className="mt-3 grid gap-2 sm:mt-4 sm:flex sm:flex-wrap sm:gap-3">
           <Link
-            href={`${basePath}/appointments/new`}
+            href="/dashboard/appointments/new"
             className="flex min-h-11 items-center justify-center rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-medium text-white active:bg-teal-900 sm:inline-flex sm:w-auto"
           >
             Book appointment
           </Link>
           <Link
-            href={`${basePath}/patients`}
+            href="/dashboard/patients"
             className="flex min-h-11 items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 active:bg-slate-50 sm:inline-flex sm:w-auto"
           >
             View patients

@@ -2,7 +2,12 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { DEFAULT_LOCALE, LOCALES } from '@/lib/env';
 
-export function middleware(request: NextRequest) {
+function resolveLocale(): string {
+  // TODO: read locale from cookie / Accept-Language when i18n switching is added
+  return DEFAULT_LOCALE;
+}
+
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (
@@ -17,13 +22,14 @@ export function middleware(request: NextRequest) {
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
-  if (!pathnameHasLocale && pathname !== '/') {
-    return NextResponse.redirect(
-      new URL(`/${DEFAULT_LOCALE}${pathname}`, request.url)
-    );
+  if (pathnameHasLocale) {
+    return NextResponse.next();
   }
 
-  return NextResponse.next();
+  const locale = resolveLocale();
+  const targetPath = pathname === '/' ? '/home' : pathname;
+
+  return NextResponse.rewrite(new URL(`/${locale}${targetPath}`, request.url));
 }
 
 export const config = {
