@@ -26,7 +26,7 @@ export function PatientsPage() {
   const patients = data?.data ?? [];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <Card>
         <CardHeader
           title="Patients"
@@ -35,40 +35,27 @@ export function PatientsPage() {
         {patients.length === 0 ? (
           <EmptyState title="No patients found" />
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead className="border-b border-slate-200 text-slate-500">
-                <tr>
-                  <th className="px-3 py-3 font-medium">Name</th>
-                  <th className="px-3 py-3 font-medium">Email</th>
-                  <th className="px-3 py-3 font-medium">Phone</th>
-                  <th className="px-3 py-3 font-medium">Date of birth</th>
-                </tr>
-              </thead>
-              <tbody>
-                {patients.map((patient) => (
-                  <tr
-                    key={patient.id}
-                    className="border-b border-slate-100 last:border-0"
-                  >
-                    <td className="px-3 py-3">
-                      <Link
-                        href={`${basePath}/patients/${patient.id}`}
-                        className="font-medium text-teal-700 hover:underline"
-                      >
-                        {patient.firstName} {patient.lastName}
-                      </Link>
-                    </td>
-                    <td className="px-3 py-3 text-slate-600">{patient.email}</td>
-                    <td className="px-3 py-3 text-slate-600">{patient.phone}</td>
-                    <td className="px-3 py-3 text-slate-600">
-                      {patient.dateOfBirth}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ul className="divide-y divide-slate-100">
+            {patients.map((patient) => (
+              <li key={patient.id}>
+                <Link
+                  href={`${basePath}/patients/${patient.id}`}
+                  className="flex min-h-[4.5rem] flex-col justify-center gap-1 py-3 active:bg-slate-50 sm:py-4"
+                >
+                  <p className="font-medium text-teal-700">
+                    {patient.firstName} {patient.lastName}
+                  </p>
+                  <p className="truncate text-sm text-slate-600">
+                    {patient.email}
+                  </p>
+                  <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-slate-500 sm:text-sm">
+                    <span>{patient.phone}</span>
+                    <span>DOB {patient.dateOfBirth}</span>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
         )}
       </Card>
     </div>

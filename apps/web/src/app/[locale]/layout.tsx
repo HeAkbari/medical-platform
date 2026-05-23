@@ -1,6 +1,18 @@
+import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { AppProviders } from '@/lib/providers';
 import { LOCALES, type Locale } from '@/lib/env';
+
+export const metadata: Metadata = {
+  title: 'Medical Platform',
+  description: 'Medical platform clinic MVP',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+};
 
 export default async function LocaleLayout({
   children,

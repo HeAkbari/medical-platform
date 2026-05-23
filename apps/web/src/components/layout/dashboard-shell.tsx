@@ -3,75 +3,93 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useDashboardBasePath } from '@/hooks/use-dashboard-base-path';
-import { useAppUiStore } from '@/hooks/use-app-ui-store';
 import { cn } from '@/components/ui';
+
+const navItems = [
+  { href: '', label: 'Overview', shortLabel: 'Home' },
+  { href: '/patients', label: 'Patients', shortLabel: 'Patients' },
+  { href: '/doctors', label: 'Doctors', shortLabel: 'Doctors' },
+  { href: '/appointments', label: 'Appointments', shortLabel: 'Appts' },
+] as const;
+
+function isNavActive(pathname: string, basePath: string, href: string) {
+  const fullHref = href ? `${basePath}${href}` : basePath;
+  if (href === '') {
+    return pathname === basePath;
+  }
+  return pathname === fullHref || pathname.startsWith(`${fullHref}/`);
+}
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const basePath = useDashboardBasePath();
 
-  const navItems = [
-    { href: basePath, label: 'Overview' },
-    { href: `${basePath}/patients`, label: 'Patients' },
-    { href: `${basePath}/doctors`, label: 'Doctors' },
-    { href: `${basePath}/appointments`, label: 'Appointments' },
-  ];
-  const sidebarOpen = useAppUiStore((state) => state.sidebarOpen);
-  const setSidebarOpen = useAppUiStore((state) => state.setSidebarOpen);
-
   return (
-    <div className="min-h-screen bg-slate-100">
-      <div className="mx-auto flex min-h-screen max-w-7xl gap-6 p-4 md:p-6">
-        <aside
-          className={cn(
-            'shrink-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all md:w-64',
-            sidebarOpen ? 'w-64' : 'w-16'
-          )}
-        >
-          <div className="mb-6 flex items-center justify-between gap-2">
-            {sidebarOpen ? (
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">
-                  Medical Platform
-                </p>
-                <p className="text-sm text-slate-500">Frontend MVP</p>
-              </div>
-            ) : null}
-            <button
-              type="button"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="rounded-lg border border-slate-200 px-2 py-1 text-xs text-slate-600 hover:bg-slate-50"
-            >
-              {sidebarOpen ? 'Hide' : 'Menu'}
-            </button>
-          </div>
+    <div className="min-h-dvh bg-slate-100">
+      <aside className="fixed inset-y-0 start-0 z-30 hidden w-64 border-e border-slate-200 bg-white p-4 lg:block">
+        <div className="mb-6">
+          <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">
+            Medical Platform
+          </p>
+          <p className="text-sm text-slate-500">Clinic MVP</p>
+        </div>
+        <nav className="space-y-1">
+          {navItems.map((item) => {
+            const active = isNavActive(pathname, basePath, item.href);
+            const href = item.href ? `${basePath}${item.href}` : basePath;
 
-          <nav className="space-y-1">
-            {navItems.map((item) => {
-              const active =
-                pathname === item.href ||
-                (item.href !== basePath && pathname.startsWith(item.href));
+            return (
+              <Link
+                key={item.label}
+                href={href}
+                className={cn(
+                  'block rounded-xl px-3 py-2.5 text-sm font-medium transition',
+                  active
+                    ? 'bg-teal-50 text-teal-800'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                )}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+      </aside>
 
-              return (
+      <div className="flex min-h-dvh flex-col lg:ps-64">
+        <main className="flex-1 px-4 pb-24 pt-4 sm:px-5 lg:px-8 lg:pb-8 lg:pt-6">
+          {children}
+        </main>
+      </div>
+
+      <nav
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden"
+        aria-label="Main navigation"
+      >
+        <ul className="mx-auto grid max-w-lg grid-cols-4">
+          {navItems.map((item) => {
+            const active = isNavActive(pathname, basePath, item.href);
+            const href = item.href ? `${basePath}${item.href}` : basePath;
+
+            return (
+              <li key={item.label}>
                 <Link
-                  key={item.href}
-                  href={item.href}
+                  href={href}
                   className={cn(
-                    'block rounded-lg px-3 py-2 text-sm font-medium transition',
-                    active
-                      ? 'bg-teal-50 text-teal-800'
-                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                    'relative flex min-h-14 flex-col items-center justify-center gap-0.5 px-1 py-2 text-[11px] font-medium transition active:opacity-70',
+                    active ? 'text-teal-700' : 'text-slate-500'
                   )}
                 >
-                  {sidebarOpen ? item.label : item.label[0]}
+                  {active ? (
+                    <span className="absolute inset-x-3 top-0 h-0.5 rounded-full bg-teal-600" />
+                  ) : null}
+                  <span>{item.shortLabel}</span>
                 </Link>
-              );
-            })}
-          </nav>
-        </aside>
-
-        <main className="min-w-0 flex-1">{children}</main>
-      </div>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
     </div>
   );
 }

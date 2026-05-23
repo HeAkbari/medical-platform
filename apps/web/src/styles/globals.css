@@ -13,8 +13,24 @@
   --font-sans: ui-sans-serif, system-ui, sans-serif;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--color-muted);
   color: #0f172a;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* Prevent iOS zoom on input focus — use 16px base on mobile inputs */
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
 }

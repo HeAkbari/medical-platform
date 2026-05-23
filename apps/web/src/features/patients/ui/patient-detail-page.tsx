@@ -33,29 +33,41 @@ export function PatientDetailPage() {
   const appointments = appointmentsQuery.data?.data ?? [];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <Card>
         <CardHeader
           title={`${patient.firstName} ${patient.lastName}`}
           description="Patient profile and related appointments."
           action={
             <Link href={`${basePath}/patients`}>
-              <Button variant="secondary">Back</Button>
+              <Button variant="secondary" fullWidth>
+                Back
+              </Button>
             </Link>
           }
         />
-        <dl className="grid gap-4 sm:grid-cols-2">
+        <dl className="grid gap-4">
           <div>
-            <dt className="text-sm text-slate-500">Email</dt>
-            <dd className="mt-1 font-medium text-slate-900">{patient.email}</dd>
+            <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              Email
+            </dt>
+            <dd className="mt-1 break-all text-sm font-medium text-slate-900 sm:text-base">
+              {patient.email}
+            </dd>
           </div>
           <div>
-            <dt className="text-sm text-slate-500">Phone</dt>
-            <dd className="mt-1 font-medium text-slate-900">{patient.phone}</dd>
+            <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              Phone
+            </dt>
+            <dd className="mt-1 text-sm font-medium text-slate-900 sm:text-base">
+              {patient.phone}
+            </dd>
           </div>
           <div>
-            <dt className="text-sm text-slate-500">Date of birth</dt>
-            <dd className="mt-1 font-medium text-slate-900">
+            <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              Date of birth
+            </dt>
+            <dd className="mt-1 text-sm font-medium text-slate-900 sm:text-base">
               {patient.dateOfBirth}
             </dd>
           </div>
@@ -65,12 +77,10 @@ export function PatientDetailPage() {
       <Card>
         <CardHeader
           title="Appointments"
-          description="Filtered by this patient from the mock API."
+          description="Filtered by this patient."
           action={
-            <Link
-              href={`${basePath}/appointments/new?patientId=${patient.id}`}
-            >
-              <Button>Book appointment</Button>
+            <Link href={`${basePath}/appointments/new?patientId=${patient.id}`}>
+              <Button fullWidth>Book appointment</Button>
             </Link>
           }
         />
@@ -83,9 +93,9 @@ export function PatientDetailPage() {
             {appointments.map((appointment) => (
               <div
                 key={appointment.id}
-                className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3"
+                className="rounded-xl border border-slate-200 bg-slate-50 p-3 sm:p-4"
               >
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                   <p className="font-medium text-slate-900">
                     {appointment.reason}
                   </p>

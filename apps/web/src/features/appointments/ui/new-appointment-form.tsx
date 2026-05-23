@@ -17,6 +17,7 @@ import {
   ErrorState,
   LoadingState,
 } from '@/components/ui';
+import { inputClassName } from '@/components/ui/input-styles';
 
 export function NewAppointmentForm() {
   const router = useRouter();
@@ -76,25 +77,27 @@ export function NewAppointmentForm() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <Card>
         <CardHeader
           title="Book appointment"
           description="Creates a new appointment through the mock API."
           action={
             <Link href={`${basePath}/appointments`}>
-              <Button variant="secondary">Back</Button>
+              <Button variant="secondary" fullWidth>
+                Back
+              </Button>
             </Link>
           }
         />
 
-        <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-2">
-          <label className="grid gap-2 text-sm">
-            <span className="font-medium text-slate-700">Patient</span>
+        <form onSubmit={handleSubmit} className="grid gap-4">
+          <label className="grid gap-2">
+            <span className="text-sm font-medium text-slate-700">Patient</span>
             <select
               value={patientId}
               onChange={(event) => setPatientId(event.target.value)}
-              className="rounded-lg border border-slate-200 px-3 py-2"
+              className={inputClassName}
               required
             >
               <option value="">Select patient</option>
@@ -106,12 +109,12 @@ export function NewAppointmentForm() {
             </select>
           </label>
 
-          <label className="grid gap-2 text-sm">
-            <span className="font-medium text-slate-700">Doctor</span>
+          <label className="grid gap-2">
+            <span className="text-sm font-medium text-slate-700">Doctor</span>
             <select
               value={doctorId}
               onChange={(event) => setDoctorId(event.target.value)}
-              className="rounded-lg border border-slate-200 px-3 py-2"
+              className={inputClassName}
               required
             >
               <option value="">Select doctor</option>
@@ -123,19 +126,23 @@ export function NewAppointmentForm() {
             </select>
           </label>
 
-          <label className="grid gap-2 text-sm">
-            <span className="font-medium text-slate-700">Date & time</span>
+          <label className="grid gap-2">
+            <span className="text-sm font-medium text-slate-700">
+              Date & time
+            </span>
             <input
               type="datetime-local"
               value={scheduledAt}
               onChange={(event) => setScheduledAt(event.target.value)}
-              className="rounded-lg border border-slate-200 px-3 py-2"
+              className={inputClassName}
               required
             />
           </label>
 
-          <label className="grid gap-2 text-sm">
-            <span className="font-medium text-slate-700">Duration (minutes)</span>
+          <label className="grid gap-2">
+            <span className="text-sm font-medium text-slate-700">
+              Duration (minutes)
+            </span>
             <input
               type="number"
               min={15}
@@ -143,42 +150,40 @@ export function NewAppointmentForm() {
               step={15}
               value={durationMinutes}
               onChange={(event) => setDurationMinutes(event.target.value)}
-              className="rounded-lg border border-slate-200 px-3 py-2"
+              className={inputClassName}
               required
             />
           </label>
 
-          <label className="grid gap-2 text-sm md:col-span-2">
-            <span className="font-medium text-slate-700">Reason</span>
+          <label className="grid gap-2">
+            <span className="text-sm font-medium text-slate-700">Reason</span>
             <input
               type="text"
               value={reason}
               onChange={(event) => setReason(event.target.value)}
-              className="rounded-lg border border-slate-200 px-3 py-2"
+              className={inputClassName}
               placeholder="Annual wellness visit"
               required
             />
           </label>
 
-          <label className="grid gap-2 text-sm md:col-span-2">
-            <span className="font-medium text-slate-700">Notes</span>
+          <label className="grid gap-2">
+            <span className="text-sm font-medium text-slate-700">Notes</span>
             <textarea
               value={notes}
               onChange={(event) => setNotes(event.target.value)}
-              className="min-h-24 rounded-lg border border-slate-200 px-3 py-2"
+              className={`${inputClassName} min-h-28 resize-y`}
               placeholder="Optional notes"
             />
           </label>
 
           {formError ? (
-            <p className="md:col-span-2 text-sm text-red-600">{formError}</p>
+            <p className="text-sm text-red-600">{formError}</p>
           ) : null}
 
-          <div className="md:col-span-2">
-            <Button type="submit" disabled={createMutation.isPending}>
-              {createMutation.isPending ? 'Saving...' : 'Create appointment'}
-            </Button>
-          </div>
+          <Button type="submit" disabled={createMutation.isPending} fullWidth>
+            {createMutation.isPending ? 'Saving...' : 'Create appointment'}
+          </Button>
         </form>
       </Card>
     </div>

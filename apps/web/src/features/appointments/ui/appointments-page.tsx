@@ -40,14 +40,14 @@ export function AppointmentsPage() {
   const appointments = data?.data ?? [];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <Card>
         <CardHeader
           title="Appointments"
-          description="All appointments from the mock backend API."
+          description="All appointments from the mock API."
           action={
             <Link href={`${basePath}/appointments/new`}>
-              <Button>Book appointment</Button>
+              <Button fullWidth>Book appointment</Button>
             </Link>
           }
         />
@@ -58,10 +58,10 @@ export function AppointmentsPage() {
             {appointments.map((appointment) => (
               <div
                 key={appointment.id}
-                className="rounded-xl border border-slate-200 px-4 py-4"
+                className="rounded-xl border border-slate-200 p-3 sm:p-4"
               >
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="min-w-0">
                     <p className="font-medium text-slate-900">
                       {appointment.reason}
                     </p>
@@ -75,7 +75,9 @@ export function AppointmentsPage() {
                   </Badge>
                 </div>
                 {appointment.notes ? (
-                  <p className="mt-3 text-sm text-slate-600">{appointment.notes}</p>
+                  <p className="mt-2 text-sm text-slate-600">
+                    {appointment.notes}
+                  </p>
                 ) : null}
               </div>
             ))}
