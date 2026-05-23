@@ -15,16 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "strict": true,
-    "noImplicitAny": true,
-    "paths": {
-      "@medical-platform/domain": ["packages/domain/src/index.ts"],
-      "@medical-platform/domain/validation": ["packages/domain/src/validation/schemas.ts"],
-      "@medical-platform/domain/*": ["packages/domain/src/*"],
-      "@medical-platform/auth": ["packages/auth/src/index.ts"],
-      "@medical-platform/policies": ["packages/policies/src/index.ts"],
-      "@medical-platform/db": ["packages/db/src/index.ts"],
-      "@medical-platform/observability": ["packages/observability/src/index.ts"]
-    }
+    "noImplicitAny": true
   },
   "exclude": ["node_modules", "tmp", "dist", ".next"]
 }
