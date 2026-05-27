@@ -12,7 +12,7 @@ import {
 import 'leaflet/dist/leaflet.css';
 import { useGeolocation } from '@/hooks/use-geolocation';
 
-const DEFAULT_ZOOM = 15;
+const DEFAULT_ZOOM = 17;
 
 function createMarkerIcon() {
   return L.icon({
@@ -42,21 +42,16 @@ function MapRecenter({ position }: { position: [number, number] }) {
 export function LeafletMap() {
   const geo = useGeolocation();
   const markerIcon = useMemo(() => createMarkerIcon(), []);
-
-  if (geo.status === 'loading') {
-    return (
-      <div className="flex h-full w-full items-center justify-center bg-slate-200 text-sm text-slate-600">
-        Getting your location...
-      </div>
-    );
-  }
-
-  const center =
-    geo.status === 'success' ? geo.position : geo.fallbackCenter;
-  const showUserMarker = geo.status === 'success';
+  const userPosition = geo.status === 'success' ? geo.position : null;
 
   return (
     <div className="relative h-full w-full">
+      {geo.status === 'loading' ? (
+        <div className="absolute inset-0 z-[1000] flex items-center justify-center bg-slate-200/90 text-sm text-slate-600">
+          Getting your location...
+        </div>
+      ) : null}
+
       {geo.status === 'error' ? (
         <div className="absolute inset-x-4 top-4 z-[1000] rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 shadow-sm">
           {geo.message}
@@ -64,7 +59,7 @@ export function LeafletMap() {
       ) : null}
 
       <MapContainer
-        center={center}
+        center={geo.fallbackCenter}
         zoom={DEFAULT_ZOOM}
         zoomControl={false}
         className="h-full w-full [&_.leaflet-control-zoom_a]:min-h-11 [&_.leaflet-control-zoom_a]:min-w-11"
@@ -75,10 +70,10 @@ export function LeafletMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           maxZoom={19}
         />
-        {showUserMarker ? (
+        {userPosition ? (
           <>
-            <MapRecenter position={geo.position} />
-            <Marker position={geo.position} icon={markerIcon}>
+            <MapRecenter position={userPosition} />
+            <Marker position={userPosition} icon={markerIcon}>
               <Popup>You are here</Popup>
             </Marker>
           </>

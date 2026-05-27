@@ -8,13 +8,27 @@ export type GeolocationState =
   | { status: 'error'; message: string };
 
 const FALLBACK_CENTER: [number, number] = [35.6892, 51.389];
+const MOCK_POSITION: [number, number] = [48.43307401143848, -123.33252382712526];
+const USE_MOCK_GEOLOCATION = true;
+
+function getInitialGeolocationState(): GeolocationState {
+  if (USE_MOCK_GEOLOCATION) {
+    return { status: 'success', position: MOCK_POSITION };
+  }
+
+  return { status: 'loading' };
+}
 
 export function useGeolocation(): GeolocationState & {
   fallbackCenter: [number, number];
 } {
-  const [state, setState] = useState<GeolocationState>({ status: 'loading' });
+  const [state, setState] = useState<GeolocationState>(getInitialGeolocationState);
 
   useEffect(() => {
+    if (USE_MOCK_GEOLOCATION) {
+      return;
+    }
+
     if (!navigator.geolocation) {
       queueMicrotask(() => {
         setState({
