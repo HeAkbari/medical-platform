@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
+import { DoctorReviewsDrawer } from '@/features/doctor-reviews/doctor-reviews-drawer';
+import { MapAppointmentDrawer } from '@/features/map-appointment/map-appointment-drawer';
 import { MapFilter } from '@/features/map-filter/map-filter';
 
 const Map = dynamic(() => import('@/components/map'), {
@@ -52,6 +54,8 @@ export function HomePage() {
 
       {/* Bottom sheet filter */}
       <MapFilter filterOpen={filterOpen} setFilterOpen={setFilterOpen} />
+      <DoctorReviewsDrawer />
+      <MapAppointmentDrawer />
 
       {/* <div
         className="absolute inset-x-0 bottom-9 z-[1000] flex justify-center px-4 sm:bottom-8"

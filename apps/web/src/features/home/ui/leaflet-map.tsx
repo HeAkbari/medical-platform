@@ -10,11 +10,17 @@ import {
   useMap,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import { useFilteredMapDoctors } from '@/features/map/hooks/use-filtered-map-doctors';
+import { useMapNavigationStore } from '@/features/map/store/map-navigation-store';
+import { DoctorMapPopup } from '@/features/map/ui/doctor-map-popup';
+import { MapNavigationBar } from '@/features/map/ui/map-navigation-bar';
+import { MapRouteLayer } from '@/features/map/ui/map-route-layer';
+import { formatDoctorRatingLabel } from '@/features/map/ui/doctor-rating';
 import { useGeolocation } from '@/hooks/use-geolocation';
 
-const DEFAULT_ZOOM = 17;
+const DEFAULT_ZOOM = 15;
 
-function createMarkerIcon() {
+function createUserMarkerIcon() {
   return L.icon({
     iconUrl:
       'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
@@ -29,20 +35,70 @@ function createMarkerIcon() {
   });
 }
 
-function MapRecenter({ position }: { position: [number, number] }) {
+function createDoctorMarkerIcon(
+  profileImageUrl: string,
+  rating: number,
+  reviewCount: number
+) {
+  const ratingLabel = formatDoctorRatingLabel(rating, reviewCount);
+
+  return L.divIcon({
+    className: 'doctor-map-marker',
+    html: `
+      <div class="doctor-map-marker__wrapper">
+        <img src="${profileImageUrl}" alt="" />
+        <span class="doctor-map-marker__rating">${ratingLabel}</span>
+      </div>
+    `,
+    iconSize: [48, 52],
+    iconAnchor: [24, 26],
+    popupAnchor: [0, -26],
+  });
+}
+
+function MapRecenter({
+  position,
+  enabled,
+}: {
+  position: [number, number];
+  enabled: boolean;
+}) {
   const map = useMap();
 
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     map.flyTo(position, DEFAULT_ZOOM, { duration: 0.8 });
-  }, [map, position]);
+  }, [enabled, map, position]);
 
   return null;
 }
 
 export function LeafletMap() {
   const geo = useGeolocation();
-  const markerIcon = useMemo(() => createMarkerIcon(), []);
+  const userMarkerIcon = useMemo(() => createUserMarkerIcon(), []);
   const userPosition = geo.status === 'success' ? geo.position : null;
+  const filteredDoctors = useFilteredMapDoctors(userPosition);
+  const activeRoute = useMapNavigationStore((state) => state.route);
+  const navigationStatus = useMapNavigationStore((state) => state.status);
+  const shouldRecenterOnUser =
+    navigationStatus === 'idle' || navigationStatus === 'error';
+  const doctorMarkerIcons = useMemo(
+    () =>
+      new Map(
+        filteredDoctors.map((doctor) => [
+          doctor.id,
+          createDoctorMarkerIcon(
+            doctor.profileImageUrl,
+            doctor.rating,
+            doctor.reviewCount
+          ),
+        ])
+      ),
+    [filteredDoctors]
+  );
 
   return (
     <div className="relative h-full w-full">
@@ -71,14 +127,33 @@ export function LeafletMap() {
           maxZoom={19}
         />
         {userPosition ? (
-          <>
-            <MapRecenter position={userPosition} />
-            <Marker position={userPosition} icon={markerIcon}>
-              <Popup>You are here</Popup>
-            </Marker>
-          </>
+          <MapRecenter position={userPosition} enabled={shouldRecenterOnUser} />
         ) : null}
+        {userPosition ? (
+          <Marker position={userPosition} icon={userMarkerIcon}>
+            <Popup>You are here</Popup>
+          </Marker>
+        ) : null}
+        {activeRoute ? <MapRouteLayer route={activeRoute} /> : null}
+        {userPosition
+          ? filteredDoctors.map((doctor) => (
+              <Marker
+                key={doctor.id}
+                position={doctor.position}
+                icon={doctorMarkerIcons.get(doctor.id)}
+              >
+                <Popup>
+                  <DoctorMapPopup
+                    doctor={doctor}
+                    userPosition={userPosition}
+                  />
+                </Popup>
+              </Marker>
+            ))
+          : null}
       </MapContainer>
+
+      <MapNavigationBar />
     </div>
   );
 }

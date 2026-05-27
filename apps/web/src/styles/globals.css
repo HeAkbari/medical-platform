@@ -32,6 +32,39 @@ body {
   z-index: 0;
 }
 
+.doctor-map-marker {
+  background: transparent;
+  border: none;
+}
+
+.doctor-map-marker__wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.doctor-map-marker img {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 8px rgb(15 23 42 / 0.25);
+  object-fit: cover;
+}
+
+.doctor-map-marker__rating {
+  margin-top: 2px;
+  border-radius: 9999px;
+  background: rgb(15 23 42 / 0.88);
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #fbbf24;
+  white-space: nowrap;
+}
+
 /* Prevent iOS zoom on input focus — use 16px base on mobile inputs */
 @media (max-width: 639px) {
   input,

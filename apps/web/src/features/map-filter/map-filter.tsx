@@ -1,7 +1,8 @@
 'use client';
 
 import { Drawer } from 'vaul';
-import React from 'react';
+import { DOCTOR_SPECIALTIES } from '@/features/map/constants';
+import { useMapFilterStore } from '@/features/map/store/map-filter-store';
 
 interface MapFilterProps {
   filterOpen: boolean;
@@ -9,13 +10,22 @@ interface MapFilterProps {
 }
 
 export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
-  // const [open, setOpen] = React.useState(false);
+  const selectedSpecialties = useMapFilterStore(
+    (state) => state.selectedSpecialties
+  );
+  const maxDistanceKm = useMapFilterStore((state) => state.maxDistanceKm);
+  const availableTodayOnly = useMapFilterStore(
+    (state) => state.availableTodayOnly
+  );
+  const toggleSpecialty = useMapFilterStore((state) => state.toggleSpecialty);
+  const setMaxDistanceKm = useMapFilterStore((state) => state.setMaxDistanceKm);
+  const setAvailableTodayOnly = useMapFilterStore(
+    (state) => state.setAvailableTodayOnly
+  );
+  const resetFilters = useMapFilterStore((state) => state.resetFilters);
 
   return (
     <Drawer.Root open={filterOpen} onOpenChange={setFilterOpen}>
-      <Drawer.Trigger className="relative flex h-10 flex-shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full bg-white px-4 text-sm font-medium shadow-sm transition-all hover:bg-[#FAFAFA] dark:bg-[#161615] dark:hover:bg-[#1A1A19] dark:text-white">
-        Open Drawer
-      </Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
         <Drawer.Content className="bg-gray-100 flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 left-0 right-0 outline-none">
@@ -27,35 +37,36 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
               </Drawer.Title>
 
               <div className="flex flex-col gap-6 pt-2">
-                {/* Specialty filter */}
                 <fieldset>
                   <legend className="mb-3 text-sm font-medium text-slate-700">
                     Specialty
                   </legend>
                   <div className="flex flex-wrap gap-2">
-                    {[
-                      'General',
-                      'Cardiology',
-                      'Dermatology',
-                      'Pediatrics',
-                      'Orthopedics',
-                    ].map((specialty) => (
-                      <label
-                        key={specialty}
-                        className="flex cursor-pointer items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm text-slate-700 transition has-checked:border-teal-500 has-checked:bg-teal-50 has-checked:text-teal-800"
-                      >
-                        <input
-                          type="checkbox"
-                          className="sr-only"
-                          value={specialty}
-                        />
-                        {specialty}
-                      </label>
-                    ))}
+                    {DOCTOR_SPECIALTIES.map((specialty) => {
+                      const isSelected = selectedSpecialties.includes(specialty);
+
+                      return (
+                        <label
+                          key={specialty}
+                          className={`flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
+                            isSelected
+                              ? 'border-teal-500 bg-teal-50 text-teal-800'
+                              : 'border-slate-200 text-slate-700'
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            className="sr-only"
+                            checked={isSelected}
+                            onChange={() => toggleSpecialty(specialty)}
+                          />
+                          {specialty}
+                        </label>
+                      );
+                    })}
                   </div>
                 </fieldset>
 
-                {/* Distance filter */}
                 <fieldset>
                   <legend className="mb-3 text-sm font-medium text-slate-700">
                     Max distance
@@ -65,16 +76,18 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
                       type="range"
                       min="1"
                       max="50"
-                      defaultValue="10"
+                      value={maxDistanceKm}
+                      onChange={(event) =>
+                        setMaxDistanceKm(Number(event.target.value))
+                      }
                       className="h-2 flex-1 appearance-none rounded-full bg-slate-200 accent-teal-600"
                     />
-                    <span className="min-w-[3ch] text-sm font-medium text-slate-700">
-                      10 km
+                    <span className="min-w-[4.5rem] text-sm font-medium text-slate-700">
+                      {maxDistanceKm} km
                     </span>
                   </div>
                 </fieldset>
 
-                {/* Availability toggle */}
                 <fieldset>
                   <legend className="mb-3 text-sm font-medium text-slate-700">
                     Availability
@@ -82,6 +95,10 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
                   <label className="flex items-center gap-3">
                     <input
                       type="checkbox"
+                      checked={availableTodayOnly}
+                      onChange={(event) =>
+                        setAvailableTodayOnly(event.target.checked)
+                      }
                       className="h-5 w-5 rounded border-slate-300 text-teal-600 accent-teal-600"
                     />
                     <span className="text-sm text-slate-700">
@@ -90,14 +107,22 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
                   </label>
                 </fieldset>
 
-                {/* Apply button */}
-                <button
-                  type="button"
-                  onClick={() => setFilterOpen(false)}
-                  className="mt-2 flex min-h-11 w-full items-center justify-center rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-teal-800 active:bg-teal-900"
-                >
-                  Apply filters
-                </button>
+                <div className="mt-2 flex gap-3">
+                  <button
+                    type="button"
+                    onClick={resetFilters}
+                    className="flex min-h-11 flex-1 items-center justify-center rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                  >
+                    Reset
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFilterOpen(false)}
+                    className="flex min-h-11 flex-1 items-center justify-center rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-teal-800 active:bg-teal-900"
+                  >
+                    Apply filters
+                  </button>
+                </div>
               </div>
             </div>
           </div>

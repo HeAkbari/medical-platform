@@ -1,14 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import {
+  FALLBACK_MAP_CENTER,
+  MOCK_USER_POSITION,
+} from '@/lib/geo/constants';
 
 export type GeolocationState =
   | { status: 'loading' }
   | { status: 'success'; position: [number, number] }
   | { status: 'error'; message: string };
 
-const FALLBACK_CENTER: [number, number] = [35.6892, 51.389];
-const MOCK_POSITION: [number, number] = [48.43307401143848, -123.33252382712526];
+const FALLBACK_CENTER: [number, number] = FALLBACK_MAP_CENTER;
+const MOCK_POSITION: [number, number] = MOCK_USER_POSITION;
 const USE_MOCK_GEOLOCATION = true;
 
 function getInitialGeolocationState(): GeolocationState {
