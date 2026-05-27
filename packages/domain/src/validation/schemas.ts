@@ -26,3 +26,28 @@ export const appointmentQuerySchema = z.object({
 
 export type CreateAppointmentInput = z.infer<typeof createAppointmentSchema>;
 export type AppointmentQueryInput = z.infer<typeof appointmentQuerySchema>;
+
+export const createPatientSchema = z.object({
+  firstName: z.string().min(2).max(80),
+  lastName: z.string().min(2).max(80),
+  dateOfBirth: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date of birth must use YYYY-MM-DD format'),
+  email: z.string().email(),
+  phone: z.string().min(8).max(20),
+});
+
+export type CreatePatientInput = z.infer<typeof createPatientSchema>;
+
+export const sendOtpSchema = z.object({
+  phone: z.string().min(8).max(20),
+});
+
+export const verifyOtpSchema = z.object({
+  phone: z.string().min(8).max(20),
+  code: z.string().length(6),
+});
+
+export const completeRegistrationSchema = createPatientSchema.extend({
+  registrationToken: z.string().uuid(),
+});

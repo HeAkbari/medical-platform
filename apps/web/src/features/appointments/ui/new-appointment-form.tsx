@@ -74,6 +74,7 @@ export function NewAppointmentForm() {
             doctorLabel={`${selectedDoctor.firstName} ${selectedDoctor.lastName} · ${selectedDoctor.specialty}`}
             initialPatientId={initialPatientId}
             showDoctorSummary={false}
+            staffMode
             onSuccess={() => router.push('/dashboard/appointments')}
           />
         ) : (

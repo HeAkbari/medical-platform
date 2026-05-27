@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui';
 import { useDoctorReviewsStore } from '@/features/doctor-reviews/store/doctor-reviews-store';
 import { useMapAppointmentStore } from '@/features/map-appointment/store/map-appointment-store';
+import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
 import { useMapNavigationStore } from '../store/map-navigation-store';
 import type { MapDoctor } from '../types';
 import { formatDistanceKm, getDistanceKm } from '../utils/geo';
@@ -15,6 +16,7 @@ interface DoctorMapPopupProps {
 
 export function DoctorMapPopup({ doctor, userPosition }: DoctorMapPopupProps) {
   const openReviews = useDoctorReviewsStore((state) => state.openReviews);
+  const { requireAuth } = useRequireAuth();
   const openAppointment = useMapAppointmentStore((state) => state.openAppointment);
   const startNavigation = useMapNavigationStore((state) => state.startNavigation);
   const navigationStatus = useMapNavigationStore((state) => state.status);
@@ -83,7 +85,14 @@ export function DoctorMapPopup({ doctor, userPosition }: DoctorMapPopupProps) {
               ? 'Navigating'
               : 'Navigate'}
         </Button>
-        <Button fullWidth onClick={() => openAppointment(doctor)}>
+        <Button
+          fullWidth
+          onClick={() =>
+            requireAuth({ type: 'appointment', doctor }, () =>
+              openAppointment(doctor)
+            )
+          }
+        >
           Appointment
         </Button>
       </div>

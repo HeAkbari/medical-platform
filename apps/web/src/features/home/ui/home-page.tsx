@@ -2,8 +2,11 @@
 
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
+import { useAuth } from '@/lib/auth';
 import { DoctorReviewsDrawer } from '@/features/doctor-reviews/doctor-reviews-drawer';
 import { MapAppointmentDrawer } from '@/features/map-appointment/map-appointment-drawer';
+import { PhoneAuthDrawer } from '@/features/phone-auth/phone-auth-drawer';
+import { usePhoneAuthStore } from '@/features/phone-auth/store/phone-auth-store';
 import { MapNeedSelector } from '@/features/map/ui/map-need-selector';
 import { MapFilter } from '@/features/map-filter/map-filter';
 
@@ -18,19 +21,49 @@ const Map = dynamic(() => import('@/components/map'), {
 
 export function HomePage() {
   const [filterOpen, setFilterOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const openAuth = usePhoneAuthStore((state) => state.openAuth);
+
+  function handleProfileClick() {
+    if (isAuthenticated) {
+      openAuth({ step: 'profile', pendingAction: null });
+      return;
+    }
+
+    openAuth({ pendingAction: { type: 'profile' } });
+  }
 
   return (
     <div className="fixed inset-0 z-0 h-dvh w-full">
       <Map />
 
-      {/* Filter button - top-right of map */}
+      <button
+        type="button"
+        onClick={handleProfileClick}
+        className="absolute left-4 top-4 z-[1000] flex min-h-11 min-w-11 items-center justify-center rounded-full border border-slate-200/80 bg-white/95 p-3 shadow-lg backdrop-blur-md active:scale-95"
+        aria-label="Open profile"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-5 w-5 text-slate-700"
+        >
+          <path d="M20 21a8 8 0 0 0-16 0" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      </button>
+
       <button
         type="button"
         onClick={() => setFilterOpen(true)}
         className="absolute right-4 top-4 z-[1000] flex min-h-11 min-w-11 items-center justify-center rounded-full border border-slate-200/80 bg-white/95 p-3 shadow-lg backdrop-blur-md active:scale-95"
         aria-label="Open filters"
       >
-        {/* Filter/sliders icon */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -53,23 +86,11 @@ export function HomePage() {
         </svg>
       </button>
 
-      {/* Bottom sheet filter */}
       <MapFilter filterOpen={filterOpen} setFilterOpen={setFilterOpen} />
       <MapNeedSelector />
       <DoctorReviewsDrawer />
       <MapAppointmentDrawer />
-
-      {/* <div
-        className="absolute inset-x-0 bottom-9 z-[1000] flex justify-center px-4 sm:bottom-8"
-        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
-      >
-        <Link
-          href="/dashboard"
-          className="flex min-h-11 items-center gap-2 rounded-full border border-slate-200/80 bg-white/95 px-5 py-2.5 text-sm font-medium text-slate-800 shadow-lg backdrop-blur-md active:scale-95"
-        >
-          Open clinic
-        </Link>
-      </div> */}
+      <PhoneAuthDrawer />
     </div>
   );
 }

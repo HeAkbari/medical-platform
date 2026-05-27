@@ -5,6 +5,7 @@ import { Button } from '@/components/ui';
 import { getDoctorReviews } from '@/features/doctor-reviews/data/mock-doctor-reviews';
 import { useDoctorReviewsStore } from '@/features/doctor-reviews/store/doctor-reviews-store';
 import { useMapAppointmentStore } from '@/features/map-appointment/store/map-appointment-store';
+import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
 import { DoctorRating } from '@/features/map/ui/doctor-rating';
 import type { DoctorReview } from '@/features/map/types';
 
@@ -54,6 +55,7 @@ export function DoctorReviewsDrawer() {
   const reviewsOpen = useDoctorReviewsStore((state) => state.reviewsOpen);
   const setReviewsOpen = useDoctorReviewsStore((state) => state.setReviewsOpen);
   const selectedDoctor = useDoctorReviewsStore((state) => state.selectedDoctor);
+  const { requireAuth } = useRequireAuth();
   const openAppointment = useMapAppointmentStore((state) => state.openAppointment);
 
   const reviews = selectedDoctor ? getDoctorReviews(selectedDoctor.id) : [];
@@ -63,8 +65,10 @@ export function DoctorReviewsDrawer() {
       return;
     }
 
-    setReviewsOpen(false);
-    openAppointment(selectedDoctor);
+    requireAuth({ type: 'appointment', doctor: selectedDoctor }, () => {
+      setReviewsOpen(false);
+      openAppointment(selectedDoctor);
+    });
   }
 
   return (

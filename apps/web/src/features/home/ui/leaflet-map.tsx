@@ -18,7 +18,7 @@ import { MapRouteLayer } from '@/features/map/ui/map-route-layer';
 import { formatDoctorRatingLabel } from '@/features/map/ui/doctor-rating';
 import { useGeolocation } from '@/hooks/use-geolocation';
 
-const DEFAULT_ZOOM = 15;
+const DEFAULT_ZOOM = 13;
 
 function createUserMarkerIcon() {
   return L.icon({

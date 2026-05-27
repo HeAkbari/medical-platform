@@ -31,5 +31,5 @@ export const RoleClaims: Record<Roles, string[]> = {
     'appointments:write',
     'dashboard:read',
   ],
-  [Roles.PATIENT]: ['appointments:read'],
+  [Roles.PATIENT]: ['appointments:read', 'appointments:write'],
 };

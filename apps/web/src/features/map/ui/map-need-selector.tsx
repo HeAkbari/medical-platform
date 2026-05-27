@@ -2,6 +2,7 @@
 
 import { MAP_NEED_OPTIONS, DOCTOR_SPECIALTIES } from '@/features/map/constants';
 import { useMapFilterStore } from '@/features/map/store/map-filter-store';
+import { useMapNavigationStore } from '@/features/map/store/map-navigation-store';
 import type { MapNeedOptionId } from '@/features/map/constants';
 import type { DoctorSpecialty } from '@/features/map/types';
 
@@ -24,7 +25,12 @@ export function MapNeedSelector() {
     (state) => state.selectedSpecialties
   );
   const selectQuickNeed = useMapFilterStore((state) => state.selectQuickNeed);
+  const navigationStatus = useMapNavigationStore((state) => state.status);
   const activeNeedId = getActiveNeedId(selectedSpecialties);
+
+  if (navigationStatus !== 'idle') {
+    return null;
+  }
 
   return (
     <div

@@ -4,8 +4,11 @@ import type {
   Doctor,
   Patient,
 } from '../../types/models';
-import type { CreateAppointmentInput } from '../../validation/schemas';
-import { isSameDay } from '../../utils/helpers';
+import type {
+  CreateAppointmentInput,
+  CreatePatientInput,
+} from '../../validation/schemas';
+import { isSameDay, normalizePhone } from '../../utils/helpers';
 import {
   createMockDataStore,
   type MockDataStore,
@@ -26,6 +29,31 @@ class JsonPatientRepository implements PatientRepository {
 
   findById(id: string): Promise<Patient | null> {
     const patient = this.store.patients.find((item) => item.id === id) ?? null;
+    return Promise.resolve(patient);
+  }
+
+  findByPhone(phone: string): Promise<Patient | null> {
+    const normalizedPhone = normalizePhone(phone);
+    const patient =
+      this.store.patients.find(
+        (item) => normalizePhone(item.phone) === normalizedPhone
+      ) ?? null;
+
+    return Promise.resolve(patient);
+  }
+
+  create(input: CreatePatientInput): Promise<Patient> {
+    const patient: Patient = {
+      id: randomUUID(),
+      firstName: input.firstName,
+      lastName: input.lastName,
+      dateOfBirth: input.dateOfBirth,
+      email: input.email,
+      phone: input.phone,
+      createdAt: new Date().toISOString(),
+    };
+
+    this.store.patients.push(patient);
     return Promise.resolve(patient);
   }
 }

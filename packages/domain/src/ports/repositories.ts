@@ -3,11 +3,16 @@ import type {
   Doctor,
   Patient,
 } from '../types/models';
-import type { CreateAppointmentInput } from '../validation/schemas';
+import type {
+  CreateAppointmentInput,
+  CreatePatientInput,
+} from '../validation/schemas';
 
 export interface PatientRepository {
   findAll(): Promise<Patient[]>;
   findById(id: string): Promise<Patient | null>;
+  findByPhone(phone: string): Promise<Patient | null>;
+  create(input: CreatePatientInput): Promise<Patient>;
 }
 
 export interface DoctorRepository {

@@ -2,18 +2,17 @@
 
 import { useState } from 'react';
 import { createAppointmentSchema } from '@medical-platform/domain/validation';
-import {
-  useCreateAppointmentMutation,
-  usePatientsQuery,
-} from '@/hooks';
+import { useCreateAppointmentMutation, usePatientsQuery } from '@/hooks';
+import { useAuth } from '@/lib/auth';
 import { Button, ErrorState, LoadingState } from '@/components/ui';
 import { inputClassName } from '@/components/ui/input-styles';
 
 interface AppointmentBookingFormProps {
   doctorId: string;
   doctorLabel: string;
-  initialPatientId?: string;
   showDoctorSummary?: boolean;
+  staffMode?: boolean;
+  initialPatientId?: string;
   onSuccess?: () => void;
   onCancel?: () => void;
 }
@@ -21,12 +20,14 @@ interface AppointmentBookingFormProps {
 export function AppointmentBookingForm({
   doctorId,
   doctorLabel,
-  initialPatientId = '',
   showDoctorSummary = true,
+  staffMode = false,
+  initialPatientId = '',
   onSuccess,
   onCancel,
 }: AppointmentBookingFormProps) {
-  const patientsQuery = usePatientsQuery();
+  const { user } = useAuth();
+  const patientsQuery = usePatientsQuery({ enabled: staffMode });
   const createMutation = useCreateAppointmentMutation();
 
   const [patientId, setPatientId] = useState(initialPatientId);
@@ -37,22 +38,33 @@ export function AppointmentBookingForm({
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  if (patientsQuery.isLoading) {
-    return <LoadingState label="Loading form data..." />;
-  }
+  if (staffMode) {
+    if (patientsQuery.isLoading) {
+      return <LoadingState label="Loading form data..." />;
+    }
 
-  if (patientsQuery.isError) {
-    return <ErrorState message="Could not load patients." />;
+    if (patientsQuery.isError) {
+      return <ErrorState message="Could not load patients." />;
+    }
+  } else if (!user) {
+    return <ErrorState message="Sign in to book an appointment." />;
   }
 
   const patients = patientsQuery.data?.data ?? [];
+  const selectedPatient = patients.find((patient) => patient.id === patientId);
+  const resolvedPatientId = staffMode ? patientId : user?.patientId ?? '';
+  const patientLabel = staffMode
+    ? selectedPatient
+      ? `${selectedPatient.firstName} ${selectedPatient.lastName}`
+      : ''
+    : `${user?.firstName} ${user?.lastName}`;
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setFormError(null);
 
     const parsed = createAppointmentSchema.safeParse({
-      patientId,
+      patientId: resolvedPatientId,
       doctorId,
       scheduledAt: scheduledAt ? new Date(scheduledAt).toISOString() : '',
       durationMinutes: Number(durationMinutes),
@@ -108,22 +120,31 @@ export function AppointmentBookingForm({
         </div>
       ) : null}
 
-      <label className="grid gap-2">
-        <span className="text-sm font-medium text-slate-700">Patient</span>
-        <select
-          value={patientId}
-          onChange={(event) => setPatientId(event.target.value)}
-          className={inputClassName}
-          required
-        >
-          <option value="">Select patient</option>
-          {patients.map((patient) => (
-            <option key={patient.id} value={patient.id}>
-              {patient.firstName} {patient.lastName}
-            </option>
-          ))}
-        </select>
-      </label>
+      {staffMode ? (
+        <label className="grid gap-2">
+          <span className="text-sm font-medium text-slate-700">Patient</span>
+          <select
+            value={patientId}
+            onChange={(event) => setPatientId(event.target.value)}
+            className={inputClassName}
+            required
+          >
+            <option value="">Select patient</option>
+            {patients.map((patient) => (
+              <option key={patient.id} value={patient.id}>
+                {patient.firstName} {patient.lastName}
+              </option>
+            ))}
+          </select>
+        </label>
+      ) : (
+        <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Patient
+          </p>
+          <p className="mt-1 text-sm font-medium text-slate-900">{patientLabel}</p>
+        </div>
+      )}
 
       <label className="grid gap-2">
         <span className="text-sm font-medium text-slate-700">Date & time</span>
