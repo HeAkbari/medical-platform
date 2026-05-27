@@ -65,6 +65,15 @@ body {
   white-space: nowrap;
 }
 
+.map-need-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.map-need-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 /* Prevent iOS zoom on input focus — use 16px base on mobile inputs */
 @media (max-width: 639px) {
   input,

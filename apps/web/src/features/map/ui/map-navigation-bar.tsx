@@ -20,7 +20,7 @@ export function MapNavigationBar() {
 
   return (
     <div
-      className="absolute inset-x-4 bottom-4 z-[1000] rounded-2xl border border-slate-200/80 bg-white/95 p-4 shadow-lg backdrop-blur-md"
+      className="absolute inset-x-4 bottom-[5.75rem] z-[1000] rounded-2xl border border-slate-200/80 bg-white/95 p-4 shadow-lg backdrop-blur-md"
       style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
     >
       <div className="flex items-start justify-between gap-3">

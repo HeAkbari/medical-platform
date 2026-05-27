@@ -4,6 +4,7 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { DoctorReviewsDrawer } from '@/features/doctor-reviews/doctor-reviews-drawer';
 import { MapAppointmentDrawer } from '@/features/map-appointment/map-appointment-drawer';
+import { MapNeedSelector } from '@/features/map/ui/map-need-selector';
 import { MapFilter } from '@/features/map-filter/map-filter';
 
 const Map = dynamic(() => import('@/components/map'), {
@@ -54,6 +55,7 @@ export function HomePage() {
 
       {/* Bottom sheet filter */}
       <MapFilter filterOpen={filterOpen} setFilterOpen={setFilterOpen} />
+      <MapNeedSelector />
       <DoctorReviewsDrawer />
       <MapAppointmentDrawer />
 

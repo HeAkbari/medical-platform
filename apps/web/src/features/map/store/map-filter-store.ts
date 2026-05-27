@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import {
   DEFAULT_MAX_DISTANCE_KM,
   DOCTOR_SPECIALTIES,
+  type MapNeedOptionId,
 } from '../constants';
 import type { DoctorSpecialty } from '../types';
 
@@ -10,6 +11,7 @@ interface MapFilterStore {
   maxDistanceKm: number;
   availableTodayOnly: boolean;
   toggleSpecialty: (specialty: DoctorSpecialty) => void;
+  selectQuickNeed: (need: MapNeedOptionId) => void;
   setMaxDistanceKm: (km: number) => void;
   setAvailableTodayOnly: (value: boolean) => void;
   resetFilters: () => void;
@@ -31,6 +33,22 @@ export const useMapFilterStore = create<MapFilterStore>((set) => ({
         selectedSpecialties: isSelected
           ? state.selectedSpecialties.filter((item) => item !== specialty)
           : [...state.selectedSpecialties, specialty],
+      };
+    }),
+  selectQuickNeed: (need) =>
+    set((state) => {
+      if (need === 'all') {
+        return { selectedSpecialties: [...DOCTOR_SPECIALTIES] };
+      }
+
+      const isOnlySelected =
+        state.selectedSpecialties.length === 1 &&
+        state.selectedSpecialties[0] === need;
+
+      return {
+        selectedSpecialties: isOnlySelected
+          ? [...DOCTOR_SPECIALTIES]
+          : [need],
       };
     }),
   setMaxDistanceKm: (km) => set({ maxDistanceKm: km }),
