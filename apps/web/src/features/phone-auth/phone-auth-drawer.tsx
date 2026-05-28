@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Drawer } from 'vaul';
-import { Button } from '@/components/ui';
+import { Button, ResponsiveDrawer } from '@/components/ui';
 import { inputClassName } from '@/components/ui/input-styles';
 import { useAuth } from '@/lib/auth';
 import {
@@ -149,14 +149,8 @@ export function PhoneAuthDrawer() {
   }
 
   return (
-    <Drawer.Root open={authOpen} onOpenChange={handleOpenChange}>
-      <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-        <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex h-fit max-h-[88vh] flex-col rounded-t-[10px] bg-gray-100 outline-none">
-          <div className="flex max-h-[88vh] flex-col rounded-t-[10px] bg-white p-4">
-            <div className="mx-auto mb-6 h-1.5 w-12 shrink-0 rounded-full bg-gray-300" />
-
-            <div className="mx-auto flex w-full max-w-md min-h-0 flex-1 flex-col overflow-y-auto pb-2">
+    <ResponsiveDrawer open={authOpen} onOpenChange={handleOpenChange}>
+      <div className="mx-auto flex min-h-0 w-full max-w-md flex-1 flex-col overflow-y-auto pb-2">
               <Drawer.Title className="mb-4 font-medium text-gray-900">
                 {activeStep === 'profile' ? 'My profile' : 'Sign in with phone'}
               </Drawer.Title>
@@ -331,10 +325,7 @@ export function PhoneAuthDrawer() {
                   </div>
                 </div>
               ) : null}
-            </div>
-          </div>
-        </Drawer.Content>
-      </Drawer.Portal>
-    </Drawer.Root>
+      </div>
+    </ResponsiveDrawer>
   );
 }

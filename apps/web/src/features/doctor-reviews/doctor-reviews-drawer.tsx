@@ -1,7 +1,7 @@
 'use client';
 
 import { Drawer } from 'vaul';
-import { Button } from '@/components/ui';
+import { Button, ResponsiveDrawer } from '@/components/ui';
 import { getDoctorReviews } from '@/features/doctor-reviews/data/mock-doctor-reviews';
 import { useDoctorReviewsStore } from '@/features/doctor-reviews/store/doctor-reviews-store';
 import { useMapAppointmentStore } from '@/features/map-appointment/store/map-appointment-store';
@@ -72,14 +72,8 @@ export function DoctorReviewsDrawer() {
   }
 
   return (
-    <Drawer.Root open={reviewsOpen} onOpenChange={setReviewsOpen}>
-      <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-        <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex h-fit max-h-[88vh] flex-col rounded-t-[10px] bg-gray-100 outline-none">
-          <div className="flex max-h-[88vh] flex-col rounded-t-[10px] bg-white p-4">
-            <div className="mx-auto mb-6 h-1.5 w-12 shrink-0 rounded-full bg-gray-300" />
-
-            <div className="mx-auto flex w-full max-w-md min-h-0 flex-1 flex-col">
+    <ResponsiveDrawer open={reviewsOpen} onOpenChange={setReviewsOpen}>
+      <div className="mx-auto flex min-h-0 w-full max-w-md flex-1 flex-col">
               <Drawer.Title className="mb-4 font-medium text-gray-900">
                 Patient reviews
               </Drawer.Title>
@@ -137,10 +131,7 @@ export function DoctorReviewsDrawer() {
                   </div>
                 </>
               ) : null}
-            </div>
-          </div>
-        </Drawer.Content>
-      </Drawer.Portal>
-    </Drawer.Root>
+      </div>
+    </ResponsiveDrawer>
   );
 }
