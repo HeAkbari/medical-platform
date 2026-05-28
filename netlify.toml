@@ -1,0 +1,21 @@
+# Nx monorepo + Next.js (apps/web)
+#
+# Netlify UI (Site configuration → Build & deploy → Build settings):
+#   - Base directory: leave empty (repo root)
+#   - Package directory: apps/web (optional; helps the Next.js plugin)
+#   - Build command: leave empty (use this file) OR match command below
+#   - Publish directory: leave EMPTY or set to "apps/web/.next"
+#     Do NOT use "dist/apps/web" — Next build output is apps/web/.next
+#
+# UI publish directory overrides this file when set in the dashboard.
+# Clear the wrong "dist/apps/web" value in the UI if deploys still fail.
+
+[build]
+  command = "bun install && bunx nx build web"
+  publish = "apps/web/.next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

@@ -19,7 +19,14 @@
       "dependsOn": [
         "^build"
       ],
-      "cache": true
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/dist",
+        "{projectRoot}/.next"
+      ]
+    },
+    "dev": {
+      "cache": false
     },
     "lint": {
       "cache": true

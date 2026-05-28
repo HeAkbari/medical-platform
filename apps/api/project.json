@@ -1,0 +1,17 @@
+{
+  "name": "@medical-platform/api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/api/src",
+  "projectType": "application",
+  "tags": ["scope:api", "type:app"],
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "continuous": true,
+      "options": {
+        "cwd": "apps/api",
+        "command": "node --import tsx src/main.ts"
+      }
+    }
+  }
+}

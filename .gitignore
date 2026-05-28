@@ -5,6 +5,10 @@ node_modules
 .nx/cache
 .nx/workspace-data
 
+# turbo (legacy cache; safe to delete locally)
+.turbo
+**/.turbo
+
 # next.js
 .next
 out
