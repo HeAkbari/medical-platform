@@ -49,7 +49,7 @@ export function MapNeedSelector() {
               onClick={() => selectQuickNeed(option.id)}
               className={`shrink-0 rounded-full border px-4 py-2.5 text-sm font-medium whitespace-nowrap shadow-sm transition active:scale-95 ${
                 isActive
-                  ? 'border-teal-600 bg-teal-700 text-white'
+                  ? 'border-brand-light bg-brand text-brand-foreground'
                   : 'border-slate-200/80 bg-white/95 text-slate-700 backdrop-blur-md hover:bg-white'
               }`}
             >

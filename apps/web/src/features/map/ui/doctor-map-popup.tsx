@@ -44,7 +44,7 @@ export function DoctorMapPopup({ doctor, userPosition }: DoctorMapPopupProps) {
           <p className="font-semibold text-slate-900">
             {doctor.firstName} {doctor.lastName}
           </p>
-          <p className="text-sm text-teal-700">{doctor.specialty}</p>
+          <p className="text-sm text-brand">{doctor.specialty}</p>
           <DoctorRating
             rating={doctor.rating}
             reviewCount={doctor.reviewCount}

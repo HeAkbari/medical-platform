@@ -38,7 +38,7 @@ export function MapAppointmentDrawer() {
                       <p className="truncate font-semibold text-slate-900">
                         {selectedDoctor.firstName} {selectedDoctor.lastName}
                       </p>
-                      <p className="text-sm text-teal-700">
+                      <p className="text-sm text-brand">
                         {selectedDoctor.specialty}
                       </p>
                       <DoctorRating

@@ -3,7 +3,8 @@ import { cn } from '@/components/ui/cn';
 type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-teal-700 text-white hover:bg-teal-800 active:bg-teal-900',
+  primary:
+    'bg-brand text-brand-foreground hover:bg-brand-dark active:bg-brand-darker',
   secondary:
     'bg-white text-slate-900 border border-slate-200 hover:bg-slate-50 active:bg-slate-100',
   ghost: 'bg-transparent text-slate-700 hover:bg-slate-100 active:bg-slate-200',

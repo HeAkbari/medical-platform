@@ -25,7 +25,7 @@ export function MapNavigationBar() {
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-medium uppercase tracking-wide text-teal-700">
+          <p className="text-xs font-medium uppercase tracking-wide text-brand">
             Navigation
           </p>
           <p className="truncate font-semibold text-slate-900">

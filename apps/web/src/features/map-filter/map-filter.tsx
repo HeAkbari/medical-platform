@@ -50,7 +50,7 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
                     key={specialty}
                     className={`flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
                       isSelected
-                        ? 'border-teal-500 bg-teal-50 text-teal-800'
+                        ? 'border-brand-light bg-brand-muted text-brand-dark'
                         : 'border-slate-200 text-slate-700'
                     }`}
                   >
@@ -80,7 +80,7 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
                 onChange={(event) =>
                   setMaxDistanceKm(Number(event.target.value))
                 }
-                className="h-2 flex-1 appearance-none rounded-full bg-slate-200 accent-teal-600"
+                className="h-2 flex-1 appearance-none rounded-full bg-slate-200 accent-brand-light"
               />
               <span className="min-w-[4.5rem] text-sm font-medium text-slate-700">
                 {maxDistanceKm} km
@@ -99,7 +99,7 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
                 onChange={(event) =>
                   setAvailableTodayOnly(event.target.checked)
                 }
-                className="h-5 w-5 rounded border-slate-300 text-teal-600 accent-teal-600"
+                className="h-5 w-5 rounded border-slate-300 text-brand-light accent-brand-light"
               />
               <span className="text-sm text-slate-700">
                 Show only available today
@@ -118,7 +118,7 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
             <button
               type="button"
               onClick={() => setFilterOpen(false)}
-              className="flex min-h-11 flex-1 items-center justify-center rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-teal-800 active:bg-teal-900"
+              className="flex min-h-11 flex-1 items-center justify-center rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-brand-foreground transition hover:bg-brand-dark active:bg-brand-darker"
             >
               Apply filters
             </button>

@@ -73,7 +73,7 @@ export function DashboardOverviewPage() {
       <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         {stats.map((stat) => (
           <Link key={stat.label} href={stat.href} className="active:scale-[0.98]">
-            <Card className="h-full transition hover:border-teal-200 hover:shadow-md">
+            <Card className="h-full transition hover:border-brand-subtle hover:shadow-md">
               <p className="text-xs text-slate-500 sm:text-sm">{stat.label}</p>
               <p className="mt-1 text-2xl font-semibold text-slate-900 sm:mt-2 sm:text-3xl">
                 {stat.value}
@@ -90,7 +90,7 @@ export function DashboardOverviewPage() {
         <div className="mt-3 grid gap-2 sm:mt-4 sm:flex sm:flex-wrap sm:gap-3">
           <Link
             href="/dashboard/appointments/new"
-            className="flex min-h-11 items-center justify-center rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-medium text-white active:bg-teal-900 sm:inline-flex sm:w-auto"
+            className="flex min-h-11 items-center justify-center rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-brand-foreground active:bg-brand-darker sm:inline-flex sm:w-auto"
           >
             Book appointment
           </Link>

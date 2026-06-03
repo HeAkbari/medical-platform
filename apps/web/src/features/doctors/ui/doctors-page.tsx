@@ -41,7 +41,7 @@ export function DoctorsPage() {
                 <p className="font-semibold text-slate-900">
                   {doctor.firstName} {doctor.lastName}
                 </p>
-                <p className="mt-1 text-sm text-teal-700">{doctor.specialty}</p>
+                <p className="mt-1 text-sm text-brand">{doctor.specialty}</p>
                 <p className="mt-2 break-all text-sm text-slate-600">
                   {doctor.email}
                 </p>

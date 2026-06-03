@@ -6,10 +6,17 @@
 @source "../lib";
 
 @theme {
-  --color-primary: #0f766e;
-  --color-primary-foreground: #f0fdfa;
-  --color-muted: #f1f5f9;
-  --color-muted-foreground: #64748b;
+  --color-brand: lab(51 -29.63 -26.27);
+  --color-brand-dark: lab(44 -27 -24);
+  --color-brand-darker: lab(38 -24 -21);
+  --color-brand-light: lab(58 -22 -20);
+  --color-brand-muted: lab(95 -8 -7);
+  --color-brand-subtle: lab(90 -12 -11);
+  --color-brand-foreground: lab(97 -3 -3);
+  --color-primary: var(--color-brand);
+  --color-primary-foreground: var(--color-brand-foreground);
+  --color-muted: lab(96 -4 -4);
+  --color-muted-foreground: lab(45 -12 -11);
   --font-sans: ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -21,7 +28,7 @@ html {
 body {
   font-family: var(--font-sans);
   background-color: var(--color-muted);
-  color: #0f172a;
+  color: lab(22 -8 -8);
   min-height: 100dvh;
   overflow-x: hidden;
 }
@@ -49,14 +56,14 @@ body {
   height: 40px;
   border-radius: 9999px;
   border: 2px solid #ffffff;
-  box-shadow: 0 2px 8px rgb(15 23 42 / 0.25);
+  box-shadow: 0 2px 8px lab(22 -8 -8 / 0.2);
   object-fit: cover;
 }
 
 .doctor-map-marker__rating {
   margin-top: 2px;
   border-radius: 9999px;
-  background: rgb(15 23 42 / 0.88);
+  background: lab(22 -8 -8 / 0.88);
   padding: 1px 6px;
   font-size: 10px;
   font-weight: 600;

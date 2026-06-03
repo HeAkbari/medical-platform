@@ -3,7 +3,7 @@ import { cn } from '@/components/ui/cn';
 type BadgeVariant = 'default' | 'success' | 'warning' | 'muted';
 
 const variantClasses: Record<BadgeVariant, string> = {
-  default: 'bg-teal-100 text-teal-800',
+  default: 'bg-brand-muted text-brand-dark',
   success: 'bg-emerald-100 text-emerald-800',
   warning: 'bg-amber-100 text-amber-800',
   muted: 'bg-slate-100 text-slate-700',

@@ -40,7 +40,7 @@ export function PatientsPage() {
                   href={`/dashboard/patients/${patient.id}`}
                   className="flex min-h-[4.5rem] flex-col justify-center gap-1 py-3 active:bg-slate-50 sm:py-4"
                 >
-                  <p className="font-medium text-teal-700">
+                  <p className="font-medium text-brand">
                     {patient.firstName} {patient.lastName}
                   </p>
                   <p className="truncate text-sm text-slate-600">

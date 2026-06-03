@@ -36,7 +36,7 @@ export function DoctorRating({
       </div>
       <span className="font-medium text-slate-800">{roundedRating.toFixed(1)}</span>
       {!compact ? (
-        <span className={onClick ? 'text-teal-700 underline-offset-2 group-hover:underline' : 'text-slate-500'}>
+        <span className={onClick ? 'text-brand underline-offset-2 group-hover:underline' : 'text-slate-500'}>
           ({reviewCount} reviews)
         </span>
       ) : null}
