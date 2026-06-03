@@ -10,7 +10,7 @@ const splashTitleFont = DM_Serif_Display({
   weight: '400',
 });
 
-const SPLASH_AUTO_DISMISS_MS = 5000;
+const SPLASH_AUTO_DISMISS_MS = 3000;
 interface AppIntroScreenProps {
   onComplete: () => void;
 }
@@ -40,6 +40,7 @@ export function AppIntroScreen({ onComplete }: AppIntroScreenProps) {
       className={cn(
         'fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-brand px-8 text-brand-foreground',
       )}
+      style={{ backgroundColor: 'var(--color-brand)' }}
       onClick={dismiss}
       onKeyDown={(event) => {
         if (event.key === 'Enter' || event.key === ' ') {
@@ -74,7 +75,7 @@ export function AppIntroScreen({ onComplete }: AppIntroScreenProps) {
           priority
           aria-hidden
           className="mt-12 h-40 w-40 object-contain mix-blend-screen sm:mt-14 sm:h-48 sm:w-48"
-        />{' '}
+        />
       </div>
     </div>
   );

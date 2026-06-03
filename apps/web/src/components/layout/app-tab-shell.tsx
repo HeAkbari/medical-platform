@@ -101,7 +101,7 @@ export function AppTabShell({ children }: { children: React.ReactNode }) {
         <HomeScrollRestoration scrollContainerRef={mainScrollRef} />
         <main
           ref={mainScrollRef}
-          className="mx-auto h-full max-w-lg overflow-y-auto overscroll-y-contain px-4 pb-24 pt-4 sm:px-5"
+          className="mx-auto h-full max-w-lg overflow-y-auto overscroll-y-contain bg-brand-muted px-4 pb-24 pt-4 sm:px-5"
         >
           {children}
         </main>
