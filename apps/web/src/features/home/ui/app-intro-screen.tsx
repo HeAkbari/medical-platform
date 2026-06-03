@@ -1,29 +1,18 @@
 'use client';
 
+import { DM_Serif_Display } from 'next/font/google';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef } from 'react';
 import { cn } from '@/components/ui/cn';
 
-const SPLASH_AUTO_DISMISS_MS = 5000;
+const splashTitleFont = DM_Serif_Display({
+  subsets: ['latin'],
+  weight: '400',
+});
 
+const SPLASH_AUTO_DISMISS_MS = 5000;
 interface AppIntroScreenProps {
   onComplete: () => void;
-}
-
-function SplashHeartIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 48 48"
-      aria-hidden="true"
-      className="h-10 w-10 text-brand-foreground/80"
-    >
-      <path
-        fill="currentColor"
-        d="M24 42s-14-9.6-14-20.2C10 14.9 16.5 10 24 16c7.5-6 14-1.1 14 5.8C38 32.4 24 42 24 42z"
-      />
-    </svg>
-  );
 }
 
 export function AppIntroScreen({ onComplete }: AppIntroScreenProps) {
@@ -47,9 +36,9 @@ export function AppIntroScreen({ onComplete }: AppIntroScreenProps) {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Medical Platform"
+      aria-label="Canadian Health Services"
       className={cn(
-        'fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-brand px-8 text-brand-foreground'
+        'fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-brand px-8 text-brand-foreground',
       )}
       onClick={dismiss}
       onKeyDown={(event) => {
@@ -61,21 +50,31 @@ export function AppIntroScreen({ onComplete }: AppIntroScreenProps) {
     >
       <div className="flex flex-col items-center text-center">
         <Image
-          src="/brand-logo.svg"
+          src="/chs-logo.png"
           alt=""
-          width={88}
-          height={88}
+          width={1024}
+          height={426}
           priority
-          className="h-[5.5rem] w-[5.5rem]"
+          aria-hidden
+          className="h-20 w-auto max-w-[min(100%,20rem)] mix-blend-screen sm:h-24"
         />
-
-        <h1 className="mt-6 text-2xl font-semibold tracking-tight text-brand-foreground">
-          Medical Platform
+        <h1
+          className={cn(
+            splashTitleFont.className,
+            'mt-2 max-w-[13rem] text-base font-normal leading-snug tracking-wide text-brand-logo-text sm:max-w-[14rem] sm:text-lg',
+          )}
+        >
+          Canadian Health Services
         </h1>
-
-        <div className="mt-5">
-          <SplashHeartIcon />
-        </div>
+        <Image
+          src="/chs-heart.png"
+          alt=""
+          width={1000}
+          height={1000}
+          priority
+          aria-hidden
+          className="mt-12 h-40 w-40 object-contain mix-blend-screen sm:mt-14 sm:h-48 sm:w-48"
+        />{' '}
       </div>
     </div>
   );

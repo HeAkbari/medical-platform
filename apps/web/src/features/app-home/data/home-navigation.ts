@@ -57,6 +57,12 @@ export const HOME_SERVICE_ITEMS: HomeServiceItem[] = [
   },
 ];
 
+export const HOME_MAP_CTA = {
+  title: 'Would you like to see doctors near you?',
+  description: 'Browse GPs and specialists on the map near your location.',
+  href: '/home/map',
+} as const;
+
 export const HOME_SUPPORT_ITEMS: HomeSupportItem[] = [
   {
     slug: 'symptom-checker',
@@ -69,12 +75,6 @@ export const HOME_SUPPORT_ITEMS: HomeSupportItem[] = [
     title: 'Health A–Z',
     description: 'Information about conditions, symptoms, and treatments.',
     href: '/home/services/health-a-z',
-  },
-  {
-    slug: 'local-services',
-    title: 'Find local health services',
-    description: 'Pharmacies, GPs, and nearby care on the map.',
-    href: '/home/map',
   },
 ];
 

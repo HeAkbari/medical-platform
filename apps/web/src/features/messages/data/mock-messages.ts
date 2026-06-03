@@ -31,7 +31,7 @@ export const MOCK_HEALTH_MESSAGES: HealthMessage[] = [
     subject: 'Breast screening invitation',
     preview: 'You are invited to attend breast screening. Tap to choose a time.',
     body: 'Our records show you are due for routine breast screening. You can book a convenient appointment through this message or call the screening office.',
-    sender: 'NHS Screening Programme',
+    sender: 'CHS Screening Programme',
     category: 'screening',
     receivedAt: '2026-05-26T14:40:00.000Z',
     read: false,

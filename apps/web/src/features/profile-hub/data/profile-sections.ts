@@ -13,7 +13,7 @@ export const PROFILE_SECTIONS: ProfileSectionItem[] = [
   {
     slug: 'personal-details',
     title: 'Personal details',
-    description: 'NHS number, address, phone, and care plans.',
+    description: 'CHS number, address, phone, and care plans.',
   },
   {
     slug: 'proxy-access',

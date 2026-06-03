@@ -13,6 +13,7 @@
   --color-brand-muted: lab(95 -8 -7);
   --color-brand-subtle: lab(90 -12 -11);
   --color-brand-foreground: lab(97 -3 -3);
+  --color-brand-logo-text: lab(77 -21.24 -22.57);
   --color-primary: var(--color-brand);
   --color-primary-foreground: var(--color-brand-foreground);
   --color-muted: lab(96 -4 -4);
