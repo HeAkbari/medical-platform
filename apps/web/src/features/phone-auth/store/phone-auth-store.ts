@@ -1,12 +1,16 @@
 import { create } from 'zustand';
 import type { MapDoctor } from '@/features/map/types';
+import { useAppointmentBookingStore } from '@/features/appointments/store/appointment-booking-store';
 import { useMapAppointmentStore } from '@/features/map-appointment/store/map-appointment-store';
+import { DEV_AUTH_DEFAULTS } from '@/features/phone-auth/data/dev-auth-defaults';
 
 export type PhoneAuthStep = 'phone' | 'otp' | 'register' | 'profile';
 
 export type PendingAuthAction =
   | { type: 'appointment'; doctor: MapDoctor }
-  | { type: 'profile' };
+  | { type: 'book-appointment'; doctorId?: string; patientId?: string }
+  | { type: 'profile' }
+  | { type: 'navigate'; href: string };
 
 interface PhoneAuthStore {
   authOpen: boolean;
@@ -29,7 +33,7 @@ interface PhoneAuthStore {
 const initialState = {
   authOpen: false,
   step: 'phone' as PhoneAuthStep,
-  phone: '',
+  phone: DEV_AUTH_DEFAULTS.phone,
   registrationToken: null,
   pendingAction: null as PendingAuthAction | null,
 };
@@ -37,22 +41,25 @@ const initialState = {
 export const usePhoneAuthStore = create<PhoneAuthStore>((set, get) => ({
   ...initialState,
   openAuth: (options) =>
-    set({
+    set((state) => ({
       authOpen: true,
       step: options?.step ?? 'phone',
+      phone: state.phone || DEV_AUTH_DEFAULTS.phone,
       pendingAction:
         options?.pendingAction === undefined
-          ? get().pendingAction
+          ? state.pendingAction
           : options.pendingAction,
-    }),
+    })),
   setAuthOpen: (open) =>
     set((state) => ({
       authOpen: open,
       ...(open
-        ? {}
+        ? {
+            phone: state.phone || DEV_AUTH_DEFAULTS.phone,
+          }
         : {
             step: 'phone',
-            phone: '',
+            phone: DEV_AUTH_DEFAULTS.phone,
             registrationToken: null,
             pendingAction: null,
           }),
@@ -73,6 +80,20 @@ export const usePhoneAuthStore = create<PhoneAuthStore>((set, get) => ({
       return;
     }
 
+    if (pendingAction.type === 'book-appointment') {
+      useAppointmentBookingStore.getState().openBooking({
+        doctorId: pendingAction.doctorId,
+        patientId: pendingAction.patientId,
+      });
+      set({ pendingAction: null, authOpen: false });
+      return;
+    }
+
+    if (pendingAction.type === 'navigate') {
+      set({ pendingAction: null, authOpen: false });
+      return;
+    }
+
     set({
       pendingAction: null,
       step: 'profile',
@@ -82,7 +103,7 @@ export const usePhoneAuthStore = create<PhoneAuthStore>((set, get) => ({
   resetFlow: () =>
     set({
       step: 'phone',
-      phone: '',
+      phone: DEV_AUTH_DEFAULTS.phone,
       registrationToken: null,
     }),
 }));

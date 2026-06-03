@@ -4,14 +4,18 @@ import { useAuth } from '@/lib/auth';
 import { usePhoneAuthStore } from '@/features/phone-auth/store/phone-auth-store';
 import type { MapDoctor } from '@/features/map/types';
 
+type RequireAuthAction =
+  | { type: 'appointment'; doctor: MapDoctor }
+  | { type: 'book-appointment'; doctorId?: string; patientId?: string }
+  | { type: 'profile' }
+  | { type: 'navigate'; href: string };
+
 export function useRequireAuth() {
   const { isAuthenticated, isLoading } = useAuth();
   const openAuth = usePhoneAuthStore((state) => state.openAuth);
 
   function requireAuth(
-    pendingAction:
-      | { type: 'appointment'; doctor: MapDoctor }
-      | { type: 'profile' },
+    pendingAction: RequireAuthAction,
     onAuthorized?: () => void
   ): boolean {
     if (isLoading) {

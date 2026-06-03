@@ -1,4 +1,5 @@
 import { HomePage } from '@/features/home';
-export default function HomeRoutePage() {
+
+export default function MapRoutePage() {
   return <HomePage />;
 }

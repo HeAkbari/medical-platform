@@ -30,10 +30,10 @@ export function ResponsiveDrawer({
   return (
     <Drawer.Root open={open} onOpenChange={onOpenChange} direction={direction}>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-black/40" />
+        <Drawer.Overlay className="fixed inset-0 z-[100] bg-black/40" />
         <Drawer.Content
           className={cn(
-            'fixed flex flex-col bg-gray-100 outline-none',
+            'fixed z-[100] flex flex-col bg-gray-100 outline-none',
             direction === 'bottom' &&
               cn(
                 'bottom-0 left-0 right-0 mt-24 rounded-t-[10px]',

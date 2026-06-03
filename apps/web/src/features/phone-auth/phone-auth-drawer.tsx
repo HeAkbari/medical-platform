@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Drawer } from 'vaul';
 import { Button, ResponsiveDrawer } from '@/components/ui';
@@ -14,6 +15,7 @@ import {
   usePhoneAuthStore,
   type PhoneAuthStep,
 } from '@/features/phone-auth/store/phone-auth-store';
+import { DEV_AUTH_DEFAULTS } from '@/features/phone-auth/data/dev-auth-defaults';
 
 function StepIntro({ title, description }: { title: string; description: string }) {
   return (
@@ -25,6 +27,7 @@ function StepIntro({ title, description }: { title: string; description: string 
 }
 
 export function PhoneAuthDrawer() {
+  const router = useRouter();
   const { user, refreshSession, logout } = useAuth();
   const authOpen = usePhoneAuthStore((state) => state.authOpen);
   const setAuthOpen = usePhoneAuthStore((state) => state.setAuthOpen);
@@ -41,11 +44,11 @@ export function PhoneAuthDrawer() {
   );
   const resetFlow = usePhoneAuthStore((state) => state.resetFlow);
 
-  const [otpCode, setOtpCode] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
-  const [email, setEmail] = useState('');
+  const [otpCode, setOtpCode] = useState(DEV_AUTH_DEFAULTS.otpCode);
+  const [firstName, setFirstName] = useState(DEV_AUTH_DEFAULTS.firstName);
+  const [lastName, setLastName] = useState(DEV_AUTH_DEFAULTS.lastName);
+  const [dateOfBirth, setDateOfBirth] = useState(DEV_AUTH_DEFAULTS.dateOfBirth);
+  const [email, setEmail] = useState(DEV_AUTH_DEFAULTS.email);
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -54,7 +57,21 @@ export function PhoneAuthDrawer() {
 
   async function handleAuthenticated() {
     await refreshSession();
+    const pendingAction = usePhoneAuthStore.getState().pendingAction;
     completePendingAction();
+
+    if (pendingAction?.type === 'navigate') {
+      router.push(pendingAction.href);
+    }
+  }
+
+  function resetFormDefaults() {
+    setOtpCode(DEV_AUTH_DEFAULTS.otpCode);
+    setFirstName(DEV_AUTH_DEFAULTS.firstName);
+    setLastName(DEV_AUTH_DEFAULTS.lastName);
+    setDateOfBirth(DEV_AUTH_DEFAULTS.dateOfBirth);
+    setEmail(DEV_AUTH_DEFAULTS.email);
+    setFormError(null);
   }
 
   async function handleSendOtp(event: React.FormEvent<HTMLFormElement>) {
@@ -64,7 +81,7 @@ export function PhoneAuthDrawer() {
 
     try {
       await sendOtpRequest(phone);
-      setOtpCode('');
+      setOtpCode(DEV_AUTH_DEFAULTS.otpCode);
       setStep('otp');
     } catch (error) {
       setFormError(
@@ -140,8 +157,7 @@ export function PhoneAuthDrawer() {
     }
 
     if (!open) {
-      setFormError(null);
-      setOtpCode('');
+      resetFormDefaults();
       resetFlow();
     }
 
@@ -150,7 +166,7 @@ export function PhoneAuthDrawer() {
 
   return (
     <ResponsiveDrawer open={authOpen} onOpenChange={handleOpenChange}>
-      <div className="mx-auto flex min-h-0 w-full max-w-md flex-1 flex-col overflow-y-auto pb-2">
+      <div className="mx-auto flex min-h-0 w-full max-w-md flex-1 flex-col overflow-y-auto pb-4">
               <Drawer.Title className="mb-4 font-medium text-gray-900">
                 {activeStep === 'profile' ? 'My profile' : 'Sign in with phone'}
               </Drawer.Title>
@@ -175,7 +191,10 @@ export function PhoneAuthDrawer() {
                     />
                   </label>
                   <p className="text-xs text-slate-500">
-                    Dev OTP code: <span className="font-medium">123456</span>
+                    Dev defaults: phone{' '}
+                    <span className="font-medium">{DEV_AUTH_DEFAULTS.phone}</span>
+                    {' · '}
+                    OTP <span className="font-medium">{DEV_AUTH_DEFAULTS.otpCode}</span>
                   </p>
                   {formError ? (
                     <p className="text-sm text-red-600">{formError}</p>

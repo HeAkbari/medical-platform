@@ -102,12 +102,6 @@ export function LeafletMap() {
 
   return (
     <div className="relative h-full w-full">
-      {geo.status === 'loading' ? (
-        <div className="absolute inset-0 z-[1000] flex items-center justify-center bg-slate-200/90 text-sm text-slate-600">
-          Getting your location...
-        </div>
-      ) : null}
-
       {geo.status === 'error' ? (
         <div className="absolute inset-x-4 top-4 z-[1000] rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 shadow-sm">
           {geo.message}

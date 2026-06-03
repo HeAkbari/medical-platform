@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useAppointmentsQuery } from '@/hooks';
+import { useAppointmentBookingStore } from '@/features/appointments/store/appointment-booking-store';
 import {
   Badge,
   Button,
@@ -11,6 +12,7 @@ import {
   ErrorState,
   LoadingState,
 } from '@/components/ui';
+import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
 
 function statusVariant(status: string) {
   if (status === 'completed') {
@@ -25,7 +27,15 @@ function statusVariant(status: string) {
 }
 
 export function AppointmentsPage() {
+  const openBooking = useAppointmentBookingStore((state) => state.openBooking);
+  const { requireAuth } = useRequireAuth();
   const { data, isLoading, isError } = useAppointmentsQuery();
+
+  function handleBookAppointment() {
+    requireAuth({ type: 'book-appointment' }, () => {
+      openBooking();
+    });
+  }
 
   if (isLoading) {
     return <LoadingState label="Loading appointments..." />;
@@ -38,15 +48,30 @@ export function AppointmentsPage() {
   const appointments = data?.data ?? [];
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-4">
+      <Link
+        href="/home"
+        scroll={false}
+        className="inline-flex min-h-11 items-center text-sm font-medium text-brand"
+      >
+        ← Back to Home
+      </Link>
+
       <Card>
         <CardHeader
           title="Appointments"
-          description="All appointments from the mock API."
+          description="View, book, or manage your GP appointments."
           action={
-            <Link href="/dashboard/appointments/new">
-              <Button fullWidth>Book appointment</Button>
-            </Link>
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+              <Link href="/home/map" className="inline-flex">
+                <Button variant="secondary" fullWidth>
+                  Find on map
+                </Button>
+              </Link>
+              <Button type="button" fullWidth onClick={handleBookAppointment}>
+                Book appointment
+              </Button>
+            </div>
           }
         />
         {appointments.length === 0 ? (
