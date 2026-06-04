@@ -2,7 +2,8 @@
 
 import { Drawer } from 'vaul';
 import { ResponsiveDrawer } from '@/components/ui/responsive-drawer';
-import { DOCTOR_SPECIALTIES } from '@/features/map/constants';
+import { FACILITY_SUPER_CATEGORIES } from '@/features/map/types';
+import { CATEGORY_LABELS } from '@/features/map/constants';
 import { useMapFilterStore } from '@/features/map/store/map-filter-store';
 
 interface MapFilterProps {
@@ -11,17 +12,23 @@ interface MapFilterProps {
 }
 
 export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
-  const selectedSpecialties = useMapFilterStore(
-    (state) => state.selectedSpecialties
+  const selectedSuperCategories = useMapFilterStore(
+    (state) => state.selectedSuperCategories
   );
   const maxDistanceKm = useMapFilterStore((state) => state.maxDistanceKm);
-  const availableTodayOnly = useMapFilterStore(
-    (state) => state.availableTodayOnly
+  const openNowOnly = useMapFilterStore((state) => state.openNowOnly);
+  const is24HoursOnly = useMapFilterStore((state) => state.is24HoursOnly);
+  const acceptingNewPatientsOnly = useMapFilterStore(
+    (state) => state.acceptingNewPatientsOnly
   );
-  const toggleSpecialty = useMapFilterStore((state) => state.toggleSpecialty);
+  const toggleSuperCategory = useMapFilterStore(
+    (state) => state.toggleSuperCategory
+  );
   const setMaxDistanceKm = useMapFilterStore((state) => state.setMaxDistanceKm);
-  const setAvailableTodayOnly = useMapFilterStore(
-    (state) => state.setAvailableTodayOnly
+  const setOpenNowOnly = useMapFilterStore((state) => state.setOpenNowOnly);
+  const setIs24HoursOnly = useMapFilterStore((state) => state.setIs24HoursOnly);
+  const setAcceptingNewPatientsOnly = useMapFilterStore(
+    (state) => state.setAcceptingNewPatientsOnly
   );
   const resetFilters = useMapFilterStore((state) => state.resetFilters);
 
@@ -33,21 +40,21 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
     >
       <div className="mx-auto max-w-md">
         <Drawer.Title className="mb-4 font-medium text-gray-900">
-          Filter
+          Filter care on map
         </Drawer.Title>
 
         <div className="flex flex-col gap-6 pt-2">
           <fieldset>
             <legend className="mb-3 text-sm font-medium text-slate-700">
-              Specialty
+              Care type
             </legend>
             <div className="flex flex-wrap gap-2">
-              {DOCTOR_SPECIALTIES.map((specialty) => {
-                const isSelected = selectedSpecialties.includes(specialty);
+              {FACILITY_SUPER_CATEGORIES.map((category) => {
+                const isSelected = selectedSuperCategories.includes(category);
 
                 return (
                   <label
-                    key={specialty}
+                    key={category}
                     className={`flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
                       isSelected
                         ? 'border-brand-light bg-brand-muted text-brand-dark'
@@ -58,9 +65,9 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
                       type="checkbox"
                       className="sr-only"
                       checked={isSelected}
-                      onChange={() => toggleSpecialty(specialty)}
+                      onChange={() => toggleSuperCategory(category)}
                     />
-                    {specialty}
+                    {CATEGORY_LABELS[category]}
                   </label>
                 );
               })}
@@ -88,21 +95,39 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
             </div>
           </fieldset>
 
-          <fieldset>
+          <fieldset className="space-y-3">
             <legend className="mb-3 text-sm font-medium text-slate-700">
               Availability
             </legend>
             <label className="flex items-center gap-3">
               <input
                 type="checkbox"
-                checked={availableTodayOnly}
+                checked={openNowOnly}
+                onChange={(event) => setOpenNowOnly(event.target.checked)}
+                className="h-5 w-5 rounded border-slate-300 text-brand-light accent-brand-light"
+              />
+              <span className="text-sm text-slate-700">Open now</span>
+            </label>
+            <label className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                checked={is24HoursOnly}
+                onChange={(event) => setIs24HoursOnly(event.target.checked)}
+                className="h-5 w-5 rounded border-slate-300 text-brand-light accent-brand-light"
+              />
+              <span className="text-sm text-slate-700">24 hours</span>
+            </label>
+            <label className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                checked={acceptingNewPatientsOnly}
                 onChange={(event) =>
-                  setAvailableTodayOnly(event.target.checked)
+                  setAcceptingNewPatientsOnly(event.target.checked)
                 }
                 className="h-5 w-5 rounded border-slate-300 text-brand-light accent-brand-light"
               />
               <span className="text-sm text-slate-700">
-                Show only available today
+                Accepting new patients (primary care)
               </span>
             </label>
           </fieldset>

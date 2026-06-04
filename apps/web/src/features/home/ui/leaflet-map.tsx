@@ -10,12 +10,12 @@ import {
   useMap,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useFilteredMapDoctors } from '@/features/map/hooks/use-filtered-map-doctors';
+import { useFilteredMapFacilities } from '@/features/map/hooks/use-filtered-map-facilities';
 import { useMapNavigationStore } from '@/features/map/store/map-navigation-store';
-import { DoctorMapPopup } from '@/features/map/ui/doctor-map-popup';
+import { FacilityMapPopup } from '@/features/map/ui/facility-map-popup';
 import { MapNavigationBar } from '@/features/map/ui/map-navigation-bar';
 import { MapRouteLayer } from '@/features/map/ui/map-route-layer';
-import { formatDoctorRatingLabel } from '@/features/map/ui/doctor-rating';
+import { createFacilityMarkerIcon } from '@/features/map/utils/facility-markers';
 import { useGeolocation } from '@/hooks/use-geolocation';
 
 const DEFAULT_ZOOM = 13;
@@ -32,27 +32,6 @@ function createUserMarkerIcon() {
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     shadowSize: [41, 41],
-  });
-}
-
-function createDoctorMarkerIcon(
-  profileImageUrl: string,
-  rating: number,
-  reviewCount: number
-) {
-  const ratingLabel = formatDoctorRatingLabel(rating, reviewCount);
-
-  return L.divIcon({
-    className: 'doctor-map-marker',
-    html: `
-      <div class="doctor-map-marker__wrapper">
-        <img src="${profileImageUrl}" alt="" />
-        <span class="doctor-map-marker__rating">${ratingLabel}</span>
-      </div>
-    `,
-    iconSize: [48, 52],
-    iconAnchor: [24, 26],
-    popupAnchor: [0, -26],
   });
 }
 
@@ -80,31 +59,34 @@ export function LeafletMap() {
   const geo = useGeolocation();
   const userMarkerIcon = useMemo(() => createUserMarkerIcon(), []);
   const userPosition = geo.status === 'success' ? geo.position : null;
-  const filteredDoctors = useFilteredMapDoctors(userPosition);
+  const filteredFacilities = useFilteredMapFacilities(userPosition);
   const activeRoute = useMapNavigationStore((state) => state.route);
   const navigationStatus = useMapNavigationStore((state) => state.status);
   const shouldRecenterOnUser =
     navigationStatus === 'idle' || navigationStatus === 'error';
-  const doctorMarkerIcons = useMemo(
+  const facilityMarkerIcons = useMemo(
     () =>
       new Map(
-        filteredDoctors.map((doctor) => [
-          doctor.id,
-          createDoctorMarkerIcon(
-            doctor.profileImageUrl,
-            doctor.rating,
-            doctor.reviewCount
-          ),
+        filteredFacilities.map((facility) => [
+          facility.id,
+          createFacilityMarkerIcon(facility.superCategory),
         ])
       ),
-    [filteredDoctors]
+    [filteredFacilities]
   );
 
   return (
     <div className="relative h-full w-full">
       {geo.status === 'error' ? (
-        <div className="absolute inset-x-4 top-4 z-[1000] rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 shadow-sm">
-          {geo.message}
+        <div className="absolute inset-x-4 top-[7.5rem] z-[1000] rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 shadow-sm">
+          {geo.message} Showing Greater Victoria area.
+        </div>
+      ) : null}
+
+      {userPosition && filteredFacilities.length === 0 ? (
+        <div className="absolute inset-x-4 top-[7.5rem] z-[1000] rounded-xl border border-slate-200 bg-white/95 px-4 py-3 text-sm text-slate-700 shadow-sm">
+          No matching care nearby. Try Urgent &amp; walk-in or widen distance in
+          filters.
         </div>
       ) : null}
 
@@ -130,15 +112,15 @@ export function LeafletMap() {
         ) : null}
         {activeRoute ? <MapRouteLayer route={activeRoute} /> : null}
         {userPosition
-          ? filteredDoctors.map((doctor) => (
+          ? filteredFacilities.map((facility) => (
               <Marker
-                key={doctor.id}
-                position={doctor.position}
-                icon={doctorMarkerIcons.get(doctor.id)}
+                key={facility.id}
+                position={facility.position}
+                icon={facilityMarkerIcons.get(facility.id)}
               >
                 <Popup>
-                  <DoctorMapPopup
-                    doctor={doctor}
+                  <FacilityMapPopup
+                    facility={facility}
                     userPosition={userPosition}
                   />
                 </Popup>

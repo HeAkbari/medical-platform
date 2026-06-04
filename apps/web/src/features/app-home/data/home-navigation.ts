@@ -58,8 +58,9 @@ export const HOME_SERVICE_ITEMS: HomeServiceItem[] = [
 ];
 
 export const HOME_MAP_CTA = {
-  title: 'Would you like to see doctors near you?',
-  description: 'Browse GPs and specialists on the map near your location.',
+  title: 'Find care near you?',
+  description:
+    'Walk-in clinics, pharmacies, GPs accepting patients, and more on the map.',
   href: '/home/map',
 } as const;
 

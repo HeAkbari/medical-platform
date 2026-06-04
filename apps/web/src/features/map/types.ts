@@ -1,25 +1,99 @@
-import { DOCTOR_SPECIALTIES } from './constants';
+export const FACILITY_SUPER_CATEGORIES = [
+  'urgent-walk-in',
+  'pharmacy',
+  'primary-care',
+  'therapy-rehab',
+  'mental-health',
+  'dental-other',
+] as const;
 
-export type DoctorSpecialty = (typeof DOCTOR_SPECIALTIES)[number];
+export type FacilitySuperCategory = (typeof FACILITY_SUPER_CATEGORIES)[number];
 
-export interface MapDoctor {
-  id: string;
-  firstName: string;
-  lastName: string;
-  specialty: DoctorSpecialty;
-  email: string;
-  phone: string;
-  profileImageUrl: string;
-  position: [number, number];
-  availableToday: boolean;
-  rating: number;
-  reviewCount: number;
+export const FACILITY_CATEGORIES = [
+  'walk-in-clinic',
+  'urgent-care',
+  'emergency-department',
+  'pharmacy',
+  'family-practice',
+  'nurse-practitioner-clinic',
+  'physiotherapy',
+  'chiropractic',
+  'massage-therapy',
+  'psychology',
+  'counselling',
+  'dentistry',
+  'podiatry',
+  'dietitian',
+] as const;
+
+export type FacilityCategory = (typeof FACILITY_CATEGORIES)[number];
+
+export type CoverageBadge =
+  | 'provincially-insured'
+  | 'co-pay-limit'
+  | 'direct-pay'
+  | 'private-insurance'
+  | 'accepting-new-patients'
+  | 'open-now'
+  | '24-hours'
+  | 'wait-time-estimate'
+  | 'referral-not-required'
+  | 'province-specific';
+
+export type MapActionType = 'call' | 'navigate' | 'book';
+
+export interface MapFacilityAddress {
+  street: string;
+  city: string;
+  province: 'BC';
+  postalCode: string;
 }
 
-export interface MapDoctorFilters {
-  selectedSpecialties: DoctorSpecialty[];
+export interface WeeklyHours {
+  monday: string;
+  tuesday: string;
+  wednesday: string;
+  thursday: string;
+  friday: string;
+  saturday: string;
+  sunday: string;
+}
+
+export interface MapFacility {
+  id: string;
+  category: FacilityCategory;
+  superCategory: FacilitySuperCategory;
+  subcategory?: string;
+  name: string;
+  address: MapFacilityAddress;
+  position: [number, number];
+  phone?: string;
+  website?: string;
+  hours: WeeklyHours | '24/7';
+  isOpenNow: boolean;
+  coverageBadges: CoverageBadge[];
+  acceptingNewPatients?: boolean;
+  waitTimeMinutes?: number;
+  waitTimeUpdatedAt?: string;
+  waitTimeSource?: string;
+  services?: string[];
+  whyOnMap: string;
+  province: 'BC';
+  actions: MapActionType[];
+  providerId?: string;
+  supportsBooking: boolean;
+  is24Hours?: boolean;
+  minorAilmentsPrescribing?: boolean;
+  source: 'mock';
+  lastVerifiedAt: string;
+}
+
+export interface MapFacilityFilters {
+  selectedSuperCategories: FacilitySuperCategory[];
   maxDistanceKm: number;
-  availableTodayOnly: boolean;
+  openNowOnly: boolean;
+  is24HoursOnly: boolean;
+  acceptingNewPatientsOnly: boolean;
 }
 
 export interface MapRoute {
@@ -29,12 +103,3 @@ export interface MapRoute {
 }
 
 export type MapNavigationStatus = 'idle' | 'loading' | 'success' | 'error';
-
-export interface DoctorReview {
-  id: string;
-  doctorId: string;
-  authorName: string;
-  rating: number;
-  comment: string;
-  createdAt: string;
-}

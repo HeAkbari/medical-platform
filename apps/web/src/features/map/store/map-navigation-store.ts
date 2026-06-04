@@ -1,41 +1,41 @@
 import { create } from 'zustand';
 import { fetchMapRoute } from '../services/fetch-route';
 import type {
-  MapDoctor,
+  MapFacility,
   MapNavigationStatus,
   MapRoute,
 } from '../types';
 
 interface MapNavigationStore {
-  activeDoctor: MapDoctor | null;
+  activeFacility: MapFacility | null;
   route: MapRoute | null;
   status: MapNavigationStatus;
   errorMessage: string | null;
   startNavigation: (
-    doctor: MapDoctor,
+    facility: MapFacility,
     userPosition: [number, number]
   ) => Promise<void>;
   clearNavigation: () => void;
 }
 
 export const useMapNavigationStore = create<MapNavigationStore>((set) => ({
-  activeDoctor: null,
+  activeFacility: null,
   route: null,
   status: 'idle',
   errorMessage: null,
-  startNavigation: async (doctor, userPosition) => {
+  startNavigation: async (facility, userPosition) => {
     set({
-      activeDoctor: doctor,
+      activeFacility: facility,
       route: null,
       status: 'loading',
       errorMessage: null,
     });
 
     try {
-      const route = await fetchMapRoute(userPosition, doctor.position);
+      const route = await fetchMapRoute(userPosition, facility.position);
 
       set({
-        activeDoctor: doctor,
+        activeFacility: facility,
         route,
         status: 'success',
         errorMessage: null,
@@ -45,7 +45,7 @@ export const useMapNavigationStore = create<MapNavigationStore>((set) => ({
         error instanceof Error ? error.message : 'Unable to calculate route';
 
       set({
-        activeDoctor: doctor,
+        activeFacility: facility,
         route: null,
         status: 'error',
         errorMessage: message,
@@ -54,7 +54,7 @@ export const useMapNavigationStore = create<MapNavigationStore>((set) => ({
   },
   clearNavigation: () =>
     set({
-      activeDoctor: null,
+      activeFacility: null,
       route: null,
       status: 'idle',
       errorMessage: null,

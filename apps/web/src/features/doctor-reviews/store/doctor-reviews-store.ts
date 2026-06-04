@@ -1,10 +1,20 @@
 import { create } from 'zustand';
-import type { MapDoctor } from '@/features/map/types';
+
+/** Legacy type for unused doctor-reviews feature (pre facility-centric map). */
+export interface ReviewDoctor {
+  id: string;
+  firstName: string;
+  lastName: string;
+  specialty: string;
+  profileImageUrl: string;
+  rating: number;
+  reviewCount: number;
+}
 
 interface DoctorReviewsStore {
   reviewsOpen: boolean;
-  selectedDoctor: MapDoctor | null;
-  openReviews: (doctor: MapDoctor) => void;
+  selectedDoctor: ReviewDoctor | null;
+  openReviews: (doctor: ReviewDoctor) => void;
   setReviewsOpen: (open: boolean) => void;
 }
 

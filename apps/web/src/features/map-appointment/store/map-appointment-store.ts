@@ -1,24 +1,24 @@
 import { create } from 'zustand';
-import type { MapDoctor } from '@/features/map/types';
+import type { MapFacility } from '@/features/map/types';
 
 interface MapAppointmentStore {
   appointmentOpen: boolean;
-  selectedDoctor: MapDoctor | null;
-  openAppointment: (doctor: MapDoctor) => void;
+  selectedFacility: MapFacility | null;
+  openAppointment: (facility: MapFacility) => void;
   setAppointmentOpen: (open: boolean) => void;
 }
 
 export const useMapAppointmentStore = create<MapAppointmentStore>((set) => ({
   appointmentOpen: false,
-  selectedDoctor: null,
-  openAppointment: (doctor) =>
+  selectedFacility: null,
+  openAppointment: (facility) =>
     set({
-      selectedDoctor: doctor,
+      selectedFacility: facility,
       appointmentOpen: true,
     }),
   setAppointmentOpen: (open) =>
     set((state) => ({
       appointmentOpen: open,
-      selectedDoctor: open ? state.selectedDoctor : null,
+      selectedFacility: open ? state.selectedFacility : null,
     })),
 }));

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { MapDoctor } from '@/features/map/types';
+import type { MapFacility } from '@/features/map/types';
 import { useAppointmentBookingStore } from '@/features/appointments/store/appointment-booking-store';
 import { useMapAppointmentStore } from '@/features/map-appointment/store/map-appointment-store';
 import { DEV_AUTH_DEFAULTS } from '@/features/phone-auth/data/dev-auth-defaults';
@@ -7,7 +7,7 @@ import { DEV_AUTH_DEFAULTS } from '@/features/phone-auth/data/dev-auth-defaults'
 export type PhoneAuthStep = 'phone' | 'otp' | 'register' | 'profile';
 
 export type PendingAuthAction =
-  | { type: 'appointment'; doctor: MapDoctor }
+  | { type: 'appointment'; facility: MapFacility }
   | { type: 'book-appointment'; doctorId?: string; patientId?: string }
   | { type: 'profile' }
   | { type: 'navigate'; href: string };
@@ -75,7 +75,7 @@ export const usePhoneAuthStore = create<PhoneAuthStore>((set, get) => ({
     }
 
     if (pendingAction.type === 'appointment') {
-      useMapAppointmentStore.getState().openAppointment(pendingAction.doctor);
+      useMapAppointmentStore.getState().openAppointment(pendingAction.facility);
       set({ pendingAction: null, authOpen: false });
       return;
     }

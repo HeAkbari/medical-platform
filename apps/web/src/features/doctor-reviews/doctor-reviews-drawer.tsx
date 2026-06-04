@@ -2,12 +2,12 @@
 
 import { Drawer } from 'vaul';
 import { Button, ResponsiveDrawer } from '@/components/ui';
+import { useAppointmentBookingStore } from '@/features/appointments/store/appointment-booking-store';
 import { getDoctorReviews } from '@/features/doctor-reviews/data/mock-doctor-reviews';
 import { useDoctorReviewsStore } from '@/features/doctor-reviews/store/doctor-reviews-store';
-import { useMapAppointmentStore } from '@/features/map-appointment/store/map-appointment-store';
+import type { DoctorReview } from '@/features/doctor-reviews/types';
 import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
 import { DoctorRating } from '@/features/map/ui/doctor-rating';
-import type { DoctorReview } from '@/features/map/types';
 
 function ReviewStars({ rating }: { rating: number }) {
   const filledStars = Math.min(5, Math.max(0, Math.round(rating)));
@@ -56,7 +56,7 @@ export function DoctorReviewsDrawer() {
   const setReviewsOpen = useDoctorReviewsStore((state) => state.setReviewsOpen);
   const selectedDoctor = useDoctorReviewsStore((state) => state.selectedDoctor);
   const { requireAuth } = useRequireAuth();
-  const openAppointment = useMapAppointmentStore((state) => state.openAppointment);
+  const openBooking = useAppointmentBookingStore((state) => state.openBooking);
 
   const reviews = selectedDoctor ? getDoctorReviews(selectedDoctor.id) : [];
 
@@ -65,10 +65,13 @@ export function DoctorReviewsDrawer() {
       return;
     }
 
-    requireAuth({ type: 'appointment', doctor: selectedDoctor }, () => {
-      setReviewsOpen(false);
-      openAppointment(selectedDoctor);
-    });
+    requireAuth(
+      { type: 'book-appointment', doctorId: selectedDoctor.id },
+      () => {
+        setReviewsOpen(false);
+        openBooking({ doctorId: selectedDoctor.id });
+      }
+    );
   }
 
   return (

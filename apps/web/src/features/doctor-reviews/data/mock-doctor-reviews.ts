@@ -1,4 +1,4 @@
-import type { DoctorReview } from '@/features/map/types';
+import type { DoctorReview } from '@/features/doctor-reviews/types';
 
 export const MOCK_DOCTOR_REVIEWS: DoctorReview[] = [
   {

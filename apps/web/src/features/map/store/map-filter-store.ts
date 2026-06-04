@@ -1,57 +1,69 @@
 import { create } from 'zustand';
 import {
   DEFAULT_MAX_DISTANCE_KM,
-  DOCTOR_SPECIALTIES,
-  type MapNeedOptionId,
+  type MapCategoryOptionId,
 } from '../constants';
-import type { DoctorSpecialty } from '../types';
+import {
+  FACILITY_SUPER_CATEGORIES,
+  type FacilitySuperCategory,
+} from '../types';
 
 interface MapFilterStore {
-  selectedSpecialties: DoctorSpecialty[];
+  selectedSuperCategories: FacilitySuperCategory[];
   maxDistanceKm: number;
-  availableTodayOnly: boolean;
-  toggleSpecialty: (specialty: DoctorSpecialty) => void;
-  selectQuickNeed: (need: MapNeedOptionId) => void;
+  openNowOnly: boolean;
+  is24HoursOnly: boolean;
+  acceptingNewPatientsOnly: boolean;
+  toggleSuperCategory: (category: FacilitySuperCategory) => void;
+  selectQuickCategory: (category: MapCategoryOptionId) => void;
   setMaxDistanceKm: (km: number) => void;
-  setAvailableTodayOnly: (value: boolean) => void;
+  setOpenNowOnly: (value: boolean) => void;
+  setIs24HoursOnly: (value: boolean) => void;
+  setAcceptingNewPatientsOnly: (value: boolean) => void;
   resetFilters: () => void;
 }
 
 const defaultState = {
-  selectedSpecialties: [...DOCTOR_SPECIALTIES],
+  selectedSuperCategories: [...FACILITY_SUPER_CATEGORIES],
   maxDistanceKm: DEFAULT_MAX_DISTANCE_KM,
-  availableTodayOnly: false,
+  openNowOnly: false,
+  is24HoursOnly: false,
+  acceptingNewPatientsOnly: false,
 };
 
 export const useMapFilterStore = create<MapFilterStore>((set) => ({
   ...defaultState,
-  toggleSpecialty: (specialty) =>
+  toggleSuperCategory: (category) =>
     set((state) => {
-      const isSelected = state.selectedSpecialties.includes(specialty);
+      const isSelected = state.selectedSuperCategories.includes(category);
 
       return {
-        selectedSpecialties: isSelected
-          ? state.selectedSpecialties.filter((item) => item !== specialty)
-          : [...state.selectedSpecialties, specialty],
+        selectedSuperCategories: isSelected
+          ? state.selectedSuperCategories.filter((item) => item !== category)
+          : [...state.selectedSuperCategories, category],
       };
     }),
-  selectQuickNeed: (need) =>
+  selectQuickCategory: (category) =>
     set((state) => {
-      if (need === 'all') {
-        return { selectedSpecialties: [...DOCTOR_SPECIALTIES] };
+      if (category === 'all') {
+        return { selectedSuperCategories: [...FACILITY_SUPER_CATEGORIES] };
       }
 
+      const superCategory = category as FacilitySuperCategory;
       const isOnlySelected =
-        state.selectedSpecialties.length === 1 &&
-        state.selectedSpecialties[0] === need;
+        state.selectedSuperCategories.length === 1 &&
+        state.selectedSuperCategories[0] === superCategory;
 
       return {
-        selectedSpecialties: isOnlySelected
-          ? [...DOCTOR_SPECIALTIES]
-          : [need],
+        selectedSuperCategories: isOnlySelected
+          ? [...FACILITY_SUPER_CATEGORIES]
+          : [superCategory],
       };
     }),
   setMaxDistanceKm: (km) => set({ maxDistanceKm: km }),
-  setAvailableTodayOnly: (value) => set({ availableTodayOnly: value }),
+  setOpenNowOnly: (value) => set({ openNowOnly: value }),
+  setIs24HoursOnly: (value) => set({ is24HoursOnly: value }),
+  setAcceptingNewPatientsOnly: (value) =>
+    set({ acceptingNewPatientsOnly: value }),
   resetFilters: () => set(defaultState),
 }));

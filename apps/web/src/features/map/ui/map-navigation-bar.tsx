@@ -2,19 +2,20 @@
 
 import { Button } from '@/components/ui';
 import { useMapNavigationStore } from '../store/map-navigation-store';
+import { formatFacilityAddress } from '../utils/filter-facilities';
 import {
   formatDistanceMeters,
   formatDuration,
 } from '../utils/format-route';
 
 export function MapNavigationBar() {
-  const activeDoctor = useMapNavigationStore((state) => state.activeDoctor);
+  const activeFacility = useMapNavigationStore((state) => state.activeFacility);
   const route = useMapNavigationStore((state) => state.route);
   const status = useMapNavigationStore((state) => state.status);
   const errorMessage = useMapNavigationStore((state) => state.errorMessage);
   const clearNavigation = useMapNavigationStore((state) => state.clearNavigation);
 
-  if (status === 'idle' || !activeDoctor) {
+  if (status === 'idle' || !activeFacility) {
     return null;
   }
 
@@ -29,7 +30,10 @@ export function MapNavigationBar() {
             Navigation
           </p>
           <p className="truncate font-semibold text-slate-900">
-            {activeDoctor.firstName} {activeDoctor.lastName}
+            {activeFacility.name}
+          </p>
+          <p className="truncate text-sm text-slate-600">
+            {formatFacilityAddress(activeFacility)}
           </p>
 
           {status === 'loading' ? (

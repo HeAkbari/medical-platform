@@ -2,10 +2,10 @@
 
 import { useAuth } from '@/lib/auth';
 import { usePhoneAuthStore } from '@/features/phone-auth/store/phone-auth-store';
-import type { MapDoctor } from '@/features/map/types';
+import type { MapFacility } from '@/features/map/types';
 
 type RequireAuthAction =
-  | { type: 'appointment'; doctor: MapDoctor }
+  | { type: 'appointment'; facility: MapFacility }
   | { type: 'book-appointment'; doctorId?: string; patientId?: string }
   | { type: 'profile' }
   | { type: 'navigate'; href: string };
