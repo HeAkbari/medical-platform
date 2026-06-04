@@ -84,11 +84,7 @@ export function getHomeService(slug: string): HomeServiceItem | undefined {
 }
 
 export function getHomeSupportPlaceholder(slug: string): HomeSupportItem | undefined {
-  if (slug === 'symptom-checker' || slug === 'health-a-z') {
-    return HOME_SUPPORT_ITEMS.find((item) => item.slug === slug);
-  }
-
-  return undefined;
+  return HOME_SUPPORT_ITEMS.find((item) => item.slug === slug);
 }
 
 export function isUserServiceSlug(slug: string): slug is HomeServiceSlug {
