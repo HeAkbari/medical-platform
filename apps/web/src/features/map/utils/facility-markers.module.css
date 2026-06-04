@@ -1,0 +1,49 @@
+:global(.leaflet-div-icon).leafletFacilityIcon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.28);
+  pointer-events: auto;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  user-select: none;
+}
+
+.urgentWalkIn {
+  background: #dc2626;
+}
+
+.pharmacy {
+  background: #16a34a;
+}
+
+.primaryCare {
+  background: #2563eb;
+}
+
+.therapyRehab {
+  background: #7c3aed;
+}
+
+.mentalHealth {
+  background: #0d9488;
+}
+
+.dentalOther {
+  background: #d97706;
+}

@@ -36,15 +36,6 @@ export const CATEGORY_LABELS: Record<FacilitySuperCategory, string> = {
   'dental-other': 'Dental & other',
 };
 
-export const MARKER_COLORS: Record<FacilitySuperCategory, string> = {
-  'urgent-walk-in': '#dc2626',
-  pharmacy: '#16a34a',
-  'primary-care': '#2563eb',
-  'therapy-rehab': '#7c3aed',
-  'mental-health': '#0d9488',
-  'dental-other': '#d97706',
-};
-
 export const MAP_EMERGENCY_DISCLAIMER =
   'For life-threatening emergencies, call 911. This map shows care you can access directly without a specialist referral.';
 

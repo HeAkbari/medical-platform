@@ -41,31 +41,6 @@ body {
   z-index: 0;
 }
 
-.facility-map-marker {
-  background: transparent;
-  border: none;
-}
-
-.facility-map-marker__pin {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 9999px;
-  background: var(--marker-color, #2563eb);
-  border: 2px solid #ffffff;
-  box-shadow: 0 2px 8px lab(22 -8 -8 / 0.25);
-}
-
-.facility-map-marker__label {
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 1;
-  color: #ffffff;
-  letter-spacing: -0.02em;
-}
-
 .map-need-scroll {
   scrollbar-width: none;
   -ms-overflow-style: none;
