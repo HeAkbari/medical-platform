@@ -7,3 +7,4 @@ export * from './services/doctor.service';
 export * from './services/appointment.service';
 export * from './adapters/in-memory/mock-data/index';
 export * from './adapters/in-memory/mock-repositories';
+export * from './adapters/fhir/index';

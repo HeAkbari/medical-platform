@@ -6,9 +6,13 @@ export const appointmentStatusSchema = z.enum([
   'cancelled',
 ]);
 
+// Resource ids are backend-defined: UUIDs from the mock store, numeric ids from
+// a FHIR server (HAPI / OSCAR). Accept any non-empty id rather than forcing UUID.
+const resourceId = z.string().min(1);
+
 export const createAppointmentSchema = z.object({
-  patientId: z.string().uuid(),
-  doctorId: z.string().uuid(),
+  patientId: resourceId,
+  doctorId: resourceId,
   scheduledAt: z.string().datetime(),
   durationMinutes: z.number().int().min(15).max(240),
   reason: z.string().min(3).max(500),
@@ -16,8 +20,8 @@ export const createAppointmentSchema = z.object({
 });
 
 export const appointmentQuerySchema = z.object({
-  patientId: z.string().uuid().optional(),
-  doctorId: z.string().uuid().optional(),
+  patientId: resourceId.optional(),
+  doctorId: resourceId.optional(),
   date: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)
