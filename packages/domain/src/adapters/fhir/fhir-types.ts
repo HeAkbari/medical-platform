@@ -74,7 +74,115 @@ export interface FhirAppointment {
   participant?: FhirAppointmentParticipant[];
 }
 
-export type FhirResource = FhirPatient | FhirPractitioner | FhirAppointment;
+export interface FhirCoding {
+  system?: string;
+  code?: string;
+  display?: string;
+}
+
+export interface FhirCodeableConcept {
+  coding?: FhirCoding[];
+  text?: string;
+}
+
+export interface FhirAddress {
+  line?: string[];
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  country?: string;
+}
+
+export interface FhirLocationPosition {
+  latitude?: number;
+  longitude?: number;
+  altitude?: number;
+}
+
+export interface FhirLocationHoursOfOperation {
+  daysOfWeek?: string[]; // mon | tue | wed | thu | fri | sat | sun
+  allDay?: boolean;
+  openingTime?: string; // HH:mm:ss
+  closingTime?: string; // HH:mm:ss
+}
+
+export interface FhirLocation {
+  resourceType: 'Location';
+  id?: string;
+  meta?: FhirMeta;
+  status?: string;
+  name?: string;
+  type?: FhirCodeableConcept[];
+  telecom?: FhirContactPoint[];
+  address?: FhirAddress;
+  position?: FhirLocationPosition;
+  hoursOfOperation?: FhirLocationHoursOfOperation[];
+}
+
+export interface FhirOrganization {
+  resourceType: 'Organization';
+  id?: string;
+  meta?: FhirMeta;
+  name?: string;
+  alias?: string[];
+  type?: FhirCodeableConcept[];
+  telecom?: FhirContactPoint[];
+  address?: FhirAddress[];
+}
+
+export interface FhirAvailableTime {
+  daysOfWeek?: string[];
+  allDay?: boolean;
+  availableStartTime?: string;
+  availableEndTime?: string;
+}
+
+export interface FhirHealthcareServiceEligibility {
+  code?: FhirCodeableConcept;
+  comment?: string;
+}
+
+export interface FhirHealthcareService {
+  resourceType: 'HealthcareService';
+  id?: string;
+  meta?: FhirMeta;
+  active?: boolean;
+  providedBy?: FhirReference;
+  location?: FhirReference[];
+  name?: string;
+  comment?: string;
+  extraDetails?: string;
+  category?: FhirCodeableConcept[];
+  type?: FhirCodeableConcept[];
+  specialty?: FhirCodeableConcept[];
+  appointmentRequired?: boolean;
+  referralMethod?: FhirCodeableConcept[];
+  eligibility?: FhirHealthcareServiceEligibility[];
+  program?: FhirCodeableConcept[];
+  communication?: FhirCodeableConcept[];
+  availableTime?: FhirAvailableTime[];
+}
+
+export interface FhirPractitionerRole {
+  resourceType: 'PractitionerRole';
+  id?: string;
+  meta?: FhirMeta;
+  practitioner?: FhirReference;
+  organization?: FhirReference;
+  location?: FhirReference[];
+  code?: FhirCodeableConcept[];
+  specialty?: FhirCodeableConcept[];
+  availableTime?: FhirAvailableTime[];
+}
+
+export type FhirResource =
+  | FhirPatient
+  | FhirPractitioner
+  | FhirAppointment
+  | FhirLocation
+  | FhirOrganization
+  | FhirHealthcareService
+  | FhirPractitionerRole;
 
 export interface FhirBundleEntry<T> {
   fullUrl?: string;

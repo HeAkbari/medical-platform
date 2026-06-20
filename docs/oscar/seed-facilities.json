@@ -1,0 +1,218 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "request": { "method": "POST", "url": "Location" },
+      "resource": {
+        "resourceType": "Location",
+        "status": "active",
+        "name": "James Bay Urgent & Family Clinic",
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "https://medical-platform.local/facility-category",
+                "code": "walk-in-clinic"
+              }
+            ],
+            "text": "Walk-in Clinic"
+          }
+        ],
+        "telecom": [{ "system": "phone", "value": "+1-250-555-0101" }],
+        "address": {
+          "line": ["1234 Government St"],
+          "city": "Victoria",
+          "state": "BC",
+          "postalCode": "V8W 1X5"
+        },
+        "position": { "latitude": 48.4168, "longitude": -123.3698 },
+        "hoursOfOperation": [
+          {
+            "daysOfWeek": ["mon", "tue", "wed", "thu", "fri"],
+            "openingTime": "08:00:00",
+            "closingTime": "20:00:00"
+          },
+          {
+            "daysOfWeek": ["sat", "sun"],
+            "openingTime": "09:00:00",
+            "closingTime": "17:00:00"
+          }
+        ]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "Location" },
+      "resource": {
+        "resourceType": "Location",
+        "status": "active",
+        "name": "Cook Street Pharmacy",
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "https://medical-platform.local/facility-category",
+                "code": "pharmacy"
+              }
+            ],
+            "text": "Pharmacy"
+          }
+        ],
+        "telecom": [
+          { "system": "phone", "value": "+1-250-555-0110" },
+          { "system": "url", "value": "https://cookstreetpharmacy.example.ca" }
+        ],
+        "address": {
+          "line": ["320 Cook St"],
+          "city": "Victoria",
+          "state": "BC",
+          "postalCode": "V8V 3X5"
+        },
+        "position": { "latitude": 48.4185, "longitude": -123.353 },
+        "hoursOfOperation": [
+          {
+            "daysOfWeek": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "openingTime": "08:00:00",
+            "closingTime": "22:00:00"
+          }
+        ]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "Location" },
+      "resource": {
+        "resourceType": "Location",
+        "status": "active",
+        "name": "Fairfield Family Practice",
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "https://medical-platform.local/facility-category",
+                "code": "family-practice"
+              }
+            ],
+            "text": "Family Practice"
+          }
+        ],
+        "telecom": [{ "system": "phone", "value": "+1-250-555-0120" }],
+        "address": {
+          "line": ["1560 Fairfield Rd"],
+          "city": "Victoria",
+          "state": "BC",
+          "postalCode": "V8S 1G1"
+        },
+        "position": { "latitude": 48.4127, "longitude": -123.345 },
+        "hoursOfOperation": [
+          {
+            "daysOfWeek": ["mon", "tue", "wed", "thu", "fri"],
+            "openingTime": "09:00:00",
+            "closingTime": "17:00:00"
+          }
+        ]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "Location" },
+      "resource": {
+        "resourceType": "Location",
+        "status": "active",
+        "name": "Victoria Physio & Rehab",
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "https://medical-platform.local/facility-category",
+                "code": "physiotherapy"
+              }
+            ],
+            "text": "Physiotherapy"
+          }
+        ],
+        "telecom": [{ "system": "phone", "value": "+1-250-555-0130" }],
+        "address": {
+          "line": ["910 Hillside Ave"],
+          "city": "Victoria",
+          "state": "BC",
+          "postalCode": "V8T 1Z3"
+        },
+        "position": { "latitude": 48.4284, "longitude": -123.365 },
+        "hoursOfOperation": [
+          {
+            "daysOfWeek": ["mon", "tue", "wed", "thu", "fri"],
+            "openingTime": "07:00:00",
+            "closingTime": "19:00:00"
+          }
+        ]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "Location" },
+      "resource": {
+        "resourceType": "Location",
+        "status": "active",
+        "name": "Inner Harbour Psychology",
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "https://medical-platform.local/facility-category",
+                "code": "psychology"
+              }
+            ],
+            "text": "Psychology"
+          }
+        ],
+        "telecom": [{ "system": "phone", "value": "+1-250-555-0140" }],
+        "address": {
+          "line": ["75 Wharf St"],
+          "city": "Victoria",
+          "state": "BC",
+          "postalCode": "V8W 1T9"
+        },
+        "position": { "latitude": 48.423, "longitude": -123.37 },
+        "hoursOfOperation": [
+          {
+            "daysOfWeek": ["mon", "tue", "wed", "thu"],
+            "openingTime": "10:00:00",
+            "closingTime": "18:00:00"
+          }
+        ]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "Location" },
+      "resource": {
+        "resourceType": "Location",
+        "status": "active",
+        "name": "Oak Bay Dental",
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "https://medical-platform.local/facility-category",
+                "code": "dentistry"
+              }
+            ],
+            "text": "Dentistry"
+          }
+        ],
+        "telecom": [{ "system": "phone", "value": "+1-250-555-0150" }],
+        "address": {
+          "line": ["2200 Oak Bay Ave"],
+          "city": "Victoria",
+          "state": "BC",
+          "postalCode": "V8R 1G3"
+        },
+        "position": { "latitude": 48.427, "longitude": -123.31 },
+        "hoursOfOperation": [
+          {
+            "daysOfWeek": ["mon", "tue", "wed", "thu", "fri"],
+            "openingTime": "08:00:00",
+            "closingTime": "16:00:00"
+          }
+        ]
+      }
+    }
+  ]
+}

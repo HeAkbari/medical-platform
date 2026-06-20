@@ -1,0 +1,189 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:org-island-health",
+      "request": { "method": "POST", "url": "Organization" },
+      "resource": {
+        "resourceType": "Organization",
+        "name": "Island Health",
+        "type": [{ "text": "Healthcare Provider" }],
+        "telecom": [
+          { "system": "phone", "value": "+1-250-370-8699" },
+          { "system": "url", "value": "https://www.islandhealth.ca" }
+        ],
+        "address": [
+          {
+            "line": ["1952 Bay St"],
+            "city": "Victoria",
+            "state": "BC",
+            "postalCode": "V8R 1J8"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:org-coastal-clinics",
+      "request": { "method": "POST", "url": "Organization" },
+      "resource": {
+        "resourceType": "Organization",
+        "name": "Coastal Community Clinics",
+        "type": [{ "text": "Private Clinic Group" }],
+        "telecom": [{ "system": "url", "value": "https://coastalclinics.example.ca" }]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "HealthcareService" },
+      "resource": {
+        "resourceType": "HealthcareService",
+        "providedBy": { "reference": "urn:uuid:org-island-health" },
+        "location": [{ "reference": "Location/1015" }],
+        "name": "Urgent Walk-in Care",
+        "category": [{ "text": "Urgent care" }],
+        "type": [{ "text": "Walk-in clinic" }],
+        "specialty": [{ "text": "Family medicine" }],
+        "comment": "No appointment needed — first-come, first-served. Bring your BC Services Card.",
+        "appointmentRequired": false,
+        "referralMethod": [{ "text": "No referral required" }],
+        "eligibility": [{ "comment": "Open to all BC residents with valid coverage" }],
+        "program": [{ "text": "Provincially insured (MSP)" }],
+        "communication": [{ "text": "English" }, { "text": "French" }],
+        "availableTime": [
+          {
+            "daysOfWeek": ["mon", "tue", "wed", "thu", "fri"],
+            "availableStartTime": "08:00:00",
+            "availableEndTime": "20:00:00"
+          },
+          {
+            "daysOfWeek": ["sat", "sun"],
+            "availableStartTime": "09:00:00",
+            "availableEndTime": "17:00:00"
+          }
+        ]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "HealthcareService" },
+      "resource": {
+        "resourceType": "HealthcareService",
+        "providedBy": { "reference": "urn:uuid:org-island-health" },
+        "location": [{ "reference": "Location/1016" }],
+        "name": "Community Pharmacy & Minor Ailments",
+        "category": [{ "text": "Pharmacy" }],
+        "type": [{ "text": "Retail pharmacy" }],
+        "comment": "Prescription dispensing, vaccinations, and minor ailment prescribing.",
+        "appointmentRequired": false,
+        "program": [{ "text": "Minor ailments prescribing" }],
+        "communication": [{ "text": "English" }, { "text": "Punjabi" }]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "HealthcareService" },
+      "resource": {
+        "resourceType": "HealthcareService",
+        "providedBy": { "reference": "urn:uuid:org-coastal-clinics" },
+        "location": [{ "reference": "Location/1017" }],
+        "name": "Family Practice",
+        "category": [{ "text": "Primary care" }],
+        "type": [{ "text": "Longitudinal family medicine" }],
+        "specialty": [{ "text": "Family medicine" }],
+        "comment": "Ongoing primary care with a dedicated family physician.",
+        "appointmentRequired": true,
+        "referralMethod": [{ "text": "Self-referral" }],
+        "eligibility": [{ "comment": "Accepting new patients" }],
+        "program": [{ "text": "Provincially insured (MSP)" }],
+        "communication": [{ "text": "English" }],
+        "availableTime": [
+          {
+            "daysOfWeek": ["mon", "tue", "wed", "thu", "fri"],
+            "availableStartTime": "09:00:00",
+            "availableEndTime": "17:00:00"
+          }
+        ]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "HealthcareService" },
+      "resource": {
+        "resourceType": "HealthcareService",
+        "providedBy": { "reference": "urn:uuid:org-coastal-clinics" },
+        "location": [{ "reference": "Location/1018" }],
+        "name": "Physiotherapy & Rehabilitation",
+        "category": [{ "text": "Therapy & rehab" }],
+        "type": [{ "text": "Physiotherapy" }],
+        "specialty": [{ "text": "Musculoskeletal rehabilitation" }],
+        "comment": "Injury recovery, post-surgical rehab, and chronic pain management.",
+        "appointmentRequired": true,
+        "referralMethod": [{ "text": "Referral optional" }],
+        "eligibility": [{ "comment": "Direct pay and extended health accepted" }],
+        "program": [{ "text": "Private / extended health" }],
+        "communication": [{ "text": "English" }]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "HealthcareService" },
+      "resource": {
+        "resourceType": "HealthcareService",
+        "providedBy": { "reference": "urn:uuid:org-coastal-clinics" },
+        "location": [{ "reference": "Location/1019" }],
+        "name": "Counselling & Psychology",
+        "category": [{ "text": "Mental health" }],
+        "type": [{ "text": "Registered psychology" }],
+        "specialty": [{ "text": "Clinical psychology" }],
+        "comment": "Individual therapy for anxiety, depression, and trauma.",
+        "appointmentRequired": true,
+        "referralMethod": [{ "text": "Self-referral" }],
+        "eligibility": [{ "comment": "Accepting new clients — sliding scale available" }],
+        "program": [{ "text": "Private / extended health" }],
+        "communication": [{ "text": "English" }, { "text": "Farsi" }]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "HealthcareService" },
+      "resource": {
+        "resourceType": "HealthcareService",
+        "providedBy": { "reference": "urn:uuid:org-coastal-clinics" },
+        "location": [{ "reference": "Location/1020" }],
+        "name": "General & Family Dentistry",
+        "category": [{ "text": "Dental" }],
+        "type": [{ "text": "Dentistry" }],
+        "specialty": [{ "text": "General dentistry" }],
+        "comment": "Cleanings, fillings, crowns, and emergency dental care.",
+        "appointmentRequired": true,
+        "eligibility": [{ "comment": "Direct pay and dental insurance accepted" }],
+        "program": [{ "text": "Private / dental insurance" }],
+        "communication": [{ "text": "English" }]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "PractitionerRole" },
+      "resource": {
+        "resourceType": "PractitionerRole",
+        "practitioner": { "reference": "Practitioner/1003" },
+        "organization": { "reference": "urn:uuid:org-coastal-clinics" },
+        "location": [{ "reference": "Location/1017" }],
+        "code": [{ "text": "Family Physician" }],
+        "specialty": [{ "text": "Family medicine" }],
+        "availableTime": [
+          {
+            "daysOfWeek": ["mon", "wed", "fri"],
+            "availableStartTime": "09:00:00",
+            "availableEndTime": "16:00:00"
+          }
+        ]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "PractitionerRole" },
+      "resource": {
+        "resourceType": "PractitionerRole",
+        "practitioner": { "reference": "Practitioner/1002" },
+        "organization": { "reference": "urn:uuid:org-island-health" },
+        "location": [{ "reference": "Location/1015" }],
+        "code": [{ "text": "Attending Physician" }],
+        "specialty": [{ "text": "General practice" }]
+      }
+    }
+  ]
+}

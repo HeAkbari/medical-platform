@@ -8,11 +8,13 @@ import {
   Popup,
   TileLayer,
   useMap,
+  useMapEvents,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useFilteredMapFacilities } from '@/features/map/hooks/use-filtered-map-facilities';
 import { useMapNavigationStore } from '@/features/map/store/map-navigation-store';
-import { FacilityMapPopup } from '@/features/map/ui/facility-map-popup';
+import { useMapFacilityDrawerStore } from '@/features/map/store/map-facility-drawer-store';
+import { FacilityDrawer } from '@/features/map/ui/facility-drawer';
 import { MapNavigationBar } from '@/features/map/ui/map-navigation-bar';
 import { MapRouteLayer } from '@/features/map/ui/map-route-layer';
 import { createFacilityMarkerIcon } from '@/features/map/utils/facility-markers';
@@ -33,6 +35,11 @@ function createUserMarkerIcon() {
     popupAnchor: [1, -34],
     shadowSize: [41, 41],
   });
+}
+
+function MapClickHandler({ onMapClick }: { onMapClick: () => void }) {
+  useMapEvents({ click: onMapClick });
+  return null;
 }
 
 function MapRecenter({
@@ -64,6 +71,8 @@ export function LeafletMap() {
   const navigationStatus = useMapNavigationStore((state) => state.status);
   const shouldRecenterOnUser =
     navigationStatus === 'idle' || navigationStatus === 'error';
+  const openDrawer = useMapFacilityDrawerStore((state) => state.open);
+  const closeDrawer = useMapFacilityDrawerStore((state) => state.setOpen);
   const facilityMarkerIcons = useMemo(
     () =>
       new Map(
@@ -102,6 +111,7 @@ export function LeafletMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           maxZoom={19}
         />
+        <MapClickHandler onMapClick={() => closeDrawer(false)} />
         {userPosition ? (
           <MapRecenter position={userPosition} enabled={shouldRecenterOnUser} />
         ) : null}
@@ -117,19 +127,16 @@ export function LeafletMap() {
                 key={facility.id}
                 position={facility.position}
                 icon={facilityMarkerIcons.get(facility.id)}
-              >
-                <Popup>
-                  <FacilityMapPopup
-                    facility={facility}
-                    userPosition={userPosition}
-                  />
-                </Popup>
-              </Marker>
+                eventHandlers={{
+                  click: () => openDrawer(facility, userPosition),
+                }}
+              />
             ))
           : null}
       </MapContainer>
 
       <MapNavigationBar />
+      <FacilityDrawer />
     </div>
   );
 }

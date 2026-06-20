@@ -1,11 +1,12 @@
 'use client';
 
 import { useMemo } from 'react';
-import { MOCK_MAP_FACILITIES } from '../data/mock-facilities';
 import { useMapFilterStore } from '../store/map-filter-store';
 import { filterMapFacilities } from '../utils/filter-facilities';
+import { useMapFacilitiesQuery } from './use-map-facilities-query';
 
 export function useFilteredMapFacilities(userPosition: [number, number] | null) {
+  const { data: facilities } = useMapFacilitiesQuery();
   const selectedSuperCategories = useMapFilterStore(
     (state) => state.selectedSuperCategories
   );
@@ -17,11 +18,11 @@ export function useFilteredMapFacilities(userPosition: [number, number] | null) 
   );
 
   return useMemo(() => {
-    if (!userPosition) {
+    if (!userPosition || !facilities) {
       return [];
     }
 
-    return filterMapFacilities(MOCK_MAP_FACILITIES, userPosition, {
+    return filterMapFacilities(facilities, userPosition, {
       selectedSuperCategories,
       maxDistanceKm,
       openNowOnly,
@@ -29,6 +30,7 @@ export function useFilteredMapFacilities(userPosition: [number, number] | null) 
       acceptingNewPatientsOnly,
     });
   }, [
+    facilities,
     acceptingNewPatientsOnly,
     is24HoursOnly,
     maxDistanceKm,
