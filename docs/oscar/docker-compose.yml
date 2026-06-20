@@ -1,0 +1,25 @@
+# فاز ۱ — تست happy-path رایگان OSCAR API integration
+# HAPI FHIR R4 reference server (به docs/OSCAR_SETUP_OPTIONS.md مراجعه کنید)
+#
+# اجرا:   docker compose up -d
+# دسترسی: http://localhost:8080/  (UI) و http://localhost:8080/fhir  (FHIR base)
+# توقف:   docker compose down            (داده‌ها در volume باقی می‌مانند)
+#         docker compose down -v         (پاک‌سازی کامل داده‌ها)
+
+services:
+  hapi-fhir:
+    image: hapiproject/hapi:latest
+    container_name: oscar-test-hapi-fhir
+    ports:
+      - "8080:8080"
+    environment:
+      # نسخه FHIR را روی R4 تثبیت می‌کنیم (همان نسخه‌ای که OSCAR Pro احتمالاً استفاده می‌کند)
+      hapi.fhir.fhir_version: R4
+      hapi.fhir.default_encoding: json
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/fhir/metadata"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
+    restart: unless-stopped
