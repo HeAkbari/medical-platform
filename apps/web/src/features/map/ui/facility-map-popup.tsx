@@ -11,6 +11,7 @@ import {
 } from '../constants';
 import { useMapNavigationStore } from '../store/map-navigation-store';
 import type { MapFacility } from '../types';
+import { FacilityDetailSection } from './facility-detail-section';
 import {
   formatFacilityAddress,
   formatWaitTimeUpdatedAt,
@@ -155,6 +156,8 @@ export function FacilityMapPopup({
       {showDirectPayDisclaimer ? (
         <p className="text-xs text-slate-500">{MAP_DIRECT_PAY_DISCLAIMER}</p>
       ) : null}
+
+      <FacilityDetailSection facilityId={facility.id} />
     </div>
   );
 }
