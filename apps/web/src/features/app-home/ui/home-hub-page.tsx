@@ -10,6 +10,11 @@ import {
 import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
 import { useHomeScrollCapture } from '@/lib/routing/home-scroll-context';
 
+// Real OpenStreetMap tile centred on the app's fallback map center
+// (Victoria, BC — see FALLBACK_MAP_CENTER in lib/geo/constants).
+const HOME_MAP_THUMBNAIL_URL =
+  'https://tile.openstreetmap.org/13/1288/2833.png';
+
 function ServiceIcon({ slug }: { slug: string }) {
   const common = 'h-6 w-6 text-brand';
 
@@ -151,33 +156,27 @@ export function HomeHubPage() {
           onClick={(event) => handleLinkClick(event, HOME_MAP_CTA.href, false)}
           className="block"
         >
-          <Card className="flex items-center gap-3 border-brand/40 bg-brand-muted/80 p-4 shadow-sm ring-1 ring-brand-subtle/60 transition hover:border-brand/60 hover:bg-brand-muted hover:shadow-md active:scale-[0.99]">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand">
-              <svg
-                className="h-6 w-6"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={1.8}
-                aria-hidden="true"
-              >
-                <path
-                  d="M12 21s-6-4.35-6-10a6 6 0 1 1 12 0c0 5.65-6 10-6 10z"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <circle cx="12" cy="11" r="2.5" />
-              </svg>
-            </span>
-            <span className="min-w-0 flex-1">
-              <p className="font-semibold text-brand-darker">
+          <Card className="relative flex border-0 items-center gap-3 overflow-hidden border-brand/40 p-4 shadow-sm ring-1 ring-brand-subtle/60 transition hover:border-brand/60 hover:shadow-md active:scale-[0.99]">
+            {/* Real OpenStreetMap tile filling the whole card */}
+            <span
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url("${HOME_MAP_THUMBNAIL_URL}")` }}
+              aria-hidden="true"
+            />
+            {/* Scrim + inner shadow for text legibility */}
+            <span
+              className="absolute inset-0 bg-linear-to-r from-brand-darker/55"
+              aria-hidden="true"
+            />
+            <span className="relative min-w-0 flex-1">
+              <p className="font-semibold text-white drop-shadow-sm">
                 {HOME_MAP_CTA.title}
               </p>
-              <p className="mt-0.5 text-sm text-brand-dark">
+              <p className="mt-0.5 text-sm text-white/85 drop-shadow-sm">
                 {HOME_MAP_CTA.description}
               </p>
             </span>
-            <span className="shrink-0 text-brand" aria-hidden="true">
+            <span className="relative shrink-0 text-white" aria-hidden="true">
               <svg
                 className="h-5 w-5"
                 viewBox="0 0 24 24"
