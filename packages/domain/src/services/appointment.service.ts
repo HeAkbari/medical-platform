@@ -19,4 +19,8 @@ export class AppointmentService {
   create(input: CreateAppointmentInput): Promise<Appointment> {
     return this.repository.create(input);
   }
+
+  cancel(id: string): Promise<Appointment | null> {
+    return this.repository.updateStatus(id, 'cancelled');
+  }
 }

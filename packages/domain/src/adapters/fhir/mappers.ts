@@ -11,6 +11,7 @@ import type {
 import type {
   FhirAppointment,
   FhirAppointmentStatus,
+  FhirCodeableConcept,
   FhirContactPoint,
   FhirHumanName,
   FhirPatient,
@@ -32,6 +33,29 @@ function contactValue(
   system: FhirContactPoint['system']
 ): string {
   return telecom?.find((entry) => entry.system === system)?.value ?? '';
+}
+
+function conceptLabel(concept?: FhirCodeableConcept): string | undefined {
+  return (
+    concept?.text ?? concept?.coding?.[0]?.display ?? concept?.coding?.[0]?.code
+  );
+}
+
+/** FHIR Appointment.priority is an unsignedInt (0 = highest). Label common bands. */
+function priorityLabel(priority?: number): string | undefined {
+  if (priority === undefined) {
+    return undefined;
+  }
+  if (priority === 0) {
+    return 'Stat';
+  }
+  if (priority <= 3) {
+    return 'Urgent';
+  }
+  if (priority <= 6) {
+    return 'Routine';
+  }
+  return `Priority ${priority}`;
 }
 
 /** Extract the bare id from a FHIR reference such as "Patient/1000". */
@@ -74,6 +98,19 @@ export function fhirToDoctor(resource: FhirPractitioner): Doctor {
   };
 }
 
+export function appointmentStatusToFhir(
+  status: AppointmentStatus
+): FhirAppointmentStatus {
+  switch (status) {
+    case 'completed':
+      return 'fulfilled';
+    case 'cancelled':
+      return 'cancelled';
+    default:
+      return 'booked';
+  }
+}
+
 function fhirToAppointmentStatus(status: FhirAppointmentStatus): AppointmentStatus {
   switch (status) {
     case 'fulfilled':
@@ -109,17 +146,32 @@ export function fhirToAppointment(resource: FhirAppointment): Appointment {
   const practitionerRef = participants.find((p) =>
     p.actor?.reference?.startsWith('Practitioner/')
   );
+  const locationRef = participants.find((p) =>
+    p.actor?.reference?.startsWith('Location/')
+  );
 
   return {
     id: resource.id ?? '',
     patientId: referenceId(patientRef?.actor?.reference),
     doctorId: referenceId(practitionerRef?.actor?.reference),
     scheduledAt: resource.start ?? '',
-    durationMinutes: durationMinutes(resource.start, resource.end),
+    durationMinutes:
+      resource.minutesDuration ?? durationMinutes(resource.start, resource.end),
     status: fhirToAppointmentStatus(resource.status),
     reason: resource.description ?? '',
     notes: resource.comment ?? null,
-    createdAt: resource.meta?.lastUpdated ?? '',
+    createdAt: resource.created ?? resource.meta?.lastUpdated ?? '',
+    fhirStatus: resource.status,
+    patientName: patientRef?.actor?.display,
+    doctorName: practitionerRef?.actor?.display,
+    serviceCategory: conceptLabel(resource.serviceCategory?.[0]),
+    serviceType: conceptLabel(resource.serviceType?.[0]),
+    specialty: conceptLabel(resource.specialty?.[0]),
+    appointmentType: conceptLabel(resource.appointmentType),
+    priority: priorityLabel(resource.priority),
+    reasonText: conceptLabel(resource.reasonCode?.[0]),
+    locationId: referenceId(locationRef?.actor?.reference) || undefined,
+    locationName: locationRef?.actor?.display,
   };
 }
 

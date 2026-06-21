@@ -7,21 +7,47 @@ import {
   type HomeServiceSlug,
   type HomeSupportSlug,
 } from '@/features/app-home/data/home-navigation';
-import { DocumentsServicePage } from '@/features/app-home/ui/documents-service-page';
-import { HealthAzPage } from '@/features/app-home/ui/health-a-z-page';
-import { HealthConditionsServicePage } from '@/features/app-home/ui/health-conditions-service-page';
-import { PrescriptionsServicePage } from '@/features/app-home/ui/prescriptions-service-page';
-import { SymptomCheckerPage } from '@/features/app-home/ui/symptom-checker-page';
-import { TestResultsServicePage } from '@/features/app-home/ui/test-results-service-page';
-import { VaccinationsServicePage } from '@/features/app-home/ui/vaccinations-service-page';
+import {
+  DocumentsPage,
+  HealthConditionsPage,
+  PrescriptionsPage,
+  TestResultsPage,
+  VaccinationsPage,
+} from '@/features/health-records';
 
-function SupportPlaceholderPage({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) {
+export function ServiceDetailPage({ slug }: { slug: string }) {
+  if (slug === 'appointments') {
+    notFound();
+  }
+
+  if (slug === 'test-results') {
+    return <TestResultsPage />;
+  }
+
+  if (slug === 'prescriptions') {
+    return <PrescriptionsPage />;
+  }
+
+  if (slug === 'vaccinations') {
+    return <VaccinationsPage />;
+  }
+
+  if (slug === 'health-conditions') {
+    return <HealthConditionsPage />;
+  }
+
+  if (slug === 'documents') {
+    return <DocumentsPage />;
+  }
+
+  const service = getHomeService(slug);
+  const support = getHomeSupportPlaceholder(slug);
+  const item = service ?? support;
+
+  if (!item) {
+    notFound();
+  }
+
   return (
     <div className="space-y-4">
       <Link
@@ -71,7 +97,8 @@ export function ServiceDetailPage({ slug }: { slug: string }) {
   }
 
   if (slug in SERVICE_PAGES) {
-    const render = SERVICE_PAGES[slug as Exclude<HomeServiceSlug, 'appointments'>];
+    const render =
+      SERVICE_PAGES[slug as Exclude<HomeServiceSlug, 'appointments'>];
     return render();
   }
 

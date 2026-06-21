@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type {
   Appointment,
+  AppointmentStatus,
   Doctor,
   Patient,
 } from '../../types/models';
@@ -135,6 +136,20 @@ class JsonAppointmentRepository implements AppointmentRepository {
 
     this.store.appointments.push(appointment);
     return appointment;
+  }
+
+  updateStatus(
+    id: string,
+    status: AppointmentStatus
+  ): Promise<Appointment | null> {
+    const appointment =
+      this.store.appointments.find((item) => item.id === id) ?? null;
+
+    if (appointment) {
+      appointment.status = status;
+    }
+
+    return Promise.resolve(appointment);
   }
 }
 

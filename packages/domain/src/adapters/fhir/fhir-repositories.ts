@@ -1,5 +1,6 @@
 import type {
   Appointment,
+  AppointmentStatus,
   Doctor,
   Patient,
 } from '../../types/models';
@@ -21,6 +22,7 @@ import type {
   FhirPractitioner,
 } from './fhir-types';
 import {
+  appointmentStatusToFhir,
   appointmentToFhir,
   fhirToAppointment,
   fhirToDoctor,
@@ -42,10 +44,22 @@ class FhirPatientRepository implements PatientRepository {
   }
 
   async findByPhone(phone: string): Promise<Patient | null> {
-    const resources = await this.client.search<FhirPatient>('Patient', {
-      phone: normalizePhone(phone),
-    });
-    return resources[0] ? fhirToPatient(resources[0]) : null;
+    const target = normalizePhone(phone);
+
+    // FHIR `phone` token search matches the stored telecom value exactly, so a
+    // formatted number (e.g. "+1-416-555-0101") won't match normalized digits.
+    // Compare on normalized digits instead. Fine for the sandbox dataset; a real
+    // OSCAR endpoint can be switched back to a server-side phone search.
+    const resources = await this.client.search<FhirPatient>('Patient');
+    const match = resources.find((resource) =>
+      (resource.telecom ?? []).some(
+        (entry) =>
+          entry.system === 'phone' &&
+          normalizePhone(entry.value ?? '') === target
+      )
+    );
+
+    return match ? fhirToPatient(match) : null;
   }
 
   async create(input: CreatePatientInput): Promise<Patient> {
@@ -101,6 +115,23 @@ class FhirAppointmentRepository implements AppointmentRepository {
       appointmentToFhir(input)
     );
     return fhirToAppointment(created);
+  }
+
+  async updateStatus(
+    id: string,
+    status: AppointmentStatus
+  ): Promise<Appointment | null> {
+    const existing = await this.client.read<FhirAppointment>('Appointment', id);
+    if (!existing) {
+      return null;
+    }
+
+    const updated = await this.client.update<FhirAppointment>(
+      'Appointment',
+      id,
+      { ...existing, status: appointmentStatusToFhir(status) }
+    );
+    return fhirToAppointment(updated);
   }
 }
 

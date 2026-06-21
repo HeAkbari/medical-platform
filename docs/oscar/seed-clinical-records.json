@@ -1,0 +1,304 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "request": { "method": "POST", "url": "Immunization" },
+      "resource": {
+        "resourceType": "Immunization",
+        "status": "completed",
+        "vaccineCode": {
+          "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "208", "display": "COVID-19, mRNA" }],
+          "text": "COVID-19 mRNA (Comirnaty)"
+        },
+        "patient": { "reference": "Patient/1004" },
+        "occurrenceDateTime": "2025-10-15",
+        "primarySource": true,
+        "manufacturer": { "display": "Pfizer-BioNTech" },
+        "lotNumber": "FK7841",
+        "expirationDate": "2026-04-30",
+        "site": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/v3-ActSite", "code": "LA", "display": "Left arm" }],
+          "text": "Left deltoid"
+        },
+        "route": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration", "code": "IM", "display": "Intramuscular" }],
+          "text": "Intramuscular"
+        },
+        "doseQuantity": { "value": 0.3, "unit": "mL" },
+        "performer": [{ "actor": { "reference": "Organization/1021", "display": "Island Health" } }],
+        "protocolApplied": [{ "doseNumberPositiveInt": 3, "seriesDosesPositiveInt": 3, "targetDisease": [{ "text": "COVID-19" }] }],
+        "note": [{ "text": "Booster dose. No immediate adverse reaction observed." }]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "Immunization" },
+      "resource": {
+        "resourceType": "Immunization",
+        "status": "completed",
+        "vaccineCode": {
+          "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "150", "display": "Influenza, injectable" }],
+          "text": "Influenza (seasonal)"
+        },
+        "patient": { "reference": "Patient/1004" },
+        "occurrenceDateTime": "2025-11-02",
+        "primarySource": true,
+        "manufacturer": { "display": "Sanofi Pasteur" },
+        "lotNumber": "UJ089AA",
+        "route": { "text": "Intramuscular" },
+        "site": { "text": "Right deltoid" },
+        "performer": [{ "actor": { "reference": "Practitioner/1002", "display": "Dr Ali Rezaei" } }],
+        "protocolApplied": [{ "doseNumberPositiveInt": 1, "targetDisease": [{ "text": "Influenza" }] }]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "Immunization" },
+      "resource": {
+        "resourceType": "Immunization",
+        "status": "completed",
+        "vaccineCode": {
+          "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "113", "display": "Td (adult)" }],
+          "text": "Tetanus, diphtheria (Td)"
+        },
+        "patient": { "reference": "Patient/1006" },
+        "occurrenceDateTime": "2024-03-20",
+        "primarySource": true,
+        "lotNumber": "TD55120",
+        "site": { "text": "Left deltoid" },
+        "performer": [{ "actor": { "reference": "Organization/1021", "display": "Island Health" } }],
+        "protocolApplied": [{ "doseNumberPositiveInt": 1, "targetDisease": [{ "text": "Tetanus" }] }],
+        "note": [{ "text": "Routine 10-year booster. Next due 2034." }]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "Condition" },
+      "resource": {
+        "resourceType": "Condition",
+        "clinicalStatus": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/condition-clinical", "code": "active", "display": "Active" }]
+        },
+        "verificationStatus": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status", "code": "confirmed", "display": "Confirmed" }]
+        },
+        "category": [
+          {
+            "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/condition-category", "code": "problem-list-item", "display": "Problem List Item" }]
+          }
+        ],
+        "severity": {
+          "coding": [{ "system": "http://snomed.info/sct", "code": "6736007", "display": "Moderate" }],
+          "text": "Moderate"
+        },
+        "code": {
+          "coding": [{ "system": "http://snomed.info/sct", "code": "38341003", "display": "Hypertension" }],
+          "text": "Essential hypertension"
+        },
+        "subject": { "reference": "Patient/1004" },
+        "onsetDateTime": "2023-02-10",
+        "recordedDate": "2023-02-15",
+        "note": [{ "text": "Managed with lifestyle changes and atorvastatin. Monitor blood pressure monthly." }]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "Condition" },
+      "resource": {
+        "resourceType": "Condition",
+        "clinicalStatus": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/condition-clinical", "code": "active", "display": "Active" }]
+        },
+        "verificationStatus": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status", "code": "confirmed", "display": "Confirmed" }]
+        },
+        "category": [
+          {
+            "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/condition-category", "code": "problem-list-item", "display": "Problem List Item" }]
+          }
+        ],
+        "code": {
+          "coding": [{ "system": "http://snomed.info/sct", "code": "55822004", "display": "Hyperlipidemia" }],
+          "text": "Hyperlipidemia"
+        },
+        "subject": { "reference": "Patient/1004" },
+        "onsetDateTime": "2023-02-10",
+        "recordedDate": "2023-02-15"
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "Condition" },
+      "resource": {
+        "resourceType": "Condition",
+        "clinicalStatus": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/condition-clinical", "code": "active", "display": "Active" }]
+        },
+        "verificationStatus": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status", "code": "confirmed", "display": "Confirmed" }]
+        },
+        "category": [
+          {
+            "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/condition-category", "code": "problem-list-item", "display": "Problem List Item" }]
+          }
+        ],
+        "severity": { "text": "Moderate" },
+        "code": {
+          "coding": [{ "system": "http://snomed.info/sct", "code": "44054006", "display": "Type 2 diabetes mellitus" }],
+          "text": "Type 2 diabetes mellitus"
+        },
+        "subject": { "reference": "Patient/1006" },
+        "onsetDateTime": "2022-08-01",
+        "recordedDate": "2022-08-05",
+        "note": [{ "text": "Managed with metformin and diet. HbA1c monitored quarterly." }]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "AllergyIntolerance" },
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "clinicalStatus": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical", "code": "active", "display": "Active" }]
+        },
+        "verificationStatus": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification", "code": "confirmed", "display": "Confirmed" }]
+        },
+        "type": "allergy",
+        "category": ["medication"],
+        "criticality": "high",
+        "code": {
+          "coding": [{ "system": "http://snomed.info/sct", "code": "373270004", "display": "Penicillin" }],
+          "text": "Penicillin"
+        },
+        "patient": { "reference": "Patient/1004" },
+        "onsetDateTime": "2015-06-01",
+        "recordedDate": "2015-06-03",
+        "reaction": [
+          {
+            "manifestation": [
+              { "coding": [{ "system": "http://snomed.info/sct", "code": "247472004", "display": "Hives" }], "text": "Hives (urticaria)" }
+            ],
+            "severity": "moderate",
+            "description": "Widespread urticaria within 30 minutes of oral amoxicillin."
+          }
+        ],
+        "note": [{ "text": "Avoid all beta-lactam antibiotics. Use macrolides as alternative." }]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "AllergyIntolerance" },
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "clinicalStatus": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical", "code": "active", "display": "Active" }]
+        },
+        "verificationStatus": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification", "code": "confirmed", "display": "Confirmed" }]
+        },
+        "type": "allergy",
+        "category": ["food"],
+        "criticality": "high",
+        "code": {
+          "coding": [{ "system": "http://snomed.info/sct", "code": "91935009", "display": "Allergy to peanuts" }],
+          "text": "Peanuts"
+        },
+        "patient": { "reference": "Patient/1006" },
+        "onsetDateTime": "2005-01-01",
+        "recordedDate": "2010-09-12",
+        "reaction": [
+          {
+            "manifestation": [
+              { "coding": [{ "system": "http://snomed.info/sct", "code": "39579001", "display": "Anaphylaxis" }], "text": "Anaphylaxis" }
+            ],
+            "severity": "severe",
+            "description": "Throat tightness and difficulty breathing after peanut exposure."
+          }
+        ],
+        "note": [{ "text": "Carries epinephrine auto-injector (EpiPen) at all times." }]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "DocumentReference" },
+      "resource": {
+        "resourceType": "DocumentReference",
+        "status": "current",
+        "docStatus": "final",
+        "type": {
+          "coding": [{ "system": "http://loinc.org", "code": "18842-5", "display": "Discharge summary" }],
+          "text": "Discharge summary"
+        },
+        "category": [{ "text": "Clinical note" }],
+        "subject": { "reference": "Patient/1004" },
+        "date": "2026-05-10T16:00:00-04:00",
+        "author": [{ "reference": "Practitioner/1002", "display": "Dr Ali Rezaei" }],
+        "custodian": { "reference": "Organization/1021", "display": "Island Health" },
+        "description": "Discharge summary following short stay for hypertension review.",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "application/pdf",
+              "title": "Discharge summary - May 2026.pdf",
+              "creation": "2026-05-10T16:00:00-04:00",
+              "url": "https://sandbox.local/documents/discharge-1004.pdf",
+              "size": 184320
+            }
+          }
+        ]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "DocumentReference" },
+      "resource": {
+        "resourceType": "DocumentReference",
+        "status": "current",
+        "docStatus": "final",
+        "type": {
+          "coding": [{ "system": "http://loinc.org", "code": "57133-1", "display": "Referral note" }],
+          "text": "Referral letter"
+        },
+        "category": [{ "text": "Referral" }],
+        "subject": { "reference": "Patient/1004" },
+        "date": "2026-05-12T09:30:00-04:00",
+        "author": [{ "reference": "Practitioner/1002", "display": "Dr Ali Rezaei" }],
+        "custodian": { "reference": "Organization/1021", "display": "Island Health" },
+        "description": "Referral to cardiology for ambulatory blood pressure monitoring.",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "application/pdf",
+              "title": "Cardiology referral.pdf",
+              "creation": "2026-05-12T09:30:00-04:00",
+              "url": "https://sandbox.local/documents/referral-1004.pdf",
+              "size": 96256
+            }
+          }
+        ]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "DocumentReference" },
+      "resource": {
+        "resourceType": "DocumentReference",
+        "status": "current",
+        "docStatus": "final",
+        "type": {
+          "coding": [{ "system": "http://loinc.org", "code": "11502-2", "display": "Laboratory report" }],
+          "text": "Laboratory report"
+        },
+        "category": [{ "text": "Lab report" }],
+        "subject": { "reference": "Patient/1006" },
+        "date": "2026-06-20T14:00:00-04:00",
+        "author": [{ "reference": "Organization/1021", "display": "Island Health Laboratory" }],
+        "custodian": { "reference": "Organization/1021", "display": "Island Health" },
+        "description": "Fasting blood glucose laboratory report.",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "application/pdf",
+              "title": "Glucose lab report.pdf",
+              "creation": "2026-06-20T14:00:00-04:00",
+              "url": "https://sandbox.local/documents/lab-1006.pdf",
+              "size": 71680
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

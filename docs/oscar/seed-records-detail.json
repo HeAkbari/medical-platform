@@ -1,0 +1,230 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "request": { "method": "PUT", "url": "Observation/1009" },
+      "resource": {
+        "resourceType": "Observation",
+        "id": "1009",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "85354-9",
+              "display": "Blood pressure panel"
+            }
+          ],
+          "text": "Blood pressure"
+        },
+        "subject": { "reference": "Patient/1004" },
+        "performer": [{ "reference": "Organization/1021", "display": "Island Health" }],
+        "effectiveDateTime": "2026-06-22T10:05:00-04:00",
+        "issued": "2026-06-22T11:00:00-04:00",
+        "component": [
+          {
+            "code": {
+              "coding": [{ "system": "http://loinc.org", "code": "8480-6", "display": "Systolic" }]
+            },
+            "valueQuantity": { "value": 128, "unit": "mmHg", "system": "http://unitsofmeasure.org", "code": "mm[Hg]" },
+            "interpretation": [
+              {
+                "coding": [
+                  { "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation", "code": "H", "display": "High" }
+                ],
+                "text": "High"
+              }
+            ],
+            "referenceRange": [{ "low": { "value": 90, "unit": "mmHg" }, "high": { "value": 120, "unit": "mmHg" } }]
+          },
+          {
+            "code": {
+              "coding": [{ "system": "http://loinc.org", "code": "8462-4", "display": "Diastolic" }]
+            },
+            "valueQuantity": { "value": 82, "unit": "mmHg", "system": "http://unitsofmeasure.org", "code": "mm[Hg]" },
+            "referenceRange": [{ "low": { "value": 60, "unit": "mmHg" }, "high": { "value": 80, "unit": "mmHg" } }]
+          }
+        ],
+        "note": [{ "text": "Slightly elevated. Lifestyle measures advised; recheck in 2 weeks." }]
+      }
+    },
+    {
+      "request": { "method": "PUT", "url": "Observation/1010" },
+      "resource": {
+        "resourceType": "Observation",
+        "id": "1010",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [{ "system": "http://loinc.org", "code": "2339-0", "display": "Glucose" }],
+          "text": "Blood glucose"
+        },
+        "subject": { "reference": "Patient/1006" },
+        "performer": [{ "reference": "Organization/1021", "display": "Island Health" }],
+        "effectiveDateTime": "2026-06-20T09:00:00-04:00",
+        "issued": "2026-06-20T13:30:00-04:00",
+        "valueQuantity": { "value": 142, "unit": "mg/dL", "system": "http://unitsofmeasure.org", "code": "mg/dL" },
+        "interpretation": [
+          {
+            "coding": [
+              { "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation", "code": "H", "display": "High" }
+            ],
+            "text": "High"
+          }
+        ],
+        "referenceRange": [{ "low": { "value": 70, "unit": "mg/dL" }, "high": { "value": 99, "unit": "mg/dL" }, "text": "70 – 99 mg/dL (fasting)" }],
+        "note": [{ "text": "Above fasting reference range. Repeat fasting glucose and HbA1c advised." }]
+      }
+    },
+    {
+      "request": { "method": "PUT", "url": "MedicationRequest/1011" },
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "1011",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": { "text": "Atorvastatin 20mg tablet" },
+        "subject": { "reference": "Patient/1004" },
+        "requester": { "reference": "Practitioner/1002", "display": "Dr Ali Rezaei" },
+        "authoredOn": "2026-06-22",
+        "courseOfTherapyType": {
+          "coding": [
+            { "system": "http://terminology.hl7.org/CodeSystem/medicationrequest-course-of-therapy", "code": "continuous", "display": "Continuous long term therapy" }
+          ],
+          "text": "Repeat / long-term"
+        },
+        "reasonCode": [{ "text": "High cholesterol (hyperlipidemia)" }],
+        "dosageInstruction": [{ "text": "1 tablet once daily at night" }],
+        "dispenseRequest": {
+          "numberOfRepeatsAllowed": 3,
+          "quantity": { "value": 30, "unit": "tablet" },
+          "expectedSupplyDuration": { "value": 30, "unit": "days" },
+          "validityPeriod": { "start": "2026-06-22", "end": "2026-12-22" }
+        },
+        "note": [{ "text": "Avoid grapefruit juice. Report muscle pain or weakness." }]
+      }
+    },
+    {
+      "request": { "method": "PUT", "url": "MedicationRequest/1012" },
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "1012",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": { "text": "Metformin 500mg tablet" },
+        "subject": { "reference": "Patient/1006" },
+        "requester": { "reference": "Practitioner/1003", "display": "Dr Sara Ahmadi" },
+        "authoredOn": "2026-06-20",
+        "courseOfTherapyType": {
+          "coding": [
+            { "system": "http://terminology.hl7.org/CodeSystem/medicationrequest-course-of-therapy", "code": "continuous", "display": "Continuous long term therapy" }
+          ],
+          "text": "Repeat / long-term"
+        },
+        "reasonCode": [{ "text": "Type 2 diabetes mellitus" }],
+        "dosageInstruction": [{ "text": "1 tablet twice daily with meals" }],
+        "dispenseRequest": {
+          "numberOfRepeatsAllowed": 5,
+          "quantity": { "value": 60, "unit": "tablet" },
+          "expectedSupplyDuration": { "value": 30, "unit": "days" },
+          "validityPeriod": { "start": "2026-06-20", "end": "2027-06-20" }
+        },
+        "note": [{ "text": "Take with meals to reduce stomach upset." }]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "DiagnosticReport" },
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              { "system": "http://terminology.hl7.org/CodeSystem/v2-0074", "code": "OSLT", "display": "Other lab" }
+            ],
+            "text": "Vital signs"
+          }
+        ],
+        "code": { "text": "Blood pressure panel" },
+        "subject": { "reference": "Patient/1004" },
+        "performer": [{ "reference": "Organization/1021", "display": "Island Health" }],
+        "effectiveDateTime": "2026-06-22T10:05:00-04:00",
+        "issued": "2026-06-22T11:00:00-04:00",
+        "result": [{ "reference": "Observation/1009", "display": "Blood pressure" }],
+        "conclusion": "Blood pressure slightly elevated at 128/82 mmHg. No urgent concern; lifestyle measures advised and recheck in 2 weeks."
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "DiagnosticReport" },
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              { "system": "http://terminology.hl7.org/CodeSystem/v2-0074", "code": "CH", "display": "Chemistry" }
+            ],
+            "text": "Chemistry"
+          }
+        ],
+        "code": { "text": "Basic metabolic panel" },
+        "subject": { "reference": "Patient/1006" },
+        "performer": [{ "reference": "Organization/1021", "display": "Island Health" }],
+        "effectiveDateTime": "2026-06-20T09:00:00-04:00",
+        "issued": "2026-06-20T13:30:00-04:00",
+        "result": [{ "reference": "Observation/1010", "display": "Blood glucose" }],
+        "conclusion": "Fasting glucose elevated at 142 mg/dL (reference 70–99). Recommend repeat fasting glucose and HbA1c to assess for diabetes."
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "MedicationDispense" },
+      "resource": {
+        "resourceType": "MedicationDispense",
+        "status": "completed",
+        "medicationCodeableConcept": { "text": "Atorvastatin 20mg tablet" },
+        "subject": { "reference": "Patient/1004" },
+        "authorizingPrescription": [{ "reference": "MedicationRequest/1011" }],
+        "quantity": { "value": 30, "unit": "tablet" },
+        "daysSupply": { "value": 30, "unit": "days" },
+        "whenHandedOver": "2026-06-23T14:20:00-04:00",
+        "performer": [{ "actor": { "display": "James Bay Pharmacy" } }]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "MedicationDispense" },
+      "resource": {
+        "resourceType": "MedicationDispense",
+        "status": "completed",
+        "medicationCodeableConcept": { "text": "Metformin 500mg tablet" },
+        "subject": { "reference": "Patient/1006" },
+        "authorizingPrescription": [{ "reference": "MedicationRequest/1012" }],
+        "quantity": { "value": 60, "unit": "tablet" },
+        "daysSupply": { "value": 30, "unit": "days" },
+        "whenHandedOver": "2026-06-21T10:00:00-04:00",
+        "performer": [{ "actor": { "display": "Shoppers Drug Mart - Douglas St" } }]
+      }
+    }
+  ]
+}

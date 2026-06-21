@@ -4,11 +4,8 @@ import {
   Roles,
   type AuthenticatedUser,
 } from '@medical-platform/auth';
-import {
-  getMockRepositories,
-  normalizePhone,
-  type CreatePatientInput,
-} from '@medical-platform/domain';
+import { normalizePhone, type CreatePatientInput } from '@medical-platform/domain';
+import { repositories } from '@/lib/repositories';
 
 const OTP_TTL_MS = 5 * 60 * 1000;
 const REGISTRATION_TTL_MS = 10 * 60 * 1000;
@@ -64,7 +61,6 @@ function getPhoneAuthState(): PhoneAuthState {
 async function buildAuthenticatedUser(
   account: AuthAccount
 ): Promise<AuthenticatedUser | null> {
-  const repositories = getMockRepositories();
   const patient = await repositories.patients.findById(account.patientId);
 
   if (!patient) {
@@ -148,8 +144,18 @@ export async function verifyOtp(
 
   state.otpByPhone.delete(normalizedPhone);
 
-  const repositories = getMockRepositories();
   let account = state.accountsByPhone.get(normalizedPhone);
+
+  // Resolve the cached account against current patient data. If it points at a
+  // patient id that no longer exists — e.g. the FHIR sandbox was reseeded with
+  // new ids — drop the stale account and look the patient up again by phone so
+  // login keeps working across data resets.
+  let user = account ? await buildAuthenticatedUser(account) : null;
+
+  if (account && !user) {
+    state.accountsByPhone.delete(normalizedPhone);
+    account = undefined;
+  }
 
   if (!account) {
     const existingPatient = await repositories.patients.findByPhone(normalizedPhone);
@@ -161,16 +167,11 @@ export async function verifyOtp(
         patientId: existingPatient.id,
       };
       state.accountsByPhone.set(normalizedPhone, account);
+      user = await buildAuthenticatedUser(account);
     }
   }
 
-  if (account) {
-    const user = await buildAuthenticatedUser(account);
-
-    if (!user) {
-      throw new Error('Unable to load user profile');
-    }
-
+  if (account && user) {
     const sessionId = randomUUID();
     state.sessions.set(sessionId, {
       userId: account.id,
@@ -217,7 +218,6 @@ export async function completeRegistration(
     throw new Error('Phone number does not match verified number');
   }
 
-  const repositories = getMockRepositories();
   const existingPatient = await repositories.patients.findByPhone(normalizedPhone);
 
   if (existingPatient) {

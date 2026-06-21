@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useAppointmentsQuery } from '@/hooks';
 import { useAppointmentBookingStore } from '@/features/appointments/store/appointment-booking-store';
@@ -13,6 +14,7 @@ import {
   LoadingState,
 } from '@/components/ui';
 import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
+import { AppointmentDetailDrawer } from './appointment-detail-drawer';
 
 function statusVariant(status: string) {
   if (status === 'completed') {
@@ -30,6 +32,7 @@ export function AppointmentsPage() {
   const openBooking = useAppointmentBookingStore((state) => state.openBooking);
   const { requireAuth } = useRequireAuth();
   const { data, isLoading, isError } = useAppointmentsQuery();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   function handleBookAppointment() {
     requireAuth({ type: 'book-appointment' }, () => {
@@ -78,35 +81,61 @@ export function AppointmentsPage() {
           <EmptyState title="No appointments found" />
         ) : (
           <div className="space-y-3">
-            {appointments.map((appointment) => (
-              <div
-                key={appointment.id}
-                className="rounded-xl border border-slate-200 p-3 sm:p-4"
-              >
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                  <div className="min-w-0">
-                    <p className="font-medium text-slate-900">
-                      {appointment.reason}
-                    </p>
-                    <p className="mt-1 text-sm text-slate-500">
-                      {new Date(appointment.scheduledAt).toLocaleString()} ·{' '}
-                      {appointment.durationMinutes} min
-                    </p>
+            {appointments.map((appointment) => {
+              const meta = [
+                appointment.doctorName,
+                appointment.locationName,
+              ]
+                .filter(Boolean)
+                .join(' · ');
+
+              return (
+                <button
+                  key={appointment.id}
+                  type="button"
+                  onClick={() => setSelectedId(appointment.id)}
+                  className="w-full rounded-xl border border-slate-200 p-3 text-left transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4"
+                >
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="min-w-0">
+                      <p className="font-medium text-slate-900">
+                        {appointment.reason}
+                      </p>
+                      <p className="mt-1 text-sm text-slate-500">
+                        {new Date(appointment.scheduledAt).toLocaleString()} ·{' '}
+                        {appointment.durationMinutes} min
+                      </p>
+                      {meta ? (
+                        <p className="mt-0.5 text-sm text-slate-500">{meta}</p>
+                      ) : null}
+                    </div>
+                    <div className="flex shrink-0 flex-wrap items-center gap-1.5">
+                      {appointment.appointmentType ? (
+                        <span className="inline-flex rounded-full bg-brand-muted px-2 py-0.5 text-xs font-medium text-brand-dark">
+                          {appointment.appointmentType}
+                        </span>
+                      ) : null}
+                      <Badge variant={statusVariant(appointment.status)}>
+                        {appointment.status}
+                      </Badge>
+                    </div>
                   </div>
-                  <Badge variant={statusVariant(appointment.status)}>
-                    {appointment.status}
-                  </Badge>
-                </div>
-                {appointment.notes ? (
-                  <p className="mt-2 text-sm text-slate-600">
-                    {appointment.notes}
-                  </p>
-                ) : null}
-              </div>
-            ))}
+                </button>
+              );
+            })}
           </div>
         )}
       </Card>
+
+      <AppointmentDetailDrawer
+        appointmentId={selectedId}
+        open={selectedId !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setSelectedId(null);
+          }
+        }}
+      />
     </div>
   );
 }

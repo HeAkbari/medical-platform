@@ -1,0 +1,134 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "request": { "method": "DELETE", "url": "Appointment/1013" }
+    },
+    {
+      "request": { "method": "PUT", "url": "Appointment/1007" },
+      "resource": {
+        "resourceType": "Appointment",
+        "id": "1007",
+        "status": "booked",
+        "serviceCategory": [
+          { "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/service-category", "code": "17", "display": "General Practice" }], "text": "General Practice" }
+        ],
+        "serviceType": [
+          { "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/service-type", "code": "394579002", "display": "Cardiology" }], "text": "Cardiology follow-up" }
+        ],
+        "specialty": [
+          { "coding": [{ "system": "http://snomed.info/sct", "code": "394579002", "display": "Cardiology" }], "text": "Cardiology" }
+        ],
+        "appointmentType": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/v2-0276", "code": "FOLLOWUP", "display": "A follow up visit from a previous appointment" }],
+          "text": "Follow-up"
+        },
+        "reasonCode": [{ "text": "Hypertension monitoring and medication review" }],
+        "priority": 5,
+        "description": "Cardiology follow-up",
+        "start": "2026-06-22T10:00:00-04:00",
+        "end": "2026-06-22T10:30:00-04:00",
+        "minutesDuration": 30,
+        "created": "2026-06-01T09:00:00-04:00",
+        "comment": "Please bring your home blood pressure log.",
+        "patientInstruction": "Arrive 10 minutes early to check in.",
+        "participant": [
+          { "actor": { "reference": "Patient/1004", "display": "Hesam Akbari" }, "required": "required", "status": "accepted" },
+          { "actor": { "reference": "Practitioner/1002", "display": "Dr Ali Rezaei" }, "required": "required", "status": "accepted" },
+          { "actor": { "reference": "Location/1017", "display": "Fairfield Family Practice" }, "required": "required", "status": "accepted" }
+        ]
+      }
+    },
+    {
+      "request": { "method": "PUT", "url": "Appointment/1008" },
+      "resource": {
+        "resourceType": "Appointment",
+        "id": "1008",
+        "status": "booked",
+        "serviceCategory": [
+          { "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/service-category", "code": "17", "display": "General Practice" }], "text": "General Practice" }
+        ],
+        "serviceType": [
+          { "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/service-type", "code": "124", "display": "General Practice" }], "text": "General check-up" }
+        ],
+        "appointmentType": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/v2-0276", "code": "CHECKUP", "display": "A routine check-up" }],
+          "text": "Check-up"
+        },
+        "reasonCode": [{ "text": "Annual wellness visit" }],
+        "priority": 5,
+        "description": "General check-up",
+        "start": "2026-06-23T14:00:00-04:00",
+        "end": "2026-06-23T14:20:00-04:00",
+        "minutesDuration": 20,
+        "created": "2026-06-02T11:30:00-04:00",
+        "participant": [
+          { "actor": { "reference": "Patient/1005", "display": "Maryam Karimi" }, "required": "required", "status": "accepted" },
+          { "actor": { "reference": "Practitioner/1003", "display": "Dr Sara Ahmadi" }, "required": "required", "status": "accepted" },
+          { "actor": { "reference": "Location/1017", "display": "Fairfield Family Practice" }, "required": "required", "status": "accepted" }
+        ]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "Appointment" },
+      "resource": {
+        "resourceType": "Appointment",
+        "status": "fulfilled",
+        "serviceCategory": [
+          { "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/service-category", "code": "17", "display": "General Practice" }], "text": "General Practice" }
+        ],
+        "serviceType": [
+          { "text": "Blood pressure review" }
+        ],
+        "appointmentType": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/v2-0276", "code": "ROUTINE", "display": "Routine appointment" }],
+          "text": "Routine"
+        },
+        "reasonCode": [{ "text": "Blood pressure check" }],
+        "priority": 5,
+        "description": "Blood pressure review",
+        "start": "2026-05-20T09:30:00-04:00",
+        "end": "2026-05-20T09:45:00-04:00",
+        "minutesDuration": 15,
+        "created": "2026-05-05T10:00:00-04:00",
+        "comment": "Completed. Blood pressure stable.",
+        "participant": [
+          { "actor": { "reference": "Patient/1004", "display": "Hesam Akbari" }, "required": "required", "status": "accepted" },
+          { "actor": { "reference": "Practitioner/1002", "display": "Dr Ali Rezaei" }, "required": "required", "status": "accepted" },
+          { "actor": { "reference": "Location/1017", "display": "Fairfield Family Practice" }, "required": "required", "status": "accepted" }
+        ]
+      }
+    },
+    {
+      "request": { "method": "POST", "url": "Appointment" },
+      "resource": {
+        "resourceType": "Appointment",
+        "status": "cancelled",
+        "serviceCategory": [
+          { "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/service-category", "code": "17", "display": "General Practice" }], "text": "General Practice" }
+        ],
+        "serviceType": [
+          { "text": "Walk-in consultation" }
+        ],
+        "appointmentType": {
+          "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/v2-0276", "code": "WALKIN", "display": "A previously unscheduled walk-in visit" }],
+          "text": "Walk-in"
+        },
+        "reasonCode": [{ "text": "Flu-like symptoms" }],
+        "priority": 5,
+        "description": "Walk-in consultation",
+        "start": "2026-06-10T16:00:00-04:00",
+        "end": "2026-06-10T16:15:00-04:00",
+        "minutesDuration": 15,
+        "created": "2026-06-10T08:00:00-04:00",
+        "comment": "Cancelled by patient — felt better.",
+        "participant": [
+          { "actor": { "reference": "Patient/1004", "display": "Hesam Akbari" }, "required": "required", "status": "accepted" },
+          { "actor": { "reference": "Practitioner/1002", "display": "Dr Ali Rezaei" }, "required": "required", "status": "accepted" },
+          { "actor": { "reference": "Location/1015", "display": "James Bay Urgent & Family Clinic" }, "required": "required", "status": "accepted" }
+        ]
+      }
+    }
+  ]
+}
