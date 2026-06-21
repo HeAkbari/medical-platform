@@ -5,10 +5,37 @@ import {
   getHomeService,
   getHomeSupportPlaceholder,
 } from '@/features/app-home/data/home-navigation';
+import {
+  DocumentsPage,
+  HealthConditionsPage,
+  PrescriptionsPage,
+  TestResultsPage,
+  VaccinationsPage,
+} from '@/features/health-records';
 
 export function ServiceDetailPage({ slug }: { slug: string }) {
   if (slug === 'appointments') {
     notFound();
+  }
+
+  if (slug === 'test-results') {
+    return <TestResultsPage />;
+  }
+
+  if (slug === 'prescriptions') {
+    return <PrescriptionsPage />;
+  }
+
+  if (slug === 'vaccinations') {
+    return <VaccinationsPage />;
+  }
+
+  if (slug === 'health-conditions') {
+    return <HealthConditionsPage />;
+  }
+
+  if (slug === 'documents') {
+    return <DocumentsPage />;
   }
 
   const service = getHomeService(slug);

@@ -1,6 +1,10 @@
-/** Pre-filled values for mock phone auth during local development. */
+/**
+ * Pre-filled values for phone auth during local development.
+ * The phone matches the seeded patient "Hesam Akbari" (docs/oscar/seed.py),
+ * who has the richest demo data (appointments, results, prescriptions, etc.).
+ */
 export const DEV_AUTH_DEFAULTS = {
-  phone: '+1 555 0101',
+  phone: '+1 416 555 0101',
   otpCode: '123456',
   firstName: 'Jane',
   lastName: 'Rivera',

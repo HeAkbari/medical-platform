@@ -1,25 +1,56 @@
 # فاز ۱ — تست happy-path رایگان OSCAR API integration
-# HAPI FHIR R4 reference server (به docs/OSCAR_SETUP_OPTIONS.md مراجعه کنید)
+# HAPI FHIR R4 reference server + PostgreSQL (به docs/OSCAR_SETUP_OPTIONS.md مراجعه کنید)
 #
-# اجرا:   docker compose up -d
+# اجرا:   docker compose -f docs/oscar/docker-compose.yml up -d
 # دسترسی: http://localhost:8080/  (UI) و http://localhost:8080/fhir  (FHIR base)
-# توقف:   docker compose down            (داده‌ها در volume باقی می‌مانند)
-#         docker compose down -v         (پاک‌سازی کامل داده‌ها)
+# توقف:   docker compose -f docs/oscar/docker-compose.yml down       (داده در volume می‌ماند)
+#         docker compose -f docs/oscar/docker-compose.yml down -v    (پاک‌سازی کامل + volume)
+#
+# داده روی PostgreSQL در volume `hapi-pg-data` ذخیره می‌شود، پس با restart/down
+# پاک نمی‌شود. seed اولیه (یک‌بار):  python docs/oscar/seed.py
 
 services:
+  postgres:
+    image: postgres:16
+    container_name: oscar-test-postgres
+    environment:
+      POSTGRES_DB: hapi
+      POSTGRES_USER: hapi
+      POSTGRES_PASSWORD: hapi
+    volumes:
+      - hapi-pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hapi -d hapi"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
   hapi-fhir:
     image: hapiproject/hapi:latest
     container_name: oscar-test-hapi-fhir
+    depends_on:
+      postgres:
+        condition: service_healthy
     ports:
       - "8080:8080"
     environment:
       # نسخه FHIR را روی R4 تثبیت می‌کنیم (همان نسخه‌ای که OSCAR Pro احتمالاً استفاده می‌کند)
       hapi.fhir.fhir_version: R4
       hapi.fhir.default_encoding: json
+      # دیتابیس پایدار: PostgreSQL به‌جای H2 in-memory
+      spring.datasource.url: jdbc:postgresql://postgres:5432/hapi
+      spring.datasource.username: hapi
+      spring.datasource.password: hapi
+      spring.datasource.driverClassName: org.postgresql.Driver
+      spring.jpa.properties.hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/fhir/metadata"]
       interval: 15s
       timeout: 10s
       retries: 10
-      start_period: 90s
+      start_period: 120s
     restart: unless-stopped
+
+volumes:
+  hapi-pg-data:

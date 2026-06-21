@@ -132,6 +132,25 @@ export class FhirClient {
 
     return (await response.json()) as T;
   }
+
+  /** Update a resource in place (PUT to /{resourceType}/{id}). */
+  async update<T>(resourceType: string, id: string, resource: T): Promise<T> {
+    const response = await this.fetchImpl(this.buildUrl(resourceType, id), {
+      method: 'PUT',
+      headers: this.headers({ 'Content-Type': FHIR_JSON }),
+      body: JSON.stringify(resource),
+    });
+
+    if (!response.ok) {
+      throw new FhirHttpError(
+        `FHIR update ${resourceType}/${id} failed`,
+        response.status,
+        await safeText(response)
+      );
+    }
+
+    return (await response.json()) as T;
+  }
 }
 
 async function safeText(response: Response): Promise<string | undefined> {

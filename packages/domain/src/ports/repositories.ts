@@ -1,5 +1,6 @@
 import type {
   Appointment,
+  AppointmentStatus,
   Doctor,
   Patient,
 } from '../types/models';
@@ -28,6 +29,10 @@ export interface AppointmentRepository {
   }): Promise<Appointment[]>;
   findById(id: string): Promise<Appointment | null>;
   create(input: CreateAppointmentInput): Promise<Appointment>;
+  updateStatus(
+    id: string,
+    status: AppointmentStatus
+  ): Promise<Appointment | null>;
 }
 
 export interface MedicalRepositories {
