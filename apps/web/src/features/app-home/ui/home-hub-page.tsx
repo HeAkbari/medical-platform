@@ -133,7 +133,7 @@ export function HomeHubPage() {
   }
 
   return (
-    <div className="space-y-6 pb-4">
+    <div className="space-y-2 pb-4">
       <header>
         <p className="text-xs font-semibold uppercase tracking-wide text-brand">
           Medical Platform
@@ -142,7 +142,8 @@ export function HomeHubPage() {
           Home
         </h1>
         <p className="mt-2 text-sm text-slate-600">
-          Your health services and CHS information in one place.
+          Your health services and <b className="text-brand">CHS</b> information
+          in one place.
         </p>
       </header>
 
@@ -214,11 +215,11 @@ export function HomeHubPage() {
                   onClick={(event) => handleLinkClick(event, href, true)}
                   className="block h-full"
                 >
-                  <Card className="flex h-full flex-col gap-3 transition hover:border-brand-subtle hover:shadow-md active:scale-[0.99]">
+                  <Card className="flex h-full flex-col gap-1 transition hover:border-brand-subtle hover:shadow-md active:scale-[0.99]">
                     <ServiceIcon slug={item.slug} />
                     <div>
                       <p className="font-medium text-slate-900">{item.title}</p>
-                      <p className="mt-1 text-xs leading-5 text-slate-500">
+                      <p className="mt-1 text-xs leading-4 text-slate-500">
                         {item.description}
                       </p>
                     </div>
