@@ -94,7 +94,9 @@
 https://github.com/HeAkbari/medical-platform.git
 ```
 
-قبل از دیپلوی، مطمئن شوید آخرین تغییرات (شامل پوشهٔ `deploy/`) روی GitHub push شده باشد.
+**رویکرد فعلی (موقت):** repo معمولاً **private** است؛ فقط هنگام دیپلوی/به‌روزرسانی روی سرور موقتاً **public** کنید، بعد دوباره private کنید. جزئیات در [بخش ۵.۳](#۵۳-رویکرد-موقت-public-فقط-هنگام-دیپلوی).
+
+**بعداً (پایدار):** SSH key روی سرور — [بخش ۵.۴](#۵۴-دسترسی-دائمی-وقتی-repo-private-است).
 
 ---
 
@@ -336,9 +338,32 @@ ls deploy/
 # باید ببینید: docker-compose.prod.yml  Dockerfile  .env.production.example
 ```
 
-### ۵.۳ اگر مخزن private است
+### ۵.۳ رویکرد موقت: public فقط هنگام دیپلوی
 
-**روش A — SSH key (پیشنهادی):**
+اگر هنوز SSH روی سرور تنظیم نکرده‌اید، می‌توانید repo را **فقط برای `git pull`** موقتاً public کنید:
+
+| مرحله | کار | کجا |
+|-------|-----|-----|
+| ۱ | تغییرات را push کنید | لوکال: `git push` |
+| ۲ | repo را **Public** کنید | GitHub → repo → **Settings → General → Danger Zone → Change visibility** |
+| ۳ | روی سرور `git pull` (یا clone اول) | PuTTY |
+| ۴ | دیپلوی / rebuild | `docker compose ... up -d --build web` |
+| ۵ | repo را دوباره **Private** کنید | همان صفحهٔ Settings |
+
+```bash
+# روی سرور — بعد از public کردن repo
+cd /opt/medical-platform
+git pull
+docker compose -f deploy/docker-compose.prod.yml --env-file deploy/.env up -d --build web
+```
+
+> **توجه:** وقتی repo دوباره private شد، `git pull` روی سرور **تا زمانی که SSH یا token تنظیم نشود** خطا می‌دهد. برای دیپلوی بعدی یا دوباره public کنید یا [بخش ۵.۴](#۵۴-دسترسی-دائمی-وقتی-repo-private-است) را انجام دهید.
+>
+> clone اولیه‌ای که قبلاً با HTTPS انجام شده روی سرور **باقی می‌ماند** — فقط `git pull` بدون احراز هویت قطع می‌شود.
+
+### ۵.۴ دسترسی دائمی وقتی repo private است
+
+**روش A — SSH key (پیشنهادی برای بعد):**
 
 روی سرور:
 
@@ -367,7 +392,7 @@ cd medical-platform
 git clone https://<TOKEN>@github.com/HeAkbari/medical-platform.git
 ```
 
-### ۵.۴ انتخاب branch
+### ۵.۵ انتخاب branch
 
 اگر روی branch خاصی کار می‌کنید:
 
@@ -378,9 +403,9 @@ git checkout main    # یا نام branch شما
 git pull
 ```
 
-### ۵.۵ به‌روزرسانی بعداً (بدون WinSCP)
+### ۵.۶ به‌روزرسانی بعداً (بدون WinSCP)
 
-هر بار که روی GitHub push کردید:
+هر بار که روی GitHub push کردید — **اگر repo private است، اول موقتاً public کنید** ([۵.۳](#۵۳-رویکرد-موقت-public-فقط-هنگام-دیپلوی)) یا SSH را راه بیندازید ([۵.۴](#۵۴-دسترسی-دائمی-وقتی-repo-private-است)):
 
 ```bash
 cd /opt/medical-platform
