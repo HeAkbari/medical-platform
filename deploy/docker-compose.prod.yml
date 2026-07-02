@@ -48,12 +48,14 @@ services:
       spring.datasource.password: ${HAPI_DB_PASSWORD:-hapi}
       spring.datasource.driverClassName: org.postgresql.Driver
       spring.jpa.properties.hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
+      # Limit JVM heap on small VPS (avoid OOM during first boot)
+      JAVA_TOOL_OPTIONS: ${HAPI_JAVA_OPTS:--Xms256m -Xmx768m}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/fhir/metadata"]
-      interval: 15s
-      timeout: 10s
-      retries: 10
-      start_period: 120s
+      interval: 20s
+      timeout: 15s
+      retries: 20
+      start_period: 300s
     restart: unless-stopped
     networks:
       - medical-platform
