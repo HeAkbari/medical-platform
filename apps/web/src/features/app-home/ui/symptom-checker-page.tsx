@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Badge, Button, Card, CardHeader } from '@/components/ui';
 import {
   getSymptomTopic,
+  SYMPTOM_CHECKER_911_WARNING,
   SYMPTOM_CHECKER_DISCLAIMER,
   SYMPTOM_TOPICS,
 } from '@/features/app-home/data/mock-symptom-checker';
@@ -168,6 +169,10 @@ export function SymptomCheckerPage() {
           title="Symptom checker"
           description="Get general guidance based on your symptoms."
         />
+
+        <p className="mb-3 rounded-xl border border-red-300 bg-red-50 px-3 py-3 text-sm font-semibold leading-relaxed text-red-800">
+          {SYMPTOM_CHECKER_911_WARNING}
+        </p>
 
         <p className="mb-4 rounded-xl border border-amber-200/80 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
           {SYMPTOM_CHECKER_DISCLAIMER}

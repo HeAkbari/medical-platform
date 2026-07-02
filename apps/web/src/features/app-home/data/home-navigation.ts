@@ -1,9 +1,7 @@
 export type HomeServiceSlug =
-  | 'prescriptions'
   | 'appointments'
   | 'test-results'
-  | 'vaccinations'
-  | 'health-conditions'
+  | 'advices'
   | 'documents';
 
 export type HomeSupportSlug =
@@ -26,41 +24,31 @@ export interface HomeSupportItem {
 
 export const HOME_SERVICE_ITEMS: HomeServiceItem[] = [
   {
-    slug: 'prescriptions',
-    title: 'Prescriptions',
-    description: 'Order repeat prescriptions and choose a pharmacy.',
-  },
-  {
     slug: 'appointments',
     title: 'Appointments',
-    description: 'Book, view, or cancel GP appointments and online advice.',
+    description: 'Book, reschedule, or view upcoming and past visits.',
   },
   {
     slug: 'test-results',
     title: 'Test results',
-    description: 'View results from your GP or hospital tests.',
+    description: 'Laboratory and diagnostic results from your care team.',
   },
   {
-    slug: 'vaccinations',
-    title: 'Vaccinations',
-    description: 'See vaccination history and book new vaccines.',
-  },
-  {
-    slug: 'health-conditions',
-    title: 'Health conditions',
-    description: 'Conditions, allergies, and medicine reactions on record.',
+    slug: 'advices',
+    title: 'Advices',
+    description: 'Educational guides and advice from your providers.',
   },
   {
     slug: 'documents',
     title: 'Documents',
-    description: 'Letters and documents from your GP or hospital.',
+    description: 'Letters, clinical notes, and records from your providers.',
   },
 ];
 
 export const HOME_MAP_CTA = {
   title: 'Find care near you?',
   description:
-    'Walk-in clinics, pharmacies, GPs accepting patients, and more on the map.',
+    'Walk-in clinics, doctor offices, pharmacies, and emergency centres on the map.',
   href: '/home/map',
 } as const;
 

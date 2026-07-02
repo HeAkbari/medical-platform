@@ -1,10 +1,10 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Card, CardHeader } from '@/components/ui';
 import {
   getHomeService,
   getHomeSupportPlaceholder,
 } from '@/features/app-home/data/home-navigation';
+import { HealthAzPage } from '@/features/app-home/ui/health-a-z-page';
+import { SymptomCheckerPage } from '@/features/app-home/ui/symptom-checker-page';
 import {
   DocumentsPage,
   HealthConditionsPage,
@@ -18,24 +18,33 @@ export function ServiceDetailPage({ slug }: { slug: string }) {
     notFound();
   }
 
+  if (slug === 'symptom-checker') {
+    return <SymptomCheckerPage />;
+  }
+
+  if (slug === 'health-a-z') {
+    return <HealthAzPage />;
+  }
+
   if (slug === 'test-results') {
     return <TestResultsPage />;
   }
 
+  if (slug === 'advices' || slug === 'health-conditions') {
+    return <HealthConditionsPage />;
+  }
+
+  if (slug === 'documents') {
+    return <DocumentsPage />;
+  }
+
+  // Legacy routes kept for bookmarks — out of PRD v0.3 home grid scope.
   if (slug === 'prescriptions') {
     return <PrescriptionsPage />;
   }
 
   if (slug === 'vaccinations') {
     return <VaccinationsPage />;
-  }
-
-  if (slug === 'health-conditions') {
-    return <HealthConditionsPage />;
-  }
-
-  if (slug === 'documents') {
-    return <DocumentsPage />;
   }
 
   const service = getHomeService(slug);
@@ -46,24 +55,5 @@ export function ServiceDetailPage({ slug }: { slug: string }) {
     notFound();
   }
 
-  return (
-    <div className="space-y-4">
-      <Link
-        href="/home"
-        scroll={false}
-        className="inline-flex min-h-11 items-center text-sm font-medium text-brand"
-      >
-        ← Back to Home
-      </Link>
-
-      <Card>
-        <CardHeader title={item.title} description={item.description} />
-
-        <p className="text-sm leading-6 text-slate-600">
-          This section is a UI placeholder for the MVP. Connect it to live APIs
-          when backend services are ready.
-        </p>
-      </Card>
-    </div>
-  );
+  return notFound();
 }

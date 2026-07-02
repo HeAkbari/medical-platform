@@ -23,8 +23,11 @@ const EMERGENCY_ACTIONS = [
   'This tool does not replace emergency care.',
 ];
 
+export const SYMPTOM_CHECKER_911_WARNING =
+  'If you are experiencing chest pain, severe shortness of breath, sudden numbness, or any life-threatening health crisis, stop using this tool immediately. Close this application and dial 911.';
+
 export const SYMPTOM_CHECKER_DISCLAIMER =
-  'This symptom checker gives general guidance only. It does not diagnose conditions. For emergencies, call 911. In BC, call 811 (HealthLink BC) for 24/7 nurse advice.';
+  'This symptom checker gives general guidance only. It does not diagnose conditions and is not a substitute for professional medical advice. In BC, call 811 (HealthLink BC) for 24/7 nurse advice.';
 
 export const SYMPTOM_TOPICS: SymptomTopic[] = [
   {

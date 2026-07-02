@@ -19,20 +19,6 @@ function ServiceIcon({ slug }: { slug: string }) {
   const common = 'h-6 w-6 text-brand';
 
   switch (slug) {
-    case 'prescriptions':
-      return (
-        <svg
-          className={common}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.8}
-          aria-hidden="true"
-        >
-          <rect x="5" y="3" width="14" height="18" rx="2" />
-          <path d="M9 8h6M9 12h6M9 16h4" strokeLinecap="round" />
-        </svg>
-      );
     case 'appointments':
       return (
         <svg
@@ -61,21 +47,7 @@ function ServiceIcon({ slug }: { slug: string }) {
           <path d="M10 9h4M10 13h4M10 17h2" strokeLinecap="round" />
         </svg>
       );
-    case 'vaccinations':
-      return (
-        <svg
-          className={common}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.8}
-          aria-hidden="true"
-        >
-          <path d="m8 16 8-8M9 7l2 2M15 15l2 2" strokeLinecap="round" />
-          <path d="M6 18 4 20M18 6l2-2" strokeLinecap="round" />
-        </svg>
-      );
-    case 'health-conditions':
+    case 'advices':
       return (
         <svg
           className={common}
@@ -136,14 +108,13 @@ export function HomeHubPage() {
     <div className="space-y-2 pb-4">
       <header>
         <p className="text-xs font-semibold uppercase tracking-wide text-brand">
-          Medical Platform
+          DrFinder
         </p>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900">
           Home
         </h1>
         <p className="mt-2 text-sm text-slate-600">
-          Your health services and <b className="text-brand">CHS</b> information
-          in one place.
+          Your health services and care information in one place.
         </p>
       </header>
 
