@@ -10,7 +10,6 @@ import {
   useNotificationsStore,
 } from '@/features/notifications/store/notifications-store';
 import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
-import { useAuth } from '@/lib/auth';
 import { HomeScrollProvider } from '@/lib/routing/home-scroll-context';
 import { HomeScrollRestoration } from '@/lib/routing/home-scroll-restoration';
 import { captureHomeScroll } from '@/lib/routing/home-scroll-state';
@@ -19,7 +18,7 @@ import { normalizeAppPath } from '@/lib/routing/normalize-app-path';
 function TabIcon({
   name,
 }: {
-  name: 'home' | 'appointments' | 'notifications' | 'profile';
+  name: 'home' | 'appointments' | 'notifications';
 }) {
   if (name === 'home') {
     return (
@@ -47,12 +46,7 @@ function TabIcon({
     );
   }
 
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-5 w-5" aria-hidden="true">
-      <circle cx="12" cy="8" r="3.5" />
-      <path d="M5 20a7 7 0 0 1 14 0" strokeLinecap="round" />
-    </svg>
-  );
+  return null;
 }
 
 export function AppTabShell({ children }: { children: React.ReactNode }) {
@@ -61,16 +55,12 @@ export function AppTabShell({ children }: { children: React.ReactNode }) {
   const notifications = useNotificationsStore((state) => state.notifications);
   const unreadCount = selectUnreadNotificationCount(notifications);
   const { requireAuth, isLoading } = useRequireAuth();
-  const { user, isAuthenticated } = useAuth();
   const mainScrollRef = useRef<HTMLElement>(null);
   const captureScroll = useCallback(() => {
     if (normalizeAppPath(pathname) === '/home') {
       captureHomeScroll(mainScrollRef.current);
     }
   }, [pathname]);
-
-  const profileLabel =
-    isAuthenticated && user?.firstName ? user.firstName : 'Profile';
 
   const tabs = [
     {
@@ -97,13 +87,6 @@ export function AppTabShell({ children }: { children: React.ReactNode }) {
       icon: 'notifications' as const,
       requiresAuth: true,
       match: (path: string) => path.startsWith('/notifications'),
-    },
-    {
-      href: '/profile',
-      label: profileLabel,
-      icon: 'profile' as const,
-      requiresAuth: true,
-      match: (path: string) => path.startsWith('/profile'),
     },
   ];
 
@@ -138,7 +121,7 @@ export function AppTabShell({ children }: { children: React.ReactNode }) {
           className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md"
           aria-label="Main navigation"
         >
-          <ul className="mx-auto grid max-w-lg grid-cols-4">
+          <ul className="mx-auto grid max-w-lg grid-cols-3">
             {tabs.map((tab) => {
               const active = tab.match(normalizedPath);
               const showBadge = tab.href === '/notifications' && unreadCount > 0;

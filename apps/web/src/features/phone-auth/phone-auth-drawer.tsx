@@ -63,6 +63,10 @@ export function PhoneAuthDrawer() {
     if (pendingAction?.type === 'navigate') {
       router.push(pendingAction.href);
     }
+
+    if (!usePhoneAuthStore.getState().authOpen) {
+      resetFormDefaults();
+    }
   }
 
   function resetFormDefaults() {

@@ -71,6 +71,11 @@ export const usePhoneAuthStore = create<PhoneAuthStore>((set, get) => ({
     const pendingAction = get().pendingAction;
 
     if (!pendingAction) {
+      set({
+        authOpen: false,
+        step: 'phone',
+        registrationToken: null,
+      });
       return;
     }
 

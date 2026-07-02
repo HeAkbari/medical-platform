@@ -1,3 +1,5 @@
+import type { Doctor } from '@medical-platform/domain';
+
 export type HomeSearchChipId = 'urgent' | 'find-physician' | 'near-me';
 
 export interface HomeSearchChip {
@@ -42,3 +44,28 @@ export const COMPLIANCE_LINKS = [
     href: 'https://www.healthlinkbc.ca/',
   },
 ] as const;
+
+export function filterDoctorsByQuery(
+  doctors: Doctor[],
+  query: string,
+  limit?: number
+): Doctor[] {
+  const normalized = query.trim().toLowerCase();
+
+  const filtered = normalized
+    ? doctors.filter((doctor) => {
+        const haystack = [
+          doctor.firstName,
+          doctor.lastName,
+          doctor.specialty,
+          doctor.email,
+        ]
+          .join(' ')
+          .toLowerCase();
+
+        return haystack.includes(normalized);
+      })
+    : doctors;
+
+  return limit ? filtered.slice(0, limit) : filtered;
+}
