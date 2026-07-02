@@ -1,11 +1,9 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import type { ReactNode } from 'react';
 import { Card, CardHeader } from '@/components/ui';
 import {
   getHomeService,
-  type HomeServiceSlug,
-  type HomeSupportSlug,
+  getHomeSupportPlaceholder,
 } from '@/features/app-home/data/home-navigation';
 import {
   DocumentsPage,
@@ -59,63 +57,13 @@ export function ServiceDetailPage({ slug }: { slug: string }) {
       </Link>
 
       <Card>
-        <CardHeader title={title} description={description} />
+        <CardHeader title={item.title} description={item.description} />
+
         <p className="text-sm leading-6 text-slate-600">
           This section is a UI placeholder for the MVP. Connect it to live APIs
           when backend services are ready.
         </p>
       </Card>
     </div>
-  );
-}
-
-const SERVICE_PAGES: Record<
-  Exclude<HomeServiceSlug, 'appointments'>,
-  () => ReactNode
-> = {
-  prescriptions: () => <PrescriptionsServicePage />,
-  'test-results': () => <TestResultsServicePage />,
-  vaccinations: () => <VaccinationsServicePage />,
-  'health-conditions': () => <HealthConditionsServicePage />,
-  documents: () => <DocumentsServicePage />,
-};
-
-const SUPPORT_PAGES: Record<HomeSupportSlug, () => ReactNode> = {
-  'symptom-checker': () => <SymptomCheckerPage />,
-  'health-a-z': () => <HealthAzPage />,
-  'local-services': () => (
-    <SupportPlaceholderPage
-      title="Local services"
-      description="Find pharmacies, clinics, and support services near you."
-    />
-  ),
-};
-
-export function ServiceDetailPage({ slug }: { slug: string }) {
-  if (slug === 'appointments') {
-    notFound();
-  }
-
-  if (slug in SERVICE_PAGES) {
-    const render =
-      SERVICE_PAGES[slug as Exclude<HomeServiceSlug, 'appointments'>];
-    return render();
-  }
-
-  if (slug in SUPPORT_PAGES) {
-    const render = SUPPORT_PAGES[slug as HomeSupportSlug];
-    return render();
-  }
-
-  const service = getHomeService(slug);
-  if (!service) {
-    notFound();
-  }
-
-  return (
-    <SupportPlaceholderPage
-      title={service.title}
-      description={service.description}
-    />
   );
 }
