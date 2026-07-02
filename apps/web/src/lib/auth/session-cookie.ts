@@ -8,16 +8,19 @@ import {
 
 export { SESSION_COOKIE_NAME, SESSION_MAX_AGE_SECONDS };
 
+/** Secure cookies require HTTPS; keep false on http://IP:port VPS deploys. */
+function useSecureCookie(): boolean {
+  return process.env.SESSION_COOKIE_SECURE === 'true';
+}
+
 export function createSessionCookie(sessionId: string): string {
-  const secure =
-    process.env.NODE_ENV === 'production' ? '; Secure' : '';
+  const secure = useSecureCookie() ? '; Secure' : '';
 
   return `${SESSION_COOKIE_NAME}=${sessionId}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${SESSION_MAX_AGE_SECONDS}${secure}`;
 }
 
 export function clearSessionCookie(): string {
-  const secure =
-    process.env.NODE_ENV === 'production' ? '; Secure' : '';
+  const secure = useSecureCookie() ? '; Secure' : '';
 
   return `${SESSION_COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure}`;
 }

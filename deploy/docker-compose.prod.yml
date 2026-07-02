@@ -76,6 +76,8 @@ services:
       DATA_SOURCE: fhir
       FHIR_BASE_URL: http://hapi-fhir:8080/fhir
       NEXT_PUBLIC_API_URL: /api
+      # HTTP deploy (no TLS yet) — set to "true" after enabling HTTPS
+      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
     restart: unless-stopped
     networks:
       - medical-platform
