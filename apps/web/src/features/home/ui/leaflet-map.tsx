@@ -93,7 +93,7 @@ export function LeafletMap() {
       ) : null}
 
       {userPosition && filteredFacilities.length === 0 ? (
-        <div className="absolute inset-x-4 top-[7.5rem] z-[1000] rounded-xl border border-slate-200 bg-white/95 px-4 py-3 text-sm text-slate-700 shadow-sm">
+        <div className="absolute inset-x-4 top-[7.5rem] z-[1000] rounded-xl border border-border bg-surface/95 px-4 py-3 text-sm text-accent-foreground shadow-sm">
           No matching care nearby. Try Urgent &amp; walk-in or widen distance in
           filters.
         </div>

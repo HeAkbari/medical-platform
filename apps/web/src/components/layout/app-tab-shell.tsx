@@ -6,9 +6,9 @@ import { useCallback, useRef } from 'react';
 import { AppTopBar } from '@/components/layout/app-top-bar';
 import { cn } from '@/components/ui/cn';
 import {
-  countUnreadNotifications,
-  MOCK_NOTIFICATIONS,
-} from '@/features/notifications/data/mock-notifications';
+  selectUnreadNotificationCount,
+  useNotificationsStore,
+} from '@/features/notifications/store/notifications-store';
 import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
 import { useAuth } from '@/lib/auth';
 import { HomeScrollProvider } from '@/lib/routing/home-scroll-context';
@@ -58,7 +58,8 @@ function TabIcon({
 export function AppTabShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const normalizedPath = normalizeAppPath(pathname);
-  const unreadCount = countUnreadNotifications(MOCK_NOTIFICATIONS);
+  const notifications = useNotificationsStore((state) => state.notifications);
+  const unreadCount = selectUnreadNotificationCount(notifications);
   const { requireAuth, isLoading } = useRequireAuth();
   const { user, isAuthenticated } = useAuth();
   const mainScrollRef = useRef<HTMLElement>(null);
@@ -123,18 +124,18 @@ export function AppTabShell({ children }: { children: React.ReactNode }) {
 
   return (
     <HomeScrollProvider captureScroll={captureScroll}>
-      <div className="h-dvh overflow-hidden bg-brand-muted">
+      <div className="h-dvh overflow-hidden bg-background">
         <AppTopBar />
         <HomeScrollRestoration scrollContainerRef={mainScrollRef} />
         <main
           ref={mainScrollRef}
-          className="mx-auto h-full max-w-lg overflow-y-auto overscroll-y-contain bg-brand-muted px-4 pb-24 pt-[calc(3.5rem+1rem)] sm:px-5"
+          className="mx-auto h-full max-w-lg overflow-y-auto overscroll-y-contain bg-background px-4 pb-24 pt-[calc(3.5rem+1rem)] sm:px-5"
         >
           {children}
         </main>
 
         <nav
-          className="fixed inset-x-0 bottom-0 z-40 border-t border-brand-subtle/80 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md"
+          className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md"
           aria-label="Main navigation"
         >
           <ul className="mx-auto grid max-w-lg grid-cols-4">
@@ -154,7 +155,7 @@ export function AppTabShell({ children }: { children: React.ReactNode }) {
                     }
                     className={cn(
                       'relative flex min-h-14 flex-col items-center justify-center gap-0.5 px-1 py-2 text-[10px] font-medium transition active:opacity-70 sm:px-2 sm:text-[11px]',
-                      active ? 'text-brand' : 'text-slate-500'
+                      active ? 'text-brand' : 'text-faint-foreground'
                     )}
                   >
                     {active ? (

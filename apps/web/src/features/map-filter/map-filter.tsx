@@ -39,13 +39,13 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
       variant="fit"
     >
       <div className="mx-auto max-w-md">
-        <Drawer.Title className="mb-4 font-medium text-gray-900">
+        <Drawer.Title className="mb-4 font-medium text-foreground">
           Filter care on map
         </Drawer.Title>
 
         <div className="flex flex-col gap-6 pt-2">
           <fieldset>
-            <legend className="mb-3 text-sm font-medium text-slate-700">
+            <legend className="mb-3 text-sm font-medium text-accent-foreground">
               Care type
             </legend>
             <div className="flex flex-wrap gap-2">
@@ -58,7 +58,7 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
                     className={`flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
                       isSelected
                         ? 'border-brand-light bg-brand-muted text-brand-dark'
-                        : 'border-slate-200 text-slate-700'
+                        : 'border-border text-accent-foreground'
                     }`}
                   >
                     <input
@@ -75,7 +75,7 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
           </fieldset>
 
           <fieldset>
-            <legend className="mb-3 text-sm font-medium text-slate-700">
+            <legend className="mb-3 text-sm font-medium text-accent-foreground">
               Max distance
             </legend>
             <div className="flex items-center gap-3">
@@ -87,16 +87,16 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
                 onChange={(event) =>
                   setMaxDistanceKm(Number(event.target.value))
                 }
-                className="h-2 flex-1 appearance-none rounded-full bg-slate-200 accent-brand-light"
+                className="h-2 flex-1 appearance-none rounded-full bg-muted accent-brand-light"
               />
-              <span className="min-w-[4.5rem] text-sm font-medium text-slate-700">
+              <span className="min-w-[4.5rem] text-sm font-medium text-accent-foreground">
                 {maxDistanceKm} km
               </span>
             </div>
           </fieldset>
 
           <fieldset className="space-y-3">
-            <legend className="mb-3 text-sm font-medium text-slate-700">
+            <legend className="mb-3 text-sm font-medium text-accent-foreground">
               Availability
             </legend>
             <label className="flex items-center gap-3">
@@ -104,18 +104,18 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
                 type="checkbox"
                 checked={openNowOnly}
                 onChange={(event) => setOpenNowOnly(event.target.checked)}
-                className="h-5 w-5 rounded border-slate-300 text-brand-light accent-brand-light"
+                className="h-5 w-5 rounded border-border text-brand-light accent-brand-light"
               />
-              <span className="text-sm text-slate-700">Open now</span>
+              <span className="text-sm text-accent-foreground">Open now</span>
             </label>
             <label className="flex items-center gap-3">
               <input
                 type="checkbox"
                 checked={is24HoursOnly}
                 onChange={(event) => setIs24HoursOnly(event.target.checked)}
-                className="h-5 w-5 rounded border-slate-300 text-brand-light accent-brand-light"
+                className="h-5 w-5 rounded border-border text-brand-light accent-brand-light"
               />
-              <span className="text-sm text-slate-700">24 hours</span>
+              <span className="text-sm text-accent-foreground">24 hours</span>
             </label>
             <label className="flex items-center gap-3">
               <input
@@ -124,9 +124,9 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
                 onChange={(event) =>
                   setAcceptingNewPatientsOnly(event.target.checked)
                 }
-                className="h-5 w-5 rounded border-slate-300 text-brand-light accent-brand-light"
+                className="h-5 w-5 rounded border-border text-brand-light accent-brand-light"
               />
-              <span className="text-sm text-slate-700">
+              <span className="text-sm text-accent-foreground">
                 Accepting new patients (primary care)
               </span>
             </label>
@@ -136,7 +136,7 @@ export function MapFilter({ filterOpen, setFilterOpen }: MapFilterProps) {
             <button
               type="button"
               onClick={resetFilters}
-              className="flex min-h-11 flex-1 items-center justify-center rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+              className="flex min-h-11 flex-1 items-center justify-center rounded-xl border border-border px-4 py-2.5 text-sm font-medium text-accent-foreground transition hover:bg-muted"
             >
               Reset
             </button>

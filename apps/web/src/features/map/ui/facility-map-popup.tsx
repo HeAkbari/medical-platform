@@ -30,7 +30,7 @@ function FacilityBadge({ label, variant }: { label: string; variant: 'category' 
       ? 'bg-brand-muted text-brand-dark'
       : variant === 'open'
         ? 'bg-green-100 text-green-800'
-        : 'bg-slate-100 text-slate-700';
+        : 'bg-accent text-accent-foreground';
 
   return (
     <span
@@ -99,14 +99,14 @@ export function FacilityMapPopup({
       </div>
 
       <div>
-        <p className="font-semibold text-slate-900">{facility.name}</p>
-        <p className="mt-0.5 text-sm text-slate-600">
+        <p className="font-semibold text-foreground">{facility.name}</p>
+        <p className="mt-0.5 text-sm text-muted-foreground">
           {formatFacilityAddress(facility)} · {distanceLabel}
         </p>
       </div>
 
       {facility.waitTimeMinutes !== undefined ? (
-        <p className="text-sm text-slate-700">
+        <p className="text-sm text-accent-foreground">
           Wait: ~{facility.waitTimeMinutes} min
           {facility.waitTimeUpdatedAt
             ? ` (updated ${formatWaitTimeUpdatedAt(facility.waitTimeUpdatedAt)})`
@@ -117,7 +117,7 @@ export function FacilityMapPopup({
       <p className="text-sm text-brand-dark">{facility.whyOnMap}</p>
 
       {isEr ? (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-800">
+        <p className="rounded-lg bg-error-subtle px-3 py-2 text-xs text-red-800">
           {MAP_WAIT_TIME_DISCLAIMER} Call 911 for life-threatening emergencies.
         </p>
       ) : null}
@@ -151,10 +151,10 @@ export function FacilityMapPopup({
       </div>
 
       {showCoverageDisclaimer ? (
-        <p className="text-xs text-slate-500">{MAP_COVERAGE_DISCLAIMER}</p>
+        <p className="text-xs text-faint-foreground">{MAP_COVERAGE_DISCLAIMER}</p>
       ) : null}
       {showDirectPayDisclaimer ? (
-        <p className="text-xs text-slate-500">{MAP_DIRECT_PAY_DISCLAIMER}</p>
+        <p className="text-xs text-faint-foreground">{MAP_DIRECT_PAY_DISCLAIMER}</p>
       ) : null}
 
       <FacilityDetailSection facilityId={facility.id} />

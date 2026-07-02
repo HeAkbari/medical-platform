@@ -23,19 +23,19 @@ export function HomePage() {
       <header className="absolute inset-x-0 top-0 z-[1000] flex items-center justify-between gap-3 px-4 pt-4">
         <Link
           href="/home"
-          className="flex min-h-11 shrink-0 items-center gap-1 rounded-full border border-brand-subtle/80 bg-white/95 px-4 py-2 text-sm font-medium text-brand shadow-lg backdrop-blur-md active:scale-95"
+          className="flex min-h-11 shrink-0 items-center gap-1 rounded-full border border-brand-subtle/80 bg-surface/95 px-4 py-2 text-sm font-medium text-brand shadow-lg backdrop-blur-md active:scale-95"
         >
           ← Home
         </Link>
 
-        <h1 className="truncate text-center text-sm font-semibold text-slate-900 drop-shadow-sm">
+        <h1 className="truncate text-center text-sm font-semibold text-foreground drop-shadow-sm">
           Find care near you
         </h1>
 
         <button
           type="button"
           onClick={() => setFilterOpen(true)}
-          className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full border border-brand-subtle/80 bg-white/95 p-3 shadow-lg backdrop-blur-md active:scale-95"
+          className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full border border-brand-subtle/80 bg-surface/95 p-3 shadow-lg backdrop-blur-md active:scale-95"
           aria-label="Open filters"
         >
           <svg

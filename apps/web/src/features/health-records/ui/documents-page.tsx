@@ -38,7 +38,7 @@ function DocumentCard({
     <button
       type="button"
       onClick={onSelect}
-      className="flex w-full items-center gap-3 rounded-xl border border-slate-200 p-3 text-left transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4"
+      className="flex w-full items-center gap-3 rounded-xl border border-border p-3 text-left transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4"
     >
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-muted text-brand">
         <svg
@@ -54,10 +54,10 @@ function DocumentCard({
         </svg>
       </span>
       <div className="min-w-0">
-        <p className="truncate font-medium text-slate-900">
+        <p className="truncate font-medium text-foreground">
           {document.type ?? document.title}
         </p>
-        <p className="mt-0.5 text-sm text-slate-500">
+        <p className="mt-0.5 text-sm text-faint-foreground">
           {formatDate(document.date)}
         </p>
       </div>

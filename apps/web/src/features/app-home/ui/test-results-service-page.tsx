@@ -65,11 +65,11 @@ function flagVariant(
 
 function TestResultRow({ result }: { result: MockTestResult }) {
   return (
-    <article className="rounded-xl border border-slate-200 p-3 sm:p-4">
+    <article className="rounded-xl border border-border p-3 sm:p-4">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <p className="font-medium text-slate-900">{result.testName}</p>
-          <p className="mt-0.5 text-sm text-slate-500">
+          <p className="font-medium text-foreground">{result.testName}</p>
+          <p className="mt-0.5 text-sm text-faint-foreground">
             {result.facility}
           </p>
         </div>
@@ -78,25 +78,25 @@ function TestResultRow({ result }: { result: MockTestResult }) {
         </Badge>
       </div>
 
-      <dl className="mt-3 space-y-1.5 text-sm text-slate-600">
+      <dl className="mt-3 space-y-1.5 text-sm text-muted-foreground">
         <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-          <dt className="text-slate-500">Ordered by</dt>
+          <dt className="text-faint-foreground">Ordered by</dt>
           <dd>{result.orderedBy}</dd>
         </div>
         <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-          <dt className="text-slate-500">Sample date</dt>
+          <dt className="text-faint-foreground">Sample date</dt>
           <dd>{formatServiceDateTime(result.sampleDate)}</dd>
         </div>
         {result.resultDate ? (
           <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-            <dt className="text-slate-500">Result date</dt>
+            <dt className="text-faint-foreground">Result date</dt>
             <dd>{formatServiceDate(result.resultDate)}</dd>
           </div>
         ) : null}
       </dl>
 
       {result.summary ? (
-        <p className="mt-3 text-sm leading-6 text-slate-700">{result.summary}</p>
+        <p className="mt-3 text-sm leading-6 text-accent-foreground">{result.summary}</p>
       ) : null}
 
       {result.flag ? (

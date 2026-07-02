@@ -34,8 +34,8 @@ function Field({ label, value }: { label: string; value?: string }) {
   }
   return (
     <div className="flex justify-between gap-4 text-sm">
-      <span className="text-slate-500">{label}</span>
-      <span className="text-right font-medium text-slate-900">{value}</span>
+      <span className="text-faint-foreground">{label}</span>
+      <span className="text-right font-medium text-foreground">{value}</span>
     </div>
   );
 }
@@ -45,11 +45,11 @@ function DetailBody({ detail }: { detail: LabResultDetail }) {
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-lg font-semibold text-slate-900">
+          <h3 className="text-lg font-semibold text-foreground">
             {detail.name}
           </h3>
           {detail.category ? (
-            <p className="mt-0.5 text-sm text-slate-500 capitalize">
+            <p className="mt-0.5 text-sm text-faint-foreground capitalize">
               {detail.category}
             </p>
           ) : null}
@@ -58,18 +58,18 @@ function DetailBody({ detail }: { detail: LabResultDetail }) {
       </div>
 
       {detail.values.length > 0 ? (
-        <div className="rounded-xl border border-slate-200 p-3">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <div className="rounded-xl border border-border p-3">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-faint-foreground">
             Measurements
           </p>
           <div className="space-y-2">
             {detail.values.map((value, index) => (
               <div key={index}>
                 <div className="flex justify-between gap-4 text-sm">
-                  <span className="text-slate-600">
+                  <span className="text-muted-foreground">
                     {value.label ?? 'Value'}
                   </span>
-                  <span className="font-semibold text-slate-900">
+                  <span className="font-semibold text-foreground">
                     {value.value}
                     {value.interpretation ? (
                       <span className="ml-2 rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-800">
@@ -79,7 +79,7 @@ function DetailBody({ detail }: { detail: LabResultDetail }) {
                   </span>
                 </div>
                 {value.referenceRange ? (
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-faint-foreground">
                     Reference: {value.referenceRange}
                   </p>
                 ) : null}
@@ -105,17 +105,17 @@ function DetailBody({ detail }: { detail: LabResultDetail }) {
             Diagnostic report
           </p>
           {detail.report.code ? (
-            <p className="text-sm font-medium text-slate-900">
+            <p className="text-sm font-medium text-foreground">
               {detail.report.code}
             </p>
           ) : null}
           {detail.report.conclusion ? (
-            <p className="mt-1 text-sm leading-6 text-slate-700">
+            <p className="mt-1 text-sm leading-6 text-accent-foreground">
               {detail.report.conclusion}
             </p>
           ) : null}
           {detail.report.performer ? (
-            <p className="mt-2 text-xs text-slate-500">
+            <p className="mt-2 text-xs text-faint-foreground">
               {detail.report.performer}
             </p>
           ) : null}
@@ -124,10 +124,10 @@ function DetailBody({ detail }: { detail: LabResultDetail }) {
 
       {detail.notes ? (
         <div>
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-faint-foreground">
             Notes
           </p>
-          <p className="text-sm leading-6 text-slate-600">{detail.notes}</p>
+          <p className="text-sm leading-6 text-muted-foreground">{detail.notes}</p>
         </div>
       ) : null}
     </div>

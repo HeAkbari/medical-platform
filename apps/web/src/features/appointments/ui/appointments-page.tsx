@@ -94,19 +94,19 @@ export function AppointmentsPage() {
                   key={appointment.id}
                   type="button"
                   onClick={() => setSelectedId(appointment.id)}
-                  className="w-full rounded-xl border border-slate-200 p-3 text-left transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4"
+                  className="w-full rounded-xl border border-border p-3 text-left transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4"
                 >
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0">
-                      <p className="font-medium text-slate-900">
+                      <p className="font-medium text-foreground">
                         {appointment.reason}
                       </p>
-                      <p className="mt-1 text-sm text-slate-500">
+                      <p className="mt-1 text-sm text-faint-foreground">
                         {new Date(appointment.scheduledAt).toLocaleString()} ·{' '}
                         {appointment.durationMinutes} min
                       </p>
                       {meta ? (
-                        <p className="mt-0.5 text-sm text-slate-500">{meta}</p>
+                        <p className="mt-0.5 text-sm text-faint-foreground">{meta}</p>
                       ) : null}
                     </div>
                     <div className="flex shrink-0 flex-wrap items-center gap-1.5">

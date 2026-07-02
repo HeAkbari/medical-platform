@@ -49,13 +49,13 @@ function ResultCard({
     <button
       type="button"
       onClick={onSelect}
-      className="w-full rounded-xl border border-slate-200 p-3 text-left transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4"
+      className="w-full rounded-xl border border-border p-3 text-left transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4"
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <p className="font-medium text-slate-900">{result.name}</p>
+          <p className="font-medium text-foreground">{result.name}</p>
           {result.effectiveDate ? (
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-faint-foreground">
               {formatDate(result.effectiveDate)}
             </p>
           ) : null}
@@ -67,25 +67,25 @@ function ResultCard({
         <dl className="mt-3 space-y-1">
           {result.values.map((value, index) => (
             <div key={index} className="flex justify-between gap-4 text-sm">
-              <dt className="text-slate-500">{value.label ?? 'Value'}</dt>
-              <dd className="font-medium text-slate-900">{value.value}</dd>
+              <dt className="text-faint-foreground">{value.label ?? 'Value'}</dt>
+              <dd className="font-medium text-foreground">{value.value}</dd>
             </div>
           ))}
         </dl>
       ) : null}
 
       {result.referenceRange ? (
-        <p className="mt-2 text-xs text-slate-500">
+        <p className="mt-2 text-xs text-faint-foreground">
           Reference range: {result.referenceRange}
         </p>
       ) : null}
       {result.interpretation ? (
-        <p className="mt-1 text-xs text-slate-600">
+        <p className="mt-1 text-xs text-muted-foreground">
           Interpretation: {result.interpretation}
         </p>
       ) : null}
       {result.notes ? (
-        <p className="mt-2 text-sm text-slate-600">{result.notes}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{result.notes}</p>
       ) : null}
     </button>
   );

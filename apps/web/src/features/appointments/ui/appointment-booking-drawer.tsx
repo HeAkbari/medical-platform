@@ -35,10 +35,10 @@ export function AppointmentBookingDrawer() {
   return (
     <ResponsiveDrawer open={bookingOpen} onOpenChange={setBookingOpen}>
       <div className="mx-auto flex min-h-0 w-full max-w-md flex-1 flex-col overflow-y-auto pb-4">
-        <Drawer.Title className="mb-1 font-medium text-gray-900">
+        <Drawer.Title className="mb-1 font-medium text-foreground">
           Book appointment
         </Drawer.Title>
-        <p className="mb-4 text-sm text-slate-600">
+        <p className="mb-4 text-sm text-muted-foreground">
           Choose a doctor and schedule your visit.
         </p>
 
@@ -53,7 +53,7 @@ export function AppointmentBookingDrawer() {
         {doctorsQuery.isSuccess ? (
           <>
             <label className="mb-4 grid gap-2">
-              <span className="text-sm font-medium text-slate-700">Doctor</span>
+              <span className="text-sm font-medium text-accent-foreground">Doctor</span>
               <select
                 value={doctorId}
                 onChange={(event) => setDoctorId(event.target.value)}
@@ -80,7 +80,7 @@ export function AppointmentBookingDrawer() {
                 onSuccess={() => setBookingOpen(false)}
               />
             ) : (
-              <p className="text-sm text-slate-500">Select a doctor to continue.</p>
+              <p className="text-sm text-faint-foreground">Select a doctor to continue.</p>
             )}
           </>
         ) : null}

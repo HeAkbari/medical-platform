@@ -37,7 +37,7 @@ function Badge({
       ? 'bg-brand-muted text-brand-dark'
       : variant === 'open'
         ? 'bg-green-100 text-green-800'
-        : 'bg-slate-100 text-slate-700';
+        : 'bg-accent text-accent-foreground';
   return (
     <span
       className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${cls}`}
@@ -121,8 +121,8 @@ function DrawerContent({
         </div>
 
         <div>
-          <p className="font-semibold text-slate-900">{facility.name}</p>
-          <p className="mt-0.5 text-sm text-slate-600">
+          <p className="font-semibold text-foreground">{facility.name}</p>
+          <p className="mt-0.5 text-sm text-muted-foreground">
             {formatFacilityAddress(facility)} · {distanceLabel}
           </p>
         </div>
@@ -130,7 +130,7 @@ function DrawerContent({
         <p className="text-sm text-brand-dark">{facility.whyOnMap}</p>
 
         {facility.waitTimeMinutes !== undefined ? (
-          <p className="text-sm text-slate-700">
+          <p className="text-sm text-accent-foreground">
             Wait: ~{facility.waitTimeMinutes} min
             {facility.waitTimeUpdatedAt
               ? ` (updated ${formatWaitTimeUpdatedAt(facility.waitTimeUpdatedAt)})`
@@ -139,7 +139,7 @@ function DrawerContent({
         ) : null}
 
         {isEr ? (
-          <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-800">
+          <p className="rounded-lg bg-error-subtle px-3 py-2 text-xs text-red-800">
             {MAP_WAIT_TIME_DISCLAIMER} Call 911 for life-threatening
             emergencies.
           </p>
@@ -174,16 +174,16 @@ function DrawerContent({
         </div>
 
         {showCoverageDisclaimer ? (
-          <p className="text-xs text-slate-500">{MAP_COVERAGE_DISCLAIMER}</p>
+          <p className="text-xs text-faint-foreground">{MAP_COVERAGE_DISCLAIMER}</p>
         ) : null}
         {showDirectPayDisclaimer ? (
-          <p className="text-xs text-slate-500">{MAP_DIRECT_PAY_DISCLAIMER}</p>
+          <p className="text-xs text-faint-foreground">{MAP_DIRECT_PAY_DISCLAIMER}</p>
         ) : null}
 
         {!isFullSnap ? (
           <button
             onClick={() => setActiveSnapPoint(SNAP_FULL)}
-            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-slate-200 py-2 text-xs text-slate-400 transition-colors hover:border-slate-300 hover:text-slate-600"
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-border py-2 text-xs text-faint-foreground transition-colors hover:border-border hover:text-muted-foreground"
           >
             <svg
               viewBox="0 0 24 24"
@@ -231,13 +231,13 @@ export function FacilityDrawer() {
       setActiveSnapPoint={setActiveSnapPoint}
     >
       <Drawer.Portal>
-        <Drawer.Content className="fixed bottom-0 left-0 right-0 z-1500 flex h-[82vh] flex-col rounded-t-2xl bg-white shadow-[0_-4px_32px_rgba(0,0,0,0.14)] outline-none">
+        <Drawer.Content className="fixed bottom-0 left-0 right-0 z-1500 flex h-[82vh] flex-col rounded-t-2xl bg-card shadow-[0_-4px_32px_rgba(0,0,0,0.14)] outline-none">
           <Drawer.Title className="sr-only">
             {facility?.name ?? 'Clinic details'}
           </Drawer.Title>
 
           {/* Visual drag handle */}
-          <div className="mx-auto mt-3 mb-1 h-1 w-10 shrink-0 rounded-full bg-slate-300" />
+          <div className="mx-auto mt-3 mb-1 h-1 w-10 shrink-0 rounded-full bg-muted" />
 
           {facility && userPosition ? (
             <DrawerContent

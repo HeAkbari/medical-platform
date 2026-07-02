@@ -29,24 +29,24 @@ export function MapAppointmentDrawer() {
   return (
     <ResponsiveDrawer open={appointmentOpen} onOpenChange={setAppointmentOpen}>
       <div className="mx-auto flex min-h-0 w-full max-w-md flex-1 flex-col">
-        <Drawer.Title className="mb-4 font-medium text-gray-900">
+        <Drawer.Title className="mb-4 font-medium text-foreground">
           Book appointment
         </Drawer.Title>
 
         {selectedFacility ? (
           <>
-            <div className="mb-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
-              <p className="font-semibold text-slate-900">
+            <div className="mb-4 rounded-xl border border-border bg-muted p-3">
+              <p className="font-semibold text-foreground">
                 {selectedFacility.name}
               </p>
               <p className="mt-0.5 text-sm text-brand">
                 {getFacilityCategoryLabel(selectedFacility)}
               </p>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-muted-foreground">
                 {formatFacilityAddress(selectedFacility)}
               </p>
               {selectedFacility.coverageBadges.length > 0 ? (
-                <p className="mt-2 text-xs text-slate-500">
+                <p className="mt-2 text-xs text-faint-foreground">
                   {selectedFacility.coverageBadges
                     .slice(0, 2)
                     .map((badge) => COVERAGE_BADGE_LABELS[badge] ?? badge)

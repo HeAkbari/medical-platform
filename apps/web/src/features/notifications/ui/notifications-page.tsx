@@ -5,9 +5,10 @@ import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/components/ui/cn';
 import {
-  MOCK_NOTIFICATIONS,
-  type AppNotification,
-} from '@/features/notifications/data/mock-notifications';
+  selectUnreadNotificationCount,
+  useNotificationsStore,
+} from '@/features/notifications/store/notifications-store';
+import type { AppNotification } from '@/features/notifications/data/mock-notifications';
 
 function formatNotificationDate(value: string): string {
   return new Date(value).toLocaleDateString(undefined, {
@@ -29,9 +30,9 @@ function NotificationRow({
       type="button"
       onClick={onOpen}
       className={cn(
-        'w-full rounded-xl border p-3 text-left transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4',
+        'w-full rounded-xl border p-3 text-start transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4',
         notification.read
-          ? 'border-slate-200 bg-white'
+          ? 'border-border bg-card'
           : 'border-brand-subtle/80 bg-brand-muted/30'
       )}
     >
@@ -45,9 +46,13 @@ function NotificationRow({
           <span className="mt-1.5 h-2 w-2 shrink-0" aria-hidden="true" />
         )}
         <div className="min-w-0 flex-1">
-          <p className="font-medium text-slate-900">{notification.title}</p>
-          <p className="mt-1 text-sm text-slate-600">{notification.preview}</p>
-          <p className="mt-2 text-xs text-slate-500">
+          <p className="font-medium text-foreground">
+            {notification.title}
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {notification.preview}
+          </p>
+          <p className="mt-2 text-xs text-faint-foreground">
             {formatNotificationDate(notification.receivedAt)}
           </p>
         </div>
@@ -74,13 +79,13 @@ function NotificationDetail({
       </button>
 
       <Card>
-        <h1 className="text-xl font-semibold text-slate-900">
+        <h1 className="text-xl font-semibold text-foreground">
           {notification.title}
         </h1>
-        <p className="mt-1 text-xs text-slate-500">
+        <p className="mt-1 text-xs text-faint-foreground">
           {formatNotificationDate(notification.receivedAt)}
         </p>
-        <p className="mt-4 text-sm leading-7 text-slate-700">
+        <p className="mt-4 text-sm leading-7 text-accent-foreground">
           {notification.body}
         </p>
         {notification.href ? (
@@ -97,7 +102,7 @@ function NotificationDetail({
       <Link
         href="/settings"
         scroll={false}
-        className="inline-flex min-h-11 items-center text-sm text-slate-600 underline-offset-2 hover:text-brand hover:underline"
+        className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline-offset-2 hover:text-brand hover:underline text-faint-foreground"
       >
         Notification preferences in Settings
       </Link>
@@ -106,20 +111,20 @@ function NotificationDetail({
 }
 
 export function NotificationsPage() {
-  const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
+  const notifications = useNotificationsStore((state) => state.notifications);
+  const markAsRead = useNotificationsStore((state) => state.markAsRead);
+  const markAllAsRead = useNotificationsStore((state) => state.markAllAsRead);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const selectedNotification =
     notifications.find((notification) => notification.id === selectedId) ??
     null;
 
+  const unreadCount = selectUnreadNotificationCount(notifications);
+
   function handleOpen(id: string) {
     setSelectedId(id);
-    setNotifications((current) =>
-      current.map((notification) =>
-        notification.id === id ? { ...notification, read: true } : notification
-      )
-    );
+    markAsRead(id);
   }
 
   if (selectedNotification) {
@@ -133,18 +138,31 @@ export function NotificationsPage() {
 
   return (
     <div className="space-y-4">
-      <header>
-        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
-          Notifications
-        </h1>
-        <p className="mt-2 text-sm text-slate-600">
-          Appointment updates, booking confirmations, and care-plan alerts.
-        </p>
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+            Notifications
+          </h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Appointment updates, booking confirmations, and care-plan alerts.
+          </p>
+        </div>
+        {unreadCount > 0 ? (
+          <button
+            type="button"
+            onClick={markAllAsRead}
+            className="inline-flex min-h-11 items-center text-sm font-medium text-brand"
+          >
+            Mark all read
+          </button>
+        ) : null}
       </header>
 
       {notifications.length === 0 ? (
         <Card>
-          <p className="text-sm text-slate-600">No notifications yet.</p>
+          <p className="text-sm text-muted-foreground">
+            No notifications yet.
+          </p>
         </Card>
       ) : (
         <ul className="space-y-2">

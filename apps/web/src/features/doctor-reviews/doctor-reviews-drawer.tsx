@@ -19,7 +19,7 @@ function ReviewStars({ rating }: { rating: number }) {
           key={index}
           viewBox="0 0 20 20"
           className={`h-3.5 w-3.5 ${
-            index < filledStars ? 'text-amber-400' : 'text-slate-300'
+            index < filledStars ? 'text-amber-400' : 'text-faint-foreground'
           }`}
           fill="currentColor"
         >
@@ -32,11 +32,11 @@ function ReviewStars({ rating }: { rating: number }) {
 
 function ReviewCard({ review }: { review: DoctorReview }) {
   return (
-    <article className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+    <article className="rounded-xl border border-border bg-muted p-4">
       <div className="mb-2 flex items-start justify-between gap-3">
         <div>
-          <p className="font-medium text-slate-900">{review.authorName}</p>
-          <p className="text-xs text-slate-500">
+          <p className="font-medium text-foreground">{review.authorName}</p>
+          <p className="text-xs text-faint-foreground">
             {new Date(review.createdAt).toLocaleDateString(undefined, {
               year: 'numeric',
               month: 'short',
@@ -46,7 +46,7 @@ function ReviewCard({ review }: { review: DoctorReview }) {
         </div>
         <ReviewStars rating={review.rating} />
       </div>
-      <p className="text-sm leading-6 text-slate-700">{review.comment}</p>
+      <p className="text-sm leading-6 text-accent-foreground">{review.comment}</p>
     </article>
   );
 }
@@ -77,20 +77,20 @@ export function DoctorReviewsDrawer() {
   return (
     <ResponsiveDrawer open={reviewsOpen} onOpenChange={setReviewsOpen}>
       <div className="mx-auto flex min-h-0 w-full max-w-md flex-1 flex-col">
-              <Drawer.Title className="mb-4 font-medium text-gray-900">
+              <Drawer.Title className="mb-4 font-medium text-foreground">
                 Patient reviews
               </Drawer.Title>
 
               {selectedDoctor ? (
                 <>
-                  <div className="mb-4 flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="mb-4 flex items-center gap-3 rounded-xl border border-border bg-muted p-3">
                     <img
                       src={selectedDoctor.profileImageUrl}
                       alt={`${selectedDoctor.firstName} ${selectedDoctor.lastName}`}
-                      className="h-14 w-14 rounded-full border border-slate-200 object-cover"
+                      className="h-14 w-14 rounded-full border border-border object-cover"
                     />
                     <div className="min-w-0">
-                      <p className="truncate font-semibold text-slate-900">
+                      <p className="truncate font-semibold text-foreground">
                         {selectedDoctor.firstName} {selectedDoctor.lastName}
                       </p>
                       <p className="text-sm text-brand">
@@ -103,7 +103,7 @@ export function DoctorReviewsDrawer() {
                     </div>
                   </div>
 
-                  <p className="mb-3 text-sm text-slate-500">
+                  <p className="mb-3 text-sm text-faint-foreground">
                     Showing {reviews.length} recent reviews of{' '}
                     {selectedDoctor.reviewCount}
                   </p>
@@ -114,7 +114,7 @@ export function DoctorReviewsDrawer() {
                         <ReviewCard key={review.id} review={review} />
                       ))
                     ) : (
-                      <p className="rounded-xl border border-dashed border-slate-200 px-4 py-8 text-center text-sm text-slate-500">
+                      <p className="rounded-xl border border-dashed border-border px-4 py-8 text-center text-sm text-faint-foreground">
                         No reviews yet.
                       </p>
                     )}

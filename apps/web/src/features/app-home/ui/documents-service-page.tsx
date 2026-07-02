@@ -27,19 +27,19 @@ function documentTypeLabel(type: HealthDocumentType): string {
 
 function DocumentRow({ document }: { document: MockHealthDocument }) {
   return (
-    <article className="rounded-xl border border-slate-200 p-3 sm:p-4">
+    <article className="rounded-xl border border-border p-3 sm:p-4">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <p className="font-medium text-slate-900">{document.title}</p>
-          <p className="mt-0.5 text-sm text-slate-500">{document.from}</p>
+          <p className="font-medium text-foreground">{document.title}</p>
+          <p className="mt-0.5 text-sm text-faint-foreground">{document.from}</p>
         </div>
         <Badge variant="muted">{documentTypeLabel(document.type)}</Badge>
       </div>
 
-      <p className="mt-3 text-sm leading-6 text-slate-600">{document.summary}</p>
+      <p className="mt-3 text-sm leading-6 text-muted-foreground">{document.summary}</p>
 
       <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-faint-foreground">
           {formatServiceDate(document.date)}
         </p>
         <Button type="button" variant="secondary" disabled>

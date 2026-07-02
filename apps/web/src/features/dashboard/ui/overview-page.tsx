@@ -62,10 +62,10 @@ export function DashboardOverviewPage() {
     <div className="space-y-4 sm:space-y-6">
       <header className="space-y-1.5">
         <Badge>Frontend MVP</Badge>
-        <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
           Clinic dashboard
         </h1>
-        <p className="text-sm text-slate-600 sm:text-base">
+        <p className="text-sm text-muted-foreground sm:text-base">
           UI-first MVP powered by mock JSON APIs.
         </p>
       </header>
@@ -74,8 +74,8 @@ export function DashboardOverviewPage() {
         {stats.map((stat) => (
           <Link key={stat.label} href={stat.href} className="active:scale-[0.98]">
             <Card className="h-full transition hover:border-brand-subtle hover:shadow-md">
-              <p className="text-xs text-slate-500 sm:text-sm">{stat.label}</p>
-              <p className="mt-1 text-2xl font-semibold text-slate-900 sm:mt-2 sm:text-3xl">
+              <p className="text-xs text-faint-foreground sm:text-sm">{stat.label}</p>
+              <p className="mt-1 text-2xl font-semibold text-foreground sm:mt-2 sm:text-3xl">
                 {stat.value}
               </p>
             </Card>
@@ -84,7 +84,7 @@ export function DashboardOverviewPage() {
       </div>
 
       <Card>
-        <h2 className="text-base font-semibold text-slate-900 sm:text-lg">
+        <h2 className="text-base font-semibold text-foreground sm:text-lg">
           Quick actions
         </h2>
         <div className="mt-3 grid gap-2 sm:mt-4 sm:flex sm:flex-wrap sm:gap-3">
@@ -96,7 +96,7 @@ export function DashboardOverviewPage() {
           </Link>
           <Link
             href="/dashboard/patients"
-            className="flex min-h-11 items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 active:bg-slate-50 sm:inline-flex sm:w-auto"
+            className="flex min-h-11 items-center justify-center rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-accent-foreground active:bg-muted sm:inline-flex sm:w-auto"
           >
             View patients
           </Link>

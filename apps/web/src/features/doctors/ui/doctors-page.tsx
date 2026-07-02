@@ -36,16 +36,16 @@ export function DoctorsPage() {
             {doctors.map((doctor) => (
               <li
                 key={doctor.id}
-                className="rounded-xl border border-slate-200 bg-slate-50 p-3 sm:p-4"
+                className="rounded-xl border border-border bg-muted p-3 sm:p-4"
               >
-                <p className="font-semibold text-slate-900">
+                <p className="font-semibold text-foreground">
                   {doctor.firstName} {doctor.lastName}
                 </p>
                 <p className="mt-1 text-sm text-brand">{doctor.specialty}</p>
-                <p className="mt-2 break-all text-sm text-slate-600">
+                <p className="mt-2 break-all text-sm text-muted-foreground">
                   {doctor.email}
                 </p>
-                <p className="text-sm text-slate-600">{doctor.phone}</p>
+                <p className="text-sm text-muted-foreground">{doctor.phone}</p>
               </li>
             ))}
           </ul>

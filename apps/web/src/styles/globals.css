@@ -1,11 +1,14 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @source "../features";
 @source "../components";
 @source "../hooks";
 @source "../lib";
 
 @theme {
+  /* Brand palette — light defaults */
   --color-brand: lab(51% -29.63 -26.27);
   --color-brand-dark: lab(44% -27 -24);
   --color-brand-darker: lab(38% -24 -21);
@@ -16,21 +19,79 @@
   --color-brand-logo-text: lab(77% -21.24 -22.57);
   --color-primary: lab(51% -29.63 -26.27);
   --color-primary-foreground: lab(97% -3 -3);
+
+  /* Semantic surface & text tokens — light */
+  --color-background: lab(95% -8 -7);
+  --color-foreground: lab(22% -8 -8);
+  --color-card: rgb(255 255 255);
+  --color-card-foreground: lab(22% -8 -8);
+  --color-surface: rgb(255 255 255);
   --color-muted: lab(96% -4 -4);
   --color-muted-foreground: lab(45% -12 -11);
+  --color-subtle-foreground: lab(35% -10 -9);
+  --color-faint-foreground: lab(50% -8 -8);
+  --color-border: lab(88% -10 -9);
+  --color-input: rgb(255 255 255);
+  --color-input-foreground: lab(22% -8 -8);
+  --color-accent: lab(94% -6 -5);
+  --color-accent-foreground: lab(35% -12 -11);
+  --color-ring: lab(58% -22 -20);
+
+  /* Status */
+  --color-success-subtle: rgb(209 250 229);
+  --color-success-foreground: rgb(6 95 70);
+  --color-warning-subtle: rgb(254 243 199);
+  --color-warning-foreground: rgb(146 64 14);
+  --color-error-subtle: rgb(254 226 226);
+  --color-error-foreground: rgb(185 28 28);
+  --color-destructive: rgb(220 38 38);
+  --color-destructive-foreground: rgb(255 255 255);
+
   --font-sans: ui-sans-serif, system-ui, sans-serif;
+}
+
+.dark {
+  /* Brand palette — dark overrides */
+  --color-brand-dark: lab(72% -18 -16);
+  --color-brand-darker: lab(65% -16 -14);
+  --color-brand-muted: lab(16% -8 -7);
+  --color-brand-subtle: lab(24% -12 -10);
+  --color-brand-logo-text: lab(72% -18 -19);
+
+  /* Semantic surface & text tokens — dark */
+  --color-background: lab(8% -3 -3);
+  --color-foreground: lab(92% -2 -2);
+  --color-card: lab(14% -5 -4);
+  --color-card-foreground: lab(92% -2 -2);
+  --color-surface: lab(14% -5 -4);
+  --color-muted: lab(18% -5 -4);
+  --color-muted-foreground: lab(65% -3 -3);
+  --color-subtle-foreground: lab(85% -2 -2);
+  --color-faint-foreground: lab(58% -3 -3);
+  --color-border: lab(25% -6 -5);
+  --color-input: lab(18% -5 -4);
+  --color-input-foreground: lab(92% -2 -2);
+  --color-accent: lab(22% -6 -5);
+  --color-accent-foreground: lab(85% -2 -2);
+
+  --color-success-subtle: rgb(6 78 59 / 0.35);
+  --color-success-foreground: rgb(110 231 183);
+  --color-warning-subtle: rgb(120 53 15 / 0.35);
+  --color-warning-foreground: rgb(252 211 77);
+  --color-error-subtle: rgb(127 29 29 / 0.35);
+  --color-error-foreground: rgb(252 165 165);
 }
 
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  background-color: var(--color-brand-muted);
+  background-color: var(--color-background);
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-brand-muted);
-  color: lab(22% -8 -8);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
   min-height: 100dvh;
   overflow-x: hidden;
 }
@@ -41,11 +102,13 @@ body {
   z-index: 0;
 }
 
+.scrollbar-none,
 .map-need-scroll {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
+.scrollbar-none::-webkit-scrollbar,
 .map-need-scroll::-webkit-scrollbar {
   display: none;
 }

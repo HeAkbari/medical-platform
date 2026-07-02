@@ -20,8 +20,8 @@ import { DEV_AUTH_DEFAULTS } from '@/features/phone-auth/data/dev-auth-defaults'
 function StepIntro({ title, description }: { title: string; description: string }) {
   return (
     <div className="mb-4 space-y-1">
-      <p className="font-medium text-slate-900">{title}</p>
-      <p className="text-sm text-slate-600">{description}</p>
+      <p className="font-medium text-foreground">{title}</p>
+      <p className="text-sm text-muted-foreground">{description}</p>
     </div>
   );
 }
@@ -167,7 +167,7 @@ export function PhoneAuthDrawer() {
   return (
     <ResponsiveDrawer open={authOpen} onOpenChange={handleOpenChange}>
       <div className="mx-auto flex min-h-0 w-full max-w-md flex-1 flex-col overflow-y-auto pb-4">
-              <Drawer.Title className="mb-4 font-medium text-gray-900">
+              <Drawer.Title className="mb-4 font-medium text-foreground">
                 {activeStep === 'profile' ? 'My profile' : 'Sign in with phone'}
               </Drawer.Title>
 
@@ -178,7 +178,7 @@ export function PhoneAuthDrawer() {
                     description="We will send a one-time code to verify your phone."
                   />
                   <label className="grid gap-2">
-                    <span className="text-sm font-medium text-slate-700">
+                    <span className="text-sm font-medium text-accent-foreground">
                       Mobile number
                     </span>
                     <input
@@ -190,7 +190,7 @@ export function PhoneAuthDrawer() {
                       required
                     />
                   </label>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-faint-foreground">
                     Dev defaults: phone{' '}
                     <span className="font-medium">{DEV_AUTH_DEFAULTS.phone}</span>
                     {' · '}
@@ -212,7 +212,7 @@ export function PhoneAuthDrawer() {
                     description={`Code sent to ${phone}`}
                   />
                   <label className="grid gap-2">
-                    <span className="text-sm font-medium text-slate-700">
+                    <span className="text-sm font-medium text-accent-foreground">
                       6-digit code
                     </span>
                     <input
@@ -254,18 +254,18 @@ export function PhoneAuthDrawer() {
                     description="Create your patient profile to book appointments."
                   />
                   <label className="grid gap-2">
-                    <span className="text-sm font-medium text-slate-700">
+                    <span className="text-sm font-medium text-accent-foreground">
                       Mobile number
                     </span>
                     <input
                       type="tel"
                       value={phone}
                       readOnly
-                      className={`${inputClassName} bg-slate-50`}
+                      className={`${inputClassName} bg-muted`}
                     />
                   </label>
                   <label className="grid gap-2">
-                    <span className="text-sm font-medium text-slate-700">
+                    <span className="text-sm font-medium text-accent-foreground">
                       First name
                     </span>
                     <input
@@ -277,7 +277,7 @@ export function PhoneAuthDrawer() {
                     />
                   </label>
                   <label className="grid gap-2">
-                    <span className="text-sm font-medium text-slate-700">
+                    <span className="text-sm font-medium text-accent-foreground">
                       Last name
                     </span>
                     <input
@@ -289,7 +289,7 @@ export function PhoneAuthDrawer() {
                     />
                   </label>
                   <label className="grid gap-2">
-                    <span className="text-sm font-medium text-slate-700">
+                    <span className="text-sm font-medium text-accent-foreground">
                       Date of birth
                     </span>
                     <input
@@ -301,7 +301,7 @@ export function PhoneAuthDrawer() {
                     />
                   </label>
                   <label className="grid gap-2">
-                    <span className="text-sm font-medium text-slate-700">
+                    <span className="text-sm font-medium text-accent-foreground">
                       Email
                     </span>
                     <input
@@ -323,12 +323,12 @@ export function PhoneAuthDrawer() {
 
               {activeStep === 'profile' && user ? (
                 <div className="grid gap-4">
-                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                    <p className="font-semibold text-slate-900">
+                  <div className="rounded-xl border border-border bg-muted p-4">
+                    <p className="font-semibold text-foreground">
                       {user.firstName} {user.lastName}
                     </p>
-                    <p className="mt-1 text-sm text-slate-600">{user.phone}</p>
-                    <p className="text-sm text-slate-600">{user.email}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{user.phone}</p>
+                    <p className="text-sm text-muted-foreground">{user.email}</p>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <Button

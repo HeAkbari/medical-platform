@@ -112,17 +112,17 @@ export function AppointmentBookingForm({
   return (
     <form onSubmit={handleSubmit} className="grid gap-4">
       {showDoctorSummary ? (
-        <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+        <div className="rounded-xl border border-border bg-muted px-4 py-3">
+          <p className="text-xs font-medium uppercase tracking-wide text-faint-foreground">
             Doctor
           </p>
-          <p className="mt-1 text-sm font-medium text-slate-900">{doctorLabel}</p>
+          <p className="mt-1 text-sm font-medium text-foreground">{doctorLabel}</p>
         </div>
       ) : null}
 
       {staffMode ? (
         <label className="grid gap-2">
-          <span className="text-sm font-medium text-slate-700">Patient</span>
+          <span className="text-sm font-medium text-accent-foreground">Patient</span>
           <select
             value={patientId}
             onChange={(event) => setPatientId(event.target.value)}
@@ -138,16 +138,16 @@ export function AppointmentBookingForm({
           </select>
         </label>
       ) : (
-        <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+        <div className="rounded-xl border border-border bg-muted px-4 py-3">
+          <p className="text-xs font-medium uppercase tracking-wide text-faint-foreground">
             Patient
           </p>
-          <p className="mt-1 text-sm font-medium text-slate-900">{patientLabel}</p>
+          <p className="mt-1 text-sm font-medium text-foreground">{patientLabel}</p>
         </div>
       )}
 
       <label className="grid gap-2">
-        <span className="text-sm font-medium text-slate-700">Date & time</span>
+        <span className="text-sm font-medium text-accent-foreground">Date & time</span>
         <input
           type="datetime-local"
           value={scheduledAt}
@@ -158,7 +158,7 @@ export function AppointmentBookingForm({
       </label>
 
       <label className="grid gap-2">
-        <span className="text-sm font-medium text-slate-700">
+        <span className="text-sm font-medium text-accent-foreground">
           Duration (minutes)
         </span>
         <input
@@ -174,7 +174,7 @@ export function AppointmentBookingForm({
       </label>
 
       <label className="grid gap-2">
-        <span className="text-sm font-medium text-slate-700">Reason</span>
+        <span className="text-sm font-medium text-accent-foreground">Reason</span>
         <input
           type="text"
           value={reason}
@@ -186,7 +186,7 @@ export function AppointmentBookingForm({
       </label>
 
       <label className="grid gap-2">
-        <span className="text-sm font-medium text-slate-700">Notes</span>
+        <span className="text-sm font-medium text-accent-foreground">Notes</span>
         <textarea
           value={notes}
           onChange={(event) => setNotes(event.target.value)}

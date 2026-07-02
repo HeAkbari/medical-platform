@@ -61,15 +61,15 @@ function OutcomeCard({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <div className="rounded-xl border border-border bg-muted p-4">
         <div className="mb-2 flex flex-wrap items-center gap-2">
           <Badge variant={urgencyVariant(outcome.urgency)}>
             {urgencyLabel(outcome.urgency)}
           </Badge>
         </div>
-        <h3 className="text-base font-semibold text-slate-900">{outcome.title}</h3>
-        <p className="mt-2 text-sm leading-6 text-slate-600">{outcome.guidance}</p>
-        <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm text-slate-700">
+        <h3 className="text-base font-semibold text-foreground">{outcome.title}</h3>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">{outcome.guidance}</p>
+        <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm text-accent-foreground">
           {outcome.actions.map((action) => (
             <li key={action}>{action}</li>
           ))}
@@ -105,10 +105,10 @@ function FollowUpStep({
     <div className="space-y-4">
       <div className="rounded-xl border border-brand-subtle bg-brand-muted/50 px-4 py-3">
         <p className="text-sm font-medium text-brand-dark">{topic.label}</p>
-        <p className="mt-1 text-sm text-slate-600">{topic.summary}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{topic.summary}</p>
       </div>
 
-      <p className="text-sm font-medium text-slate-800">{topic.followUp.prompt}</p>
+      <p className="text-sm font-medium text-subtle-foreground">{topic.followUp.prompt}</p>
 
       <div className="space-y-2">
         {topic.followUp.options.map((option) => (
@@ -116,7 +116,7 @@ function FollowUpStep({
             key={option.id}
             type="button"
             onClick={() => onSelect(option.outcome)}
-            className="flex w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-800 transition hover:border-brand-subtle hover:bg-brand-muted/30 active:scale-[0.99]"
+            className="flex w-full rounded-xl border border-border bg-card px-4 py-3 text-left text-sm text-subtle-foreground transition hover:border-brand-subtle hover:bg-brand-muted/30 active:scale-[0.99]"
           >
             {option.label}
           </button>
@@ -170,7 +170,7 @@ export function SymptomCheckerPage() {
           description="Get general guidance based on your symptoms."
         />
 
-        <p className="mb-3 rounded-xl border border-red-300 bg-red-50 px-3 py-3 text-sm font-semibold leading-relaxed text-red-800">
+        <p className="mb-3 rounded-xl border border-red-300 bg-error-subtle px-3 py-3 text-sm font-semibold leading-relaxed text-red-800">
           {SYMPTOM_CHECKER_911_WARNING}
         </p>
 
@@ -180,7 +180,7 @@ export function SymptomCheckerPage() {
 
         {step === 'select' ? (
           <div className="space-y-3">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-muted-foreground">
               What is your main symptom today?
             </p>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -189,7 +189,7 @@ export function SymptomCheckerPage() {
                   key={topic.id}
                   type="button"
                   onClick={() => handleSelectTopic(topic.id)}
-                  className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-left text-sm font-medium text-slate-800 transition hover:border-brand-subtle hover:bg-brand-muted/30 active:scale-[0.99]"
+                  className="rounded-xl border border-border bg-card px-3 py-3 text-left text-sm font-medium text-subtle-foreground transition hover:border-brand-subtle hover:bg-brand-muted/30 active:scale-[0.99]"
                 >
                   {topic.label}
                 </button>

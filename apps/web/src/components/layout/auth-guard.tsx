@@ -45,8 +45,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   if (!isAuthenticated) {
     return (
       <div className="space-y-4 py-10 text-center">
-        <h1 className="text-lg font-semibold text-slate-900">Sign in required</h1>
-        <p className="text-sm text-slate-600">
+        <h1 className="text-lg font-semibold text-foreground">Sign in required</h1>
+        <p className="text-sm text-muted-foreground">
           This section is linked to your health account. Sign in with your phone
           to continue.
         </p>

@@ -30,8 +30,8 @@ function Field({ label, value }: { label: string; value?: string }) {
   }
   return (
     <div className="flex justify-between gap-4 text-sm">
-      <span className="text-slate-500">{label}</span>
-      <span className="text-right font-medium text-slate-900">{value}</span>
+      <span className="text-faint-foreground">{label}</span>
+      <span className="text-right font-medium text-foreground">{value}</span>
     </div>
   );
 }
@@ -48,8 +48,8 @@ function DetailBody({ detail }: { detail: VaccinationDetail }) {
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-lg font-semibold text-slate-900">{detail.name}</h3>
-          {dose ? <p className="mt-0.5 text-sm text-slate-500">{dose}</p> : null}
+          <h3 className="text-lg font-semibold text-foreground">{detail.name}</h3>
+          {dose ? <p className="mt-0.5 text-sm text-faint-foreground">{dose}</p> : null}
         </div>
         <Badge variant={detail.status === 'completed' ? 'success' : 'default'}>
           {detail.status}
@@ -69,14 +69,14 @@ function DetailBody({ detail }: { detail: VaccinationDetail }) {
 
       {detail.targetDiseases.length > 0 ? (
         <div>
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-faint-foreground">
             Protects against
           </p>
           <div className="flex flex-wrap gap-1">
             {detail.targetDiseases.map((disease) => (
               <span
                 key={disease}
-                className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-700"
+                className="inline-flex rounded-full bg-accent px-2 py-0.5 text-xs text-accent-foreground"
               >
                 {disease}
               </span>
@@ -87,10 +87,10 @@ function DetailBody({ detail }: { detail: VaccinationDetail }) {
 
       {detail.notes ? (
         <div>
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-faint-foreground">
             Notes
           </p>
-          <p className="text-sm leading-6 text-slate-600">{detail.notes}</p>
+          <p className="text-sm leading-6 text-muted-foreground">{detail.notes}</p>
         </div>
       ) : null}
     </div>

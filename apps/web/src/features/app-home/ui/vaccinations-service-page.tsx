@@ -44,12 +44,12 @@ function VaccinationRow({ vaccination }: { vaccination: MockVaccination }) {
     vaccination.status === 'overdue';
 
   return (
-    <article className="rounded-xl border border-slate-200 p-3 sm:p-4">
+    <article className="rounded-xl border border-border p-3 sm:p-4">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <p className="font-medium text-slate-900">{vaccination.vaccine}</p>
+          <p className="font-medium text-foreground">{vaccination.vaccine}</p>
           {vaccination.doseLabel ? (
-            <p className="mt-0.5 text-sm text-slate-500">
+            <p className="mt-0.5 text-sm text-faint-foreground">
               {vaccination.doseLabel}
             </p>
           ) : null}
@@ -59,20 +59,20 @@ function VaccinationRow({ vaccination }: { vaccination: MockVaccination }) {
         </Badge>
       </div>
 
-      <dl className="mt-3 space-y-1.5 text-sm text-slate-600">
+      <dl className="mt-3 space-y-1.5 text-sm text-muted-foreground">
         <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-          <dt className="text-slate-500">Provider</dt>
+          <dt className="text-faint-foreground">Provider</dt>
           <dd>{vaccination.provider}</dd>
         </div>
         {vaccination.date ? (
           <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-            <dt className="text-slate-500">Date given</dt>
+            <dt className="text-faint-foreground">Date given</dt>
             <dd>{formatServiceDate(vaccination.date)}</dd>
           </div>
         ) : null}
         {vaccination.dueDate ? (
           <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-            <dt className="text-slate-500">
+            <dt className="text-faint-foreground">
               {vaccination.status === 'completed' ? 'Next due' : 'Due date'}
             </dt>
             <dd>{formatServiceDate(vaccination.dueDate)}</dd>
@@ -114,7 +114,7 @@ export function VaccinationsServicePage() {
           description="See vaccination history and book new vaccines."
           action={
             dueCount > 0 ? (
-              <p className="text-sm text-slate-500">{dueCount} to schedule</p>
+              <p className="text-sm text-faint-foreground">{dueCount} to schedule</p>
             ) : undefined
           }
         />

@@ -50,10 +50,10 @@ function PrescriptionRow({ prescription }: { prescription: MockPrescription }) {
     new Date(prescription.nextOrderEligibleAt) <= new Date();
 
   return (
-    <article className="rounded-xl border border-slate-200 p-3 sm:p-4">
+    <article className="rounded-xl border border-border p-3 sm:p-4">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <p className="font-medium text-slate-900">{prescription.medication}</p>
+          <p className="font-medium text-foreground">{prescription.medication}</p>
           <p className="mt-0.5 text-sm text-brand">{prescription.dosage}</p>
         </div>
         <Badge variant={prescriptionStatusVariant(prescription.status)}>
@@ -61,28 +61,28 @@ function PrescriptionRow({ prescription }: { prescription: MockPrescription }) {
         </Badge>
       </div>
 
-      <dl className="mt-3 space-y-1.5 text-sm text-slate-600">
+      <dl className="mt-3 space-y-1.5 text-sm text-muted-foreground">
         <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-          <dt className="text-slate-500">Prescribed by</dt>
-          <dd className="font-medium text-slate-800">{prescription.prescribedBy}</dd>
+          <dt className="text-faint-foreground">Prescribed by</dt>
+          <dd className="font-medium text-subtle-foreground">{prescription.prescribedBy}</dd>
         </div>
         <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-          <dt className="text-slate-500">Pharmacy</dt>
+          <dt className="text-faint-foreground">Pharmacy</dt>
           <dd>{prescription.pharmacy}</dd>
         </div>
         <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-          <dt className="text-slate-500">Last issued</dt>
+          <dt className="text-faint-foreground">Last issued</dt>
           <dd>{formatServiceDate(prescription.lastIssuedAt)}</dd>
         </div>
         {prescription.repeatsRemaining > 0 ? (
           <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-            <dt className="text-slate-500">Repeats left</dt>
+            <dt className="text-faint-foreground">Repeats left</dt>
             <dd>{prescription.repeatsRemaining}</dd>
           </div>
         ) : null}
       </dl>
 
-      <p className="mt-3 text-sm leading-6 text-slate-600">
+      <p className="mt-3 text-sm leading-6 text-muted-foreground">
         {prescription.instructions}
       </p>
 
@@ -118,7 +118,7 @@ export function PrescriptionsServicePage() {
           title="Prescriptions"
           description="Order repeat prescriptions and choose a pharmacy."
           action={
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-faint-foreground">
               {activeCount} active on record
             </p>
           }

@@ -33,7 +33,7 @@ export function ResponsiveDrawer({
         <Drawer.Overlay className="fixed inset-0 z-[100] bg-black/40" />
         <Drawer.Content
           className={cn(
-            'fixed z-[100] flex flex-col bg-gray-100 outline-none',
+            'fixed z-[100] flex flex-col bg-muted outline-none',
             direction === 'bottom' &&
               cn(
                 'bottom-0 left-0 right-0 mt-24 rounded-t-[10px]',
@@ -45,7 +45,7 @@ export function ResponsiveDrawer({
         >
           <div
             className={cn(
-              'flex flex-col bg-white p-4',
+              'flex flex-col bg-card p-4',
               direction === 'bottom' &&
                 cn('rounded-t-[10px]', variant === 'tall' && 'max-h-[88vh]'),
               direction === 'right' &&
@@ -53,7 +53,7 @@ export function ResponsiveDrawer({
             )}
           >
             {direction === 'bottom' ? (
-              <div className="mx-auto mb-6 h-1.5 w-12 shrink-0 rounded-full bg-gray-300" />
+              <div className="mx-auto mb-6 h-1.5 w-12 shrink-0 rounded-full bg-border" />
             ) : null}
             {children}
           </div>

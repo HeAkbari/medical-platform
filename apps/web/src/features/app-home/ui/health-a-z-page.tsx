@@ -65,16 +65,16 @@ function TopicListItem({
       className={`w-full rounded-xl border px-4 py-3 text-left transition active:scale-[0.99] ${
         isSelected
           ? 'border-brand-light bg-brand-muted'
-          : 'border-slate-200 bg-white hover:border-brand-subtle hover:bg-brand-muted/30'
+          : 'border-border bg-card hover:border-brand-subtle hover:bg-brand-muted/30'
       }`}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="font-medium text-slate-900">{topic.title}</p>
+        <p className="font-medium text-foreground">{topic.title}</p>
         <Badge variant={categoryVariant(topic.category)}>
           {categoryLabel(topic.category)}
         </Badge>
       </div>
-      <p className="mt-1 line-clamp-2 text-sm text-slate-500">{topic.summary}</p>
+      <p className="mt-1 line-clamp-2 text-sm text-faint-foreground">{topic.summary}</p>
     </button>
   );
 }
@@ -91,31 +91,31 @@ function TopicDetail({
     .filter((item): item is HealthTopic => Boolean(item));
 
   return (
-    <article className="rounded-xl border border-slate-200 bg-slate-50/80 p-4">
+    <article className="rounded-xl border border-border bg-muted/80 p-4">
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <Badge variant={categoryVariant(topic.category)}>
           {categoryLabel(topic.category)}
         </Badge>
-        <span className="text-xs text-slate-500">{topic.letter}</span>
+        <span className="text-xs text-faint-foreground">{topic.letter}</span>
       </div>
 
-      <h3 className="text-lg font-semibold text-slate-900">{topic.title}</h3>
-      <p className="mt-2 text-sm leading-6 text-slate-600">{topic.summary}</p>
+      <h3 className="text-lg font-semibold text-foreground">{topic.title}</h3>
+      <p className="mt-2 text-sm leading-6 text-muted-foreground">{topic.summary}</p>
 
       <div className="mt-4 space-y-4">
         {topic.sections.map((section) => (
           <section key={section.heading}>
-            <h4 className="text-sm font-semibold text-slate-800">
+            <h4 className="text-sm font-semibold text-subtle-foreground">
               {section.heading}
             </h4>
-            <p className="mt-1 text-sm leading-6 text-slate-600">{section.body}</p>
+            <p className="mt-1 text-sm leading-6 text-muted-foreground">{section.body}</p>
           </section>
         ))}
       </div>
 
       {related.length > 0 ? (
-        <div className="mt-4 border-t border-slate-200 pt-4">
-          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+        <div className="mt-4 border-t border-border pt-4">
+          <p className="text-xs font-medium uppercase tracking-wide text-faint-foreground">
             Related topics
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
@@ -124,7 +124,7 @@ function TopicDetail({
                 key={item.id}
                 type="button"
                 onClick={() => onSelectRelated(item.id)}
-                className="rounded-full border border-brand-subtle bg-white px-3 py-1 text-sm text-brand-dark transition hover:bg-brand-muted"
+                className="rounded-full border border-brand-subtle bg-card px-3 py-1 text-sm text-brand-dark transition hover:bg-brand-muted"
               >
                 {item.title}
               </button>
@@ -191,7 +191,7 @@ export function HealthAzPage() {
             className={`shrink-0 rounded-full border px-3 py-1.5 text-sm font-medium ${
               activeLetter === null
                 ? 'border-brand-light bg-brand text-brand-foreground'
-                : 'border-slate-200 bg-white text-slate-700'
+                : 'border-border bg-card text-accent-foreground'
             }`}
           >
             All
@@ -204,7 +204,7 @@ export function HealthAzPage() {
               className={`shrink-0 rounded-full border px-3 py-1.5 text-sm font-medium ${
                 activeLetter === letter
                   ? 'border-brand-light bg-brand text-brand-foreground'
-                  : 'border-slate-200 bg-white text-slate-700'
+                  : 'border-border bg-card text-accent-foreground'
               }`}
             >
               {letter}
@@ -215,7 +215,7 @@ export function HealthAzPage() {
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="max-h-[28rem] space-y-2 overflow-y-auto pr-1">
             {filteredTopics.length === 0 ? (
-              <p className="rounded-xl border border-dashed border-slate-200 px-4 py-8 text-center text-sm text-slate-500">
+              <p className="rounded-xl border border-dashed border-border px-4 py-8 text-center text-sm text-faint-foreground">
                 No topics match your search.
               </p>
             ) : (

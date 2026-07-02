@@ -48,26 +48,26 @@ function Field({ label, value }: { label: string; value?: string }) {
   }
   return (
     <div className="flex justify-between gap-4 text-sm">
-      <span className="text-slate-500">{label}</span>
-      <span className="text-right font-medium text-slate-900">{value}</span>
+      <span className="text-faint-foreground">{label}</span>
+      <span className="text-right font-medium text-foreground">{value}</span>
     </div>
   );
 }
 
 function DispenseRow({ dispense }: { dispense: PrescriptionDispense }) {
   return (
-    <div className="rounded-lg border border-slate-200 p-2.5 text-sm">
+    <div className="rounded-lg border border-border p-2.5 text-sm">
       <div className="flex justify-between gap-3">
-        <span className="font-medium text-slate-900">
+        <span className="font-medium text-foreground">
           {dispense.pharmacy ?? 'Pharmacy'}
         </span>
         {dispense.handedOver ? (
-          <span className="text-slate-500">
+          <span className="text-faint-foreground">
             {formatDate(dispense.handedOver)}
           </span>
         ) : null}
       </div>
-      <p className="mt-1 text-xs text-slate-500">
+      <p className="mt-1 text-xs text-faint-foreground">
         {[dispense.quantity, dispense.daysSupply && `${dispense.daysSupply} supply`]
           .filter(Boolean)
           .join(' · ')}
@@ -81,11 +81,11 @@ function DetailBody({ detail }: { detail: PrescriptionDetail }) {
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-lg font-semibold text-slate-900">
+          <h3 className="text-lg font-semibold text-foreground">
             {detail.medication}
           </h3>
           {detail.courseOfTherapy ? (
-            <p className="mt-0.5 text-sm text-slate-500">
+            <p className="mt-0.5 text-sm text-faint-foreground">
               {detail.courseOfTherapy}
             </p>
           ) : null}
@@ -94,11 +94,11 @@ function DetailBody({ detail }: { detail: PrescriptionDetail }) {
       </div>
 
       {detail.dosageInstructions.length > 0 ? (
-        <div className="rounded-xl border border-slate-200 p-3">
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <div className="rounded-xl border border-border p-3">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-faint-foreground">
             Directions
           </p>
-          <ul className="space-y-1 text-sm text-slate-700">
+          <ul className="space-y-1 text-sm text-accent-foreground">
             {detail.dosageInstructions.map((instruction, index) => (
               <li key={index}>{instruction}</li>
             ))}
@@ -130,7 +130,7 @@ function DetailBody({ detail }: { detail: PrescriptionDetail }) {
 
       {detail.dispenses.length > 0 ? (
         <div>
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-faint-foreground">
             Dispensing history
           </p>
           <div className="space-y-2">
@@ -143,10 +143,10 @@ function DetailBody({ detail }: { detail: PrescriptionDetail }) {
 
       {detail.notes ? (
         <div>
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-faint-foreground">
             Notes
           </p>
-          <p className="text-sm leading-6 text-slate-600">{detail.notes}</p>
+          <p className="text-sm leading-6 text-muted-foreground">{detail.notes}</p>
         </div>
       ) : null}
     </div>

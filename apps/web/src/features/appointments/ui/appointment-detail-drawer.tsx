@@ -51,8 +51,8 @@ function Field({ label, value }: { label: string; value?: string }) {
   }
   return (
     <div className="flex justify-between gap-4 text-sm">
-      <span className="text-slate-500">{label}</span>
-      <span className="text-right font-medium text-slate-900">{value}</span>
+      <span className="text-faint-foreground">{label}</span>
+      <span className="text-right font-medium text-foreground">{value}</span>
     </div>
   );
 }
@@ -65,8 +65,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-slate-200 p-3">
-      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+    <div className="rounded-xl border border-border p-3">
+      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-faint-foreground">
         {title}
       </p>
       <div className="space-y-1.5">{children}</div>
@@ -92,11 +92,11 @@ function DetailBody({
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-lg font-semibold text-slate-900">
+          <h3 className="text-lg font-semibold text-foreground">
             {detail.reason || detail.serviceType || 'Appointment'}
           </h3>
           {detail.appointmentType ? (
-            <p className="mt-0.5 text-sm text-slate-500">
+            <p className="mt-0.5 text-sm text-faint-foreground">
               {detail.appointmentType}
             </p>
           ) : null}
@@ -139,10 +139,10 @@ function DetailBody({
 
       {detail.comment ? (
         <div>
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-faint-foreground">
             Comment
           </p>
-          <p className="text-sm leading-6 text-slate-600">{detail.comment}</p>
+          <p className="text-sm leading-6 text-muted-foreground">{detail.comment}</p>
         </div>
       ) : null}
 
@@ -151,7 +151,7 @@ function DetailBody({
           <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-brand-dark">
             Instructions
           </p>
-          <p className="text-sm leading-6 text-slate-700">
+          <p className="text-sm leading-6 text-accent-foreground">
             {detail.patientInstruction}
           </p>
         </div>

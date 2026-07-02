@@ -46,26 +46,26 @@ export function PatientDetailPage() {
         />
         <dl className="grid gap-4">
           <div>
-            <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            <dt className="text-xs font-medium uppercase tracking-wide text-faint-foreground">
               Email
             </dt>
-            <dd className="mt-1 break-all text-sm font-medium text-slate-900 sm:text-base">
+            <dd className="mt-1 break-all text-sm font-medium text-foreground sm:text-base">
               {patient.email}
             </dd>
           </div>
           <div>
-            <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            <dt className="text-xs font-medium uppercase tracking-wide text-faint-foreground">
               Phone
             </dt>
-            <dd className="mt-1 text-sm font-medium text-slate-900 sm:text-base">
+            <dd className="mt-1 text-sm font-medium text-foreground sm:text-base">
               {patient.phone}
             </dd>
           </div>
           <div>
-            <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            <dt className="text-xs font-medium uppercase tracking-wide text-faint-foreground">
               Date of birth
             </dt>
-            <dd className="mt-1 text-sm font-medium text-slate-900 sm:text-base">
+            <dd className="mt-1 text-sm font-medium text-foreground sm:text-base">
               {patient.dateOfBirth}
             </dd>
           </div>
@@ -85,16 +85,16 @@ export function PatientDetailPage() {
         {appointmentsQuery.isLoading ? (
           <LoadingState label="Loading appointments..." />
         ) : appointments.length === 0 ? (
-          <p className="text-sm text-slate-500">No appointments yet.</p>
+          <p className="text-sm text-faint-foreground">No appointments yet.</p>
         ) : (
           <div className="space-y-3">
             {appointments.map((appointment) => (
               <div
                 key={appointment.id}
-                className="rounded-xl border border-slate-200 bg-slate-50 p-3 sm:p-4"
+                className="rounded-xl border border-border bg-muted p-3 sm:p-4"
               >
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                  <p className="font-medium text-slate-900">
+                  <p className="font-medium text-foreground">
                     {appointment.reason}
                   </p>
                   <Badge
@@ -105,7 +105,7 @@ export function PatientDetailPage() {
                     {appointment.status}
                   </Badge>
                 </div>
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-faint-foreground">
                   {new Date(appointment.scheduledAt).toLocaleString()}
                 </p>
               </div>

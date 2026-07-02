@@ -7,6 +7,8 @@ import {
   HOME_SERVICE_ITEMS,
   HOME_SUPPORT_ITEMS,
 } from '@/features/app-home/data/home-navigation';
+import { HomeSearchPanel } from '@/features/app-home/ui/home-search-panel';
+import { HealthcareTeamBanner } from '@/features/healthcare-team/ui/healthcare-team-banner';
 import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
 import { useHomeScrollCapture } from '@/lib/routing/home-scroll-context';
 
@@ -106,17 +108,21 @@ export function HomeHubPage() {
 
   return (
     <div className="space-y-2 pb-4">
-      <header>
+      {/* <header>
         <p className="text-xs font-semibold uppercase tracking-wide text-brand">
           DrFinder
         </p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900">
+        <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground">
           Home
         </h1>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-muted-foreground">
           Your health services and care information in one place.
         </p>
-      </header>
+      </header> */}
+
+      <HomeSearchPanel />
+
+      <HealthcareTeamBanner />
 
       <section aria-labelledby="home-map-cta-heading">
         <h2 id="home-map-cta-heading" className="sr-only">
@@ -170,7 +176,7 @@ export function HomeHubPage() {
       <section aria-labelledby="home-services-heading">
         <h2
           id="home-services-heading"
-          className="mb-3 text-sm font-semibold text-slate-800"
+          className="mb-3 text-sm font-semibold text-subtle-foreground"
         >
           Services
         </h2>
@@ -189,8 +195,8 @@ export function HomeHubPage() {
                   <Card className="flex h-full flex-col gap-1 transition hover:border-brand-subtle hover:shadow-md active:scale-[0.99]">
                     <ServiceIcon slug={item.slug} />
                     <div>
-                      <p className="font-medium text-slate-900">{item.title}</p>
-                      <p className="mt-1 text-xs leading-4 text-slate-500">
+                      <p className="font-medium text-foreground">{item.title}</p>
+                      <p className="mt-1 text-xs leading-4 text-faint-foreground">
                         {item.description}
                       </p>
                     </div>
@@ -205,7 +211,7 @@ export function HomeHubPage() {
       <section aria-labelledby="home-support-heading">
         <h2
           id="home-support-heading"
-          className="mb-3 text-sm font-semibold text-slate-800"
+          className="mb-3 text-sm font-semibold text-subtle-foreground"
         >
           Information and support
         </h2>
@@ -218,8 +224,8 @@ export function HomeHubPage() {
                 onClick={(event) => handleLinkClick(event, item.href, false)}
               >
                 <Card className="transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99]">
-                  <p className="font-medium text-slate-900">{item.title}</p>
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="font-medium text-foreground">{item.title}</p>
+                  <p className="mt-1 text-sm text-faint-foreground">
                     {item.description}
                   </p>
                 </Card>

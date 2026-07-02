@@ -44,10 +44,10 @@ function Section({
 }) {
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+      <p className="text-xs font-semibold uppercase tracking-wide text-faint-foreground">
         {title}
       </p>
-      <div className="mt-1 space-y-1 text-sm text-slate-700">{children}</div>
+      <div className="mt-1 space-y-1 text-sm text-accent-foreground">{children}</div>
     </div>
   );
 }
@@ -58,7 +58,7 @@ function Chips({ items }: { items: string[] }) {
       {items.map((item) => (
         <span
           key={item}
-          className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-700"
+          className="inline-flex rounded-full bg-accent px-2 py-0.5 text-xs text-accent-foreground"
         >
           {item}
         </span>
@@ -69,14 +69,14 @@ function Chips({ items }: { items: string[] }) {
 
 function ServiceCard({ service }: { service: FacilityServiceDetail }) {
   return (
-    <div className="rounded-lg border border-slate-200 p-2.5">
+    <div className="rounded-lg border border-border p-2.5">
       <div className="flex items-center justify-between gap-2">
-        <p className="font-medium text-slate-900">{service.name}</p>
+        <p className="font-medium text-foreground">{service.name}</p>
         {service.appointmentRequired !== undefined ? (
           <span
             className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${
               service.appointmentRequired
-                ? 'bg-amber-100 text-amber-800'
+                ? 'bg-warning-subtle text-warning-foreground'
                 : 'bg-green-100 text-green-800'
             }`}
           >
@@ -86,46 +86,46 @@ function ServiceCard({ service }: { service: FacilityServiceDetail }) {
       </div>
 
       {service.comment ? (
-        <p className="mt-1 text-sm text-slate-600">{service.comment}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{service.comment}</p>
       ) : null}
 
       {service.specialties.length > 0 ? (
-        <p className="mt-1.5 text-xs text-slate-600">
+        <p className="mt-1.5 text-xs text-muted-foreground">
           <span className="font-medium">Specialties:</span>{' '}
           {service.specialties.join(', ')}
         </p>
       ) : null}
 
       {service.eligibility.length > 0 ? (
-        <p className="mt-1 text-xs text-slate-600">
+        <p className="mt-1 text-xs text-muted-foreground">
           <span className="font-medium">Eligibility:</span>{' '}
           {service.eligibility.join('; ')}
         </p>
       ) : null}
 
       {service.referralMethods.length > 0 ? (
-        <p className="mt-1 text-xs text-slate-600">
+        <p className="mt-1 text-xs text-muted-foreground">
           <span className="font-medium">Referral:</span>{' '}
           {service.referralMethods.join(', ')}
         </p>
       ) : null}
 
       {service.programs.length > 0 ? (
-        <p className="mt-1 text-xs text-slate-600">
+        <p className="mt-1 text-xs text-muted-foreground">
           <span className="font-medium">Coverage:</span>{' '}
           {service.programs.join(', ')}
         </p>
       ) : null}
 
       {service.languages.length > 0 ? (
-        <p className="mt-1 text-xs text-slate-600">
+        <p className="mt-1 text-xs text-muted-foreground">
           <span className="font-medium">Languages:</span>{' '}
           {service.languages.join(', ')}
         </p>
       ) : null}
 
       {service.availableTimes.length > 0 ? (
-        <ul className="mt-1.5 space-y-0.5 text-xs text-slate-600">
+        <ul className="mt-1.5 space-y-0.5 text-xs text-muted-foreground">
           {service.availableTimes.map((time, index) => (
             <li key={index}>{formatAvailableTime(time)}</li>
           ))}
@@ -140,7 +140,7 @@ export function FacilityDetailSection({ facilityId }: { facilityId: string }) {
 
   if (isLoading) {
     return (
-      <p className="border-t border-slate-100 pt-2 text-xs text-slate-400">
+      <p className="border-t border-border pt-2 text-xs text-faint-foreground">
         Loading clinic details…
       </p>
     );
@@ -151,7 +151,7 @@ export function FacilityDetailSection({ facilityId }: { facilityId: string }) {
   }
 
   return (
-    <div className="space-y-3 border-t border-slate-100 pt-3">
+    <div className="space-y-3 border-t border-border pt-3">
       {data.organization ? (
         <Section title="Operated by">
           <p>{data.organization.name}</p>
@@ -180,11 +180,11 @@ export function FacilityDetailSection({ facilityId }: { facilityId: string }) {
         <Section title="Practitioners">
           {data.practitioners.map((practitioner) => (
             <div key={practitioner.id}>
-              <span className="font-medium text-slate-900">
+              <span className="font-medium text-foreground">
                 {practitioner.name}
               </span>
               {practitioner.role ? (
-                <span className="text-slate-600"> · {practitioner.role}</span>
+                <span className="text-muted-foreground"> · {practitioner.role}</span>
               ) : null}
               {practitioner.specialties.length > 0 ? (
                 <div className="mt-0.5">

@@ -21,7 +21,7 @@ export function ProfileSectionPage({ slug }: { slug: string }) {
 
       <Card>
         <CardHeader title={section.title} description={section.description} />
-        <p className="text-sm leading-6 text-slate-600">
+        <p className="text-sm leading-6 text-muted-foreground">
           Placeholder screen for the MVP. Wire this section to authenticated
           profile APIs when available.
         </p>

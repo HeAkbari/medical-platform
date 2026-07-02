@@ -21,7 +21,7 @@ export function MapNavigationBar() {
 
   return (
     <div
-      className="absolute inset-x-4 bottom-4 z-[1000] rounded-2xl border border-slate-200/80 bg-white/95 p-4 shadow-lg backdrop-blur-md"
+      className="absolute inset-x-4 bottom-4 z-[1000] rounded-2xl border border-border/80 bg-surface/95 p-4 shadow-lg backdrop-blur-md"
       style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
     >
       <div className="flex items-start justify-between gap-3">
@@ -29,15 +29,15 @@ export function MapNavigationBar() {
           <p className="text-xs font-medium uppercase tracking-wide text-brand">
             Navigation
           </p>
-          <p className="truncate font-semibold text-slate-900">
+          <p className="truncate font-semibold text-foreground">
             {activeFacility.name}
           </p>
-          <p className="truncate text-sm text-slate-600">
+          <p className="truncate text-sm text-muted-foreground">
             {formatFacilityAddress(activeFacility)}
           </p>
 
           {status === 'loading' ? (
-            <p className="mt-1 text-sm text-slate-600">Calculating route...</p>
+            <p className="mt-1 text-sm text-muted-foreground">Calculating route...</p>
           ) : null}
 
           {status === 'error' ? (
@@ -47,7 +47,7 @@ export function MapNavigationBar() {
           ) : null}
 
           {status === 'success' && route ? (
-            <p className="mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-sm text-muted-foreground">
               {formatDistanceMeters(route.distanceMeters)} ·{' '}
               {formatDuration(route.durationSeconds)}
             </p>

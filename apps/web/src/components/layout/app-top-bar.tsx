@@ -9,12 +9,12 @@ export function AppTopBar() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-brand-subtle/80 bg-white/95 backdrop-blur-md">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-surface/95 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-lg items-center gap-2 px-4 sm:gap-3 sm:px-5">
           <button
             type="button"
             onClick={() => setDrawerOpen(true)}
-            className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl text-slate-700 transition hover:bg-slate-100 active:opacity-70"
+            className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl text-accent-foreground transition hover:bg-accent active:opacity-70"
             aria-label="Open menu"
           >
             <svg
@@ -41,7 +41,7 @@ export function AppTopBar() {
             >
               DF
             </span>
-            <span className="truncate text-base font-semibold tracking-tight text-slate-900">
+            <span className="truncate text-base font-semibold tracking-tight text-foreground">
               DrFinder
             </span>
           </Link>

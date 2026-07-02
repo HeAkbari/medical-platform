@@ -35,8 +35,8 @@ function Field({ label, value }: { label: string; value?: string }) {
   }
   return (
     <div className="flex justify-between gap-4 text-sm">
-      <span className="text-slate-500">{label}</span>
-      <span className="text-right font-medium text-slate-900">{value}</span>
+      <span className="text-faint-foreground">{label}</span>
+      <span className="text-right font-medium text-foreground">{value}</span>
     </div>
   );
 }
@@ -47,10 +47,10 @@ function Notes({ notes }: { notes?: string }) {
   }
   return (
     <div>
-      <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+      <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-faint-foreground">
         Notes
       </p>
-      <p className="text-sm leading-6 text-slate-600">{notes}</p>
+      <p className="text-sm leading-6 text-muted-foreground">{notes}</p>
     </div>
   );
 }
@@ -63,7 +63,7 @@ function ConditionBody({ detail }: { detail: ConditionDetail }) {
           <p className="text-xs font-semibold uppercase tracking-wide text-brand">
             Condition
           </p>
-          <h3 className="mt-0.5 text-lg font-semibold text-slate-900">
+          <h3 className="mt-0.5 text-lg font-semibold text-foreground">
             {detail.name}
           </h3>
         </div>
@@ -101,7 +101,7 @@ function AllergyBody({ detail }: { detail: AllergyDetail }) {
           <p className="text-xs font-semibold uppercase tracking-wide text-red-600">
             Allergy
           </p>
-          <h3 className="mt-0.5 text-lg font-semibold text-slate-900">
+          <h3 className="mt-0.5 text-lg font-semibold text-foreground">
             {detail.name}
           </h3>
         </div>
@@ -126,32 +126,32 @@ function AllergyBody({ detail }: { detail: AllergyDetail }) {
 
       {detail.reactions.length > 0 ? (
         <div>
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-faint-foreground">
             Reactions
           </p>
           <div className="space-y-2">
             {detail.reactions.map((reaction, index) => (
               <div
                 key={index}
-                className="rounded-lg border border-red-100 bg-red-50/60 p-2.5"
+                className="rounded-lg border border-red-100 bg-error-subtle/60 p-2.5"
               >
                 <div className="flex flex-wrap items-center gap-1.5">
                   {reaction.manifestations.map((manifestation) => (
                     <span
                       key={manifestation}
-                      className="inline-flex rounded-full bg-white px-2 py-0.5 text-xs font-medium text-red-800"
+                      className="inline-flex rounded-full bg-card px-2 py-0.5 text-xs font-medium text-red-800"
                     >
                       {manifestation}
                     </span>
                   ))}
                   {reaction.severity ? (
-                    <span className="text-xs text-red-700">
+                    <span className="text-xs text-error-foreground">
                       · {reaction.severity}
                     </span>
                   ) : null}
                 </div>
                 {reaction.description ? (
-                  <p className="mt-1 text-sm text-slate-600">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     {reaction.description}
                   </p>
                 ) : null}

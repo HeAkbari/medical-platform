@@ -17,10 +17,10 @@ export function ProfileHubPage() {
   return (
     <div className="space-y-4">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           Profile
         </h1>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-muted-foreground">
           Manage your personal details and health preferences.
         </p>
       </header>
@@ -28,15 +28,15 @@ export function ProfileHubPage() {
       <Card>
         {isAuthenticated && user ? (
           <div>
-            <p className="text-sm text-slate-500">Signed in as</p>
-            <p className="mt-1 font-medium text-slate-900">
+            <p className="text-sm text-faint-foreground">Signed in as</p>
+            <p className="mt-1 font-medium text-foreground">
               {user.firstName} {user.lastName}
             </p>
-            <p className="text-sm text-slate-600">{user.phone}</p>
+            <p className="text-sm text-muted-foreground">{user.phone}</p>
           </div>
         ) : (
           <div className="space-y-3">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-muted-foreground">
               Sign in to view and update your personal details.
             </p>
             <button
@@ -55,8 +55,8 @@ export function ProfileHubPage() {
           <li key={section.slug}>
             <Link href={`/profile/${section.slug}`}>
               <Card className="transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99]">
-                <p className="font-medium text-slate-900">{section.title}</p>
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="font-medium text-foreground">{section.title}</p>
+                <p className="mt-1 text-sm text-faint-foreground">
                   {section.description}
                 </p>
               </Card>

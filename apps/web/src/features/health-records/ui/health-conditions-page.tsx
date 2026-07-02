@@ -43,7 +43,7 @@ function RecordCard({
     <button
       type="button"
       onClick={onSelect}
-      className="w-full rounded-xl border border-slate-200 p-3 text-left transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4"
+      className="w-full rounded-xl border border-border p-3 text-left transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -56,15 +56,15 @@ function RecordCard({
           >
             {isAllergy ? 'Allergy' : 'Condition'}
           </span>
-          <p className="mt-1.5 font-medium text-slate-900">{record.name}</p>
-          <p className="mt-0.5 text-sm text-slate-500">
+          <p className="mt-1.5 font-medium text-foreground">{record.name}</p>
+          <p className="mt-0.5 text-sm text-faint-foreground">
             {[record.clinicalStatus, formatDate(record.recordedDate)]
               .filter(Boolean)
               .join(' · ')}
           </p>
         </div>
         {record.tag ? (
-          <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+          <span className="shrink-0 rounded-full bg-accent px-2 py-0.5 text-xs text-muted-foreground">
             {record.tag}
           </span>
         ) : null}

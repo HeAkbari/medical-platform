@@ -54,13 +54,13 @@ function PrescriptionCard({
     <button
       type="button"
       onClick={onSelect}
-      className="w-full rounded-xl border border-slate-200 p-3 text-left transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4"
+      className="w-full rounded-xl border border-border p-3 text-left transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4"
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <p className="font-medium text-slate-900">{prescription.medication}</p>
+          <p className="font-medium text-foreground">{prescription.medication}</p>
           {prescription.authoredOn ? (
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-faint-foreground">
               Prescribed {formatDate(prescription.authoredOn)}
             </p>
           ) : null}
@@ -71,7 +71,7 @@ function PrescriptionCard({
       </div>
 
       {prescription.dosageInstructions.length > 0 ? (
-        <ul className="mt-3 space-y-1 text-sm text-slate-700">
+        <ul className="mt-3 space-y-1 text-sm text-accent-foreground">
           {prescription.dosageInstructions.map((instruction, index) => (
             <li key={index}>{instruction}</li>
           ))}
@@ -79,7 +79,7 @@ function PrescriptionCard({
       ) : null}
 
       {prescription.repeatsAllowed !== undefined ? (
-        <p className="mt-2 text-xs text-slate-500">
+        <p className="mt-2 text-xs text-faint-foreground">
           Repeats allowed: {prescription.repeatsAllowed}
         </p>
       ) : null}

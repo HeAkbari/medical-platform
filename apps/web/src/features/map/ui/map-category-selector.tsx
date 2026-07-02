@@ -50,7 +50,7 @@ export function MapCategorySelector() {
               className={`shrink-0 rounded-full border px-3.5 py-2 text-sm font-medium whitespace-nowrap shadow-sm transition active:scale-95 ${
                 isActive
                   ? 'border-brand-light bg-brand text-brand-foreground'
-                  : 'border-slate-200/80 bg-white/95 text-slate-700 backdrop-blur-md hover:bg-white'
+                  : 'border-border/80 bg-surface/95 text-accent-foreground backdrop-blur-md hover:bg-card'
               }`}
             >
               {option.label}

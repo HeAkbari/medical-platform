@@ -54,6 +54,10 @@ export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
       href: '/settings',
     },
     {
+      label: 'My Healthcare Team',
+      href: '/healthcare-team',
+    },
+    {
       label: 'Map view',
       href: '/home/map',
     },
@@ -76,13 +80,15 @@ export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-110 bg-black/40" />
         <Drawer.Content
-          className="fixed inset-y-0 start-0 z-110 flex w-[min(100%,18rem)] flex-col bg-white outline-none"
+          className="fixed inset-y-0 start-0 z-110 flex w-[min(100%,18rem)] flex-col bg-surface outline-none"
         >
           <div className="flex h-full flex-col p-4 pt-[max(1rem,env(safe-area-inset-top))]">
-            <Drawer.Title className="text-lg font-semibold text-slate-900">
+            <Drawer.Title className="text-lg font-semibold text-foreground">
               Menu
             </Drawer.Title>
-            <p className="mt-1 text-sm text-slate-500">DrFinder patient app</p>
+            <p className="mt-1 text-sm text-faint-foreground">
+              DrFinder patient app
+            </p>
 
             <nav className="mt-6 flex flex-1 flex-col gap-1" aria-label="App menu">
               {items.map((item) => {
@@ -99,7 +105,7 @@ export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
                         'flex min-h-11 items-center rounded-xl px-3 text-sm font-medium transition active:opacity-70',
                         active
                           ? 'bg-brand-muted text-brand-dark'
-                          : 'text-slate-800 hover:bg-slate-50'
+                          : 'text-subtle-foreground hover:bg-accent'
                       )}
                     >
                       {item.label}
@@ -115,8 +121,8 @@ export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
                     className={cn(
                       'flex min-h-11 items-center rounded-xl px-3 text-start text-sm font-medium transition active:opacity-70',
                       item.destructive
-                        ? 'text-red-700 hover:bg-red-50'
-                        : 'text-slate-800 hover:bg-slate-50'
+                        ? 'text-error-foreground hover:bg-error-subtle'
+                        : 'text-subtle-foreground hover:bg-accent'
                     )}
                   >
                     {item.label}

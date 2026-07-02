@@ -36,16 +36,16 @@ function MessageDetail({
         <p className="text-xs font-medium uppercase tracking-wide text-brand">
           {message.sender}
         </p>
-        <h1 className="mt-2 text-xl font-semibold text-slate-900">
+        <h1 className="mt-2 text-xl font-semibold text-foreground">
           {message.subject}
         </h1>
-        <p className="mt-1 text-xs text-slate-500">
+        <p className="mt-1 text-xs text-faint-foreground">
           {formatMessageDate(message.receivedAt)}
         </p>
-        <p className="mt-4 text-sm leading-7 text-slate-700">{message.body}</p>
+        <p className="mt-4 text-sm leading-7 text-accent-foreground">{message.body}</p>
       </Card>
 
-      <p className="text-xs text-slate-500">
+      <p className="text-xs text-faint-foreground">
         If notifications are off, important updates may also be sent by SMS.
       </p>
     </div>
@@ -80,10 +80,10 @@ export function MessagesPage() {
   return (
     <div className="space-y-4">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           Messages
         </h1>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-muted-foreground">
           Secure messages from your GP, hospital, and screening services.
         </p>
       </header>
@@ -105,13 +105,13 @@ export function MessagesPage() {
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="truncate font-medium text-slate-900">
+                    <p className="truncate font-medium text-foreground">
                       {message.subject}
                     </p>
-                    <p className="mt-0.5 text-xs text-slate-500">
+                    <p className="mt-0.5 text-xs text-faint-foreground">
                       {message.sender}
                     </p>
-                    <p className="mt-2 line-clamp-2 text-sm text-slate-600">
+                    <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
                       {message.preview}
                     </p>
                   </div>

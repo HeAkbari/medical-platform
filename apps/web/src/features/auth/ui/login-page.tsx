@@ -10,7 +10,7 @@ export function LoginPage() {
           title="Login"
           description="Authentication placeholder — mock MVP runs without login."
         />
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-muted-foreground">
           JWT + cookie auth will be wired when the NestJS API is implemented.
         </p>
       </Card>

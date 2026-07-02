@@ -38,15 +38,15 @@ export function PatientsPage() {
               <li key={patient.id}>
                 <Link
                   href={`/dashboard/patients/${patient.id}`}
-                  className="flex min-h-[4.5rem] flex-col justify-center gap-1 py-3 active:bg-slate-50 sm:py-4"
+                  className="flex min-h-[4.5rem] flex-col justify-center gap-1 py-3 active:bg-muted sm:py-4"
                 >
                   <p className="font-medium text-brand">
                     {patient.firstName} {patient.lastName}
                   </p>
-                  <p className="truncate text-sm text-slate-600">
+                  <p className="truncate text-sm text-muted-foreground">
                     {patient.email}
                   </p>
-                  <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-slate-500 sm:text-sm">
+                  <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-faint-foreground sm:text-sm">
                     <span>{patient.phone}</span>
                     <span>DOB {patient.dateOfBirth}</span>
                   </div>

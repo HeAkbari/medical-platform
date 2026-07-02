@@ -4,9 +4,9 @@ type BadgeVariant = 'default' | 'success' | 'warning' | 'muted';
 
 const variantClasses: Record<BadgeVariant, string> = {
   default: 'bg-brand-muted text-brand-dark',
-  success: 'bg-emerald-100 text-emerald-800',
-  warning: 'bg-amber-100 text-amber-800',
-  muted: 'bg-slate-100 text-slate-700',
+  success: 'bg-success-subtle text-success-foreground',
+  warning: 'bg-warning-subtle text-warning-foreground',
+  muted: 'bg-muted text-muted-foreground',
 };
 
 export function Badge({

@@ -46,12 +46,12 @@ function VaccinationCard({
     <button
       type="button"
       onClick={onSelect}
-      className="w-full rounded-xl border border-slate-200 p-3 text-left transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4"
+      className="w-full rounded-xl border border-border p-3 text-left transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4"
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <p className="font-medium text-slate-900">{vaccination.name}</p>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="font-medium text-foreground">{vaccination.name}</p>
+          <p className="mt-1 text-sm text-faint-foreground">
             {formatDate(vaccination.date)}
             {dose ? ` · ${dose}` : ''}
           </p>
