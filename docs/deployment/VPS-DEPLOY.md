@@ -628,6 +628,20 @@ docker compose -f deploy/docker-compose.prod.yml logs web
 2. seed اجرا شده؟ `FHIR_BASE_URL=http://127.0.0.1:8082/fhir python3 docs/oscar/seed.py`
 3. env اپ: `docker exec medical-platform-web printenv FHIR_BASE_URL` باید `http://hapi-fhir:8080/fhir` باشد
 
+### HAPI unhealthy ولی لاگ `Started Application` دارد
+
+image جدید `hapiproject/hapi` **distroless** است و `curl` ندارد. healthcheck قدیمی با `curl` همیشه fail می‌شود.
+
+```bash
+# تست دستی — اگر JSON برگرداند HAPI سالم است:
+curl -s http://127.0.0.1:8082/fhir/metadata | head -c 100
+
+# healthcheck داخلی image:
+docker exec medical-platform-hapi-fhir java -cp /app HealthCheck && echo OK
+```
+
+`git pull` بگیر (healthcheck اصلاح شده) و دوباره `docker compose up -d` بزن.
+
 ### HAPI مدام restart می‌شود
 
 ```bash

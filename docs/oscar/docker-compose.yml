@@ -45,7 +45,8 @@ services:
       spring.datasource.driverClassName: org.postgresql.Driver
       spring.jpa.properties.hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/fhir/metadata"]
+      # hapiproject/hapi is distroless — no curl/wget; use built-in Java HealthCheck
+      test: ["CMD", "java", "-cp", "/app", "HealthCheck"]
       interval: 15s
       timeout: 10s
       retries: 10

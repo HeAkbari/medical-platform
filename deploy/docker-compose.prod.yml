@@ -51,7 +51,8 @@ services:
       # Limit JVM heap on small VPS (avoid OOM during first boot)
       JAVA_TOOL_OPTIONS: ${HAPI_JAVA_OPTS:--Xms256m -Xmx768m}
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/fhir/metadata"]
+      # hapiproject/hapi is distroless — no curl/wget; use built-in Java HealthCheck
+      test: ["CMD", "java", "-cp", "/app", "HealthCheck"]
       interval: 20s
       timeout: 15s
       retries: 20
