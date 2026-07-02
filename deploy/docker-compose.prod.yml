@@ -1,0 +1,85 @@
+# Production stack for VPS — Medical Platform + HAPI FHIR
+#
+# Ports chosen to avoid common conflicts (8080, 3000, 3001):
+#   - Web app:      3002  →  http://YOUR_IP:3002
+#   - HAPI FHIR UI: 8082  →  http://YOUR_IP:8082
+#   - PostgreSQL:   internal only (no host port)
+#
+# Usage (from repo root on the server):
+#   docker compose -f deploy/docker-compose.prod.yml up -d --build
+#   docker compose -f deploy/docker-compose.prod.yml logs -f
+#   docker compose -f deploy/docker-compose.prod.yml down        # keeps data
+#   docker compose -f deploy/docker-compose.prod.yml down -v     # wipes FHIR DB
+
+name: medical-platform
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: medical-platform-postgres
+    environment:
+      POSTGRES_DB: hapi
+      POSTGRES_USER: hapi
+      POSTGRES_PASSWORD: ${HAPI_DB_PASSWORD:-hapi}
+    volumes:
+      - medical-platform-hapi-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hapi -d hapi"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    networks:
+      - medical-platform
+
+  hapi-fhir:
+    image: hapiproject/hapi:latest
+    container_name: medical-platform-hapi-fhir
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "${HAPI_HOST_PORT:-8082}:8080"
+    environment:
+      hapi.fhir.fhir_version: R4
+      hapi.fhir.default_encoding: json
+      spring.datasource.url: jdbc:postgresql://postgres:5432/hapi
+      spring.datasource.username: hapi
+      spring.datasource.password: ${HAPI_DB_PASSWORD:-hapi}
+      spring.datasource.driverClassName: org.postgresql.Driver
+      spring.jpa.properties.hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/fhir/metadata"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 120s
+    restart: unless-stopped
+    networks:
+      - medical-platform
+
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    container_name: medical-platform-web
+    depends_on:
+      hapi-fhir:
+        condition: service_healthy
+    ports:
+      - "${WEB_HOST_PORT:-3002}:3001"
+    environment:
+      NODE_ENV: production
+      DATA_SOURCE: fhir
+      FHIR_BASE_URL: http://hapi-fhir:8080/fhir
+      NEXT_PUBLIC_API_URL: /api
+    restart: unless-stopped
+    networks:
+      - medical-platform
+
+volumes:
+  medical-platform-hapi-pg:
+
+networks:
+  medical-platform:
+    name: medical-platform-network

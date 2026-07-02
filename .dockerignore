@@ -1,0 +1,17 @@
+node_modules
+.git
+.next
+out
+dist
+tmp
+scaffold-tmp
+.nx
+.turbo
+.env
+.env.*
+!.env.example
+apps/web/.env.local
+*.md
+docs/oscar/seed-all.json
+.idea
+.vscode
