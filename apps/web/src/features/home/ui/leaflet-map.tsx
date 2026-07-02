@@ -22,6 +22,12 @@ import { useGeolocation } from '@/hooks/use-geolocation';
 
 const DEFAULT_ZOOM = 13;
 
+const OSM_TILE_LAYER = {
+  url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+} as const;
+
 function createUserMarkerIcon() {
   return L.icon({
     iconUrl:
@@ -85,7 +91,7 @@ export function LeafletMap() {
   );
 
   return (
-    <div className="relative h-full w-full">
+    <div className="leaflet-map relative h-full w-full">
       {geo.status === 'error' ? (
         <div className="absolute inset-x-4 top-[7.5rem] z-[1000] rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 shadow-sm">
           {geo.message} Showing Greater Victoria area.
@@ -107,8 +113,8 @@ export function LeafletMap() {
         scrollWheelZoom
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution={OSM_TILE_LAYER.attribution}
+          url={OSM_TILE_LAYER.url}
           maxZoom={19}
         />
         <MapClickHandler onMapClick={() => closeDrawer(false)} />

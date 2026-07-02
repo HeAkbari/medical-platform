@@ -102,6 +102,12 @@ body {
   z-index: 0;
 }
 
+/* Invert OSM tiles in dark mode — keeps roads/labels readable vs low-contrast dark tile sets */
+.dark .leaflet-map .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.94) contrast(1.08)
+    saturate(0.82);
+}
+
 .scrollbar-none,
 .map-need-scroll {
   scrollbar-width: none;

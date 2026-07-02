@@ -134,27 +134,30 @@ export function HomeHubPage() {
           onClick={(event) => handleLinkClick(event, HOME_MAP_CTA.href, false)}
           className="block"
         >
-          <Card className="relative flex border-0 items-center gap-3 overflow-hidden border-brand/40 p-4 shadow-sm ring-1 ring-brand-subtle/60 transition hover:border-brand/60 hover:shadow-md active:scale-[0.99]">
+          <Card className="relative flex items-center gap-3 overflow-hidden border-brand-subtle p-4 shadow-sm transition hover:border-brand-light hover:shadow-md active:scale-[0.99]">
             {/* Real OpenStreetMap tile filling the whole card */}
             <span
-              className="absolute inset-0 bg-cover bg-center"
+              className="absolute inset-0 bg-cover bg-center dark:brightness-[0.72] dark:saturate-[0.65]"
               style={{ backgroundImage: `url("${HOME_MAP_THUMBNAIL_URL}")` }}
               aria-hidden="true"
             />
-            {/* Scrim + inner shadow for text legibility */}
+            {/* Scrim for text legibility — green tint in light, subtle dark wash in dark */}
             <span
-              className="absolute inset-0 bg-linear-to-r from-brand-darker/55"
+              className="absolute inset-0 bg-linear-to-r from-brand-darker/55 dark:from-background/70 dark:via-brand-muted/40 dark:to-transparent"
               aria-hidden="true"
             />
             <span className="relative min-w-0 flex-1">
-              <p className="font-semibold text-white drop-shadow-sm">
+              <p className="font-semibold text-white drop-shadow-sm dark:text-foreground dark:drop-shadow-none">
                 {HOME_MAP_CTA.title}
               </p>
-              <p className="mt-0.5 text-sm text-white/85 drop-shadow-sm">
+              <p className="mt-0.5 text-sm text-white/85 drop-shadow-sm dark:text-muted-foreground dark:drop-shadow-none">
                 {HOME_MAP_CTA.description}
               </p>
             </span>
-            <span className="relative shrink-0 text-white" aria-hidden="true">
+            <span
+              className="relative shrink-0 text-white dark:text-brand"
+              aria-hidden="true"
+            >
               <svg
                 className="h-5 w-5"
                 viewBox="0 0 24 24"
