@@ -16,7 +16,7 @@ export function HealthConditionMeter({
       <div>
         <div className="mb-2 flex items-center justify-between gap-2">
           <p className="text-sm font-semibold text-foreground">
-            Health condition meter
+            Health Screening
           </p>
           <span className="text-sm font-medium text-brand">
             {completedCount}/{milestones.length}
@@ -28,7 +28,7 @@ export function HealthConditionMeter({
           aria-valuenow={progress}
           aria-valuemin={0}
           aria-valuemax={100}
-          aria-label="Care plan progress"
+          aria-label="Health screening progress"
         >
           <div
             className="h-full rounded-full bg-brand transition-all"

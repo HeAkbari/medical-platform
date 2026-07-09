@@ -124,6 +124,56 @@ export function HomeHubPage() {
 
       <HealthcareTeamBanner />
 
+      {/* Symptom Checker entry block (P8) */}
+      <section aria-labelledby="symptom-checker-entry-heading">
+        <h2 id="symptom-checker-entry-heading" className="sr-only">
+          Symptom Checker
+        </h2>
+        <Link
+          href="/home/services/symptom-checker"
+          scroll={false}
+          onClick={(event) =>
+            handleLinkClick(event, '/home/services/symptom-checker', false)
+          }
+          className="block"
+        >
+          <Card className="relative overflow-hidden border-brand-subtle bg-linear-to-br from-brand-muted via-brand-muted/60 to-card transition hover:border-brand-light hover:shadow-md active:scale-[0.99]">
+            <div className="flex items-start gap-3">
+              <span
+                className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand/10"
+                aria-hidden="true"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.8}
+                  className="h-5 w-5 text-brand"
+                >
+                  <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-foreground">
+                  AI Symptom Checker
+                </p>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                  Describe your symptoms and get guidance on your next step — self-care, book an appointment, or seek urgent care.
+                </p>
+                <p className="mt-2 text-xs text-faint-foreground">
+                  Non-diagnostic · For emergencies, call 911
+                </p>
+              </div>
+              <span className="shrink-0 text-brand" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4">
+                  <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+            </div>
+          </Card>
+        </Link>
+      </section>
+
       <section aria-labelledby="home-map-cta-heading">
         <h2 id="home-map-cta-heading" className="sr-only">
           Find doctors nearby

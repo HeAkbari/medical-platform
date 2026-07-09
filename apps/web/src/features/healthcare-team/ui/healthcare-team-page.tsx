@@ -23,6 +23,17 @@ import { useHealthcareTeamStore } from '@/features/healthcare-team/store/healthc
 import { useAppointmentBookingStore } from '@/features/appointments/store/appointment-booking-store';
 import { useDoctorsQuery } from '@/hooks';
 
+const PHYSICIAN_CATEGORIES = [
+  { label: 'Family Physician', icon: '🏥' },
+  { label: 'Internist', icon: '🩺' },
+  { label: 'Cardiologist', icon: '❤️' },
+  { label: 'Dermatologist', icon: '🧴' },
+  { label: 'Pediatrician', icon: '👶' },
+  { label: 'Gynecologist', icon: '🩻' },
+  { label: 'Psychiatrist', icon: '🧠' },
+  { label: 'Other', icon: '🔍' },
+];
+
 function formatVisitDate(value: string): string {
   return new Date(value).toLocaleDateString(undefined, {
     month: 'short',
@@ -87,7 +98,7 @@ export function HealthcareTeamPage() {
 
       <header>
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-          My Healthcare Team
+          Your Healthcare Team
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Your family physician, visit history, and care milestones.
@@ -172,8 +183,28 @@ export function HealthcareTeamPage() {
             ) : null}
           </div>
         ) : (
-          <div className="space-y-3">
-            <EmptyState title="No family physician on file" />
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Add a physician to your care team. Choose a specialty:
+            </p>
+            {/* Add a Physician — 2-column grid picker (v0.4) */}
+            <ul className="grid grid-cols-2 gap-2">
+              {PHYSICIAN_CATEGORIES.map((cat) => (
+                <li key={cat.label}>
+                  <Link
+                    href={`/home/find-physician?specialty=${encodeURIComponent(cat.label)}`}
+                    className="flex min-h-18 flex-col items-start justify-between gap-1 rounded-xl border border-border bg-card p-3 transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.98]"
+                  >
+                    <span className="text-lg" aria-hidden="true">
+                      {cat.icon}
+                    </span>
+                    <span className="text-sm font-medium text-foreground leading-snug">
+                      {cat.label}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
             {familyMedicineDoctor ? (
               <Button
                 type="button"
@@ -183,13 +214,7 @@ export function HealthcareTeamPage() {
                 Add {familyMedicineDoctor.firstName}{' '}
                 {familyMedicineDoctor.lastName}
               </Button>
-            ) : (
-              <Link href="/home/find-physician" className="inline-flex w-full">
-                <Button variant="secondary" fullWidth>
-                  Find a physician
-                </Button>
-              </Link>
-            )}
+            ) : null}
           </div>
         )}
       </Card>
@@ -240,7 +265,7 @@ export function HealthcareTeamPage() {
 
       <Card>
         <CardHeader
-          title="Care plan progress"
+          title="Health Screening"
           description="Track milestones recommended for your care plan."
         />
         <HealthConditionMeter milestones={milestones} />

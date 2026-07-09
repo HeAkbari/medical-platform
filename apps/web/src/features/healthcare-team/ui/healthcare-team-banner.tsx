@@ -45,7 +45,7 @@ export function HealthcareTeamBanner() {
     return (
       <section aria-labelledby="healthcare-team-banner-heading">
         <h2 id="healthcare-team-banner-heading" className="sr-only">
-          My Healthcare Team
+          Your Healthcare Team
         </h2>
         <Link
           href={HEALTHCARE_TEAM_HREF}
@@ -55,7 +55,7 @@ export function HealthcareTeamBanner() {
         >
           <Card className="border-brand-subtle bg-linear-to-br from-brand-muted to-card transition hover:border-brand-light hover:shadow-md active:scale-[0.99]">
             <p className="text-xs font-semibold uppercase tracking-wide text-brand">
-              My Healthcare Team
+              Your Healthcare Team
             </p>
             <p className="mt-1 font-semibold text-foreground">
               Sign in to view your care team
@@ -72,12 +72,12 @@ export function HealthcareTeamBanner() {
   return (
     <section aria-labelledby="healthcare-team-banner-heading">
       <h2 id="healthcare-team-banner-heading" className="sr-only">
-        My Healthcare Team
+        Your Healthcare Team
       </h2>
       <Link href={HEALTHCARE_TEAM_HREF} scroll={false} className="block">
         <Card className="border-brand-subtle bg-linear-to-br from-brand-muted to-card transition hover:border-brand-light hover:shadow-md active:scale-[0.99]">
           <p className="text-xs font-semibold uppercase tracking-wide text-brand">
-            My Healthcare Team
+            Your Healthcare Team
           </p>
           {familyPhysician ? (
             <>

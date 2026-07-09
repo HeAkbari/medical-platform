@@ -7,7 +7,7 @@ export const MAP_CATEGORY_OPTIONS = [
   { id: 'urgent-walk-in', label: 'Urgent & walk-in' },
   { id: 'pharmacy', label: 'Pharmacy' },
   { id: 'primary-care', label: 'Primary care' },
-  { id: 'therapy-rehab', label: 'Therapy & rehab' },
+  { id: 'therapy-rehab', label: 'Therapy' },
   { id: 'mental-health', label: 'Mental health' },
   { id: 'dental-other', label: 'Dental & other' },
 ] as const;

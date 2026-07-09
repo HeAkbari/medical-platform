@@ -36,7 +36,7 @@ export function MapCategorySelector() {
   }
 
   return (
-    <div className="pointer-events-none absolute inset-x-0 top-[4.5rem] z-[1000] px-4">
+    <div className="pointer-events-none absolute inset-x-0 top-[8rem] z-[1000] px-4">
       <div className="map-need-scroll pointer-events-auto flex gap-2 overflow-x-auto pb-1">
         {MAP_CATEGORY_OPTIONS.map((option) => {
           const isActive =
