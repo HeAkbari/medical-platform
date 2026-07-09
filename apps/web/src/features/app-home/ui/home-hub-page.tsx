@@ -1,84 +1,83 @@
 'use client';
 
-import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import {
   HOME_MAP_CTA,
-  HOME_SERVICE_ITEMS,
   HOME_SUPPORT_ITEMS,
 } from '@/features/app-home/data/home-navigation';
 import { HomeSearchPanel } from '@/features/app-home/ui/home-search-panel';
 import { HealthcareTeamBanner } from '@/features/healthcare-team/ui/healthcare-team-banner';
 import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
 import { useHomeScrollCapture } from '@/lib/routing/home-scroll-context';
+import Link from 'next/link';
 
 // Real OpenStreetMap tile centred on the app's fallback map center
 // (Victoria, BC — see FALLBACK_MAP_CENTER in lib/geo/constants).
 const HOME_MAP_THUMBNAIL_URL =
   'https://tile.openstreetmap.org/13/1288/2833.png';
 
-function ServiceIcon({ slug }: { slug: string }) {
-  const common = 'h-6 w-6 text-brand';
+// function ServiceIcon({ slug }: { slug: string }) {
+//   const common = 'h-6 w-6 text-brand';
 
-  switch (slug) {
-    case 'appointments':
-      return (
-        <svg
-          className={common}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.8}
-          aria-hidden="true"
-        >
-          <rect x="4" y="5" width="16" height="15" rx="2" />
-          <path d="M8 3v4M16 3v4M4 10h16" strokeLinecap="round" />
-        </svg>
-      );
-    case 'test-results':
-      return (
-        <svg
-          className={common}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.8}
-          aria-hidden="true"
-        >
-          <path d="M8 4h8v16H8z" />
-          <path d="M10 9h4M10 13h4M10 17h2" strokeLinecap="round" />
-        </svg>
-      );
-    case 'advices':
-      return (
-        <svg
-          className={common}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.8}
-          aria-hidden="true"
-        >
-          <path d="M12 21s-6-3.6-6-9a6 6 0 1 1 12 0c0 5.4-6 9-6 9z" />
-          <path d="M12 8v5M9.5 10.5h5" strokeLinecap="round" />
-        </svg>
-      );
-    default:
-      return (
-        <svg
-          className={common}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.8}
-          aria-hidden="true"
-        >
-          <path d="M6 4h12v16H6z" />
-          <path d="M9 9h6M9 13h6" strokeLinecap="round" />
-        </svg>
-      );
-  }
-}
+//   switch (slug) {
+//     case 'appointments':
+//       return (
+//         <svg
+//           className={common}
+//           viewBox="0 0 24 24"
+//           fill="none"
+//           stroke="currentColor"
+//           strokeWidth={1.8}
+//           aria-hidden="true"
+//         >
+//           <rect x="4" y="5" width="16" height="15" rx="2" />
+//           <path d="M8 3v4M16 3v4M4 10h16" strokeLinecap="round" />
+//         </svg>
+//       );
+//     case 'test-results':
+//       return (
+//         <svg
+//           className={common}
+//           viewBox="0 0 24 24"
+//           fill="none"
+//           stroke="currentColor"
+//           strokeWidth={1.8}
+//           aria-hidden="true"
+//         >
+//           <path d="M8 4h8v16H8z" />
+//           <path d="M10 9h4M10 13h4M10 17h2" strokeLinecap="round" />
+//         </svg>
+//       );
+//     case 'advices':
+//       return (
+//         <svg
+//           className={common}
+//           viewBox="0 0 24 24"
+//           fill="none"
+//           stroke="currentColor"
+//           strokeWidth={1.8}
+//           aria-hidden="true"
+//         >
+//           <path d="M12 21s-6-3.6-6-9a6 6 0 1 1 12 0c0 5.4-6 9-6 9z" />
+//           <path d="M12 8v5M9.5 10.5h5" strokeLinecap="round" />
+//         </svg>
+//       );
+//     default:
+//       return (
+//         <svg
+//           className={common}
+//           viewBox="0 0 24 24"
+//           fill="none"
+//           stroke="currentColor"
+//           strokeWidth={1.8}
+//           aria-hidden="true"
+//         >
+//           <path d="M6 4h12v16H6z" />
+//           <path d="M9 9h6M9 13h6" strokeLinecap="round" />
+//         </svg>
+//       );
+//   }
+// }
 
 export function HomeHubPage() {
   const { requireAuth, isLoading } = useRequireAuth();
@@ -150,7 +149,11 @@ export function HomeHubPage() {
                   strokeWidth={1.8}
                   className="h-5 w-5 text-brand"
                 >
-                  <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18" strokeLinecap="round" strokeLinejoin="round" />
+                  <path
+                    d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </span>
               <div className="min-w-0 flex-1">
@@ -158,15 +161,26 @@ export function HomeHubPage() {
                   AI Symptom Checker
                 </p>
                 <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                  Describe your symptoms and get guidance on your next step — self-care, book an appointment, or seek urgent care.
+                  Describe your symptoms and get guidance on your next step —
+                  self-care, book an appointment, or seek urgent care.
                 </p>
                 <p className="mt-2 text-xs text-faint-foreground">
                   Non-diagnostic · For emergencies, call 911
                 </p>
               </div>
               <span className="shrink-0 text-brand" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4">
-                  <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  className="h-4 w-4"
+                >
+                  <path
+                    d="M9 6l6 6-6 6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </span>
             </div>
@@ -226,7 +240,7 @@ export function HomeHubPage() {
         </Link>
       </section>
 
-      <section aria-labelledby="home-services-heading">
+      {/* <section aria-labelledby="home-services-heading">
         <h2
           id="home-services-heading"
           className="mb-3 text-sm font-semibold text-subtle-foreground"
@@ -259,7 +273,7 @@ export function HomeHubPage() {
             );
           })}
         </ul>
-      </section>
+      </section> */}
 
       <section aria-labelledby="home-support-heading">
         <h2
