@@ -1,50 +1,57 @@
 'use client';
 
-import Link from 'next/link';
 import { useState } from 'react';
 import { NavDrawer } from '@/components/layout/nav-drawer';
+import { useAuth } from '@/lib/auth';
 
 export function AppTopBar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { user, isAuthenticated } = useAuth();
 
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-surface/95 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-lg items-center gap-2 px-4 sm:gap-3 sm:px-5">
+        <div className="mx-auto flex h-14 max-w-lg items-center px-4 sm:px-5">
+          {/* Hamburger / X — inline-start */}
           <button
             type="button"
-            onClick={() => setDrawerOpen(true)}
+            onClick={() => setDrawerOpen((prev) => !prev)}
             className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl text-accent-foreground transition hover:bg-accent active:opacity-70"
-            aria-label="Open menu"
+            aria-label={drawerOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={drawerOpen}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={1.8}
-              className="h-6 w-6"
-              aria-hidden="true"
-            >
-              <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
-            </svg>
+            {drawerOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-6 w-6" aria-hidden="true">
+                <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-6 w-6" aria-hidden="true">
+                <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
+              </svg>
+            )}
           </button>
 
-          <Link
-            href="/home"
-            scroll={false}
-            className="inline-flex min-h-11 min-w-0 flex-1 items-center gap-2 active:opacity-70"
-          >
+          {/* Centered greeting */}
+          <div className="flex flex-1 items-center justify-center px-2">
+            {isAuthenticated && user ? (
+              <span className="truncate text-sm font-medium text-foreground">
+                Hi {user.firstName}!
+              </span>
+            ) : null}
+          </div>
+
+          {/* DrFinder logo — inline-end (top-right) */}
+          <div className="flex shrink-0 flex-col items-center gap-0.5">
             <span
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand text-xs font-bold text-brand-foreground"
+              className="flex h-6 w-6 items-center justify-center rounded-md bg-brand text-[10px] font-bold leading-none text-brand-foreground"
               aria-hidden="true"
             >
               DF
             </span>
-            <span className="truncate text-base font-semibold tracking-tight text-foreground">
+            <span className="text-[11px] font-semibold leading-none tracking-tight text-foreground">
               DrFinder
             </span>
-          </Link>
+          </div>
         </div>
       </header>
 
