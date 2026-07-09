@@ -9,18 +9,67 @@ import { inputClassName } from '@/components/ui/input-styles';
 import {
   filterDoctorsByQuery,
   HOME_SEARCH_CHIPS,
+  type HomeSearchChip,
+  type HomeSearchChipTone,
 } from '@/features/app-home/data/home-search';
+import { HomeSearchChipIconGlyph } from '@/features/app-home/ui/home-search-chip-icon';
 import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
 import { useDoctorsQuery } from '@/hooks';
 import { useHomeScrollCapture } from '@/lib/routing/home-scroll-context';
 
 const POPOVER_RESULT_LIMIT = 5;
 
+const CHIP_TONE_STYLES: Record<
+  HomeSearchChipTone,
+  { chip: string; icon: string; inlineIcon?: boolean }
+> = {
+  urgent: {
+    chip: 'border-urgent-border bg-urgent-subtle text-urgent-foreground hover:border-urgent-foreground/25 hover:bg-urgent-subtle/80',
+    icon: 'text-urgent-foreground',
+    inlineIcon: true,
+  },
+  brand: {
+    chip: 'border-brand-subtle bg-brand-muted/50 text-brand-dark hover:border-brand-light hover:bg-brand-muted',
+    icon: 'text-brand',
+  },
+  sky: {
+    chip: 'border-info-foreground/20 bg-info-subtle text-info-foreground hover:border-info-foreground/30 hover:bg-info-subtle/80',
+    icon: 'text-info-foreground',
+  },
+  teal: {
+    chip: 'border-calm-foreground/20 bg-calm-subtle text-calm-foreground hover:border-calm-foreground/30 hover:bg-calm-subtle/80',
+    icon: 'text-calm-foreground',
+  },
+};
+
+function getChipClassName(chip: HomeSearchChip): string {
+  const tone = CHIP_TONE_STYLES[chip.tone];
+
+  return cn(
+    'inline-flex min-h-9 items-center gap-1.5 rounded-full border px-3.5 text-sm font-medium transition active:scale-[0.98]',
+    chip.tone === 'urgent' && 'px-4',
+    tone.chip,
+  );
+}
+
+function getChipIconClassName(chip: HomeSearchChip): string {
+  const tone = CHIP_TONE_STYLES[chip.tone];
+
+  if (tone.inlineIcon) {
+    return 'flex shrink-0 items-center justify-center';
+  }
+
+  return cn(
+    'flex h-6 w-6 shrink-0 items-center justify-center rounded-full',
+    tone.icon,
+  );
+}
+
 function buildResultsHref(query: string): string {
   const trimmed = query.trim();
   return trimmed
-    ? `/home/find-physician?q=${encodeURIComponent(trimmed)}`
-    : '/home/find-physician';
+    ? `/find-physician?q=${encodeURIComponent(trimmed)}`
+    : '/find-physician';
 }
 
 export function HomeSearchPanel() {
@@ -38,19 +87,17 @@ export function HomeSearchPanel() {
   const trimmedQuery = query.trim();
   const matchingDoctors = useMemo(
     () => filterDoctorsByQuery(doctors, query, POPOVER_RESULT_LIMIT),
-    [doctors, query]
+    [doctors, query],
   );
   const totalMatches = useMemo(
     () => filterDoctorsByQuery(doctors, query).length,
-    [doctors, query]
+    [doctors, query],
   );
   const hasMoreResults = totalMatches > matchingDoctors.length;
 
   const showPopover =
     open &&
-    (isDoctorsLoading ||
-      trimmedQuery.length > 0 ||
-      matchingDoctors.length > 0);
+    (isDoctorsLoading || trimmedQuery.length > 0 || matchingDoctors.length > 0);
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
@@ -85,7 +132,7 @@ export function HomeSearchPanel() {
   function handleChipClick(
     event: React.MouseEvent<HTMLAnchorElement>,
     href: string,
-    requiresAuth: boolean
+    requiresAuth: boolean,
   ) {
     homeScroll?.captureScroll();
 
@@ -117,7 +164,7 @@ export function HomeSearchPanel() {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       setActiveIndex((index) =>
-        Math.min(index + 1, matchingDoctors.length - 1)
+        Math.min(index + 1, matchingDoctors.length - 1),
       );
       return;
     }
@@ -227,7 +274,7 @@ export function HomeSearchPanel() {
                           'flex w-full flex-col gap-0.5 px-4 py-3 text-start transition',
                           activeIndex === index
                             ? 'bg-accent text-accent-foreground'
-                            : 'hover:bg-accent'
+                            : 'hover:bg-accent',
                         )}
                       >
                         <span className="text-sm font-medium text-foreground">
@@ -274,8 +321,11 @@ export function HomeSearchPanel() {
                     handleChipClick(event, chip.href, requiresAuth)
                   }
                   title={chip.description}
-                  className="inline-flex min-h-9 items-center rounded-full border border-brand-subtle bg-card px-3.5 text-sm font-medium text-brand-dark transition hover:border-brand-light hover:bg-brand-muted active:scale-[0.98]"
+                  className={getChipClassName(chip)}
                 >
+                  <span className={getChipIconClassName(chip)}>
+                    <HomeSearchChipIconGlyph icon={chip.icon} />
+                  </span>
                   {chip.label}
                 </Link>
               </li>

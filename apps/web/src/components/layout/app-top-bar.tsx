@@ -21,11 +21,27 @@ export function AppTopBar() {
             aria-expanded={drawerOpen}
           >
             {drawerOpen ? (
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-6 w-6" aria-hidden="true">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                className="h-6 w-6"
+                aria-hidden="true"
+              >
                 <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" />
               </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-6 w-6" aria-hidden="true">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.8}
+                className="h-6 w-6"
+                aria-hidden="true"
+              >
                 <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
               </svg>
             )}
@@ -48,9 +64,9 @@ export function AppTopBar() {
             >
               DF
             </span>
-            <span className="text-[11px] font-semibold leading-none tracking-tight text-foreground">
+            {/* <span className="text-[11px] font-semibold leading-none tracking-tight text-foreground">
               DrFinder
-            </span>
+            </span> */}
           </div>
         </div>
       </header>

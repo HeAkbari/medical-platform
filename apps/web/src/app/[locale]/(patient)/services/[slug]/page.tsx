@@ -2,7 +2,7 @@ import { AuthGuard } from '@/components/layout';
 import { ServiceDetailPage } from '@/features/app-home/ui/service-detail-page';
 import { isUserServiceSlug } from '@/features/app-home/data/home-navigation';
 
-export default async function HomeServicePage({
+export default async function ServicePage({
   params,
 }: {
   params: Promise<{ slug: string }>;

@@ -1,32 +1,60 @@
 import type { Doctor } from '@medical-platform/domain';
 
-export type HomeSearchChipId = 'urgent' | 'find-physician' | 'near-me';
+export type HomeSearchChipId =
+  | 'urgent'
+  | 'find-physician'
+  | 'near-me'
+  | 'walk-in';
+
+export type HomeSearchChipIcon =
+  | 'zap'
+  | 'stethoscope'
+  | 'map-pin'
+  | 'walk-in';
+
+export type HomeSearchChipTone = 'urgent' | 'brand' | 'sky' | 'teal';
 
 export interface HomeSearchChip {
   id: HomeSearchChipId;
   label: string;
   href: string;
   description: string;
+  icon: HomeSearchChipIcon;
+  tone: HomeSearchChipTone;
 }
 
 export const HOME_SEARCH_CHIPS: HomeSearchChip[] = [
   {
     id: 'urgent',
-    label: 'Urgent appointment',
-    href: '/home/services/appointments',
+    label: 'Urgent',
+    href: '/services/appointments',
     description: 'Real-time openings and walk-in options.',
+    icon: 'zap',
+    tone: 'urgent',
   },
   {
     id: 'find-physician',
     label: 'Find physician',
-    href: '/home/find-physician',
+    href: '/find-physician',
     description: 'Browse physicians by region and sponsored placement.',
+    icon: 'stethoscope',
+    tone: 'brand',
   },
   {
     id: 'near-me',
     label: 'Near me',
     href: '/home/map',
     description: 'Open the map using your device location.',
+    icon: 'map-pin',
+    tone: 'sky',
+  },
+  {
+    id: 'walk-in',
+    label: 'Walk-in',
+    href: '/home/map',
+    description: 'Real-time openings and walk-in options.',
+    icon: 'walk-in',
+    tone: 'teal',
   },
 ];
 

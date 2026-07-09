@@ -68,7 +68,22 @@ function MapRecenter({
   return null;
 }
 
-export function LeafletMap() {
+function MapInvalidateSize({ refreshKey }: { refreshKey?: boolean }) {
+  const map = useMap();
+
+  useEffect(() => {
+    map.invalidateSize();
+    const timer = window.setTimeout(() => {
+      map.invalidateSize();
+    }, 100);
+
+    return () => window.clearTimeout(timer);
+  }, [map, refreshKey]);
+
+  return null;
+}
+
+export function LeafletMap({ refreshKey }: { refreshKey?: boolean } = {}) {
   const geo = useGeolocation();
   const userMarkerIcon = useMemo(() => createUserMarkerIcon(), []);
   const userPosition = geo.status === 'success' ? geo.position : null;
@@ -117,6 +132,7 @@ export function LeafletMap() {
           url={OSM_TILE_LAYER.url}
           maxZoom={19}
         />
+        <MapInvalidateSize refreshKey={refreshKey} />
         <MapClickHandler onMapClick={() => closeDrawer(false)} />
         {userPosition ? (
           <MapRecenter position={userPosition} enabled={shouldRecenterOnUser} />

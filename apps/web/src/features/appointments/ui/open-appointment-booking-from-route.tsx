@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAppointmentBookingStore } from '@/features/appointments/store/appointment-booking-store';
 
-const APPOINTMENTS_LIST_PATH = '/home/services/appointments';
+const APPOINTMENTS_LIST_PATH = '/services/appointments';
 
 export function OpenAppointmentBookingFromRoute() {
   const router = useRouter();

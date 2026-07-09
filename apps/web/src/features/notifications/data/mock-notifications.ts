@@ -25,7 +25,7 @@ export const MOCK_NOTIFICATIONS: AppNotification[] = [
     kind: 'appointment-reminder',
     receivedAt: '2026-07-01T09:00:00.000Z',
     read: false,
-    href: '/home/services/appointments',
+    href: '/services/appointments',
   },
   {
     id: 'notif-2',
@@ -35,7 +35,7 @@ export const MOCK_NOTIFICATIONS: AppNotification[] = [
     kind: 'booking-confirmation',
     receivedAt: '2026-06-30T16:20:00.000Z',
     read: false,
-    href: '/home/services/appointments',
+    href: '/services/appointments',
   },
   {
     id: 'notif-3',
@@ -45,7 +45,7 @@ export const MOCK_NOTIFICATIONS: AppNotification[] = [
     kind: 'cancellation',
     receivedAt: '2026-06-28T08:45:00.000Z',
     read: true,
-    href: '/home/services/appointments',
+    href: '/services/appointments',
   },
   {
     id: 'notif-4',

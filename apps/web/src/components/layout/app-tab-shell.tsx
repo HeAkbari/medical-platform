@@ -89,11 +89,11 @@ export function AppTabShell({ children }: { children: React.ReactNode }) {
           !path.startsWith('/home/map/')),
     },
     {
-      href: '/home/services/appointments',
+      href: '/services/appointments',
       label: 'Appointments',
       icon: 'appointments' as const,
       requiresAuth: true,
-      match: (path: string) => path.startsWith('/home/services/appointments'),
+      match: (path: string) => path.startsWith('/services/appointments'),
     },
     {
       href: '/notifications',

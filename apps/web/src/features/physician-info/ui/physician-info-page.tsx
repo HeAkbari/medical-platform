@@ -76,7 +76,7 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
   return (
     <div className="space-y-4 pb-6">
       <Link
-        href="/home/find-physician"
+        href="/find-physician"
         className="inline-flex min-h-11 items-center text-sm font-medium text-brand"
       >
         ← Back

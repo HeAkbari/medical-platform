@@ -192,7 +192,7 @@ export function HealthcareTeamPage() {
               {PHYSICIAN_CATEGORIES.map((cat) => (
                 <li key={cat.label}>
                   <Link
-                    href={`/home/find-physician?specialty=${encodeURIComponent(cat.label)}`}
+                    href={`/find-physician?specialty=${encodeURIComponent(cat.label)}`}
                     className="flex min-h-18 flex-col items-start justify-between gap-1 rounded-xl border border-border bg-card p-3 transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.98]"
                   >
                     <span className="text-lg" aria-hidden="true">

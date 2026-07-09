@@ -44,6 +44,13 @@
   --color-warning-foreground: rgb(146 64 14);
   --color-error-subtle: rgb(254 226 226);
   --color-error-foreground: rgb(185 28 28);
+  --color-info-subtle: rgb(224 242 254);
+  --color-info-foreground: rgb(7 89 133);
+  --color-calm-subtle: rgb(204 251 241);
+  --color-calm-foreground: rgb(15 118 110);
+  --color-urgent-subtle: rgb(255 236 236);
+  --color-urgent-border: rgb(248 200 200);
+  --color-urgent-foreground: rgb(122 46 58);
   --color-destructive: rgb(220 38 38);
   --color-destructive-foreground: rgb(255 255 255);
 
@@ -80,6 +87,13 @@
   --color-warning-foreground: rgb(252 211 77);
   --color-error-subtle: rgb(127 29 29 / 0.35);
   --color-error-foreground: rgb(252 165 165);
+  --color-info-subtle: rgb(12 74 110 / 0.35);
+  --color-info-foreground: rgb(125 211 252);
+  --color-calm-subtle: rgb(19 78 74 / 0.35);
+  --color-calm-foreground: rgb(94 234 212);
+  --color-urgent-subtle: rgb(127 29 29 / 0.22);
+  --color-urgent-border: rgb(190 80 90 / 0.38);
+  --color-urgent-foreground: rgb(251 167 178);
 }
 
 html {

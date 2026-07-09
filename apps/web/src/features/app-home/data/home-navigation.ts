@@ -15,11 +15,14 @@ export interface HomeServiceItem {
   description: string;
 }
 
+export type HomeSupportIcon = 'symptom-checker' | 'health-a-z';
+
 export interface HomeSupportItem {
   slug: HomeSupportSlug;
   title: string;
   description: string;
   href: string;
+  icon: HomeSupportIcon;
 }
 
 export const HOME_SERVICE_ITEMS: HomeServiceItem[] = [
@@ -57,13 +60,15 @@ export const HOME_SUPPORT_ITEMS: HomeSupportItem[] = [
     slug: 'symptom-checker',
     title: 'Symptom checker',
     description: 'Get guidance based on your symptoms.',
-    href: '/home/services/symptom-checker',
+    href: '/services/symptom-checker',
+    icon: 'symptom-checker',
   },
   {
     slug: 'health-a-z',
     title: 'Health A–Z',
     description: 'Information about conditions, symptoms, and treatments.',
-    href: '/home/services/health-a-z',
+    href: '/services/health-a-z',
+    icon: 'health-a-z',
   },
 ];
 

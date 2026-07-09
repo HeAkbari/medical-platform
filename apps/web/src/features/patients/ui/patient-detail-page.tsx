@@ -77,7 +77,7 @@ export function PatientDetailPage() {
           title="Appointments"
           description="Filtered by this patient."
           action={
-            <Link href={`/home/services/appointments/new?patientId=${patient.id}`}>
+            <Link href={`/services/appointments/new?patientId=${patient.id}`}>
               <Button fullWidth>Book appointment</Button>
             </Link>
           }
