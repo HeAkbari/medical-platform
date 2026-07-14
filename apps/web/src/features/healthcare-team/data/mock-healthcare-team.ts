@@ -1,5 +1,11 @@
+/** Assigned by clinic/system — not patient-selectable. */
 export const DEFAULT_FAMILY_PHYSICIAN_ID =
   'd4e5f6a7-b8c9-0123-def0-234567890123';
+
+/** Seed team members the patient can manage (add/remove). */
+export const DEFAULT_TEAM_MEMBER_IDS = [
+  'e5f6a7b8-c9d0-1234-ef01-345678901234', // Dr. David Brooks · Cardiology
+];
 
 export const VISIT_DELIVERY_METHODS = [
   'In-Clinic / Walk-in',

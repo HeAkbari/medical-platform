@@ -17,11 +17,14 @@ export function HealthcareTeamBanner() {
   const familyPhysicianId = useHealthcareTeamStore(
     (state) => state.familyPhysicianId
   );
+  const teamMemberIds = useHealthcareTeamStore((state) => state.teamMemberIds);
   const { data } = useDoctorsQuery();
 
-  const familyPhysician = data?.data.find(
+  const doctors = data?.data ?? [];
+  const familyPhysician = doctors.find(
     (doctor) => doctor.id === familyPhysicianId
   );
+  const teamCount = teamMemberIds.length;
 
   function handleGuestClick(event: React.MouseEvent<HTMLAnchorElement>) {
     homeScroll?.captureScroll();
@@ -61,7 +64,7 @@ export function HealthcareTeamBanner() {
               Sign in to view your care team
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Access your family physician, visit history, and care milestones.
+              See your assigned family physician and manage your care team.
             </p>
           </Card>
         </Link>
@@ -82,19 +85,24 @@ export function HealthcareTeamBanner() {
           {familyPhysician ? (
             <>
               <p className="mt-1 font-semibold text-foreground">
-                Dr. {familyPhysician.firstName} {familyPhysician.lastName}
+                Family physician: Dr. {familyPhysician.firstName}{' '}
+                {familyPhysician.lastName}
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
-                {familyPhysician.specialty} · View team dashboard and history
+                {teamCount > 0
+                  ? `${teamCount} other physician${teamCount === 1 ? '' : 's'} on your team · View dashboard`
+                  : 'View team dashboard and visit history'}
               </p>
             </>
           ) : (
             <>
               <p className="mt-1 font-semibold text-foreground">
-                Add your family physician
+                {teamCount > 0
+                  ? `${teamCount} physician${teamCount === 1 ? '' : 's'} on your team`
+                  : 'Your care team'}
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Connect your primary care provider to unlock care milestones.
+                Family physician is assigned by your clinic · View team dashboard
               </p>
             </>
           )}

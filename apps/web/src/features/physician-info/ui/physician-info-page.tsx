@@ -55,7 +55,9 @@ interface PhysicianInfoPageProps {
 export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
   const { data, isLoading, isError } = useDoctorsQuery();
   const familyPhysicianId = useHealthcareTeamStore((s) => s.familyPhysicianId);
-  const setFamilyPhysicianId = useHealthcareTeamStore((s) => s.setFamilyPhysicianId);
+  const teamMemberIds = useHealthcareTeamStore((s) => s.teamMemberIds);
+  const addTeamMember = useHealthcareTeamStore((s) => s.addTeamMember);
+  const removeTeamMember = useHealthcareTeamStore((s) => s.removeTeamMember);
 
   const doctor = useMemo(
     () => data?.data.find((d) => d.id === doctorId),
@@ -64,10 +66,16 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
 
   const extras: PhysicianExtras = DEFAULT_PHYSICIAN_EXTRAS;
 
-  const isInTeam = familyPhysicianId === doctorId;
+  const isFamilyPhysician = familyPhysicianId === doctorId;
+  const isInTeam = teamMemberIds.includes(doctorId);
 
   function toggleTeam() {
-    setFamilyPhysicianId(isInTeam ? null : doctorId);
+    if (isFamilyPhysician) return;
+    if (isInTeam) {
+      removeTeamMember(doctorId);
+    } else {
+      addTeamMember(doctorId);
+    }
   }
 
   if (isLoading) return <LoadingState label="Loading physician info..." />;
@@ -90,6 +98,11 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
             Dr. {doctor.firstName} {doctor.lastName}
           </h1>
           <p className="mt-0.5 text-sm font-medium text-brand">{doctor.specialty}</p>
+          {isFamilyPhysician ? (
+            <p className="mt-1 text-xs font-medium text-brand">
+              Your assigned family physician
+            </p>
+          ) : null}
           <div className="mt-2 flex items-center justify-center gap-2">
             <StarRating rating={extras.rating} />
             <span className="text-sm text-muted-foreground">
@@ -107,13 +120,15 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
         <Link href={`/physicians/${doctorId}/book`} className="block">
           <Button fullWidth>Book appointment</Button>
         </Link>
-        <Button
-          variant="secondary"
-          fullWidth
-          onClick={toggleTeam}
-        >
-          {isInTeam ? 'In your team ✓' : 'Add to Your Healthcare Team'}
-        </Button>
+        {isFamilyPhysician ? (
+          <p className="rounded-xl border border-border bg-muted/50 px-3 py-2.5 text-center text-sm text-muted-foreground">
+            Family physician is assigned by your clinic and cannot be changed here.
+          </p>
+        ) : (
+          <Button variant="secondary" fullWidth onClick={toggleTeam}>
+            {isInTeam ? 'In your team ✓' : 'Add to Your Healthcare Team'}
+          </Button>
+        )}
       </div>
 
       {/* Clinic */}

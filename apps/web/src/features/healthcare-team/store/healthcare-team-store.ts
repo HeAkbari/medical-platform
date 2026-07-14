@@ -1,18 +1,51 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { DEFAULT_FAMILY_PHYSICIAN_ID } from '@/features/healthcare-team/data/mock-healthcare-team';
+import {
+  DEFAULT_FAMILY_PHYSICIAN_ID,
+  DEFAULT_TEAM_MEMBER_IDS,
+} from '@/features/healthcare-team/data/mock-healthcare-team';
 
 interface HealthcareTeamStore {
+  /** Assigned by clinic/system — patients can view only, not select. */
   familyPhysicianId: string | null;
-  setFamilyPhysicianId: (id: string | null) => void;
+  /** Patient-managed care team (multiple physicians allowed). */
+  teamMemberIds: string[];
+  addTeamMember: (id: string) => void;
+  removeTeamMember: (id: string) => void;
 }
 
 export const useHealthcareTeamStore = create<HealthcareTeamStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       familyPhysicianId: DEFAULT_FAMILY_PHYSICIAN_ID,
-      setFamilyPhysicianId: (id) => set({ familyPhysicianId: id }),
+      teamMemberIds: DEFAULT_TEAM_MEMBER_IDS,
+      addTeamMember: (id) => {
+        const { familyPhysicianId, teamMemberIds } = get();
+        if (id === familyPhysicianId || teamMemberIds.includes(id)) {
+          return;
+        }
+        set({ teamMemberIds: [...teamMemberIds, id] });
+      },
+      removeTeamMember: (id) => {
+        set({
+          teamMemberIds: get().teamMemberIds.filter((memberId) => memberId !== id),
+        });
+      },
     }),
-    { name: 'medical-platform:healthcare-team' }
+    {
+      name: 'medical-platform:healthcare-team',
+      merge: (persisted, current) => {
+        const stored = (persisted ?? {}) as Partial<HealthcareTeamStore>;
+        return {
+          ...current,
+          ...stored,
+          teamMemberIds: stored.teamMemberIds ?? current.teamMemberIds,
+          familyPhysicianId:
+            stored.familyPhysicianId !== undefined
+              ? stored.familyPhysicianId
+              : current.familyPhysicianId,
+        };
+      },
+    }
   )
 );
