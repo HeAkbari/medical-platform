@@ -3,6 +3,7 @@
 import { Card } from '@/components/ui/card';
 import { HOME_SUPPORT_ITEMS } from '@/features/app-home/data/home-navigation';
 import { HomeMapCard } from '@/features/app-home/ui/home-map-card';
+import { HomeRecommendedPhysicians } from '@/features/app-home/ui/home-recommended-physicians';
 import { HomeSearchPanel } from '@/features/app-home/ui/home-search-panel';
 import { HomeSupportIconGlyph } from '@/features/app-home/ui/home-support-icon';
 import { HealthcareTeamBanner } from '@/features/healthcare-team/ui/healthcare-team-banner';
@@ -117,7 +118,6 @@ export function HomeHubPage() {
 
       <HealthcareTeamBanner />
 
-
       <HomeMapCard />
 
       {/* <section aria-labelledby="home-services-heading">
@@ -154,6 +154,7 @@ export function HomeHubPage() {
           })}
         </ul>
       </section> */}
+      <HomeRecommendedPhysicians />
 
       <section aria-labelledby="home-support-heading">
         <h2
