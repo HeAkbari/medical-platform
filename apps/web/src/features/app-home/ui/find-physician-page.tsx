@@ -10,6 +10,7 @@ import {
   LoadingState,
 } from '@/components/ui';
 import { cn } from '@/components/ui/cn';
+import { PhysicianAvatar } from '@/features/doctors';
 import { useDoctorsQuery } from '@/hooks';
 
 export function FindPhysicianPage() {
@@ -125,10 +126,14 @@ export function FindPhysicianPage() {
                 href={`/physicians/${doctor.id}`}
                 className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition hover:border-brand-subtle hover:shadow-sm active:scale-[0.99] sm:p-4"
               >
-                {/* Avatar */}
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-muted text-sm font-bold text-brand-dark">
-                  {doctor.firstName.charAt(0)}{doctor.lastName.charAt(0)}
-                </div>
+                <PhysicianAvatar
+                  firstName={doctor.firstName}
+                  lastName={doctor.lastName}
+                  doctorId={doctor.id}
+                  size="lg"
+                  shape="circle"
+                  className="bg-brand-muted text-brand-dark"
+                />
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-start justify-between gap-1.5">
                     <p className="font-semibold text-foreground">

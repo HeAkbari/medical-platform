@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { Button, Card, ErrorState, LoadingState } from '@/components/ui';
+import { PhysicianAvatar } from '@/features/doctors';
 import { useHealthcareTeamStore } from '@/features/healthcare-team/store/healthcare-team-store';
 import {
   DEFAULT_PHYSICIAN_EXTRAS,
@@ -31,20 +32,6 @@ function StarRating({ rating }: { rating: number }) {
         );
       })}
     </span>
-  );
-}
-
-function PhysicianAvatar({
-  firstName,
-  lastName,
-}: {
-  firstName: string;
-  lastName: string;
-}) {
-  return (
-    <div className="flex h-24 w-24 items-center justify-center rounded-full bg-brand text-3xl font-bold text-brand-foreground ring-4 ring-brand-muted">
-      {firstName.charAt(0)}{lastName.charAt(0)}
-    </div>
   );
 }
 
@@ -92,7 +79,14 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
 
       {/* Hero */}
       <div className="flex flex-col items-center gap-3 py-2 text-center">
-        <PhysicianAvatar firstName={doctor.firstName} lastName={doctor.lastName} />
+        <PhysicianAvatar
+          firstName={doctor.firstName}
+          lastName={doctor.lastName}
+          doctorId={doctor.id}
+          size="xl"
+          shape="circle"
+          className="ring-4 ring-brand-muted"
+        />
         <div>
           <h1 className="text-xl font-semibold text-foreground">
             Dr. {doctor.firstName} {doctor.lastName}

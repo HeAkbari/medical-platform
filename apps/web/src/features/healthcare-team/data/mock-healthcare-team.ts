@@ -16,33 +16,40 @@ export const VISIT_DELIVERY_METHODS = [
 export interface HealthConditionMilestone {
   id: string;
   label: string;
-  description: string;
+  /** Shown when complete, e.g. "Apr 3, 2026". Null = show "add" link. */
+  lastVisitAt: string | null;
   complete: boolean;
 }
 
 export const HEALTH_CONDITION_MILESTONES: HealthConditionMilestone[] = [
   {
-    id: 'family-physician',
-    label: 'Family physician on file',
-    description: 'Designated and validated primary care provider.',
+    id: 'annual-checkup',
+    label: 'Annual checkup',
+    lastVisitAt: 'Apr 3, 2026',
     complete: true,
   },
   {
-    id: 'baseline-labs',
-    label: 'Baseline lab tests',
-    description: 'Routine annual blood panel on record.',
+    id: 'skin-check',
+    label: 'Skin check',
+    lastVisitAt: null,
     complete: false,
   },
   {
-    id: 'preventive-screening',
-    label: 'Preventive screening',
-    description: 'Age-standardized milestone screenings up to date.',
+    id: 'teeth-cleaning',
+    label: 'Teeth cleaning',
+    lastVisitAt: null,
     complete: false,
   },
   {
-    id: 'custom-metrics',
-    label: 'Additional care metrics',
-    description: 'Custom checkpoints configured by your care team.',
+    id: 'eye-exam',
+    label: 'Eye exam',
+    lastVisitAt: null,
+    complete: false,
+  },
+  {
+    id: 'hearing-test',
+    label: 'Hearing test',
+    lastVisitAt: null,
     complete: false,
   },
 ];

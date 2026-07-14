@@ -7,7 +7,6 @@ import {
   Badge,
   Button,
   Card,
-  CardHeader,
   EmptyState,
   ErrorState,
   LoadingState,
@@ -24,6 +23,7 @@ import { HealthConditionMeter } from '@/features/healthcare-team/ui/health-condi
 import { useHealthcareTeamStore } from '@/features/healthcare-team/store/healthcare-team-store';
 import { useAppointmentBookingStore } from '@/features/appointments/store/appointment-booking-store';
 import { useDoctorsQuery } from '@/hooks';
+import { PhysicianAvatar } from '@/features/doctors';
 import type { Doctor } from '@medical-platform/domain';
 
 type PhysicianCategoryId =
@@ -218,21 +218,54 @@ function StarIcon() {
   );
 }
 
-function PhysicianAvatar({
-  firstName,
-  lastName,
+function BookingHistoryCard({
+  providerName,
+  reason,
+  visitedAt,
+  visitType,
+  doctorId,
+  onBookAgain,
 }: {
-  firstName: string;
-  lastName: string;
+  providerName: string;
+  reason: string;
+  visitedAt: string;
+  visitType: string;
+  doctorId?: string;
+  onBookAgain: () => void;
 }) {
+  const nameParts = providerName.replace(/^Dr\.\s*/i, '').trim().split(/\s+/);
+  const firstName = nameParts[0] ?? '';
+  const lastName = nameParts.slice(1).join(' ') || nameParts[0] || '';
+
   return (
-    <div
-      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand text-xs font-bold text-brand-foreground"
-      aria-hidden="true"
-    >
-      {firstName.charAt(0)}
-      {lastName.charAt(0)}
-    </div>
+    <Card className="flex h-full items-center gap-2.5 border-brand-subtle/70 p-3 sm:p-3">
+      <div className="flex min-w-0 flex-1 items-center gap-2.5">
+        <PhysicianAvatar
+          firstName={firstName}
+          lastName={lastName}
+          doctorId={doctorId}
+        />
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-semibold text-foreground">
+            {providerName}
+          </p>
+          <p className="truncate text-xs text-muted-foreground">{reason}</p>
+          <div className="mt-0.5 flex min-w-0 items-center gap-2 text-xs">
+            <span className="truncate font-medium text-subtle-foreground">
+              {formatVisitDate(visitedAt)}
+            </span>
+            <span className="truncate text-faint-foreground">{visitType}</span>
+          </div>
+        </div>
+      </div>
+      <Button
+        type="button"
+        className="min-h-9 shrink-0 rounded-xl px-3.5 py-2 text-sm"
+        onClick={onBookAgain}
+      >
+        Book again
+      </Button>
+    </Card>
   );
 }
 
@@ -261,6 +294,7 @@ function TeamPhysicianCard({
         <PhysicianAvatar
           firstName={doctor.firstName}
           lastName={doctor.lastName}
+          doctorId={doctor.id}
         />
         <div className="min-w-0 flex-1">
           <div className="flex min-h-5 items-center gap-1.5">
@@ -343,12 +377,21 @@ function PhysicianDetailDrawer({
             ) : null}
           </div>
 
-          <div className="rounded-xl border border-border bg-muted/60 p-4">
-            <p className="text-lg font-semibold text-foreground">
-              Dr. {doctor.firstName} {doctor.lastName}
-            </p>
-            <p className="mt-1 text-sm text-brand">{doctor.specialty}</p>
-            <p className="mt-2 text-sm text-muted-foreground">{doctor.phone}</p>
+          <div className="flex items-center gap-3 rounded-xl border border-border bg-muted/60 p-4">
+            <PhysicianAvatar
+              firstName={doctor.firstName}
+              lastName={doctor.lastName}
+              doctorId={doctor.id}
+              size="lg"
+              shape="circle"
+            />
+            <div className="min-w-0">
+              <p className="text-lg font-semibold text-foreground">
+                Dr. {doctor.firstName} {doctor.lastName}
+              </p>
+              <p className="mt-1 text-sm text-brand">{doctor.specialty}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{doctor.phone}</p>
+            </div>
           </div>
 
           <div>
@@ -446,13 +489,7 @@ export function HealthcareTeamPage() {
     doctors.find((doctor) => doctor.id === selectedDoctorId) ?? null;
   const selectedIsFamilyPhysician = selectedDoctorId === familyPhysicianId;
 
-  const milestones = useMemo(() => {
-    return HEALTH_CONDITION_MILESTONES.map((milestone) =>
-      milestone.id === 'family-physician'
-        ? { ...milestone, complete: Boolean(familyPhysicianId) }
-        : milestone
-    );
-  }, [familyPhysicianId]);
+  const milestones = HEALTH_CONDITION_MILESTONES;
 
   if (isLoading) {
     return <LoadingState label="Loading healthcare team..." />;
@@ -549,11 +586,13 @@ export function HealthcareTeamPage() {
         </ul>
       </section>
 
-      <Card>
-        <CardHeader
-          title="Re-booking history"
-          description="One-tap renewal from past visits."
-        />
+      <section aria-labelledby="booking-history-heading">
+        <h2
+          id="booking-history-heading"
+          className="mb-3 text-base font-semibold tracking-tight text-foreground"
+        >
+          Booking history
+        </h2>
         {MOCK_REBOOKING_HISTORY.length === 0 ? (
           <EmptyState title="No past visits to re-book" />
         ) : (
@@ -564,41 +603,27 @@ export function HealthcareTeamPage() {
               );
 
               return (
-                <li
-                  key={visit.id}
-                  className="flex flex-col gap-3 rounded-xl border border-border p-3 sm:flex-row sm:items-center sm:justify-between"
-                >
-                  <div>
-                    <p className="font-medium text-foreground">
-                      {visit.providerName}
-                    </p>
-                    <p className="mt-1 text-sm text-faint-foreground">
-                      {visit.reason} · {formatVisitDate(visit.visitedAt)}
-                    </p>
-                    <p className="text-sm text-faint-foreground">
-                      {visit.visitType}
-                    </p>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => handleRebook(doctor?.id)}
-                  >
-                    Book again
-                  </Button>
+                <li key={visit.id}>
+                  <BookingHistoryCard
+                    providerName={visit.providerName}
+                    reason={visit.reason}
+                    visitedAt={visit.visitedAt}
+                    visitType={visit.visitType}
+                    doctorId={doctor?.id}
+                    onBookAgain={() => handleRebook(doctor?.id)}
+                  />
                 </li>
               );
             })}
           </ul>
         )}
-      </Card>
+      </section>
 
       <Card>
-        <CardHeader
-          title="Health Screening"
-          description="Track milestones recommended for your care plan."
+        <HealthConditionMeter
+          milestones={milestones}
+          onBook={() => openBooking()}
         />
-        <HealthConditionMeter milestones={milestones} />
       </Card>
 
       <PhysicianDetailDrawer
