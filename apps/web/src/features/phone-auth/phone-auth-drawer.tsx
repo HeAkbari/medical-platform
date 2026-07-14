@@ -64,6 +64,14 @@ export function PhoneAuthDrawer() {
       router.push(pendingAction.href);
     }
 
+    if (pendingAction?.type === 'book-appointment') {
+      if (pendingAction.doctorId) {
+        router.push(`/physicians/${pendingAction.doctorId}/book`);
+      } else {
+        router.push('/find-physician');
+      }
+    }
+
     if (!usePhoneAuthStore.getState().authOpen) {
       resetFormDefaults();
     }

@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Badge, Button, Card } from '@/components/ui';
-import { useAppointmentBookingStore } from '@/features/appointments/store/appointment-booking-store';
+import { PhysicianAvatar } from '@/features/doctors';
+import { getPhysicianBookingHref } from '@/features/physician-booking/lib/routes';
 import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
 import { useHomeScrollCapture } from '@/lib/routing/home-scroll-context';
 import { useDoctorsQuery } from '@/hooks';
-import { PhysicianAvatar } from '@/features/doctors';
 import type { Doctor } from '@medical-platform/domain';
 
 const PREVIEW_COUNT = 2;
@@ -94,9 +95,9 @@ function RecommendedPhysicianCard({
 }
 
 export function HomeRecommendedPhysicians() {
+  const router = useRouter();
   const { data, isLoading, isError } = useDoctorsQuery();
   const { requireAuth, isLoading: isAuthLoading } = useRequireAuth();
-  const openBooking = useAppointmentBookingStore((state) => state.openBooking);
   const homeScroll = useHomeScrollCapture();
 
   const doctors = (data?.data ?? []).slice(0, PREVIEW_COUNT);
@@ -110,8 +111,9 @@ export function HomeRecommendedPhysicians() {
 
   function handleBook(doctorId: string) {
     homeScroll?.captureScroll();
-    requireAuth({ type: 'book-appointment', doctorId }, () => {
-      openBooking({ doctorId });
+    const href = getPhysicianBookingHref(doctorId);
+    requireAuth({ type: 'navigate', href }, () => {
+      router.push(href);
     });
   }
 

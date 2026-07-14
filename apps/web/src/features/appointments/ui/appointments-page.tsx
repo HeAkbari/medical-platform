@@ -2,9 +2,9 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import type { Appointment } from '@medical-platform/domain';
 import { useAppointmentsQuery } from '@/hooks';
-import { useAppointmentBookingStore } from '@/features/appointments/store/appointment-booking-store';
 import {
   Badge,
   Button,
@@ -111,14 +111,14 @@ function AppointmentCard({ appointment, onSelect }: AppointmentCardProps) {
 }
 
 export function AppointmentsPage() {
-  const openBooking = useAppointmentBookingStore((state) => state.openBooking);
+  const router = useRouter();
   const { requireAuth } = useRequireAuth();
   const { data, isLoading, isError } = useAppointmentsQuery();
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   function handleBookAppointment() {
-    requireAuth({ type: 'book-appointment' }, () => {
-      openBooking();
+    requireAuth({ type: 'navigate', href: '/find-physician' }, () => {
+      router.push('/find-physician');
     });
   }
 

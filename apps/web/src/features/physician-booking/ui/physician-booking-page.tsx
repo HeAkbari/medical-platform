@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { Button, Card, ErrorState, LoadingState } from '@/components/ui';
 import { Switch } from '@/components/ui/switch';
+import { PhysicianAvatar } from '@/features/doctors';
 import { useDoctorsQuery } from '@/hooks';
 
 const MONTH_NAMES = [
@@ -13,7 +14,7 @@ const MONTH_NAMES = [
 
 const DAY_LABELS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
-function buildCalendarDays(year: number, month: number, availableSet: Set<number>) {
+function buildCalendarDays(year: number, month: number) {
   const firstDay = new Date(year, month, 1).getDay();
   const totalDays = new Date(year, month + 1, 0).getDate();
   const cells: (number | null)[] = [];
@@ -73,8 +74,8 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
   );
 
   const calendarCells = useMemo(
-    () => buildCalendarDays(currentYear, currentMonth, availableDays),
-    [currentYear, currentMonth, availableDays]
+    () => buildCalendarDays(currentYear, currentMonth),
+    [currentYear, currentMonth]
   );
 
   const anyTypeOn = visitTypes.walkIn || visitTypes.virtual || visitTypes.phone;
@@ -132,9 +133,13 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
         href={`/physicians/${doctorId}`}
         className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition hover:border-brand-subtle active:opacity-80"
       >
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand text-sm font-bold text-brand-foreground">
-          {doctor.firstName.charAt(0)}{doctor.lastName.charAt(0)}
-        </div>
+        <PhysicianAvatar
+          firstName={doctor.firstName}
+          lastName={doctor.lastName}
+          doctorId={doctor.id}
+          size="lg"
+          shape="circle"
+        />
         <div className="min-w-0">
           <p className="font-semibold text-foreground">
             Dr. {doctor.firstName} {doctor.lastName}

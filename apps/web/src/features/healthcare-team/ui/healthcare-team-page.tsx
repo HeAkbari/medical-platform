@@ -21,10 +21,11 @@ import {
 } from '@/features/healthcare-team/data/mock-healthcare-team';
 import { HealthConditionMeter } from '@/features/healthcare-team/ui/health-condition-meter';
 import { useHealthcareTeamStore } from '@/features/healthcare-team/store/healthcare-team-store';
-import { useAppointmentBookingStore } from '@/features/appointments/store/appointment-booking-store';
+import { getPhysicianBookingHref } from '@/features/physician-booking/lib/routes';
 import { useDoctorsQuery } from '@/hooks';
 import { PhysicianAvatar } from '@/features/doctors';
 import type { Doctor } from '@medical-platform/domain';
+import { useRouter } from 'next/navigation';
 
 type PhysicianCategoryId =
   | 'family-physician'
@@ -459,6 +460,7 @@ function PhysicianDetailDrawer({
 }
 
 export function HealthcareTeamPage() {
+  const router = useRouter();
   const familyPhysicianId = useHealthcareTeamStore(
     (state) => state.familyPhysicianId
   );
@@ -466,7 +468,6 @@ export function HealthcareTeamPage() {
   const removeTeamMember = useHealthcareTeamStore(
     (state) => state.removeTeamMember
   );
-  const openBooking = useAppointmentBookingStore((state) => state.openBooking);
   const { data, isLoading, isError } = useDoctorsQuery();
   const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
 
@@ -500,20 +501,29 @@ export function HealthcareTeamPage() {
   }
 
   function handleBookWithProvider(doctorId: string) {
-    openBooking({ doctorId });
+    setSelectedDoctorId(null);
+    router.push(getPhysicianBookingHref(doctorId));
   }
 
   function handleRebook(doctorId: string | undefined) {
     if (doctorId) {
-      openBooking({ doctorId });
-    } else {
-      openBooking();
+      router.push(getPhysicianBookingHref(doctorId));
+      return;
     }
+    router.push('/find-physician');
   }
 
   function handleRemoveFromTeam(doctorId: string) {
     removeTeamMember(doctorId);
     setSelectedDoctorId(null);
+  }
+
+  function handleScreeningBook() {
+    if (familyPhysicianId) {
+      router.push(getPhysicianBookingHref(familyPhysicianId));
+      return;
+    }
+    router.push('/find-physician');
   }
 
   return (
@@ -622,7 +632,7 @@ export function HealthcareTeamPage() {
       <Card>
         <HealthConditionMeter
           milestones={milestones}
-          onBook={() => openBooking()}
+          onBook={handleScreeningBook}
         />
       </Card>
 

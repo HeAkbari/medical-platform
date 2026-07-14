@@ -2,14 +2,15 @@
 
 import { useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useAppointmentBookingStore } from '@/features/appointments/store/appointment-booking-store';
+import { getPhysicianBookingHref } from '@/features/physician-booking/lib/routes';
 
-const APPOINTMENTS_LIST_PATH = '/services/appointments';
-
+/**
+ * Legacy deep-link helper: `/services/appointments/new?doctorId=...`
+ * now routes into the physician booking page instead of the old drawer.
+ */
 export function OpenAppointmentBookingFromRoute() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const openBooking = useAppointmentBookingStore((state) => state.openBooking);
   const hasOpenedRef = useRef(false);
 
   useEffect(() => {
@@ -18,12 +19,11 @@ export function OpenAppointmentBookingFromRoute() {
     }
 
     hasOpenedRef.current = true;
-    openBooking({
-      doctorId: searchParams.get('doctorId') ?? undefined,
-      patientId: searchParams.get('patientId') ?? undefined,
-    });
-    router.replace(APPOINTMENTS_LIST_PATH);
-  }, [openBooking, router, searchParams]);
+    const doctorId = searchParams.get('doctorId');
+    router.replace(
+      doctorId ? getPhysicianBookingHref(doctorId) : '/find-physician'
+    );
+  }, [router, searchParams]);
 
   return null;
 }

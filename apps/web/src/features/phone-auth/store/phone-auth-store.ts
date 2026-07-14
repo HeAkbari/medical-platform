@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import type { MapFacility } from '@/features/map/types';
-import { useAppointmentBookingStore } from '@/features/appointments/store/appointment-booking-store';
 import { useMapAppointmentStore } from '@/features/map-appointment/store/map-appointment-store';
 import { DEV_AUTH_DEFAULTS } from '@/features/phone-auth/data/dev-auth-defaults';
 
@@ -86,10 +85,7 @@ export const usePhoneAuthStore = create<PhoneAuthStore>((set, get) => ({
     }
 
     if (pendingAction.type === 'book-appointment') {
-      useAppointmentBookingStore.getState().openBooking({
-        doctorId: pendingAction.doctorId,
-        patientId: pendingAction.patientId,
-      });
+      // Navigation to `/physicians/[id]/book` is handled by PhoneAuthDrawer.
       set({ pendingAction: null, authOpen: false });
       return;
     }
