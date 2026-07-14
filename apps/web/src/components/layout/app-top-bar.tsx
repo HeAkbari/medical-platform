@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
 import { NavDrawer } from '@/components/layout/nav-drawer';
 import { useAuth } from '@/lib/auth';
@@ -57,16 +58,14 @@ export function AppTopBar() {
           </div>
 
           {/* DrFinder logo — inline-end (top-right) */}
-          <div className="flex shrink-0 flex-col items-center gap-0.5">
-            <span
-              className="flex h-6 w-6 items-center justify-center rounded-md bg-brand text-[10px] font-bold leading-none text-brand-foreground"
-              aria-hidden="true"
-            >
-              DF
-            </span>
-            {/* <span className="text-[11px] font-semibold leading-none tracking-tight text-foreground">
-              DrFinder
-            </span> */}
+          <div className="flex shrink-0 items-center">
+            <Image
+              src="/Dr-finder-logo.png"
+              alt="DrFinder"
+              width={1024}
+              height={1024}
+              className="h-12 w-auto object-contain"
+            />
           </div>
         </div>
       </header>
