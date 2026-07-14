@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import { Button, Card, ErrorState, LoadingState } from '@/components/ui';
 import { PhysicianAvatar } from '@/features/doctors';
@@ -16,7 +17,10 @@ function StarRating({ rating }: { rating: number }) {
   const half = rating - full >= 0.5;
 
   return (
-    <span className="flex items-center gap-0.5" aria-label={`${rating} out of 5 stars`}>
+    <span
+      className="flex items-center gap-0.5"
+      aria-label={`${rating} out of 5 stars`}
+    >
       {Array.from({ length: 5 }, (_, i) => {
         const filled = i < full || (i === full && half);
         return (
@@ -40,6 +44,7 @@ interface PhysicianInfoPageProps {
 }
 
 export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
+  const router = useRouter();
   const { data, isLoading, isError } = useDoctorsQuery();
   const familyPhysicianId = useHealthcareTeamStore((s) => s.familyPhysicianId);
   const teamMemberIds = useHealthcareTeamStore((s) => s.teamMemberIds);
@@ -48,7 +53,7 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
 
   const doctor = useMemo(
     () => data?.data.find((d) => d.id === doctorId),
-    [data?.data, doctorId]
+    [data?.data, doctorId],
   );
 
   const extras: PhysicianExtras = DEFAULT_PHYSICIAN_EXTRAS;
@@ -65,20 +70,29 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
     }
   }
 
+  function handleBack() {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back();
+      return;
+    }
+    router.push('/find-physician');
+  }
+
   if (isLoading) return <LoadingState label="Loading physician info..." />;
   if (isError || !doctor) return <ErrorState message="Physician not found." />;
 
   return (
-    <div className="space-y-4 pb-6">
-      <Link
-        href="/find-physician"
+    <div className="space-y-2.5">
+      <button
+        type="button"
+        onClick={handleBack}
         className="inline-flex min-h-11 items-center text-sm font-medium text-brand"
       >
         ← Back
-      </Link>
+      </button>
 
       {/* Hero */}
-      <div className="flex flex-col items-center gap-3 py-2 text-center">
+      <div className="flex flex-col items-center gap-3 text-center">
         <PhysicianAvatar
           firstName={doctor.firstName}
           lastName={doctor.lastName}
@@ -91,7 +105,9 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
           <h1 className="text-xl font-semibold text-foreground">
             Dr. {doctor.firstName} {doctor.lastName}
           </h1>
-          <p className="mt-0.5 text-sm font-medium text-brand">{doctor.specialty}</p>
+          <p className="mt-0.5 text-sm font-medium text-brand">
+            {doctor.specialty}
+          </p>
           {isFamilyPhysician ? (
             <p className="mt-1 text-xs font-medium text-brand">
               Your assigned family physician
@@ -116,7 +132,8 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
         </Link>
         {isFamilyPhysician ? (
           <p className="rounded-xl border border-border bg-muted/50 px-3 py-2.5 text-center text-sm text-muted-foreground">
-            Family physician is assigned by your clinic and cannot be changed here.
+            Family physician is assigned by your clinic and cannot be changed
+            here.
           </p>
         ) : (
           <Button variant="secondary" fullWidth onClick={toggleTeam}>
@@ -165,9 +182,14 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
         </p>
         <ul className="mt-2 space-y-1.5">
           {extras.workingHours.map((row) => (
-            <li key={row.day} className="flex items-center justify-between gap-2">
+            <li
+              key={row.day}
+              className="flex items-center justify-between gap-2"
+            >
               <span className="text-sm text-foreground">{row.day}</span>
-              <span className={`text-sm ${row.hours ? 'text-muted-foreground' : 'text-faint-foreground italic'}`}>
+              <span
+                className={`text-sm ${row.hours ? 'text-muted-foreground' : 'text-faint-foreground italic'}`}
+              >
                 {row.hours ?? 'Closed'}
               </span>
             </li>
@@ -183,14 +205,21 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
           </p>
           <div className="flex items-center gap-1.5">
             <StarRating rating={extras.rating} />
-            <span className="text-sm font-medium text-foreground">{extras.rating}</span>
+            <span className="text-sm font-medium text-foreground">
+              {extras.rating}
+            </span>
           </div>
         </div>
         <ul className="mt-3 space-y-3">
           {extras.reviews.map((review) => (
-            <li key={review.id} className="rounded-xl border border-border bg-muted/40 p-3">
+            <li
+              key={review.id}
+              className="rounded-xl border border-border bg-muted/40 p-3"
+            >
               <div className="flex items-center justify-between gap-2">
-                <span className="text-sm font-medium text-foreground">{review.authorName}</span>
+                <span className="text-sm font-medium text-foreground">
+                  {review.authorName}
+                </span>
                 <StarRating rating={review.rating} />
               </div>
               <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">

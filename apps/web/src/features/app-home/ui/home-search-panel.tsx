@@ -33,11 +33,11 @@ const CHIP_TONE_STYLES: Record<
     icon: 'text-brand',
   },
   sky: {
-    chip: 'border-info-foreground/20 bg-info-subtle text-info-foreground hover:border-info-foreground/30 hover:bg-info-subtle/80',
+    chip: 'border-brand-subtle/60 bg-brand-muted text-info-foreground hover:border-brand-muted/30 hover:bg-brand-muted/80',
     icon: 'text-info-foreground',
   },
   teal: {
-    chip: 'border-calm-foreground/20 bg-calm-subtle text-calm-foreground hover:border-calm-foreground/30 hover:bg-calm-subtle/80',
+    chip: 'border-calm-foreground/20 bg-brand-muted text-calm-foreground hover:border-calm-foreground/30 hover:bg-calm-subtle/80',
     icon: 'text-calm-foreground',
   },
 };
