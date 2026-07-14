@@ -8,34 +8,34 @@
 @source "../lib";
 
 @theme {
-  /* Brand palette — light defaults */
-  --color-brand: lab(51% -29.63 -26.27);
-  --color-brand-dark: lab(44% -27 -24);
-  --color-brand-darker: lab(38% -24 -21);
-  --color-brand-light: lab(58% -22 -20);
-  --color-brand-muted: lab(95% -8 -7);
-  --color-brand-subtle: lab(90% -12 -11);
-  --color-brand-foreground: lab(97% -3 -3);
-  --color-brand-logo-text: lab(77% -21.24 -22.57);
-  --color-primary: lab(51% -29.63 -26.27);
-  --color-primary-foreground: lab(97% -3 -3);
+  /* Brand palette — soft orchid lilac */
+  --color-brand: lab(52% 34 -28);
+  --color-brand-dark: lab(42% 32 -26);
+  --color-brand-darker: lab(34% 28 -24);
+  --color-brand-light: lab(68% 24 -22);
+  --color-brand-muted: lab(97% 3 -2);
+  --color-brand-subtle: lab(93% 8 -7);
+  --color-brand-foreground: lab(99% 0 0);
+  --color-brand-logo-text: lab(62% 28 -26);
+  --color-primary: lab(52% 34 -28);
+  --color-primary-foreground: lab(99% 0 0);
 
   /* Semantic surface & text tokens — light */
-  --color-background: lab(95% -8 -7);
-  --color-foreground: lab(22% -8 -8);
+  --color-background: lab(98% 1.5 -1);
+  --color-foreground: lab(18% 4 -6);
   --color-card: rgb(255 255 255);
-  --color-card-foreground: lab(22% -8 -8);
+  --color-card-foreground: lab(18% 4 -6);
   --color-surface: rgb(255 255 255);
-  --color-muted: lab(96% -4 -4);
-  --color-muted-foreground: lab(45% -12 -11);
-  --color-subtle-foreground: lab(35% -10 -9);
-  --color-faint-foreground: lab(50% -8 -8);
-  --color-border: lab(88% -10 -9);
+  --color-muted: lab(96.5% 2 -1.5);
+  --color-muted-foreground: lab(48% 6 -8);
+  --color-subtle-foreground: lab(32% 6 -8);
+  --color-faint-foreground: lab(55% 5 -6);
+  --color-border: lab(90% 4 -3);
   --color-input: rgb(255 255 255);
-  --color-input-foreground: lab(22% -8 -8);
-  --color-accent: lab(94% -6 -5);
-  --color-accent-foreground: lab(35% -12 -11);
-  --color-ring: lab(58% -22 -20);
+  --color-input-foreground: lab(18% 4 -6);
+  --color-accent: lab(95% 6 -5);
+  --color-accent-foreground: lab(32% 10 -10);
+  --color-ring: lab(52% 34 -28);
 
   /* Status */
   --color-success-subtle: rgb(209 250 229);
@@ -59,27 +59,27 @@
 
 .dark {
   /* Brand palette — dark overrides */
-  --color-brand-dark: lab(72% -18 -16);
-  --color-brand-darker: lab(65% -16 -14);
-  --color-brand-muted: lab(16% -8 -7);
-  --color-brand-subtle: lab(24% -12 -10);
-  --color-brand-logo-text: lab(72% -18 -19);
+  --color-brand-dark: lab(78% 24 -22);
+  --color-brand-darker: lab(70% 22 -20);
+  --color-brand-muted: lab(14% 6 -5);
+  --color-brand-subtle: lab(20% 10 -9);
+  --color-brand-logo-text: lab(78% 24 -22);
 
   /* Semantic surface & text tokens — dark */
-  --color-background: lab(8% -3 -3);
-  --color-foreground: lab(92% -2 -2);
-  --color-card: lab(14% -5 -4);
-  --color-card-foreground: lab(92% -2 -2);
-  --color-surface: lab(14% -5 -4);
-  --color-muted: lab(18% -5 -4);
-  --color-muted-foreground: lab(65% -3 -3);
-  --color-subtle-foreground: lab(85% -2 -2);
-  --color-faint-foreground: lab(58% -3 -3);
-  --color-border: lab(25% -6 -5);
-  --color-input: lab(18% -5 -4);
-  --color-input-foreground: lab(92% -2 -2);
-  --color-accent: lab(22% -6 -5);
-  --color-accent-foreground: lab(85% -2 -2);
+  --color-background: lab(7% 2 -2);
+  --color-foreground: lab(94% 1 -1);
+  --color-card: lab(12% 4 -3);
+  --color-card-foreground: lab(94% 1 -1);
+  --color-surface: lab(12% 4 -3);
+  --color-muted: lab(16% 4 -3);
+  --color-muted-foreground: lab(68% 4 -4);
+  --color-subtle-foreground: lab(88% 2 -2);
+  --color-faint-foreground: lab(60% 3 -3);
+  --color-border: lab(22% 5 -4);
+  --color-input: lab(16% 4 -3);
+  --color-input-foreground: lab(94% 1 -1);
+  --color-accent: lab(18% 8 -7);
+  --color-accent-foreground: lab(90% 2 -2);
 
   --color-success-subtle: rgb(6 78 59 / 0.35);
   --color-success-foreground: rgb(110 231 183);
