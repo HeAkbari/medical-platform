@@ -144,6 +144,11 @@ export function FindPhysicianPage() {
                     ) : null}
                   </div>
                   <p className="mt-0.5 text-sm text-brand">{doctor.specialty}</p>
+                  {doctor.clinicName ? (
+                    <p className="mt-0.5 text-sm text-faint-foreground">
+                      {doctor.clinicName}
+                    </p>
+                  ) : null}
                   <p className="mt-0.5 text-sm text-faint-foreground">
                     {doctor.phone}
                   </p>

@@ -14,8 +14,10 @@ import type {
   FhirCodeableConcept,
   FhirContactPoint,
   FhirHumanName,
+  FhirLocation,
   FhirPatient,
   FhirPractitioner,
+  FhirPractitionerRole,
 } from './fhir-types';
 
 const DEFAULT_DURATION_MINUTES = 30;
@@ -84,7 +86,10 @@ export function fhirToPatient(resource: FhirPatient): Patient {
   };
 }
 
-export function fhirToDoctor(resource: FhirPractitioner): Doctor {
+export function fhirToDoctor(
+  resource: FhirPractitioner,
+  clinicName?: string
+): Doctor {
   const { first, last } = fullName(resource.name);
 
   return {
@@ -95,7 +100,35 @@ export function fhirToDoctor(resource: FhirPractitioner): Doctor {
     email: contactValue(resource.telecom, 'email'),
     phone: contactValue(resource.telecom, 'phone'),
     createdAt: resource.meta?.lastUpdated ?? '',
+    clinicName,
   };
+}
+
+/** Join PractitionerRole -> Location to find each practitioner's clinic name. */
+export function clinicNamesByPractitioner(
+  roles: FhirPractitionerRole[],
+  locations: FhirLocation[]
+): Map<string, string> {
+  const locationNameById = new Map(
+    locations
+      .filter((location) => location.id && location.name)
+      .map((location) => [location.id as string, location.name as string])
+  );
+
+  const result = new Map<string, string>();
+
+  for (const role of roles) {
+    const practitionerId = referenceId(role.practitioner?.reference);
+    const clinicName = locationNameById.get(
+      referenceId(role.location?.[0]?.reference)
+    );
+
+    if (practitionerId && clinicName) {
+      result.set(practitionerId, clinicName);
+    }
+  }
+
+  return result;
 }
 
 export function appointmentStatusToFhir(

@@ -95,7 +95,14 @@ function CategoryIcon({ id }: { id: PhysicianCategoryId }) {
   switch (id) {
     case 'family-physician':
       return (
-        <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
+        <svg
+          className={common}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.8}
+          aria-hidden="true"
+        >
           <path d="M6 4v6a6 6 0 0 0 12 0V4" strokeLinecap="round" />
           <path d="M9 4h6" strokeLinecap="round" />
           <circle cx="18" cy="18" r="2.5" />
@@ -104,37 +111,94 @@ function CategoryIcon({ id }: { id: PhysicianCategoryId }) {
       );
     case 'dentist':
       return (
-        <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
-          <path d="M8 4c-1.5 0-2.5 1.2-2.5 2.8 0 2.2 1 4.2 2 6.2.6 1.2.8 2.4.8 3.5V20h2.4v-3.5c0-1.1.2-2.3.8-3.5 1-2 2-4 2-6.2C15.5 5.2 14.5 4 13 4c-1 0-1.7.5-2.5.5S9 4 8 4z" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+          className={common}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.8}
+          aria-hidden="true"
+        >
+          <path
+            d="M8 4c-1.5 0-2.5 1.2-2.5 2.8 0 2.2 1 4.2 2 6.2.6 1.2.8 2.4.8 3.5V20h2.4v-3.5c0-1.1.2-2.3.8-3.5 1-2 2-4 2-6.2C15.5 5.2 14.5 4 13 4c-1 0-1.7.5-2.5.5S9 4 8 4z"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       );
     case 'physiotherapist':
       return (
-        <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
-          <path d="M8 14c-1.5 1-2.5 2.8-2 4.5.4 1.2 1.6 2 3 1.5 1.2-.4 2-1.6 2-3V8" strokeLinecap="round" />
-          <path d="M16 14c1.5 1 2.5 2.8 2 4.5-.4 1.2-1.6 2-3 1.5-1.2-.4-2-1.6-2-3V8" strokeLinecap="round" />
+        <svg
+          className={common}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.8}
+          aria-hidden="true"
+        >
+          <path
+            d="M8 14c-1.5 1-2.5 2.8-2 4.5.4 1.2 1.6 2 3 1.5 1.2-.4 2-1.6 2-3V8"
+            strokeLinecap="round"
+          />
+          <path
+            d="M16 14c1.5 1 2.5 2.8 2 4.5-.4 1.2-1.6 2-3 1.5-1.2-.4-2-1.6-2-3V8"
+            strokeLinecap="round"
+          />
           <circle cx="10" cy="6" r="1.5" />
           <circle cx="14" cy="6" r="1.5" />
         </svg>
       );
     case 'optometrist':
       return (
-        <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
-          <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+          className={common}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.8}
+          aria-hidden="true"
+        >
+          <path
+            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
           <circle cx="12" cy="12" r="2.5" />
         </svg>
       );
     case 'specialist':
       return (
-        <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
-          <path d="M12 20s-6.5-4.2-6.5-9.2A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 6.5 3.8C18.5 15.8 12 20 12 20z" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+          className={common}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.8}
+          aria-hidden="true"
+        >
+          <path
+            d="M12 20s-6.5-4.2-6.5-9.2A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 6.5 3.8C18.5 15.8 12 20 12 20z"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       );
     case 'mental-health':
       return (
-        <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
+        <svg
+          className={common}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.8}
+          aria-hidden="true"
+        >
           <path d="M9 18h6M10 21h4" strokeLinecap="round" />
-          <path d="M12 3a6 6 0 0 0-3.5 10.8V16h7v-2.2A6 6 0 0 0 12 3z" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d="M12 3a6 6 0 0 0-3.5 10.8V16h7v-2.2A6 6 0 0 0 12 3z"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       );
   }
@@ -142,13 +206,27 @@ function CategoryIcon({ id }: { id: PhysicianCategoryId }) {
 
 function PlusIcon() {
   return (
-    <svg className="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M8 3.5v9M3.5 8h9" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
+    <svg
+      className="h-3.5 w-3.5"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M8 3.5v9M3.5 8h9"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
-function AddPhysicianCategoryCard({ category }: { category: PhysicianCategory }) {
+function AddPhysicianCategoryCard({
+  category,
+}: {
+  category: PhysicianCategory;
+}) {
   const content = (
     <>
       <div className="flex items-start justify-between gap-2">
@@ -162,7 +240,9 @@ function AddPhysicianCategoryCard({ category }: { category: PhysicianCategory })
         ) : null}
       </div>
       <div className="mt-3">
-        <p className="text-sm font-semibold text-foreground">{category.label}</p>
+        <p className="text-sm font-semibold text-foreground">
+          {category.label}
+        </p>
         <p className="mt-1 text-xs leading-snug text-muted-foreground">
           {category.description}
         </p>
@@ -176,7 +256,10 @@ function AddPhysicianCategoryCard({ category }: { category: PhysicianCategory })
 
   if (!category.addable || !category.specialtyQuery) {
     return (
-      <div className={cardClassName} aria-label={`${category.label} — assigned by your clinic`}>
+      <div
+        className={cardClassName}
+        aria-label={`${category.label} — assigned by your clinic`}
+      >
         {content}
       </div>
     );
@@ -234,7 +317,10 @@ function BookingHistoryCard({
   doctorId?: string;
   onBookAgain: () => void;
 }) {
-  const nameParts = providerName.replace(/^Dr\.\s*/i, '').trim().split(/\s+/);
+  const nameParts = providerName
+    .replace(/^Dr\.\s*/i, '')
+    .trim()
+    .split(/\s+/);
   const firstName = nameParts[0] ?? '';
   const lastName = nameParts.slice(1).join(' ') || nameParts[0] || '';
 
@@ -310,11 +396,20 @@ function TeamPhysicianCard({
                 Family
               </Badge>
             ) : null}
+            <span className="inline-flex items-center gap-0.5 font-medium text-subtle-foreground text-xs">
+              <StarIcon />
+              {rating.toFixed(1)}
+            </span>
           </div>
           <p className="truncate text-xs text-muted-foreground">
             {doctor.specialty}
           </p>
-          <div className="mt-0.5 flex items-center gap-2 text-xs">
+          {doctor.clinicName ? (
+            <p className="truncate text-xs text-faint-foreground">
+              {doctor.clinicName}
+            </p>
+          ) : null}
+          {/* <div className="mt-0.5 flex items-center gap-2 text-xs">
             <span className="inline-flex items-center gap-0.5 font-medium text-subtle-foreground">
               <StarIcon />
               {rating.toFixed(1)}
@@ -322,7 +417,7 @@ function TeamPhysicianCard({
             <span className="text-faint-foreground">
               {distanceKm.toFixed(1)} km
             </span>
-          </div>
+          </div> */}
         </div>
       </button>
       <Button
@@ -353,7 +448,7 @@ function PhysicianDetailDrawer({
 }) {
   const visitHistory = doctor
     ? MOCK_PROVIDER_VISIT_HISTORY.filter((visit) =>
-        visit.providerName.includes(doctor.lastName)
+        visit.providerName.includes(doctor.lastName),
       )
     : [];
 
@@ -391,7 +486,14 @@ function PhysicianDetailDrawer({
                 Dr. {doctor.firstName} {doctor.lastName}
               </p>
               <p className="mt-1 text-sm text-brand">{doctor.specialty}</p>
-              <p className="mt-1 text-sm text-muted-foreground">{doctor.phone}</p>
+              {doctor.clinicName ? (
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {doctor.clinicName}
+                </p>
+              ) : null}
+              <p className="mt-1 text-sm text-muted-foreground">
+                {doctor.phone}
+              </p>
             </div>
           </div>
 
@@ -444,7 +546,9 @@ function PhysicianDetailDrawer({
                     key={visit.id}
                     className="rounded-xl border border-border px-3 py-3 text-sm"
                   >
-                    <p className="font-medium text-foreground">{visit.reason}</p>
+                    <p className="font-medium text-foreground">
+                      {visit.reason}
+                    </p>
                     <p className="mt-1 text-faint-foreground">
                       {formatVisitDate(visit.visitedAt)} · {visit.visitType}
                     </p>
@@ -462,26 +566,26 @@ function PhysicianDetailDrawer({
 export function HealthcareTeamPage() {
   const router = useRouter();
   const familyPhysicianId = useHealthcareTeamStore(
-    (state) => state.familyPhysicianId
+    (state) => state.familyPhysicianId,
   );
   const teamMemberIds = useHealthcareTeamStore((state) => state.teamMemberIds);
   const removeTeamMember = useHealthcareTeamStore(
-    (state) => state.removeTeamMember
+    (state) => state.removeTeamMember,
   );
   const { data, isLoading, isError } = useDoctorsQuery();
   const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
 
   const doctors = data?.data ?? [];
   const familyPhysician = doctors.find(
-    (doctor) => doctor.id === familyPhysicianId
+    (doctor) => doctor.id === familyPhysicianId,
   );
   const teamMembers = doctors.filter((doctor) =>
-    teamMemberIds.includes(doctor.id)
+    teamMemberIds.includes(doctor.id),
   );
 
   const teamPhysicians = useMemo(() => {
     const members = teamMembers.filter(
-      (doctor) => doctor.id !== familyPhysicianId
+      (doctor) => doctor.id !== familyPhysicianId,
     );
     return familyPhysician ? [familyPhysician, ...members] : members;
   }, [familyPhysician, familyPhysicianId, teamMembers]);
@@ -609,7 +713,7 @@ export function HealthcareTeamPage() {
           <ul className="space-y-2">
             {MOCK_REBOOKING_HISTORY.map((visit) => {
               const doctor = doctors.find((item) =>
-                visit.providerName.includes(item.lastName)
+                visit.providerName.includes(item.lastName),
               );
 
               return (

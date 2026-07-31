@@ -88,6 +88,11 @@ export function HealthcareTeamBanner() {
                 Family physician: Dr. {familyPhysician.firstName}{' '}
                 {familyPhysician.lastName}
               </p>
+              {familyPhysician.clinicName ? (
+                <p className="mt-0.5 text-sm text-muted-foreground">
+                  {familyPhysician.clinicName}
+                </p>
+              ) : null}
               <p className="mt-1 text-sm text-muted-foreground">
                 {teamCount > 0
                   ? `${teamCount} other physician${teamCount === 1 ? '' : 's'} on your team · View dashboard`

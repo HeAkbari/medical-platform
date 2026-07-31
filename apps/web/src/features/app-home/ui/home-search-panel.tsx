@@ -283,6 +283,11 @@ export function HomeSearchPanel() {
                         <span className="text-xs text-muted-foreground">
                           {doctor.specialty}
                         </span>
+                        {doctor.clinicName ? (
+                          <span className="text-xs text-faint-foreground">
+                            {doctor.clinicName}
+                          </span>
+                        ) : null}
                       </button>
                     </li>
                   ))}

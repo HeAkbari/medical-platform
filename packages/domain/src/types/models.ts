@@ -16,6 +16,9 @@ export interface Doctor {
   email: string;
   phone: string;
   createdAt: string;
+  // FHIR-derived enrichment (optional; populated from the practitioner's
+  // PractitionerRole -> Location, or the mock dataset).
+  clinicName?: string;
 }
 
 export type AppointmentStatus = 'scheduled' | 'completed' | 'cancelled';

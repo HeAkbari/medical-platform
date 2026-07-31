@@ -31,7 +31,8 @@
       "Bash(./node_modules/.bin/tsc.exe --noEmit -p apps/web/tsconfig.json)",
       "Bash(rm -f \"home/map/page.tsx\")",
       "Bash(rmdir \"home/map\")",
-      "Bash(rmdir \"home\")"
+      "Bash(rmdir \"home\")",
+      "Bash(./node_modules/.bin/tsc.exe --noEmit -p packages/domain/tsconfig.json)"
     ]
   }
 }

@@ -42,6 +42,11 @@ export function DoctorsPage() {
                   {doctor.firstName} {doctor.lastName}
                 </p>
                 <p className="mt-1 text-sm text-brand">{doctor.specialty}</p>
+                {doctor.clinicName ? (
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {doctor.clinicName}
+                  </p>
+                ) : null}
                 <p className="mt-2 break-all text-sm text-muted-foreground">
                   {doctor.email}
                 </p>

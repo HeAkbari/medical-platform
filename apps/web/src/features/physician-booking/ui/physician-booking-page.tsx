@@ -187,6 +187,11 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
             Dr. {doctor.firstName} {doctor.lastName}
           </p>
           <p className="truncate text-xs text-brand">{doctor.specialty}</p>
+          {doctor.clinicName ? (
+            <p className="truncate text-xs text-faint-foreground">
+              {doctor.clinicName}
+            </p>
+          ) : null}
         </div>
         <svg
           viewBox="0 0 24 24"

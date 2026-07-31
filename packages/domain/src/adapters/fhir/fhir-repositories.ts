@@ -18,16 +18,20 @@ import { normalizePhone } from '../../utils/helpers';
 import { FhirClient, type FhirClientConfig } from './fhir-client';
 import type {
   FhirAppointment,
+  FhirLocation,
   FhirPatient,
   FhirPractitioner,
+  FhirPractitionerRole,
 } from './fhir-types';
 import {
   appointmentStatusToFhir,
   appointmentToFhir,
+  clinicNamesByPractitioner,
   fhirToAppointment,
   fhirToDoctor,
   fhirToPatient,
   patientToFhir,
+  referenceId,
 } from './mappers';
 
 class FhirPatientRepository implements PatientRepository {
@@ -75,8 +79,16 @@ class FhirDoctorRepository implements DoctorRepository {
   constructor(private readonly client: FhirClient) {}
 
   async findAll(): Promise<Doctor[]> {
-    const resources = await this.client.search<FhirPractitioner>('Practitioner');
-    return resources.map(fhirToDoctor);
+    const [practitioners, roles, locations] = await Promise.all([
+      this.client.search<FhirPractitioner>('Practitioner'),
+      this.client.search<FhirPractitionerRole>('PractitionerRole'),
+      this.client.search<FhirLocation>('Location'),
+    ]);
+    const clinicNames = clinicNamesByPractitioner(roles, locations);
+
+    return practitioners.map((resource) =>
+      fhirToDoctor(resource, clinicNames.get(resource.id ?? ''))
+    );
   }
 
   async findById(id: string): Promise<Doctor | null> {
@@ -84,7 +96,20 @@ class FhirDoctorRepository implements DoctorRepository {
       'Practitioner',
       id
     );
-    return resource ? fhirToDoctor(resource) : null;
+    if (!resource) {
+      return null;
+    }
+
+    const roles = await this.client.search<FhirPractitionerRole>(
+      'PractitionerRole',
+      { practitioner: id }
+    );
+    const locationId = referenceId(roles[0]?.location?.[0]?.reference);
+    const location = locationId
+      ? await this.client.read<FhirLocation>('Location', locationId)
+      : null;
+
+    return fhirToDoctor(resource, location?.name);
   }
 }
 

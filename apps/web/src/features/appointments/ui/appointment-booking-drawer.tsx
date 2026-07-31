@@ -64,6 +64,7 @@ export function AppointmentBookingDrawer() {
                 {doctors.map((doctor) => (
                   <option key={doctor.id} value={doctor.id}>
                     {doctor.firstName} {doctor.lastName} · {doctor.specialty}
+                    {doctor.clinicName ? ` · ${doctor.clinicName}` : ''}
                   </option>
                 ))}
               </select>
@@ -72,7 +73,7 @@ export function AppointmentBookingDrawer() {
             {selectedDoctor ? (
               <AppointmentBookingForm
                 doctorId={selectedDoctor.id}
-                doctorLabel={`${selectedDoctor.firstName} ${selectedDoctor.lastName} · ${selectedDoctor.specialty}`}
+                doctorLabel={`${selectedDoctor.firstName} ${selectedDoctor.lastName} · ${selectedDoctor.specialty}${selectedDoctor.clinicName ? ` · ${selectedDoctor.clinicName}` : ''}`}
                 initialPatientId={initialPatientId}
                 showDoctorSummary={false}
                 staffMode={staffMode}

@@ -68,11 +68,20 @@ function RecommendedPhysicianCard({
                 Sponsored
               </Badge>
             ) : null}
+            <span className="inline-flex items-center gap-0.5 font-medium text-subtle-foreground text-xs">
+              <StarIcon />
+              {rating.toFixed(1)}
+            </span>
           </div>
           <p className="truncate text-xs text-muted-foreground">
             {doctor.specialty}
           </p>
-          <div className="mt-0.5 flex items-center gap-2 text-xs">
+          {doctor.clinicName ? (
+            <p className="truncate text-xs text-faint-foreground">
+              {doctor.clinicName}
+            </p>
+          ) : null}
+          {/* <div className="mt-0.5 flex items-center gap-2 text-xs">
             <span className="inline-flex items-center gap-0.5 font-medium text-subtle-foreground">
               <StarIcon />
               {rating.toFixed(1)}
@@ -80,7 +89,7 @@ function RecommendedPhysicianCard({
             <span className="text-faint-foreground">
               {distanceKm.toFixed(1)} km
             </span>
-          </div>
+          </div> */}
         </div>
       </Link>
       <Button
@@ -141,7 +150,11 @@ export function HomeRecommendedPhysicians() {
       </div>
 
       {isLoading ? (
-        <ul className="space-y-2" aria-busy="true" aria-label="Loading physicians">
+        <ul
+          className="space-y-2"
+          aria-busy="true"
+          aria-label="Loading physicians"
+        >
           {Array.from({ length: PREVIEW_COUNT }, (_, index) => (
             <li key={index} className="h-[4.5rem]">
               <Card className="flex h-full items-center gap-2.5 border-brand-subtle/70 p-3">

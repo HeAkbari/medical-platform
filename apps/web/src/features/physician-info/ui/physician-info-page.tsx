@@ -99,6 +99,11 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
           <p className="mt-0.5 text-sm font-medium text-brand">
             {doctor.specialty}
           </p>
+          {doctor.clinicName ? (
+            <p className="mt-0.5 text-sm text-muted-foreground">
+              {doctor.clinicName}
+            </p>
+          ) : null}
           {isFamilyPhysician ? (
             <p className="mt-1 text-xs font-medium text-brand">
               Your assigned family physician
@@ -138,7 +143,9 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
         <p className="text-xs font-semibold uppercase tracking-wider text-faint-foreground">
           Clinic
         </p>
-        <p className="mt-1 font-medium text-foreground">{extras.clinicName}</p>
+        <p className="mt-1 font-medium text-foreground">
+          {doctor.clinicName ?? extras.clinicName}
+        </p>
         <a
           href={`https://maps.google.com/?q=${encodeURIComponent(extras.clinicAddress)}`}
           target="_blank"
