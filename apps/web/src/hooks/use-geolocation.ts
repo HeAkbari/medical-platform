@@ -13,7 +13,7 @@ export type GeolocationState =
 
 const FALLBACK_CENTER: [number, number] = FALLBACK_MAP_CENTER;
 const MOCK_POSITION: [number, number] = MOCK_USER_POSITION;
-const USE_MOCK_GEOLOCATION = true;
+const USE_MOCK_GEOLOCATION = false;
 
 function getInitialGeolocationState(): GeolocationState {
   if (USE_MOCK_GEOLOCATION) {
