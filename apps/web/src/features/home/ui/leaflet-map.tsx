@@ -100,21 +100,21 @@ export function LeafletMap({ refreshKey }: { refreshKey?: boolean } = {}) {
         filteredFacilities.map((facility) => [
           facility.id,
           createFacilityMarkerIcon(facility.superCategory),
-        ])
+        ]),
       ),
-    [filteredFacilities]
+    [filteredFacilities],
   );
 
   return (
     <div className="leaflet-map relative h-full w-full">
       {geo.status === 'error' ? (
-        <div className="absolute inset-x-4 top-[7.5rem] z-[1000] rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 shadow-sm">
+        <div className="absolute inset-x-4 top-30 z-1000 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 shadow-sm">
           {geo.message} Showing Greater Victoria area.
         </div>
       ) : null}
 
       {userPosition && filteredFacilities.length === 0 ? (
-        <div className="absolute inset-x-4 top-[7.5rem] z-[1000] rounded-xl border border-border bg-surface/95 px-4 py-3 text-sm text-accent-foreground shadow-sm">
+        <div className="absolute inset-x-4 top-42 z-1000 rounded-xl border border-border bg-surface/95 px-4 py-3 text-sm text-accent-foreground shadow-sm">
           No matching care nearby. Try Urgent &amp; walk-in or widen distance in
           filters.
         </div>
