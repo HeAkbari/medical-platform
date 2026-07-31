@@ -5,6 +5,7 @@ export {
   useAppointmentsQuery,
   useCreateAppointmentMutation,
 } from '@/lib/api-client';
+export { useBackNavigation } from './use-back-navigation';
 export { useGeolocation } from './use-geolocation';
 export {
   useDocumentDirection,

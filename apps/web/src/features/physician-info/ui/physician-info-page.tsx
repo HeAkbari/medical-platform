@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import { Button, Card, ErrorState, LoadingState } from '@/components/ui';
 import { PhysicianAvatar } from '@/features/doctors';
@@ -10,7 +9,7 @@ import {
   DEFAULT_PHYSICIAN_EXTRAS,
   type PhysicianExtras,
 } from '@/features/physician-info/data/mock-physician-extras';
-import { useDoctorsQuery } from '@/hooks';
+import { useBackNavigation, useDoctorsQuery } from '@/hooks';
 
 function StarRating({ rating }: { rating: number }) {
   const full = Math.floor(rating);
@@ -44,7 +43,7 @@ interface PhysicianInfoPageProps {
 }
 
 export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
-  const router = useRouter();
+  const handleBack = useBackNavigation('/find-physician');
   const { data, isLoading, isError } = useDoctorsQuery();
   const familyPhysicianId = useHealthcareTeamStore((s) => s.familyPhysicianId);
   const teamMemberIds = useHealthcareTeamStore((s) => s.teamMemberIds);
@@ -68,14 +67,6 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
     } else {
       addTeamMember(doctorId);
     }
-  }
-
-  function handleBack() {
-    if (typeof window !== 'undefined' && window.history.length > 1) {
-      router.back();
-      return;
-    }
-    router.push('/find-physician');
   }
 
   if (isLoading) return <LoadingState label="Loading physician info..." />;

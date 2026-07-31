@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react';
 import { Button, Card, ErrorState, LoadingState } from '@/components/ui';
 import { cn } from '@/components/ui/cn';
 import { PhysicianAvatar } from '@/features/doctors';
-import { useDoctorsQuery } from '@/hooks';
+import { useBackNavigation, useDoctorsQuery } from '@/hooks';
 
 const MONTH_NAMES = [
   'January',
@@ -68,6 +68,7 @@ interface PhysicianBookingPageProps {
 }
 
 export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
+  const handleBack = useBackNavigation(`/physicians/${doctorId}`);
   const { data, isLoading, isError } = useDoctorsQuery();
 
   const doctor = useMemo(
@@ -138,12 +139,13 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
 
   return (
     <div className="space-y-2.5">
-      <Link
-        href={`/physicians/${doctorId}`}
+      <button
+        type="button"
+        onClick={handleBack}
         className="inline-flex min-h-9 items-center text-sm font-medium text-brand"
       >
         ← Back
-      </Link>
+      </button>
 
       <header>
         <h1 className="text-xl font-semibold tracking-tight text-foreground">

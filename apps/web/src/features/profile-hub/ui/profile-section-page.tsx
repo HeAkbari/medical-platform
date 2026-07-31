@@ -1,9 +1,12 @@
-import Link from 'next/link';
+'use client';
+
 import { notFound } from 'next/navigation';
 import { Card, CardHeader } from '@/components/ui';
 import { getProfileSection } from '@/features/profile-hub/data/profile-sections';
+import { useBackNavigation } from '@/hooks';
 
 export function ProfileSectionPage({ slug }: { slug: string }) {
+  const handleBack = useBackNavigation('/profile');
   const section = getProfileSection(slug as never);
 
   if (!section) {
@@ -12,12 +15,13 @@ export function ProfileSectionPage({ slug }: { slug: string }) {
 
   return (
     <div className="space-y-4">
-      <Link
-        href="/profile"
+      <button
+        type="button"
+        onClick={handleBack}
         className="inline-flex min-h-11 items-center text-sm font-medium text-brand"
       >
         ← Back to Profile
-      </Link>
+      </button>
 
       <Card>
         <CardHeader title={section.title} description={section.description} />
