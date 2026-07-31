@@ -12,9 +12,15 @@ import dynamic from 'next/dynamic';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/components/ui/cn';
 import { HOME_MAP_CTA } from '@/features/app-home/data/home-navigation';
+import { APP_CHROME_INSET_REM } from '@/lib/layout/chrome-inset';
 
 const MAP_TRANSITION_MS = 520;
 const MAP_EASING = 'cubic-bezier(0.32, 0.72, 0, 1)';
+
+// So the expanded map sits below the fixed header (z-50) and above the
+// fixed bottom nav (z-40) instead of covering them.
+const OVERLAY_TOP_INSET = APP_CHROME_INSET_REM;
+const OVERLAY_BOTTOM_INSET = APP_CHROME_INSET_REM;
 
 const HomeMapPreview = dynamic(
   () =>
@@ -30,7 +36,8 @@ const HomeMapPreview = dynamic(
 );
 
 const HomePage = dynamic(
-  () => import('@/features/home/ui/home-page').then((module) => module.HomePage),
+  () =>
+    import('@/features/home/ui/home-page').then((module) => module.HomePage),
   { ssr: false },
 );
 
@@ -45,11 +52,11 @@ function rectToPanelStyle(rect: DOMRect): CSSProperties {
 }
 
 const fullscreenPanelStyle: CSSProperties = {
-  top: 0,
+  top: OVERLAY_TOP_INSET,
   left: 0,
   width: '100%',
-  height: '100dvh',
-  borderRadius: 0,
+  height: `calc(100dvh - ${OVERLAY_TOP_INSET} - ${OVERLAY_BOTTOM_INSET})`,
+  borderRadius: '1rem',
 };
 
 function HomeMapOverlay({
@@ -132,7 +139,7 @@ function HomeMapOverlay({
       <div
         aria-hidden="true"
         className={cn(
-          'fixed inset-0 z-200 bg-black/25 backdrop-blur-[1px] transition-opacity',
+          'fixed inset-0 z-20 bg-black/25 backdrop-blur-[1px] transition-opacity',
         )}
         style={{
           opacity: expanded ? 1 : 0,
@@ -143,12 +150,13 @@ function HomeMapOverlay({
       <div
         aria-hidden={mapReady}
         className={cn(
-          'fixed z-201 overflow-hidden bg-background shadow-xl',
+          'fixed z-21 overflow-hidden bg-background shadow-xl',
           mapReady && 'pointer-events-none opacity-0',
         )}
         style={{
           ...panelStyle,
-          transitionProperty: 'top, left, width, height, border-radius, opacity',
+          transitionProperty:
+            'top, left, width, height, border-radius, opacity',
           transitionDuration: `${MAP_TRANSITION_MS}ms`,
           transitionTimingFunction: MAP_EASING,
         }}
@@ -161,17 +169,21 @@ function HomeMapOverlay({
           aria-modal="true"
           aria-label="Find care near you"
           className={cn(
-            'fixed inset-0 z-202 bg-background transition-opacity',
+            'fixed z-22 overflow-hidden bg-background transition-opacity',
             mapReady
               ? 'pointer-events-auto opacity-100'
               : 'pointer-events-none opacity-0',
           )}
           style={{
+            top: OVERLAY_TOP_INSET,
+            left: 0,
+            width: '100%',
+            height: `calc(100dvh - ${OVERLAY_TOP_INSET} - ${OVERLAY_BOTTOM_INSET})`,
             transitionDuration: '220ms',
             transitionTimingFunction: MAP_EASING,
           }}
         >
-          <HomePage onClose={onClose} showChrome={mapReady} />
+          <HomePage onClose={onClose} showChrome={mapReady} contained />
         </div>
       ) : null}
     </>,

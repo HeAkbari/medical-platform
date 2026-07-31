@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { cn } from '@/components/ui/cn';
 import { MapAppointmentDrawer } from '@/features/map-appointment/map-appointment-drawer';
 import { MapCategorySelector } from '@/features/map/ui/map-category-selector';
 import { MapEmergencyDisclaimer } from '@/features/map/ui/map-emergency-disclaimer';
@@ -17,11 +18,22 @@ const Map = dynamic(() => import('@/components/map'), {
 export function HomePage({
   onClose,
   showChrome = true,
-}: { onClose?: () => void; showChrome?: boolean } = {}) {
+  contained = false,
+}: {
+  onClose?: () => void;
+  showChrome?: boolean;
+  /** Fill the nearest positioned ancestor instead of the viewport (used when embedded below the app header/bottom nav). */
+  contained?: boolean;
+} = {}) {
   const [filterOpen, setFilterOpen] = useState(false);
 
   return (
-    <div className="fixed inset-0 z-0 h-dvh w-full">
+    <div
+      className={cn(
+        'z-0 w-full',
+        contained ? 'absolute inset-0 h-full' : 'fixed inset-0 h-dvh',
+      )}
+    >
       <Map refreshKey={showChrome} />
 
       {showChrome ? (

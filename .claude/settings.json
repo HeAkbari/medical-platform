@@ -26,7 +26,12 @@
       "Bash(curl -s -X POST __TRACKED_VAR__/auth/otp/send -H 'Content-Type: application/json' -d '{\"phone\":\"+1 416 555 0102\"}')",
       "Bash(curl -s -X POST __TRACKED_VAR__/auth/otp/verify -H 'Content-Type: application/json' -d '{\"phone\":\"+1 416 555 0102\",\"code\":\"123456\"}')",
       "Bash(curl -s -X POST __TRACKED_VAR__/auth/otp/send -H 'Content-Type: application/json' -d '{\"phone\":\"+1 416 555 0103\"}')",
-      "Bash(curl -s -X POST __TRACKED_VAR__/auth/otp/verify -H 'Content-Type: application/json' -d '{\"phone\":\"+1 416 555 0103\",\"code\":\"123456\"}')"
+      "Bash(curl -s -X POST __TRACKED_VAR__/auth/otp/verify -H 'Content-Type: application/json' -d '{\"phone\":\"+1 416 555 0103\",\"code\":\"123456\"}')",
+      "Bash(npx tsc *)",
+      "Bash(./node_modules/.bin/tsc.exe --noEmit -p apps/web/tsconfig.json)",
+      "Bash(rm -f \"home/map/page.tsx\")",
+      "Bash(rmdir \"home/map\")",
+      "Bash(rmdir \"home\")"
     ]
   }
 }
