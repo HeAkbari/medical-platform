@@ -35,14 +35,33 @@ function buildCalendarDays(year: number, month: number) {
   return cells;
 }
 
-/** Mock: every Monday, Wednesday, Friday is available this month */
-function getMockAvailableDays(year: number, month: number): Set<number> {
+const VISIT_TYPE_OPTIONS = [
+  { key: 'walkIn', label: 'Walk-in' },
+  { key: 'virtual', label: 'Virtual' },
+  { key: 'phone', label: 'Phone' },
+] as const;
+
+type VisitType = (typeof VISIT_TYPE_OPTIONS)[number]['key'];
+
+/** Mock: available days of the week differ by visit type */
+const MOCK_AVAILABLE_DAYS_OF_WEEK: Record<VisitType, number[]> = {
+  walkIn: [1, 3, 5], // Mon, Wed, Fri — in-clinic slots are limited
+  virtual: [1, 2, 3, 4, 5], // every weekday
+  phone: [2, 4, 6], // Tue, Thu, Sat
+};
+
+function getMockAvailableDays(
+  year: number,
+  month: number,
+  visitType: VisitType,
+): Set<number> {
   const totalDays = new Date(year, month + 1, 0).getDate();
+  const daysOfWeek = MOCK_AVAILABLE_DAYS_OF_WEEK[visitType];
   const result = new Set<number>();
 
   for (let d = 1; d <= totalDays; d++) {
     const dow = new Date(year, month, d).getDay();
-    if (dow === 1 || dow === 3 || dow === 5) result.add(d);
+    if (daysOfWeek.includes(dow)) result.add(d);
   }
 
   return result;
@@ -81,16 +100,12 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
-  const [visitTypes, setVisitTypes] = useState({
-    walkIn: true,
-    virtual: true,
-    phone: true,
-  });
+  const [visitType, setVisitType] = useState<VisitType>('walkIn');
   const [reasonNote, setReasonNote] = useState('');
 
   const availableDays = useMemo(
-    () => getMockAvailableDays(currentYear, currentMonth),
-    [currentYear, currentMonth],
+    () => getMockAvailableDays(currentYear, currentMonth, visitType),
+    [currentYear, currentMonth, visitType],
   );
 
   const calendarCells = useMemo(
@@ -98,10 +113,10 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
     [currentYear, currentMonth],
   );
 
-  const anyTypeOn = visitTypes.walkIn || visitTypes.virtual || visitTypes.phone;
-
-  function toggleVisitType(key: keyof typeof visitTypes) {
-    setVisitTypes((prev) => ({ ...prev, [key]: !prev[key] }));
+  function handleSelectVisitType(key: VisitType) {
+    setVisitType(key);
+    setSelectedDay(null);
+    setSelectedSlot(null);
   }
 
   function prevMonth() {
@@ -135,7 +150,7 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
   if (isLoading) return <LoadingState label="Loading booking..." />;
   if (isError || !doctor) return <ErrorState message="Physician not found." />;
 
-  const firstAvailableLabel = anyTypeOn ? 'Today · 2:30 PM' : null;
+  const firstAvailableLabel = 'Today · 2:30 PM';
 
   return (
     <div className="space-y-2.5">
@@ -190,21 +205,20 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
           <p className="shrink-0 text-[11px] font-semibold uppercase tracking-wide text-faint-foreground">
             Visit type
           </p>
-          <div className="flex min-w-0 flex-1 gap-1.5">
-            {(
-              [
-                { key: 'walkIn', label: 'Walk-in' },
-                { key: 'virtual', label: 'Virtual' },
-                { key: 'phone', label: 'Phone' },
-              ] as const
-            ).map((option) => {
-              const active = visitTypes[option.key];
+          <div
+            role="radiogroup"
+            aria-label="Visit type"
+            className="flex min-w-0 flex-1 gap-1.5"
+          >
+            {VISIT_TYPE_OPTIONS.map((option) => {
+              const active = visitType === option.key;
               return (
                 <button
                   key={option.key}
                   type="button"
-                  aria-pressed={active}
-                  onClick={() => toggleVisitType(option.key)}
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => handleSelectVisitType(option.key)}
                   className={cn(
                     'min-h-8 flex-1 rounded-lg px-2 text-xs font-medium transition active:scale-[0.98]',
                     active
@@ -218,182 +232,173 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
             })}
           </div>
         </div>
-        {!anyTypeOn ? (
-          <p className="mt-1.5 text-[11px] text-amber-700 dark:text-amber-400">
-            Enable at least one visit type to see availability.
-          </p>
-        ) : null}
       </div>
 
-      {anyTypeOn ? (
-        <div className="flex items-center gap-2 rounded-xl border border-brand-subtle bg-brand-muted/40 px-2.5 py-2">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            className="h-3.5 w-3.5 shrink-0 text-brand"
-            aria-hidden="true"
+      <div className="flex items-center gap-2 rounded-xl border border-brand-subtle bg-brand-muted/40 px-2.5 py-2">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          className="h-3.5 w-3.5 shrink-0 text-brand"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 6v6l4 2" strokeLinecap="round" />
+        </svg>
+        <p className="text-xs font-medium text-brand-dark">
+          First available:{' '}
+          <span className="font-semibold">{firstAvailableLabel}</span>
+        </p>
+      </div>
+
+      <Card className="p-3 sm:p-3">
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <button
+            type="button"
+            onClick={prevMonth}
+            className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition hover:bg-accent"
+            aria-label="Previous month"
           >
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 6v6l4 2" strokeLinecap="round" />
-          </svg>
-          <p className="text-xs font-medium text-brand-dark">
-            First available:{' '}
-            <span className="font-semibold">{firstAvailableLabel}</span>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              className="h-3.5 w-3.5"
+              aria-hidden="true"
+            >
+              <path
+                d="M15 18l-6-6 6-6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+          <p className="text-xs font-semibold text-foreground">
+            {MONTH_NAMES[currentMonth]} {currentYear}
           </p>
+          <button
+            type="button"
+            onClick={nextMonth}
+            className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition hover:bg-accent"
+            aria-label="Next month"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              className="h-3.5 w-3.5"
+              aria-hidden="true"
+            >
+              <path
+                d="M9 18l6-6-6-6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
         </div>
-      ) : null}
 
-      {anyTypeOn ? (
-        <Card className="p-3 sm:p-3">
-          <div className="mb-2 flex items-center justify-between gap-2">
-            <button
-              type="button"
-              onClick={prevMonth}
-              className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition hover:bg-accent"
-              aria-label="Previous month"
+        <div className="mb-0.5 grid grid-cols-7 gap-0.5">
+          {DAY_LABELS.map((day) => (
+            <div
+              key={day}
+              className="py-0.5 text-center text-[10px] font-semibold uppercase text-faint-foreground"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                className="h-3.5 w-3.5"
-                aria-hidden="true"
-              >
-                <path
-                  d="M15 18l-6-6 6-6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-            <p className="text-xs font-semibold text-foreground">
-              {MONTH_NAMES[currentMonth]} {currentYear}
-            </p>
-            <button
-              type="button"
-              onClick={nextMonth}
-              className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition hover:bg-accent"
-              aria-label="Next month"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                className="h-3.5 w-3.5"
-                aria-hidden="true"
-              >
-                <path
-                  d="M9 18l6-6-6-6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          </div>
+              {day}
+            </div>
+          ))}
+        </div>
 
-          <div className="mb-0.5 grid grid-cols-7 gap-0.5">
-            {DAY_LABELS.map((day) => (
-              <div
+        <div className="grid grid-cols-7 gap-0.5">
+          {calendarCells.map((day, idx) => {
+            if (!day) {
+              return <div key={`empty-${idx}`} className="h-8" />;
+            }
+
+            const available = availableDays.has(day);
+            const selected = selectedDay === day;
+            const isPast =
+              new Date(currentYear, currentMonth, day) <
+              new Date(
+                today.getFullYear(),
+                today.getMonth(),
+                today.getDate(),
+              );
+
+            return (
+              <button
                 key={day}
-                className="py-0.5 text-center text-[10px] font-semibold uppercase text-faint-foreground"
+                type="button"
+                disabled={!available || isPast}
+                onClick={() => handleSelectDay(day)}
+                className={`flex h-8 items-center justify-center rounded-md text-xs font-medium transition
+                  ${selected ? 'bg-brand text-brand-foreground' : ''}
+                  ${
+                    !selected && available && !isPast
+                      ? 'bg-brand-muted text-brand-dark hover:bg-brand-light hover:text-brand-foreground'
+                      : ''
+                  }
+                  ${
+                    !available || isPast
+                      ? 'cursor-default text-faint-foreground'
+                      : ''
+                  }
+                `}
               >
                 {day}
-              </div>
-            ))}
-          </div>
+              </button>
+            );
+          })}
+        </div>
 
-          <div className="grid grid-cols-7 gap-0.5">
-            {calendarCells.map((day, idx) => {
-              if (!day) {
-                return <div key={`empty-${idx}`} className="h-8" />;
-              }
+        <div className="mt-2 flex flex-wrap gap-2.5 text-[10px] text-faint-foreground">
+          <span className="flex items-center gap-1">
+            <span className="h-2.5 w-2.5 rounded-sm bg-brand-muted" />
+            Available
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="h-2.5 w-2.5 rounded-sm bg-brand" />
+            Selected
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="h-2.5 w-2.5 rounded-sm bg-muted" />
+            Unavailable
+          </span>
+        </div>
 
-              const available = availableDays.has(day);
-              const selected = selectedDay === day;
-              const isPast =
-                new Date(currentYear, currentMonth, day) <
-                new Date(
-                  today.getFullYear(),
-                  today.getMonth(),
-                  today.getDate(),
-                );
-
-              return (
+        {selectedDay ? (
+          <div className="mt-3 border-t border-border pt-3">
+            <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-faint-foreground">
+              {MONTH_NAMES[currentMonth]} {selectedDay} — Timeslots (PDT)
+            </p>
+            <div className="grid grid-cols-4 gap-1.5">
+              {MOCK_TIME_SLOTS.map((slot) => (
                 <button
-                  key={day}
+                  key={slot}
                   type="button"
-                  disabled={!available || isPast}
-                  onClick={() => handleSelectDay(day)}
-                  className={`flex h-8 items-center justify-center rounded-md text-xs font-medium transition
-                    ${selected ? 'bg-brand text-brand-foreground' : ''}
+                  onClick={() => setSelectedSlot(slot)}
+                  className={`rounded-md border px-1 py-1.5 text-[11px] font-medium transition
                     ${
-                      !selected && available && !isPast
-                        ? 'bg-brand-muted text-brand-dark hover:bg-brand-light hover:text-brand-foreground'
-                        : ''
-                    }
-                    ${
-                      !available || isPast
-                        ? 'cursor-default text-faint-foreground'
-                        : ''
+                      selectedSlot === slot
+                        ? 'border-brand bg-brand text-brand-foreground'
+                        : 'border-border text-foreground hover:border-brand-subtle hover:bg-brand-muted'
                     }
                   `}
                 >
-                  {day}
+                  {slot}
                 </button>
-              );
-            })}
-          </div>
-
-          <div className="mt-2 flex flex-wrap gap-2.5 text-[10px] text-faint-foreground">
-            <span className="flex items-center gap-1">
-              <span className="h-2.5 w-2.5 rounded-sm bg-brand-muted" />
-              Available
-            </span>
-            <span className="flex items-center gap-1">
-              <span className="h-2.5 w-2.5 rounded-sm bg-brand" />
-              Selected
-            </span>
-            <span className="flex items-center gap-1">
-              <span className="h-2.5 w-2.5 rounded-sm bg-muted" />
-              Unavailable
-            </span>
-          </div>
-
-          {selectedDay ? (
-            <div className="mt-3 border-t border-border pt-3">
-              <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-faint-foreground">
-                {MONTH_NAMES[currentMonth]} {selectedDay} — Timeslots (PDT)
-              </p>
-              <div className="grid grid-cols-4 gap-1.5">
-                {MOCK_TIME_SLOTS.map((slot) => (
-                  <button
-                    key={slot}
-                    type="button"
-                    onClick={() => setSelectedSlot(slot)}
-                    className={`rounded-md border px-1 py-1.5 text-[11px] font-medium transition
-                      ${
-                        selectedSlot === slot
-                          ? 'border-brand bg-brand text-brand-foreground'
-                          : 'border-border text-foreground hover:border-brand-subtle hover:bg-brand-muted'
-                      }
-                    `}
-                  >
-                    {slot}
-                  </button>
-                ))}
-              </div>
+              ))}
             </div>
-          ) : (
-            <p className="mt-2 text-[11px] text-faint-foreground">
-              Select an available day to see time slots.
-            </p>
-          )}
-        </Card>
-      ) : null}
+          </div>
+        ) : (
+          <p className="mt-2 text-[11px] text-faint-foreground">
+            Select an available day to see time slots.
+          </p>
+        )}
+      </Card>
 
       <Card className="p-3 sm:p-3">
         <label
@@ -415,7 +420,7 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
       <Button
         fullWidth
         className="min-h-10"
-        disabled={!selectedDay || !selectedSlot || !anyTypeOn}
+        disabled={!selectedDay || !selectedSlot}
       >
         {selectedDay && selectedSlot
           ? `Confirm — ${MONTH_NAMES[currentMonth]} ${selectedDay} · ${selectedSlot}`
