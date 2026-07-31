@@ -1,4 +1,8 @@
-import type { FacilitySuperCategory } from './types';
+import type {
+  FacilityGender,
+  FacilityServiceOffering,
+  FacilitySuperCategory,
+} from './types';
 
 export const DEFAULT_MAX_DISTANCE_KM = 50;
 
@@ -26,6 +30,40 @@ export const COVERAGE_BADGE_LABELS: Record<string, string> = {
   'referral-not-required': 'Referral not required',
   'province-specific': 'Province-specific',
 };
+
+export const GENDER_FILTER_OPTIONS = [
+  { id: 'all', label: 'All' },
+  { id: 'male', label: 'Male' },
+  { id: 'female', label: 'Female' },
+  { id: 'other', label: 'Other' },
+] as const satisfies ReadonlyArray<{ id: 'all' | FacilityGender; label: string }>;
+
+export const SERVICE_OFFERING_FILTER_OPTIONS = [
+  { id: 'all', label: 'All' },
+  { id: 'general-family-physician', label: 'General Family Physician Service' },
+  { id: 'addiction', label: 'Addiction' },
+] as const satisfies ReadonlyArray<{
+  id: 'all' | FacilityServiceOffering;
+  label: string;
+}>;
+
+export const REGISTRATION_STATUS_FILTER_OPTIONS = [
+  { id: 'all', label: 'All' },
+  { id: 'yes', label: 'Yes' },
+  { id: 'no', label: 'No' },
+] as const satisfies ReadonlyArray<{ id: 'all' | 'yes' | 'no'; label: string }>;
+
+export const MAP_LANGUAGE_OPTIONS = [
+  'English',
+  'Arabic',
+  'Bosnian',
+  'Afrikaans',
+  'Croatian',
+  'French',
+  'Farsi',
+  'German',
+  'Greek',
+] as const;
 
 export const CATEGORY_LABELS: Record<FacilitySuperCategory, string> = {
   'urgent-walk-in': 'Urgent & walk-in',

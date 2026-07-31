@@ -5,6 +5,8 @@ import {
 } from '../constants';
 import {
   FACILITY_SUPER_CATEGORIES,
+  type FacilityGender,
+  type FacilityServiceOffering,
   type FacilitySuperCategory,
 } from '../types';
 
@@ -13,13 +15,19 @@ interface MapFilterStore {
   maxDistanceKm: number;
   openNowOnly: boolean;
   is24HoursOnly: boolean;
-  acceptingNewPatientsOnly: boolean;
+  gender: 'all' | FacilityGender;
+  language: 'all' | string;
+  serviceOffering: 'all' | FacilityServiceOffering;
+  registrationStatus: 'all' | 'yes' | 'no';
   toggleSuperCategory: (category: FacilitySuperCategory) => void;
   selectQuickCategory: (category: MapCategoryOptionId) => void;
   setMaxDistanceKm: (km: number) => void;
   setOpenNowOnly: (value: boolean) => void;
   setIs24HoursOnly: (value: boolean) => void;
-  setAcceptingNewPatientsOnly: (value: boolean) => void;
+  setGender: (value: 'all' | FacilityGender) => void;
+  setLanguage: (value: 'all' | string) => void;
+  setServiceOffering: (value: 'all' | FacilityServiceOffering) => void;
+  setRegistrationStatus: (value: 'all' | 'yes' | 'no') => void;
   resetFilters: () => void;
 }
 
@@ -28,7 +36,10 @@ const defaultState = {
   maxDistanceKm: DEFAULT_MAX_DISTANCE_KM,
   openNowOnly: false,
   is24HoursOnly: false,
-  acceptingNewPatientsOnly: false,
+  gender: 'all' as const,
+  language: 'all' as const,
+  serviceOffering: 'all' as const,
+  registrationStatus: 'all' as const,
 };
 
 export const useMapFilterStore = create<MapFilterStore>((set) => ({
@@ -63,7 +74,9 @@ export const useMapFilterStore = create<MapFilterStore>((set) => ({
   setMaxDistanceKm: (km) => set({ maxDistanceKm: km }),
   setOpenNowOnly: (value) => set({ openNowOnly: value }),
   setIs24HoursOnly: (value) => set({ is24HoursOnly: value }),
-  setAcceptingNewPatientsOnly: (value) =>
-    set({ acceptingNewPatientsOnly: value }),
+  setGender: (value) => set({ gender: value }),
+  setLanguage: (value) => set({ language: value }),
+  setServiceOffering: (value) => set({ serviceOffering: value }),
+  setRegistrationStatus: (value) => set({ registrationStatus: value }),
   resetFilters: () => set(defaultState),
 }));

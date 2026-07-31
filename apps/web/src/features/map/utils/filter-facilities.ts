@@ -24,9 +24,29 @@ export function filterMapFacilities(
     }
 
     if (
-      filters.acceptingNewPatientsOnly &&
-      facility.superCategory === 'primary-care' &&
-      !facility.acceptingNewPatients
+      filters.gender !== 'all' &&
+      !facility.providerGenders?.includes(filters.gender)
+    ) {
+      return false;
+    }
+
+    if (
+      filters.language !== 'all' &&
+      !facility.languages?.includes(filters.language)
+    ) {
+      return false;
+    }
+
+    if (
+      filters.serviceOffering !== 'all' &&
+      !facility.serviceOfferings?.includes(filters.serviceOffering)
+    ) {
+      return false;
+    }
+
+    if (
+      filters.registrationStatus !== 'all' &&
+      facility.acceptingNewPatients !== (filters.registrationStatus === 'yes')
     ) {
       return false;
     }

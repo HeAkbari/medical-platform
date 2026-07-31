@@ -13,8 +13,11 @@ export function useFilteredMapFacilities(userPosition: [number, number] | null) 
   const maxDistanceKm = useMapFilterStore((state) => state.maxDistanceKm);
   const openNowOnly = useMapFilterStore((state) => state.openNowOnly);
   const is24HoursOnly = useMapFilterStore((state) => state.is24HoursOnly);
-  const acceptingNewPatientsOnly = useMapFilterStore(
-    (state) => state.acceptingNewPatientsOnly
+  const gender = useMapFilterStore((state) => state.gender);
+  const language = useMapFilterStore((state) => state.language);
+  const serviceOffering = useMapFilterStore((state) => state.serviceOffering);
+  const registrationStatus = useMapFilterStore(
+    (state) => state.registrationStatus
   );
 
   return useMemo(() => {
@@ -27,15 +30,21 @@ export function useFilteredMapFacilities(userPosition: [number, number] | null) 
       maxDistanceKm,
       openNowOnly,
       is24HoursOnly,
-      acceptingNewPatientsOnly,
+      gender,
+      language,
+      serviceOffering,
+      registrationStatus,
     });
   }, [
     facilities,
-    acceptingNewPatientsOnly,
+    gender,
     is24HoursOnly,
+    language,
     maxDistanceKm,
     openNowOnly,
+    registrationStatus,
     selectedSuperCategories,
+    serviceOffering,
     userPosition,
   ]);
 }

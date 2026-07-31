@@ -40,6 +40,17 @@ export type CoverageBadge =
   | 'referral-not-required'
   | 'province-specific';
 
+export const FACILITY_GENDERS = ['male', 'female', 'other'] as const;
+
+export type FacilityGender = (typeof FACILITY_GENDERS)[number];
+
+export const FACILITY_SERVICE_OFFERINGS = [
+  'general-family-physician',
+  'addiction',
+] as const;
+
+export type FacilityServiceOffering = (typeof FACILITY_SERVICE_OFFERINGS)[number];
+
 export type MapActionType = 'call' | 'navigate' | 'book';
 
 export interface MapFacilityAddress {
@@ -77,6 +88,9 @@ export interface MapFacility {
   waitTimeUpdatedAt?: string;
   waitTimeSource?: string;
   services?: string[];
+  providerGenders?: FacilityGender[];
+  languages?: string[];
+  serviceOfferings?: FacilityServiceOffering[];
   whyOnMap: string;
   province: 'BC';
   actions: MapActionType[];
@@ -93,7 +107,10 @@ export interface MapFacilityFilters {
   maxDistanceKm: number;
   openNowOnly: boolean;
   is24HoursOnly: boolean;
-  acceptingNewPatientsOnly: boolean;
+  gender: 'all' | FacilityGender;
+  language: 'all' | string;
+  serviceOffering: 'all' | FacilityServiceOffering;
+  registrationStatus: 'all' | 'yes' | 'no';
 }
 
 export interface MapRoute {
