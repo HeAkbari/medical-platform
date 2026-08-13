@@ -1,4 +1,5 @@
 import { createHmac } from 'node:crypto';
+import { XMLParser } from 'fast-xml-parser';
 import OAuth from 'oauth-1.0a';
 import { Agent as UndiciAgent } from 'undici';
 
@@ -26,6 +27,24 @@ type FetchInitWithInsecureTls = RequestInit & {
   dispatcher?: unknown;
   tls?: { rejectUnauthorized?: boolean };
 };
+
+export interface OscarRequestOptions {
+  query?: Record<string, string>;
+  /**
+   * Most endpoints produce JSON, but a few WADL-generated ones (e.g.
+   * `/providerService/providers`) only produce XML — verified per-endpoint
+   * against the live sandbox, not assumed. Default 'json'.
+   */
+  format?: 'json' | 'xml';
+}
+
+// OSCAR's XML list responses follow a `<List><Item>...</Item></List>`
+// wrapper (JAXB-style) — force `Item` to always parse as an array, even with
+// a single result, so callers can always `.map()` over it.
+const xmlParser = new XMLParser({
+  ignoreAttributes: false,
+  isArray: (name) => name === 'Item',
+});
 
 export class OscarHttpError extends Error {
   constructor(
@@ -56,16 +75,16 @@ export class OscarClient {
       : undefined;
   }
 
-  async get(path: string, query?: Record<string, string>): Promise<unknown> {
-    return this.request('GET', path, query);
+  async get(path: string, options?: OscarRequestOptions): Promise<unknown> {
+    return this.request('GET', path, options);
   }
 
-  async post(path: string, body?: unknown, query?: Record<string, string>): Promise<unknown> {
-    return this.request('POST', path, query, body);
+  async post(path: string, body?: unknown, options?: OscarRequestOptions): Promise<unknown> {
+    return this.request('POST', path, options, body);
   }
 
-  async put(path: string, body?: unknown, query?: Record<string, string>): Promise<unknown> {
-    return this.request('PUT', path, query, body);
+  async put(path: string, body?: unknown, options?: OscarRequestOptions): Promise<unknown> {
+    return this.request('PUT', path, options, body);
   }
 
   private buildUrl(path: string, query?: Record<string, string>): string {
@@ -83,10 +102,12 @@ export class OscarClient {
   private async request(
     method: 'GET' | 'POST' | 'PUT',
     path: string,
-    query?: Record<string, string>,
+    options?: OscarRequestOptions,
     body?: unknown
   ): Promise<unknown> {
-    const url = this.buildUrl(path, query);
+    const format = options?.format ?? 'json';
+    const accept = format === 'xml' ? 'application/xml' : 'application/json';
+    const url = this.buildUrl(path, options?.query);
     const authHeader = this.oauth.toHeader(
       this.oauth.authorize({ url, method }, this.token)
     );
@@ -95,7 +116,7 @@ export class OscarClient {
       method,
       headers: {
         ...authHeader,
-        Accept: 'application/json',
+        Accept: accept,
         ...(body ? { 'Content-Type': 'application/json' } : {}),
       },
       body: body ? JSON.stringify(body) : undefined,
@@ -126,6 +147,10 @@ export class OscarClient {
       );
     }
 
-    return responseBody ? JSON.parse(responseBody) : null;
+    if (!responseBody) {
+      return null;
+    }
+
+    return format === 'xml' ? xmlParser.parse(responseBody) : JSON.parse(responseBody);
   }
 }
