@@ -1,0 +1,35 @@
+# Local dev Postgres for the app's own platform database
+# (ClinicCredential, Facility, Doctor, PatientClinicLink, ...).
+#
+# Separate from docs/oscar/docker-compose.yml, which runs the HAPI FHIR
+# sandbox + its own Postgres — that one backs DATA_SOURCE=fhir, this one
+# backs DATABASE_URL for the platform tables (see packages/db).
+#
+# Usage:
+#   docker compose -f deploy/docker-compose.dev.yml up -d
+#   docker compose -f deploy/docker-compose.dev.yml down        # keeps data
+#   docker compose -f deploy/docker-compose.dev.yml down -v     # wipes data
+
+name: medical-platform-dev
+
+services:
+  app-postgres:
+    image: postgres:16
+    container_name: medical-platform-app-postgres
+    environment:
+      POSTGRES_DB: medical_platform
+      POSTGRES_USER: medical_platform
+      POSTGRES_PASSWORD: medical_platform
+    ports:
+      - "5432:5432"
+    volumes:
+      - medical-platform-app-pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medical_platform -d medical_platform"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  medical-platform-app-pg-data:

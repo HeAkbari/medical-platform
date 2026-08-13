@@ -8,16 +8,17 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "db:generate": "echo \"Prisma generate — enable when backend is implemented\"",
-    "db:migrate": "echo \"Prisma migrate — enable when backend is implemented\"",
-    "db:seed": "echo \"DB seed — enable when backend is implemented\"",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed:clinic-credential": "bun run prisma/seed-clinic-credential.ts",
     "lint": "eslint src"
   },
   "dependencies": {
-    "@medical-platform/auth": "workspace:*",
-    "@medical-platform/domain": "workspace:*"
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1"
   },
   "devDependencies": {
+    "prisma": "^7.9.1",
     "typescript": "~5.7.3"
   }
 }

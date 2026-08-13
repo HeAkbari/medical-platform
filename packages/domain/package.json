@@ -8,13 +8,19 @@
     "./validation": "./src/validation/schemas.ts",
     "./ports": "./src/ports/repositories.ts",
     "./adapters/in-memory": "./src/adapters/in-memory/mock-repositories.ts",
-    "./adapters/fhir": "./src/adapters/fhir/index.ts"
+    "./adapters/fhir": "./src/adapters/fhir/index.ts",
+    "./adapters/oscar": "./src/adapters/oscar/index.ts",
+    "./adapters/platform": "./src/adapters/platform/index.ts"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint src"
   },
   "dependencies": {
+    "@medical-platform/db": "workspace:*",
+    "oauth-1.0a": "^2.2.6",
+    "server-only": "^0.0.1",
+    "undici": "^8.10.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
