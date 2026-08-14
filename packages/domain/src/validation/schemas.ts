@@ -55,3 +55,14 @@ export const verifyOtpSchema = z.object({
 export const completeRegistrationSchema = createPatientSchema.extend({
   registrationToken: z.string().uuid(),
 });
+
+// Collected lazily at first clinic-linking need (e.g. booking), never at
+// registration — see docs/oscar/new-approach/patient-clinic-linking-architecture.md.
+export const linkPatientToClinicSchema = z.object({
+  healthNumber: z.string().min(1).max(50),
+  dateOfBirth: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date of birth must use YYYY-MM-DD format'),
+});
+
+export type LinkPatientToClinicRequestBody = z.infer<typeof linkPatientToClinicSchema>;

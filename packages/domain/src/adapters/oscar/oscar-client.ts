@@ -1,7 +1,7 @@
 import { createHmac } from 'node:crypto';
+import { Agent as HttpsAgent, request as httpsRequest } from 'node:https';
 import { XMLParser } from 'fast-xml-parser';
 import OAuth from 'oauth-1.0a';
-import { Agent as UndiciAgent } from 'undici';
 
 export interface OscarClientConfig {
   baseUrl: string;
@@ -17,16 +17,6 @@ export interface OscarClientConfig {
    */
   allowSelfSignedCert?: boolean;
 }
-
-// fetch's DOM types don't know about these — `dispatcher` is undici's
-// (Node's built-in fetch) way to plug in a custom TLS-relaxed agent, `tls`
-// is Bun's equivalent for its own fetch implementation. Setting both covers
-// dev (Bun) and production (Node, see deploy/Dockerfile) without needing to
-// detect the runtime.
-type FetchInitWithInsecureTls = RequestInit & {
-  dispatcher?: unknown;
-  tls?: { rejectUnauthorized?: boolean };
-};
 
 export interface OscarRequestOptions {
   query?: Record<string, string>;
@@ -57,10 +47,67 @@ export class OscarHttpError extends Error {
   }
 }
 
+interface RawHttpsResponse {
+  status: number;
+  body: string;
+}
+
+// A relaxed-TLS agent is reused across requests for this client (cheap,
+// keeps connection pooling working) — only ever constructed when the clinic
+// is explicitly configured with allowSelfSignedCert.
+function performHttpsRequest(
+  url: string,
+  method: string,
+  headers: Record<string, string>,
+  body: string | undefined,
+  agent: HttpsAgent | undefined
+): Promise<RawHttpsResponse> {
+  return new Promise((resolve, reject) => {
+    const target = new URL(url);
+
+    const req = httpsRequest(
+      {
+        protocol: target.protocol,
+        hostname: target.hostname,
+        port: target.port || 443,
+        path: `${target.pathname}${target.search}`,
+        method,
+        headers,
+        agent,
+      },
+      (res) => {
+        const chunks: Buffer[] = [];
+        res.on('data', (chunk: Buffer) => chunks.push(chunk));
+        res.on('end', () => {
+          resolve({
+            status: res.statusCode ?? 0,
+            body: Buffer.concat(chunks).toString('utf8'),
+          });
+        });
+        res.on('error', reject);
+      }
+    );
+
+    req.on('error', reject);
+
+    if (body) {
+      req.write(body);
+    }
+
+    req.end();
+  });
+}
+
 export class OscarClient {
   private readonly oauth: OAuth;
   private readonly token: OAuth.Token;
-  private readonly insecureDispatcher: UndiciAgent | undefined;
+  // Using node:https directly instead of fetch: fetch's runtime-specific TLS
+  // extensions (Bun's `tls` option, a custom undici `dispatcher`) turned out
+  // not to be portable — verified live, one worked under Bun but not inside
+  // Next.js's own fetch instrumentation, the other silently did nothing under
+  // Node. https.Agent is a stable, version-independent way to relax TLS
+  // verification for one clinic's connection specifically.
+  private readonly httpsAgent: HttpsAgent | undefined;
 
   constructor(private readonly config: OscarClientConfig) {
     this.oauth = new OAuth({
@@ -70,8 +117,8 @@ export class OscarClient {
         createHmac('sha1', key).update(baseString).digest('base64'),
     });
     this.token = { key: config.accessToken, secret: config.accessTokenSecret };
-    this.insecureDispatcher = config.allowSelfSignedCert
-      ? new UndiciAgent({ connect: { rejectUnauthorized: false } })
+    this.httpsAgent = config.allowSelfSignedCert
+      ? new HttpsAgent({ rejectUnauthorized: false })
       : undefined;
   }
 
@@ -112,22 +159,17 @@ export class OscarClient {
       this.oauth.authorize({ url, method }, this.token)
     );
 
-    const init: FetchInitWithInsecureTls = {
-      method,
-      headers: {
-        ...authHeader,
-        Accept: accept,
-        ...(body ? { 'Content-Type': 'application/json' } : {}),
-      },
-      body: body ? JSON.stringify(body) : undefined,
-      ...(this.insecureDispatcher
-        ? { dispatcher: this.insecureDispatcher, tls: { rejectUnauthorized: false } }
-        : {}),
+    const headers: Record<string, string> = {
+      ...authHeader,
+      Accept: accept,
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
     };
+    const requestBody = body ? JSON.stringify(body) : undefined;
 
-    const attempt = async (): Promise<Response> => fetch(url, init);
+    const attempt = (): Promise<RawHttpsResponse> =>
+      performHttpsRequest(url, method, headers, requestBody, this.httpsAgent);
 
-    let response: Response;
+    let response: RawHttpsResponse;
 
     try {
       response = await attempt();
@@ -137,20 +179,18 @@ export class OscarClient {
       response = await attempt();
     }
 
-    const responseBody = await response.text();
-
-    if (!response.ok) {
+    if (response.status < 200 || response.status >= 300) {
       throw new OscarHttpError(
         response.status,
-        responseBody,
+        response.body,
         `OSCAR request failed: ${method} ${path} -> ${response.status}`
       );
     }
 
-    if (!responseBody) {
+    if (!response.body) {
       return null;
     }
 
-    return format === 'xml' ? xmlParser.parse(responseBody) : JSON.parse(responseBody);
+    return format === 'xml' ? xmlParser.parse(response.body) : JSON.parse(response.body);
   }
 }

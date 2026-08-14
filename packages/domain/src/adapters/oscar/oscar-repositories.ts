@@ -118,7 +118,7 @@ export class OscarAppointmentRepository implements AppointmentRepository {
     );
   }
 
-  async findById(): Promise<Appointment | null> {
+  async findById(_id: string): Promise<Appointment | null> {
     // GET /schedule/getAppointment's exact params/shape aren't verified live
     // yet — real data first (see docs/oscar/new-approach), not a guess.
     throw new Error('OscarAppointmentRepository.findById is not implemented yet.');

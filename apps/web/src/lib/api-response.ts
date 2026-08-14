@@ -16,6 +16,10 @@ export function badRequestResponse(message: string): Response {
   return jsonResponse(createApiError(message, 'BAD_REQUEST'), 400);
 }
 
+export function unauthorizedResponse(message = 'Sign in required'): Response {
+  return jsonResponse(createApiError(message, 'UNAUTHORIZED'), 401);
+}
+
 export function internalErrorResponse(message: string): Response {
   return jsonResponse(createApiError(message, 'INTERNAL_ERROR'), 500);
 }
