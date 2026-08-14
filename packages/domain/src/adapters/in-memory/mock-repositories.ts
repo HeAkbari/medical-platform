@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type {
   Appointment,
+  AppointmentDetail,
   AppointmentStatus,
   Doctor,
   Patient,
@@ -9,7 +10,7 @@ import type {
   CreateAppointmentInput,
   CreatePatientInput,
 } from '../../validation/schemas';
-import { isSameDay, normalizePhone } from '../../utils/helpers';
+import { formatFullName, isSameDay, normalizePhone } from '../../utils/helpers';
 import {
   createMockDataStore,
   type MockDataStore,
@@ -103,6 +104,38 @@ class JsonAppointmentRepository implements AppointmentRepository {
     const appointment =
       this.store.appointments.find((item) => item.id === id) ?? null;
     return Promise.resolve(appointment);
+  }
+
+  findDetailById(id: string): Promise<AppointmentDetail | null> {
+    const appointment = this.store.appointments.find((item) => item.id === id);
+
+    if (!appointment) {
+      return Promise.resolve(null);
+    }
+
+    const patient = this.store.patients.find((item) => item.id === appointment.patientId);
+    const doctor = this.store.doctors.find((item) => item.id === appointment.doctorId);
+
+    return Promise.resolve({
+      id: appointment.id,
+      status: appointment.status,
+      scheduledAt: appointment.scheduledAt,
+      durationMinutes: appointment.durationMinutes,
+      reason: appointment.reason,
+      comment: appointment.notes ?? undefined,
+      created: appointment.createdAt,
+      patientName: patient ? formatFullName(patient.firstName, patient.lastName) : undefined,
+      doctor: doctor
+        ? {
+            id: doctor.id,
+            name: formatFullName(doctor.firstName, doctor.lastName),
+            specialty: doctor.specialty,
+            phone: doctor.phone || undefined,
+          }
+        : undefined,
+      // No location: the mock dataset has no facility linkage, matching the
+      // same gap OSCAR-sourced appointments currently have.
+    });
   }
 
   async create(input: CreateAppointmentInput): Promise<Appointment> {

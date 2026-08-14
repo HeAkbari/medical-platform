@@ -1,5 +1,6 @@
 import type {
   Appointment,
+  AppointmentDetail,
   AppointmentStatus,
   Doctor,
   Patient,
@@ -17,6 +18,7 @@ import type {
 import { normalizePhone } from '../../utils/helpers';
 import { FhirClient, type FhirClientConfig } from './fhir-client';
 import type {
+  FhirAddress,
   FhirAppointment,
   FhirLocation,
   FhirPatient,
@@ -113,6 +115,32 @@ class FhirDoctorRepository implements DoctorRepository {
   }
 }
 
+function detailPractitionerName(resource: FhirPractitioner): string {
+  const name = resource.name?.[0];
+  return (
+    [name?.prefix?.join(' '), name?.given?.join(' '), name?.family]
+      .filter(Boolean)
+      .join(' ') || 'Practitioner'
+  );
+}
+
+function detailFormatAddress(address?: FhirAddress): string | undefined {
+  if (!address) {
+    return undefined;
+  }
+
+  return [address.line?.join(', '), address.city, address.state, address.postalCode]
+    .filter(Boolean)
+    .join(', ');
+}
+
+function detailContact(
+  telecom: FhirPractitioner['telecom'],
+  system: 'phone'
+): string | undefined {
+  return telecom?.find((entry) => entry.system === system)?.value;
+}
+
 class FhirAppointmentRepository implements AppointmentRepository {
   constructor(private readonly client: FhirClient) {}
 
@@ -132,6 +160,66 @@ class FhirAppointmentRepository implements AppointmentRepository {
   async findById(id: string): Promise<Appointment | null> {
     const resource = await this.client.read<FhirAppointment>('Appointment', id);
     return resource ? fhirToAppointment(resource) : null;
+  }
+
+  /** Aggregates the Appointment with its resolved Practitioner and Location. */
+  async findDetailById(id: string): Promise<AppointmentDetail | null> {
+    const resource = await this.client.read<FhirAppointment>('Appointment', id);
+
+    if (!resource) {
+      return null;
+    }
+
+    const appointment = fhirToAppointment(resource);
+
+    const [practitioner, location] = await Promise.all([
+      appointment.doctorId
+        ? this.client.read<FhirPractitioner>('Practitioner', appointment.doctorId)
+        : Promise.resolve(null),
+      appointment.locationId
+        ? this.client.read<FhirLocation>('Location', appointment.locationId)
+        : Promise.resolve(null),
+    ]);
+
+    return {
+      id: appointment.id,
+      status: appointment.status,
+      fhirStatus: appointment.fhirStatus,
+      scheduledAt: appointment.scheduledAt,
+      endAt: resource.end,
+      durationMinutes: appointment.durationMinutes,
+      serviceCategory: appointment.serviceCategory,
+      serviceType: appointment.serviceType,
+      specialty: appointment.specialty,
+      appointmentType: appointment.appointmentType,
+      priority: appointment.priority,
+      reason: appointment.reason,
+      reasonText: appointment.reasonText,
+      comment: appointment.notes ?? undefined,
+      patientInstruction: resource.patientInstruction,
+      created: appointment.createdAt,
+      patientName: appointment.patientName,
+      doctor: appointment.doctorId
+        ? {
+            id: appointment.doctorId,
+            name: practitioner
+              ? detailPractitionerName(practitioner)
+              : appointment.doctorName ?? 'Practitioner',
+            specialty:
+              practitioner?.qualification?.[0]?.code?.text ?? appointment.specialty,
+            phone: practitioner ? detailContact(practitioner.telecom, 'phone') : undefined,
+          }
+        : undefined,
+      location:
+        appointment.locationId && (location || appointment.locationName)
+          ? {
+              id: appointment.locationId,
+              name: location?.name ?? appointment.locationName ?? 'Location',
+              address: detailFormatAddress(location?.address),
+              phone: location ? detailContact(location.telecom, 'phone') : undefined,
+            }
+          : undefined,
+    };
   }
 
   async create(input: CreateAppointmentInput): Promise<Appointment> {

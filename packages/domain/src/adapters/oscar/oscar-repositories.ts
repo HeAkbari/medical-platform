@@ -1,7 +1,12 @@
 import type { DoctorExternalIdResolver } from '../../ports/doctor-external-id';
 import type { PatientClinicIdentityStore } from '../../ports/patient-clinic-identity';
 import type { AppointmentRepository, DoctorRepository } from '../../ports/repositories';
-import type { Appointment, AppointmentStatus, Doctor } from '../../types/models';
+import type {
+  Appointment,
+  AppointmentDetail,
+  AppointmentStatus,
+  Doctor,
+} from '../../types/models';
 import type { CreateAppointmentInput } from '../../validation/schemas';
 import { OscarClient } from './oscar-client';
 import {
@@ -142,6 +147,42 @@ export class OscarAppointmentRepository implements AppointmentRepository {
     // GET /schedule/getAppointment's exact params/shape aren't verified live
     // yet — real data first (see docs/oscar/new-approach), not a guess.
     throw new Error('OscarAppointmentRepository.findById is not implemented yet.');
+  }
+
+  /**
+   * Built on top of findById so this starts working automatically once
+   * /schedule/getAppointment is verified — no separate fetch logic to keep
+   * in sync. `location` is intentionally omitted: OSCAR has no Location
+   * concept, and ClinicCredential isn't linked to a Facility yet (see
+   * design doc §5/§6 gap).
+   */
+  async findDetailById(id: string): Promise<AppointmentDetail | null> {
+    const appointment = await this.findById(id);
+
+    if (!appointment) {
+      return null;
+    }
+
+    const doctor = await new OscarDoctorRepository(this.client).findById(appointment.doctorId);
+
+    return {
+      id: appointment.id,
+      status: appointment.status,
+      scheduledAt: appointment.scheduledAt,
+      durationMinutes: appointment.durationMinutes,
+      reason: appointment.reason,
+      comment: appointment.notes ?? undefined,
+      created: appointment.createdAt,
+      patientName: appointment.patientName,
+      doctor: doctor
+        ? {
+            id: doctor.id,
+            name: `${doctor.firstName} ${doctor.lastName}`.trim(),
+            specialty: doctor.specialty,
+            phone: doctor.phone || undefined,
+          }
+        : undefined,
+    };
   }
 
   async create(input: CreateAppointmentInput): Promise<Appointment> {

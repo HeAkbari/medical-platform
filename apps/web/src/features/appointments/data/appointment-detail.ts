@@ -1,43 +1,9 @@
-import type { AppointmentStatus } from '@medical-platform/domain';
-
-/**
- * FHIR-native appointment detail. Aggregates the `Appointment` with the
- * resolved `Practitioner` (specialty, contact) and `Location` (address, contact)
- * so the detail drawer can show the full "who / where / what / when".
- */
-
-export interface AppointmentDoctorDetail {
-  id: string;
-  name: string;
-  specialty?: string;
-  phone?: string;
-}
-
-export interface AppointmentLocationDetail {
-  id: string;
-  name: string;
-  address?: string;
-  phone?: string;
-}
-
-export interface AppointmentDetail {
-  id: string;
-  status: AppointmentStatus;
-  fhirStatus?: string;
-  scheduledAt: string;
-  endAt?: string;
-  durationMinutes: number;
-  serviceCategory?: string;
-  serviceType?: string;
-  specialty?: string;
-  appointmentType?: string;
-  priority?: string;
-  reason: string;
-  reasonText?: string;
-  comment?: string;
-  patientInstruction?: string;
-  created?: string;
-  patientName?: string;
-  doctor?: AppointmentDoctorDetail;
-  location?: AppointmentLocationDetail;
-}
+// Thin re-export — the real types moved to packages/domain/src/types/models.ts
+// (see docs/oscar/new-approach/docs-oscar-new-approach.md §1) so every
+// AppointmentRepository implementation can return AppointmentDetail from
+// findDetailById(). Kept here so existing UI imports keep working unchanged.
+export type {
+  AppointmentDetail,
+  AppointmentDoctorDetail,
+  AppointmentLocationDetail,
+} from '@medical-platform/domain';

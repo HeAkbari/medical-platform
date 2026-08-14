@@ -69,6 +69,49 @@ export interface Appointment {
   locationName?: string;
 }
 
+/**
+ * Aggregates an Appointment with its resolved doctor/location so the detail
+ * drawer can show the full "who / where / what / when" — moved here from
+ * apps/web/src/features/appointments/data/appointment-detail.ts (§1 of
+ * docs/oscar/new-approach/docs-oscar-new-approach.md); a thin re-export is
+ * left there so existing UI imports keep working.
+ */
+export interface AppointmentDoctorDetail {
+  id: string;
+  name: string;
+  specialty?: string;
+  phone?: string;
+}
+
+export interface AppointmentLocationDetail {
+  id: string;
+  name: string;
+  address?: string;
+  phone?: string;
+}
+
+export interface AppointmentDetail {
+  id: string;
+  status: AppointmentStatus;
+  fhirStatus?: string;
+  scheduledAt: string;
+  endAt?: string;
+  durationMinutes: number;
+  serviceCategory?: string;
+  serviceType?: string;
+  specialty?: string;
+  appointmentType?: string;
+  priority?: string;
+  reason: string;
+  reasonText?: string;
+  comment?: string;
+  patientInstruction?: string;
+  created?: string;
+  patientName?: string;
+  doctor?: AppointmentDoctorDetail;
+  location?: AppointmentLocationDetail;
+}
+
 export interface ApiError {
   message: string;
   code: string;

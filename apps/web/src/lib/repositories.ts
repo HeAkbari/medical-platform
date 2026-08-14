@@ -61,6 +61,10 @@ class LazyOscarAppointmentRepository implements AppointmentRepository {
     return (await this.repo()).findById(id);
   }
 
+  async findDetailById(id: string) {
+    return (await this.repo()).findDetailById(id);
+  }
+
   async create(input: CreateAppointmentInput) {
     return (await this.repo()).create(input);
   }
