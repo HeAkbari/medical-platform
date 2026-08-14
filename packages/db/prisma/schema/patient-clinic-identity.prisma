@@ -1,0 +1,22 @@
+// Maps a platform Patient to their per-clinic EMR record (e.g. OSCAR
+// demographicNo). A patient has zero or one identity per clinic, established
+// lazily via LinkPatientToClinicUseCase (HIN+DOB matching) the first time
+// they need clinic/clinical data — never at registration.
+// See docs/oscar/new-approach/patient-clinic-linking-architecture.md.
+model PatientClinicIdentity {
+  id                String   @id @default(uuid())
+  patientId         String
+  clinicId          String
+  externalPatientId String
+
+  // The HIN used to establish this link — kept for potential re-verification,
+  // never for anything platform-profile-facing. Never log this field.
+  healthNumber String
+  verifiedAt   DateTime @default(now())
+  linkedAt     DateTime @default(now())
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@unique([patientId, clinicId])
+  @@unique([clinicId, externalPatientId])
+}
