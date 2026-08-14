@@ -98,7 +98,7 @@ export interface MapFacility {
   supportsBooking: boolean;
   is24Hours?: boolean;
   minorAilmentsPrescribing?: boolean;
-  source: 'mock' | 'fhir';
+  source: 'mock' | 'fhir' | 'platform';
   lastVerifiedAt: string;
 }
 

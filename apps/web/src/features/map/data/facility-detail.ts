@@ -71,5 +71,5 @@ export interface FacilityDetail {
   organization?: FacilityOrganizationDetail;
   services: FacilityServiceDetail[];
   practitioners: FacilityPractitionerDetail[];
-  source: 'fhir' | 'mock';
+  source: 'fhir' | 'mock' | 'platform';
 }

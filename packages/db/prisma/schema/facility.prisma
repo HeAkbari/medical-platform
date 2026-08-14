@@ -1,0 +1,12 @@
+// Platform-owned clinic/facility directory (map data) — independent of any
+// EMR/clinic adapter, per docs/oscar/new-approach/docs-oscar-new-approach.md
+// decision #2. `data` holds the full `MapFacility` shape (apps/web) as JSON;
+// there's no cross-facility querying need yet beyond "list all", so a single
+// JSON column avoids reverse-coupling this table's schema to that app-layer
+// type. Ingested manually per new clinic contract (see apps/web's seed script).
+model Facility {
+  id        String   @id
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

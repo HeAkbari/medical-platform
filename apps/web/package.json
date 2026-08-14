@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@medical-platform/auth": "workspace:*",
+    "@medical-platform/db": "workspace:*",
     "@medical-platform/domain": "workspace:*",
     "@medical-platform/policies": "workspace:*",
     "@tanstack/react-query": "^5.90.12",

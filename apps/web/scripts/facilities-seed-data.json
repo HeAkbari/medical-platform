@@ -1,0 +1,1162 @@
+[
+  {
+    "id": "fac-chiro-001",
+    "name": "Island Chiropractic & Wellness",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0402",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "2100 Douglas St",
+      "province": "BC",
+      "postalCode": "V8T 4K8"
+    },
+    "category": "chiropractic",
+    "position": [
+      48.4356,
+      -123.3612
+    ],
+    "province": "BC",
+    "whyOnMap": "Chiropractic — direct access",
+    "isOpenNow": true,
+    "providerId": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+    "subcategory": "Chiropractic",
+    "superCategory": "therapy-rehab",
+    "coverageBadges": [
+      "co-pay-limit",
+      "referral-not-required",
+      "open-now"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "providerGenders": [
+      "female"
+    ],
+    "supportsBooking": true,
+    "acceptingNewPatients": false
+  },
+  {
+    "id": "fac-couns-001",
+    "name": "Victoria Community Counselling Centre",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0502",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "1450 Blanshard St",
+      "province": "BC",
+      "postalCode": "V8W 2J3"
+    },
+    "category": "counselling",
+    "position": [
+      48.4301,
+      -123.3645
+    ],
+    "province": "BC",
+    "whyOnMap": "Counselling — direct access",
+    "isOpenNow": true,
+    "languages": [
+      "English",
+      "Greek"
+    ],
+    "providerId": "f6a7b8c9-d0e1-2345-f012-456789012345",
+    "subcategory": "Counselling",
+    "superCategory": "mental-health",
+    "coverageBadges": [
+      "referral-not-required",
+      "open-now",
+      "private-insurance"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "providerGenders": [
+      "male"
+    ],
+    "supportsBooking": true,
+    "serviceOfferings": [
+      "addiction"
+    ],
+    "acceptingNewPatients": true
+  },
+  {
+    "id": "fac-couns-002",
+    "name": "MindWell Therapy — Saanich",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0503",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Saanich",
+      "street": "3800 Shelbourne St",
+      "province": "BC",
+      "postalCode": "V8P 4H2"
+    },
+    "category": "counselling",
+    "position": [
+      48.4589,
+      -123.3345
+    ],
+    "province": "BC",
+    "whyOnMap": "Counselling — private pay options",
+    "isOpenNow": false,
+    "languages": [
+      "English"
+    ],
+    "providerId": "f6a7b8c9-d0e1-2345-f012-456789012345",
+    "subcategory": "Counselling",
+    "superCategory": "mental-health",
+    "coverageBadges": [
+      "referral-not-required",
+      "direct-pay"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "providerGenders": [
+      "female"
+    ],
+    "supportsBooking": true,
+    "serviceOfferings": [
+      "addiction"
+    ],
+    "acceptingNewPatients": false
+  },
+  {
+    "id": "fac-dental-001",
+    "name": "Victoria Family Dental",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0601",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "1100 Fort St",
+      "province": "BC",
+      "postalCode": "V8V 3K8"
+    },
+    "category": "dentistry",
+    "position": [
+      48.4256,
+      -123.3556
+    ],
+    "province": "BC",
+    "whyOnMap": "Dentistry — direct pay, no referral",
+    "isOpenNow": true,
+    "languages": [
+      "English",
+      "Croatian"
+    ],
+    "providerId": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+    "subcategory": "Dentistry",
+    "superCategory": "dental-other",
+    "coverageBadges": [
+      "direct-pay",
+      "referral-not-required",
+      "open-now"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "providerGenders": [
+      "male"
+    ],
+    "supportsBooking": true
+  },
+  {
+    "id": "fac-dental-002",
+    "name": "Oak Bay Dental Studio",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0602",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Oak Bay",
+      "street": "2050 Oak Bay Ave",
+      "province": "BC",
+      "postalCode": "V8R 1G3"
+    },
+    "category": "dentistry",
+    "position": [
+      48.4272,
+      -123.3145
+    ],
+    "province": "BC",
+    "whyOnMap": "Dentistry — direct pay",
+    "isOpenNow": true,
+    "providerId": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+    "subcategory": "Dentistry",
+    "superCategory": "dental-other",
+    "coverageBadges": [
+      "direct-pay",
+      "referral-not-required",
+      "open-now"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "supportsBooking": true
+  },
+  {
+    "id": "fac-diet-001",
+    "name": "Nutrition BC — Registered Dietitian",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0604",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "750 Broughton St",
+      "province": "BC",
+      "postalCode": "V8W 1E3"
+    },
+    "category": "dietitian",
+    "position": [
+      48.4245,
+      -123.3712
+    ],
+    "province": "BC",
+    "whyOnMap": "Dietitian — direct access in BC",
+    "isOpenNow": false,
+    "providerId": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+    "subcategory": "Dietitian",
+    "superCategory": "dental-other",
+    "coverageBadges": [
+      "co-pay-limit",
+      "referral-not-required"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "supportsBooking": true
+  },
+  {
+    "id": "fac-er-001",
+    "name": "Royal Jubilee Hospital — Emergency",
+    "hours": "24/7",
+    "phone": "+1-250-555-0911",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "1952 Bay St",
+      "province": "BC",
+      "postalCode": "V8R 1J8"
+    },
+    "category": "emergency-department",
+    "position": [
+      48.4339,
+      -123.3285
+    ],
+    "province": "BC",
+    "whyOnMap": "Hospital emergency — life-threatening only",
+    "is24Hours": true,
+    "isOpenNow": true,
+    "subcategory": "Emergency Department",
+    "superCategory": "urgent-walk-in",
+    "coverageBadges": [
+      "provincially-insured",
+      "24-hours",
+      "wait-time-estimate",
+      "referral-not-required"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "waitTimeSource": "Mock — ER wait feed",
+    "supportsBooking": false,
+    "waitTimeMinutes": 78,
+    "waitTimeUpdatedAt": "2026-05-28T11:42:00.000Z"
+  },
+  {
+    "id": "fac-gp-001",
+    "name": "Fairfield Family Medical Clinic",
+    "hours": {
+      "friday": "9:00 AM – 5:00 PM",
+      "monday": "9:00 AM – 5:00 PM",
+      "sunday": "Closed",
+      "tuesday": "9:00 AM – 5:00 PM",
+      "saturday": "Closed",
+      "thursday": "9:00 AM – 7:00 PM",
+      "wednesday": "9:00 AM – 5:00 PM"
+    },
+    "phone": "+1-250-555-0301",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "1321 Fairfield Rd",
+      "province": "BC",
+      "postalCode": "V8S 1H3"
+    },
+    "category": "family-practice",
+    "position": [
+      48.4228,
+      -123.3512
+    ],
+    "province": "BC",
+    "whyOnMap": "Family doctor accepting new patients",
+    "isOpenNow": true,
+    "languages": [
+      "English",
+      "French"
+    ],
+    "providerId": "d4e5f6a7-b8c9-0123-def0-234567890123",
+    "subcategory": "Family Practice",
+    "superCategory": "primary-care",
+    "coverageBadges": [
+      "provincially-insured",
+      "accepting-new-patients",
+      "open-now",
+      "referral-not-required"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "providerGenders": [
+      "female"
+    ],
+    "supportsBooking": true,
+    "serviceOfferings": [
+      "general-family-physician"
+    ],
+    "acceptingNewPatients": true
+  },
+  {
+    "id": "fac-gp-002",
+    "name": "Gordon Head Medical Group",
+    "hours": {
+      "friday": "8:30 AM – 4:30 PM",
+      "monday": "8:30 AM – 4:30 PM",
+      "sunday": "Closed",
+      "tuesday": "8:30 AM – 4:30 PM",
+      "saturday": "Closed",
+      "thursday": "8:30 AM – 4:30 PM",
+      "wednesday": "8:30 AM – 4:30 PM"
+    },
+    "phone": "+1-250-555-0302",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Saanich",
+      "street": "4100 Gordon Head Rd",
+      "province": "BC",
+      "postalCode": "V8N 3X5"
+    },
+    "category": "family-practice",
+    "position": [
+      48.4612,
+      -123.3056
+    ],
+    "province": "BC",
+    "whyOnMap": "Family doctor accepting new patients",
+    "isOpenNow": true,
+    "languages": [
+      "English"
+    ],
+    "providerId": "d4e5f6a7-b8c9-0123-def0-234567890123",
+    "subcategory": "Family Practice",
+    "superCategory": "primary-care",
+    "coverageBadges": [
+      "provincially-insured",
+      "accepting-new-patients",
+      "open-now"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "providerGenders": [
+      "male",
+      "female"
+    ],
+    "supportsBooking": true,
+    "serviceOfferings": [
+      "general-family-physician"
+    ],
+    "acceptingNewPatients": true
+  },
+  {
+    "id": "fac-gp-003",
+    "name": "Esquimalt Family Health Centre",
+    "hours": {
+      "friday": "9:00 AM – 5:00 PM",
+      "monday": "9:00 AM – 5:00 PM",
+      "sunday": "Closed",
+      "tuesday": "9:00 AM – 5:00 PM",
+      "saturday": "Closed",
+      "thursday": "9:00 AM – 5:00 PM",
+      "wednesday": "9:00 AM – 5:00 PM"
+    },
+    "phone": "+1-250-555-0304",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Esquimalt",
+      "street": "890 Esquimalt Rd",
+      "province": "BC",
+      "postalCode": "V9A 3N4"
+    },
+    "category": "family-practice",
+    "position": [
+      48.4298,
+      -123.3898
+    ],
+    "province": "BC",
+    "whyOnMap": "Family doctor accepting new patients",
+    "isOpenNow": false,
+    "languages": [
+      "English",
+      "Arabic"
+    ],
+    "providerId": "d4e5f6a7-b8c9-0123-def0-234567890123",
+    "subcategory": "Family Practice",
+    "superCategory": "primary-care",
+    "coverageBadges": [
+      "provincially-insured",
+      "accepting-new-patients"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "providerGenders": [
+      "male"
+    ],
+    "supportsBooking": true,
+    "serviceOfferings": [
+      "general-family-physician"
+    ],
+    "acceptingNewPatients": true
+  },
+  {
+    "id": "fac-np-001",
+    "name": "Victoria NP Primary Care Centre",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0303",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "1020 Pandora Ave",
+      "province": "BC",
+      "postalCode": "V8V 3P6"
+    },
+    "category": "nurse-practitioner-clinic",
+    "position": [
+      48.4312,
+      -123.3589
+    ],
+    "province": "BC",
+    "whyOnMap": "NP-led clinic — walk-in and roster",
+    "isOpenNow": true,
+    "languages": [
+      "English",
+      "Farsi"
+    ],
+    "providerId": "d4e5f6a7-b8c9-0123-def0-234567890123",
+    "subcategory": "Nurse Practitioner Clinic",
+    "superCategory": "primary-care",
+    "coverageBadges": [
+      "provincially-insured",
+      "accepting-new-patients",
+      "open-now",
+      "referral-not-required"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "providerGenders": [
+      "female"
+    ],
+    "supportsBooking": true,
+    "serviceOfferings": [
+      "general-family-physician"
+    ],
+    "acceptingNewPatients": true
+  },
+  {
+    "id": "fac-pharm-001",
+    "name": "Shoppers Drug Mart — Hillside",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0201",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "1644 Hillside Ave",
+      "province": "BC",
+      "postalCode": "V8T 2C5"
+    },
+    "category": "pharmacy",
+    "position": [
+      48.4382,
+      -123.3187
+    ],
+    "province": "BC",
+    "services": [
+      "Flu shots",
+      "Minor ailment prescribing",
+      "Prescription pickup"
+    ],
+    "whyOnMap": "Pharmacy — prescriptions and minor ailments",
+    "isOpenNow": true,
+    "languages": [
+      "English",
+      "French"
+    ],
+    "subcategory": "Pharmacy",
+    "superCategory": "pharmacy",
+    "coverageBadges": [
+      "open-now",
+      "referral-not-required",
+      "private-insurance"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "supportsBooking": false,
+    "minorAilmentsPrescribing": true
+  },
+  {
+    "id": "fac-pharm-002",
+    "name": "London Drugs — Uptown",
+    "hours": "24/7",
+    "phone": "+1-250-555-0202",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call"
+    ],
+    "address": {
+      "city": "Saanich",
+      "street": "3440 Saanich Rd",
+      "province": "BC",
+      "postalCode": "V8Z 0E9"
+    },
+    "category": "pharmacy",
+    "position": [
+      48.4543,
+      -123.3789
+    ],
+    "province": "BC",
+    "services": [
+      "24-hour pharmacy",
+      "Flu shots"
+    ],
+    "whyOnMap": "Pharmacy — 24-hour service",
+    "is24Hours": true,
+    "isOpenNow": true,
+    "languages": [
+      "English",
+      "Arabic"
+    ],
+    "subcategory": "Pharmacy",
+    "superCategory": "pharmacy",
+    "coverageBadges": [
+      "24-hours",
+      "open-now",
+      "referral-not-required"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "supportsBooking": false,
+    "minorAilmentsPrescribing": true
+  },
+  {
+    "id": "fac-pharm-003",
+    "name": "Save-On-Foods Pharmacy — Fairfield",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0203",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "1516 Fairfield Rd",
+      "province": "BC",
+      "postalCode": "V8S 1G1"
+    },
+    "category": "pharmacy",
+    "position": [
+      48.4215,
+      -123.3489
+    ],
+    "province": "BC",
+    "whyOnMap": "Pharmacy — prescriptions and OTC",
+    "isOpenNow": true,
+    "subcategory": "Pharmacy",
+    "superCategory": "pharmacy",
+    "coverageBadges": [
+      "open-now",
+      "referral-not-required"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "supportsBooking": false,
+    "minorAilmentsPrescribing": true
+  },
+  {
+    "id": "fac-pharm-004",
+    "name": "Pharmasave — Oak Bay",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0204",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call"
+    ],
+    "address": {
+      "city": "Oak Bay",
+      "street": "2200 Oak Bay Ave",
+      "province": "BC",
+      "postalCode": "V8R 1G7"
+    },
+    "category": "pharmacy",
+    "position": [
+      48.4267,
+      -123.3156
+    ],
+    "province": "BC",
+    "whyOnMap": "Pharmacy — minor ailment prescribing (BC)",
+    "isOpenNow": false,
+    "subcategory": "Pharmacy",
+    "superCategory": "pharmacy",
+    "coverageBadges": [
+      "referral-not-required"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "supportsBooking": false,
+    "minorAilmentsPrescribing": true
+  },
+  {
+    "id": "fac-physio-001",
+    "name": "Victoria Sports & Rehab Physio",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0401",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "1550 Cedar Hill Cross Rd",
+      "province": "BC",
+      "postalCode": "V8P 2P2"
+    },
+    "category": "physiotherapy",
+    "position": [
+      48.4456,
+      -123.3245
+    ],
+    "province": "BC",
+    "whyOnMap": "Physiotherapy — direct access, no referral",
+    "isOpenNow": true,
+    "languages": [
+      "English"
+    ],
+    "providerId": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+    "subcategory": "Physiotherapy",
+    "superCategory": "therapy-rehab",
+    "coverageBadges": [
+      "co-pay-limit",
+      "referral-not-required",
+      "open-now",
+      "private-insurance"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "providerGenders": [
+      "male"
+    ],
+    "supportsBooking": true,
+    "acceptingNewPatients": true
+  },
+  {
+    "id": "fac-physio-002",
+    "name": "Peninsula Physiotherapy Clinic",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0404",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Sidney",
+      "street": "2400 Beacon Ave",
+      "province": "BC",
+      "postalCode": "V8L 1X5"
+    },
+    "category": "physiotherapy",
+    "position": [
+      48.6512,
+      -123.3989
+    ],
+    "province": "BC",
+    "whyOnMap": "Physiotherapy — MSP partial coverage may apply",
+    "isOpenNow": false,
+    "providerId": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+    "subcategory": "Physiotherapy",
+    "superCategory": "therapy-rehab",
+    "coverageBadges": [
+      "co-pay-limit",
+      "referral-not-required"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "supportsBooking": true
+  },
+  {
+    "id": "fac-pod-001",
+    "name": "Island Foot & Ankle Clinic",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0603",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "1700 Cook St",
+      "province": "BC",
+      "postalCode": "V8T 3S9"
+    },
+    "category": "podiatry",
+    "position": [
+      48.4345,
+      -123.3498
+    ],
+    "province": "BC",
+    "whyOnMap": "Podiatry — BC coverage varies",
+    "isOpenNow": true,
+    "providerId": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+    "subcategory": "Podiatry",
+    "superCategory": "dental-other",
+    "coverageBadges": [
+      "province-specific",
+      "referral-not-required",
+      "open-now"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "supportsBooking": true
+  },
+  {
+    "id": "fac-psych-001",
+    "name": "Coastal Psychology Associates",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0501",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "920 Yates St",
+      "province": "BC",
+      "postalCode": "V8V 3M4"
+    },
+    "category": "psychology",
+    "position": [
+      48.4278,
+      -123.3678
+    ],
+    "province": "BC",
+    "whyOnMap": "Psychology — direct booking, coverage varies",
+    "isOpenNow": true,
+    "languages": [
+      "English",
+      "German"
+    ],
+    "providerId": "f6a7b8c9-d0e1-2345-f012-456789012345",
+    "subcategory": "Psychology",
+    "superCategory": "mental-health",
+    "coverageBadges": [
+      "province-specific",
+      "referral-not-required",
+      "open-now",
+      "private-insurance"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "providerGenders": [
+      "female"
+    ],
+    "supportsBooking": true,
+    "acceptingNewPatients": true
+  },
+  {
+    "id": "fac-rmt-001",
+    "name": "RMT Wellness Studio — Fernwood",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0403",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "1300 Gladstone Ave",
+      "province": "BC",
+      "postalCode": "V8T 1G5"
+    },
+    "category": "massage-therapy",
+    "position": [
+      48.4378,
+      -123.3423
+    ],
+    "province": "BC",
+    "whyOnMap": "RMT — direct pay, no referral",
+    "isOpenNow": true,
+    "providerId": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+    "subcategory": "Registered Massage Therapy",
+    "superCategory": "therapy-rehab",
+    "coverageBadges": [
+      "direct-pay",
+      "referral-not-required",
+      "open-now"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "supportsBooking": true
+  },
+  {
+    "id": "fac-urgent-001",
+    "name": "Island Urgent Care — Langford",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0103",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call"
+    ],
+    "address": {
+      "city": "Langford",
+      "street": "940 Goldstream Ave",
+      "province": "BC",
+      "postalCode": "V9B 2X3"
+    },
+    "category": "urgent-care",
+    "position": [
+      48.4475,
+      -123.5058
+    ],
+    "province": "BC",
+    "services": [
+      "X-ray",
+      "Suturing",
+      "Minor fractures"
+    ],
+    "whyOnMap": "Urgent care for non-emergency injuries",
+    "isOpenNow": true,
+    "languages": [
+      "English"
+    ],
+    "subcategory": "Urgent Care Centre",
+    "superCategory": "urgent-walk-in",
+    "coverageBadges": [
+      "provincially-insured",
+      "open-now",
+      "wait-time-estimate",
+      "referral-not-required"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "waitTimeSource": "Mock — HealthLink BC style",
+    "supportsBooking": false,
+    "waitTimeMinutes": 35,
+    "waitTimeUpdatedAt": "2026-05-28T11:42:00.000Z"
+  },
+  {
+    "id": "fac-walkin-001",
+    "name": "James Bay Urgent & Family Clinic",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0101",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "1234 Government St",
+      "province": "BC",
+      "postalCode": "V8W 1X5"
+    },
+    "category": "walk-in-clinic",
+    "position": [
+      48.4168,
+      -123.3698
+    ],
+    "province": "BC",
+    "whyOnMap": "Walk-in care — no referral needed",
+    "isOpenNow": true,
+    "languages": [
+      "English"
+    ],
+    "subcategory": "Walk-in Clinic",
+    "superCategory": "urgent-walk-in",
+    "coverageBadges": [
+      "provincially-insured",
+      "open-now",
+      "referral-not-required"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "supportsBooking": false
+  },
+  {
+    "id": "fac-walkin-002",
+    "name": "Saanich Peninsula Walk-in",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0102",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Saanich",
+      "street": "780 McKenzie Ave",
+      "province": "BC",
+      "postalCode": "V8P 2S4"
+    },
+    "category": "walk-in-clinic",
+    "position": [
+      48.4521,
+      -123.3312
+    ],
+    "province": "BC",
+    "whyOnMap": "Walk-in care — no referral needed",
+    "isOpenNow": true,
+    "languages": [
+      "English",
+      "Farsi"
+    ],
+    "providerId": "d4e5f6a7-b8c9-0123-def0-234567890123",
+    "subcategory": "Walk-in Clinic",
+    "superCategory": "urgent-walk-in",
+    "coverageBadges": [
+      "provincially-insured",
+      "open-now",
+      "referral-not-required"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "providerGenders": [
+      "male"
+    ],
+    "supportsBooking": true
+  },
+  {
+    "id": "fac-walkin-003",
+    "name": "Downtown Victoria Medical Walk-in",
+    "hours": {
+      "friday": "8:00 AM – 8:00 PM",
+      "monday": "8:00 AM – 8:00 PM",
+      "sunday": "9:00 AM – 5:00 PM",
+      "tuesday": "8:00 AM – 8:00 PM",
+      "saturday": "9:00 AM – 5:00 PM",
+      "thursday": "8:00 AM – 8:00 PM",
+      "wednesday": "8:00 AM – 8:00 PM"
+    },
+    "phone": "+1-250-555-0104",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "850 Douglas St",
+      "province": "BC",
+      "postalCode": "V8W 2B5"
+    },
+    "category": "walk-in-clinic",
+    "position": [
+      48.4289,
+      -123.3654
+    ],
+    "province": "BC",
+    "whyOnMap": "Walk-in care — no referral needed",
+    "isOpenNow": false,
+    "subcategory": "Walk-in Clinic",
+    "superCategory": "urgent-walk-in",
+    "coverageBadges": [
+      "provincially-insured",
+      "referral-not-required"
+    ],
+    "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
+    "supportsBooking": false
+  }
+]
