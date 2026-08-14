@@ -11,15 +11,52 @@ model Patient {
   clinicIdentities PatientClinicIdentity[]
 }
 
+// Doctor directory: platform-owned read model, periodically synced from each
+// clinic's live EMR (DoctorRepository.findAll(), OSCAR or FHIR) — never
+// queried live for browsing. Availability/booking stays fully live via the
+// existing AppointmentRepository; this table is for Find Physician /
+// Physician Info / rating display only. A doctor works at exactly one
+// clinic (confirmed), so this platform id <-> (clinicId, externalProviderId)
+// mapping is always 1:1. See
+// docs/oscar/new-approach/docs-oscar-new-approach.md §5.
 model Doctor {
-  id        String   @id @default(uuid())
-  firstName String
-  lastName  String
-  specialty String
-  email     String   @unique
-  phone     String
+  id                 String @id @default(uuid())
+  clinicId           String
+  externalProviderId String
+
+  firstName  String
+  lastName   String
+  specialty  String
+  email      String
+  phone      String
+  // Denormalized from Facility at sync time — left unset until ClinicCredential
+  // rows are linked to a specific Facility (not the case yet, see design doc).
+  clinicName String?
+
+  syncedAt  DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  reviews Review[]
+
+  @@unique([clinicId, externalProviderId])
+}
+
+// Individual rating/review. `source` distinguishes multiple review origins
+// (patient-submitted, clinic-provided, AI-assisted, ...) sharing one table
+// from day one, per design doc §5 — business rules (who can submit, how to
+// aggregate across sources, abuse handling) are intentionally deferred.
+// Average rating / count are computed on read, not stored redundantly.
+model Review {
+  id         String   @id @default(uuid())
+  doctorId   String
+  source     String
+  rating     Int
+  comment    String?
+  authorName String?
+  createdAt  DateTime @default(now())
+
+  doctor Doctor @relation(fields: [doctorId], references: [id])
 }
 
 model Appointment {

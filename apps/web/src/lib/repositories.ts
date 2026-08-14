@@ -10,6 +10,7 @@ import {
   type MedicalRepositories,
 } from '@medical-platform/domain';
 import {
+  PrismaDoctorExternalIdResolver,
   PrismaPatientClinicIdentityStore,
   PrismaPatientRepository,
 } from '@medical-platform/domain/adapters/platform';
@@ -37,12 +38,14 @@ class LazyOscarDoctorRepository implements DoctorRepository {
 
 class LazyOscarAppointmentRepository implements AppointmentRepository {
   private readonly identities = new PrismaPatientClinicIdentityStore();
+  private readonly doctors = new PrismaDoctorExternalIdResolver();
 
   private async repo(): Promise<OscarAppointmentRepository> {
     return new OscarAppointmentRepository(
       await getOscarClient(),
       OSCAR_CLINIC_ID,
-      this.identities
+      this.identities,
+      this.doctors
     );
   }
 

@@ -1,5 +1,7 @@
 import { jsonResponse, notFoundResponse } from '@/lib/api-response';
-import { doctorService } from '@/lib/server-services';
+import { PrismaDoctorDirectoryRepository } from '@/lib/doctors/repository';
+
+const doctorDirectory = new PrismaDoctorDirectoryRepository();
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -7,7 +9,7 @@ interface RouteParams {
 
 export async function GET(_request: Request, { params }: RouteParams) {
   const { id } = await params;
-  const doctor = await doctorService.getById(id);
+  const doctor = await doctorDirectory.findById(id);
 
   if (!doctor) {
     return notFoundResponse('Doctor');

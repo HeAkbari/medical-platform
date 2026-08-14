@@ -3,6 +3,7 @@ export * from './validation/schemas';
 export * from './ports/repositories';
 export * from './ports/patient-matching';
 export * from './ports/patient-clinic-identity';
+export * from './ports/doctor-external-id';
 export * from './utils/helpers';
 export * from './services/patient.service';
 export * from './services/doctor.service';

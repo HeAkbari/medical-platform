@@ -19,6 +19,12 @@ export interface Doctor {
   // FHIR-derived enrichment (optional; populated from the practitioner's
   // PractitionerRole -> Location, or the mock dataset).
   clinicName?: string;
+  // Platform-owned rating (optional; populated by the Doctor directory read
+  // model — see docs/oscar/new-approach/docs-oscar-new-approach.md §5).
+  // Undefined until the directory is synced/has reviews, not 0 — 0 would
+  // read as "rated zero stars" rather than "not yet rated".
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 export type AppointmentStatus = 'scheduled' | 'completed' | 'cancelled';

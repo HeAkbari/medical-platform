@@ -1,3 +1,4 @@
+import type { DoctorExternalIdResolver } from '../../ports/doctor-external-id';
 import type { PatientClinicIdentityStore } from '../../ports/patient-clinic-identity';
 import type { AppointmentRepository, DoctorRepository } from '../../ports/repositories';
 import type { Appointment, AppointmentStatus, Doctor } from '../../types/models';
@@ -67,8 +68,20 @@ export class OscarAppointmentRepository implements AppointmentRepository {
   constructor(
     private readonly client: OscarClient,
     private readonly clinicId: string,
-    private readonly identities: PatientClinicIdentityStore
+    private readonly identities: PatientClinicIdentityStore,
+    private readonly doctors: DoctorExternalIdResolver
   ) {}
+
+  /**
+   * `doctorId` arriving here is always the platform Doctor.id (from
+   * /api/v1/doctors) — resolve it to the clinic's real providerNo before
+   * calling OSCAR. Returns null if this doctor isn't in our directory yet
+   * (e.g. sync hasn't run) rather than guessing.
+   */
+  private async resolveProviderNo(doctorId: string): Promise<string | null> {
+    const resolved = await this.doctors.resolve(doctorId);
+    return resolved ? resolved.externalProviderId : null;
+  }
 
   async findAll(filters?: {
     patientId?: string;
@@ -92,22 +105,29 @@ export class OscarAppointmentRepository implements AppointmentRepository {
       );
     }
 
-    if (filters?.doctorId && filters.date) {
-      const items = (await this.client.get(
-        `/schedule/${encodeURIComponent(filters.doctorId)}/day/${encodeURIComponent(filters.date)}`
-      )) as OscarDayApptItem[];
-
-      return items.map((item) => oscarDayApptToDomain(item, filters.date as string));
-    }
-
     if (filters?.doctorId) {
+      const providerNo = await this.resolveProviderNo(filters.doctorId);
+
+      if (!providerNo) {
+        // Not in our synced directory yet -> no known schedule, not an error.
+        return [];
+      }
+
+      if (filters.date) {
+        const items = (await this.client.get(
+          `/schedule/${encodeURIComponent(providerNo)}/day/${encodeURIComponent(filters.date)}`
+        )) as OscarDayApptItem[];
+
+        return items.map((item) => oscarDayApptToDomain(item, filters.date as string));
+      }
+
       const today = new Date().toISOString().slice(0, 10);
       const in90Days = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
         .toISOString()
         .slice(0, 10);
 
       const response = (await this.client.get(
-        `/schedule/fetchProviderAppts/${encodeURIComponent(filters.doctorId)}/${today}/${in90Days}`
+        `/schedule/fetchProviderAppts/${encodeURIComponent(providerNo)}/${today}/${in90Days}`
       )) as OscarPaginated<OscarProviderPeriodAppsTo>;
 
       return response.content.map(oscarProviderApptToDomain);
@@ -131,12 +151,18 @@ export class OscarAppointmentRepository implements AppointmentRepository {
       throw new Error('Patient is not linked to this clinic — call linkToClinic first.');
     }
 
+    const providerNo = await this.resolveProviderNo(input.doctorId);
+
+    if (!providerNo) {
+      throw new Error(`Doctor ${input.doctorId} not found in this clinic's directory.`);
+    }
+
     const { date, time } = splitIsoDateTime(input.scheduledAt);
 
     // Body shape provided by the clinic owner from a working Postman request;
     // not yet exercised live from this codebase.
     const created = (await this.client.post('/schedule/add', {
-      providerNo: input.doctorId,
+      providerNo,
       appointmentDate: date,
       startTime: time,
       demographicNo: Number(identity.externalPatientId),
