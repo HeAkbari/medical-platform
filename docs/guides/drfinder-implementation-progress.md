@@ -13,8 +13,9 @@ This document tracks phased implementation against DrFinder PRD v0.6. All phases
 | Field | Value |
 | :--- | :--- |
 | **Current phase** | Phase 8 — **complete** · All phases done ✅ |
-| **Start next session at** | API integration & real-data wiring (bookings, profiles, healthcare numbers) |
-| **Build status** | `nx run web:build` passing (2026-07-09) |
+| **Start next session at** | OSCAR migration — step 5 (multi-clinic fan-out) or live sandbox verification of the 🟡 items in [`OSCAR_ENDPOINTS_IN_USE.md`](../oscar/OSCAR_ENDPOINTS_IN_USE.md) |
+| **Build status** | `nx run web:build` passing (2026-08-14) |
+| **Data layer** | `DATA_SOURCE` now supports `mock` \| `fhir` \| `oscar` (real OSCAR EMR 19 REST API, sponsor clinic) — see [`docs/oscar/new-approach/docs-oscar-new-approach.md`](../oscar/new-approach/docs-oscar-new-approach.md) for the migration design and [`OSCAR_ENDPOINTS_IN_USE.md`](../oscar/OSCAR_ENDPOINTS_IN_USE.md) for exactly which endpoints back each page today |
 
 ---
 
@@ -269,6 +270,35 @@ Baseline reflects v0.3 code that exists but has not yet been audited against v0.
 ## Work log
 
 Append-only session history. Newest entries at the top.
+
+### 2026-08-14 — OSCAR EMR 19 clinical data layer migration (steps 1–4, 6–11)
+
+**Phase:** N/A (backend data layer, orthogonal to the P0–P10 UI phases above)
+
+**Summary:** Migrated the clinical data layer from the temporary HAPI FHIR
+sandbox to the real OSCAR EMR 19 REST API of the sponsor clinic, following
+`docs/oscar/new-approach/docs-oscar-new-approach.md`. Ports/adapters pattern
+preserved — `DATA_SOURCE=oscar` is a third sibling to `mock`/`fhir`, not a
+replacement; the frontend contract (decision #7 in the design doc) was not
+broken anywhere.
+
+**Delivered:**
+- Real Postgres wiring for the app for the first time (`packages/db`, Prisma 7 + `PrismaPg` driver adapter), `ClinicCredential` table with AES-256-GCM-encrypted OAuth1 secrets (never env vars).
+- `OscarClient`: OAuth 1.0a (HMAC-SHA1, `oauth-1.0a` lib) signed requests over `node:https` (not `fetch` — see code comments on why), against the sponsor clinic's live sandbox.
+- Patient identity fully decoupled from any EMR: `Patient.id` is a platform UUID; `PatientClinicIdentityStore` + `LinkPatientToClinicUseCase` link it to a clinic's `demographicNo` lazily, via HIN+DOB matching (`POST /demographics/matchDemographic`) — never at registration.
+- `Doctor` directory + `Facility` table both fully platform-owned (Postgres, periodic sync / manual seed), read paths never call an EMR live; only appointment availability stays live per-clinic.
+- All 8 `MedicalRepositories` ports (patients, doctors, appointments, prescriptions, immunizations, healthConditions, testResults, documents) implemented for OSCAR, mirrored on the FHIR and mock adapters so all three `DATA_SOURCE` values keep typechecking and building.
+- Full endpoint-by-endpoint status (verified-live vs. implemented-but-untested vs. confirmed-unavailable) tracked in `docs/oscar/OSCAR_ENDPOINTS_IN_USE.md`; open gaps/decisions tracked in `docs/oscar/new-approach/deferred-items.md`.
+
+**Deliberately deferred:** step 5 (multi-clinic fan-out — no second clinic exists yet to justify it); a handful of OSCAR endpoints whose *populated* item shape was never seen live (disease registry, hl7Labs) are implemented defensively with all-optional fields, pending a real sample from the clinic.
+
+**Key files touched:** `packages/db/*`, `packages/domain/src/adapters/{oscar,platform}/*`, `packages/domain/src/ports/*`, `apps/web/src/lib/{repositories,oscar,doctors,facilities}/*`, `apps/web/src/app/api/v1/**`, `apps/web/scripts/{seed-facilities,sync-doctors}.ts`.
+
+**Verified:** `nx run web:build` — success (Windows Nx cache step throws a known-cosmetic `os error 1314` after a successful build; doesn't affect the Docker/Linux deploy path).
+
+**Next:** either step 5 (fan-out) once a second clinic exists, or resolving the 🟡/❌ rows in `OSCAR_ENDPOINTS_IN_USE.md` as real sandbox samples become available via Postman.
+
+---
 
 ### 2026-07-09 — Phase 1 complete
 
