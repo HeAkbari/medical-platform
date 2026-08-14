@@ -1,4 +1,5 @@
 export * from './types/models';
+export * from './types/health-records';
 export * from './validation/schemas';
 export * from './ports/repositories';
 export * from './ports/patient-matching';

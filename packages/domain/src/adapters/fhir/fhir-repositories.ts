@@ -12,15 +12,55 @@ import type {
 import type {
   AppointmentRepository,
   DoctorRepository,
+  DocumentRepository,
+  HealthConditionRepository,
+  ImmunizationRepository,
   MedicalRepositories,
   PatientRepository,
+  PrescriptionRepository,
+  TestResultRepository,
 } from '../../ports/repositories';
+import type {
+  DocumentDetail,
+  DocumentRecord,
+  HealthRecordDetail,
+  HealthRecordEntry,
+  HealthRecordKind,
+  LabResult,
+  LabResultDetail,
+  Prescription,
+  PrescriptionDetail,
+  Vaccination,
+  VaccinationDetail,
+} from '../../types/health-records';
 import { normalizePhone } from '../../utils/helpers';
+import {
+  fhirAllergyToDetail,
+  fhirAllergyToEntry,
+  fhirConditionToDetail,
+  fhirConditionToEntry,
+  fhirDocumentToDetail,
+  fhirDocumentToRecord,
+  fhirImmunizationToDetail,
+  fhirImmunizationToVaccination,
+  fhirMedicationRequestToPrescription,
+  fhirMedicationRequestToPrescriptionDetail,
+  fhirObservationToLabResult,
+  fhirObservationToLabResultDetail,
+} from './clinical-mappers';
 import { FhirClient, type FhirClientConfig } from './fhir-client';
 import type {
   FhirAddress,
+  FhirAllergyIntolerance,
   FhirAppointment,
+  FhirCondition,
+  FhirDiagnosticReport,
+  FhirDocumentReference,
+  FhirImmunization,
   FhirLocation,
+  FhirMedicationDispense,
+  FhirMedicationRequest,
+  FhirObservation,
   FhirPatient,
   FhirPractitioner,
   FhirPractitionerRole,
@@ -248,6 +288,136 @@ class FhirAppointmentRepository implements AppointmentRepository {
   }
 }
 
+class FhirPrescriptionRepository implements PrescriptionRepository {
+  constructor(private readonly client: FhirClient) {}
+
+  async findAll(patientId?: string): Promise<Prescription[]> {
+    const resources = await this.client.search<FhirMedicationRequest>('MedicationRequest', {
+      patient: patientId ? `Patient/${patientId}` : undefined,
+    });
+
+    return resources
+      .map(fhirMedicationRequestToPrescription)
+      .sort((a, b) => (b.authoredOn ?? '').localeCompare(a.authoredOn ?? ''));
+  }
+
+  async findById(id: string): Promise<PrescriptionDetail | null> {
+    const request = await this.client.read<FhirMedicationRequest>('MedicationRequest', id);
+
+    if (!request) {
+      return null;
+    }
+
+    const prescriberId = referenceId(request.requester?.reference);
+
+    const [dispenses, prescriber] = await Promise.all([
+      this.client.search<FhirMedicationDispense>('MedicationDispense', {
+        prescription: `MedicationRequest/${id}`,
+      }),
+      request.requester?.display || !prescriberId
+        ? Promise.resolve(null)
+        : this.client.read<FhirPractitioner>('Practitioner', prescriberId),
+    ]);
+
+    return fhirMedicationRequestToPrescriptionDetail(request, dispenses, prescriber);
+  }
+}
+
+class FhirImmunizationRepository implements ImmunizationRepository {
+  constructor(private readonly client: FhirClient) {}
+
+  async findAll(patientId?: string): Promise<Vaccination[]> {
+    const resources = await this.client.search<FhirImmunization>('Immunization', {
+      patient: patientId ? `Patient/${patientId}` : undefined,
+    });
+
+    return resources
+      .map(fhirImmunizationToVaccination)
+      .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
+  }
+
+  async findById(id: string): Promise<VaccinationDetail | null> {
+    const resource = await this.client.read<FhirImmunization>('Immunization', id);
+    return resource ? fhirImmunizationToDetail(resource) : null;
+  }
+}
+
+class FhirHealthConditionRepository implements HealthConditionRepository {
+  constructor(private readonly client: FhirClient) {}
+
+  async findAll(patientId?: string): Promise<HealthRecordEntry[]> {
+    const patientFilter = patientId ? `Patient/${patientId}` : undefined;
+
+    const [conditions, allergies] = await Promise.all([
+      this.client.search<FhirCondition>('Condition', { patient: patientFilter }),
+      this.client.search<FhirAllergyIntolerance>('AllergyIntolerance', {
+        patient: patientFilter,
+      }),
+    ]);
+
+    return [...conditions.map(fhirConditionToEntry), ...allergies.map(fhirAllergyToEntry)].sort(
+      (a, b) => (b.recordedDate ?? '').localeCompare(a.recordedDate ?? '')
+    );
+  }
+
+  async findById(id: string, kind: HealthRecordKind): Promise<HealthRecordDetail | null> {
+    if (kind === 'allergy') {
+      const resource = await this.client.read<FhirAllergyIntolerance>('AllergyIntolerance', id);
+      return resource ? fhirAllergyToDetail(resource) : null;
+    }
+
+    const resource = await this.client.read<FhirCondition>('Condition', id);
+    return resource ? fhirConditionToDetail(resource) : null;
+  }
+}
+
+class FhirTestResultRepository implements TestResultRepository {
+  constructor(private readonly client: FhirClient) {}
+
+  async findAll(patientId?: string): Promise<LabResult[]> {
+    const resources = await this.client.search<FhirObservation>('Observation', {
+      patient: patientId ? `Patient/${patientId}` : undefined,
+    });
+
+    return resources
+      .map(fhirObservationToLabResult)
+      .sort((a, b) => (b.effectiveDate ?? '').localeCompare(a.effectiveDate ?? ''));
+  }
+
+  async findById(id: string): Promise<LabResultDetail | null> {
+    const observation = await this.client.read<FhirObservation>('Observation', id);
+
+    if (!observation) {
+      return null;
+    }
+
+    const reports = await this.client.search<FhirDiagnosticReport>('DiagnosticReport', {
+      result: `Observation/${id}`,
+    });
+
+    return fhirObservationToLabResultDetail(observation, reports[0]);
+  }
+}
+
+class FhirDocumentRepository implements DocumentRepository {
+  constructor(private readonly client: FhirClient) {}
+
+  async findAll(patientId?: string): Promise<DocumentRecord[]> {
+    const resources = await this.client.search<FhirDocumentReference>('DocumentReference', {
+      patient: patientId ? `Patient/${patientId}` : undefined,
+    });
+
+    return resources
+      .map(fhirDocumentToRecord)
+      .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
+  }
+
+  async findById(id: string): Promise<DocumentDetail | null> {
+    const resource = await this.client.read<FhirDocumentReference>('DocumentReference', id);
+    return resource ? fhirDocumentToDetail(resource) : null;
+  }
+}
+
 /**
  * Build repositories backed by a FHIR R4 server (HAPI for local testing, and
  * later the OSCAR sandbox/production endpoint — same interface, swap the URL).
@@ -261,5 +431,10 @@ export function createFhirRepositories(
     patients: new FhirPatientRepository(client),
     doctors: new FhirDoctorRepository(client),
     appointments: new FhirAppointmentRepository(client),
+    prescriptions: new FhirPrescriptionRepository(client),
+    immunizations: new FhirImmunizationRepository(client),
+    healthConditions: new FhirHealthConditionRepository(client),
+    testResults: new FhirTestResultRepository(client),
+    documents: new FhirDocumentRepository(client),
   };
 }

@@ -1,24 +1,55 @@
 import type { DoctorExternalIdResolver } from '../../ports/doctor-external-id';
 import type { PatientClinicIdentityStore } from '../../ports/patient-clinic-identity';
-import type { AppointmentRepository, DoctorRepository } from '../../ports/repositories';
+import type {
+  AppointmentRepository,
+  DocumentRepository,
+  DoctorRepository,
+  HealthConditionRepository,
+  ImmunizationRepository,
+  PrescriptionRepository,
+  TestResultRepository,
+} from '../../ports/repositories';
 import type {
   Appointment,
   AppointmentDetail,
   AppointmentStatus,
   Doctor,
 } from '../../types/models';
+import type {
+  DocumentDetail,
+  DocumentRecord,
+  HealthRecordDetail,
+  HealthRecordEntry,
+  HealthRecordKind,
+  LabResult,
+  LabResultDetail,
+  Prescription,
+  PrescriptionDetail,
+  Vaccination,
+  VaccinationDetail,
+} from '../../types/health-records';
 import type { CreateAppointmentInput } from '../../validation/schemas';
 import { OscarClient } from './oscar-client';
 import {
+  oscarAllergyToEntry,
   oscarAppointmentHistoryToDomain,
   oscarDayApptToDomain,
+  oscarDiseaseRegistryItemToEntry,
+  oscarDrugToPrescription,
+  oscarHl7LabMessageToLabResult,
+  oscarPreventionToVaccination,
   oscarProviderApptToDomain,
   oscarToDoctor,
 } from './oscar-mappers';
 import type {
+  OscarAllergyResponse,
   OscarAppointmentTo1,
   OscarDayApptItem,
+  OscarDiseaseRegistryItem,
+  OscarDrug,
+  OscarHl7LabsResponse,
   OscarPaginated,
+  OscarPreventionResponse,
   OscarProvider,
   OscarProviderPeriodAppsTo,
   OscarSchedulingResponse,
@@ -262,5 +293,204 @@ export class OscarAppointmentRepository implements AppointmentRepository {
       notes: null,
       createdAt: '',
     };
+  }
+}
+
+/**
+ * Every OSCAR clinical-data endpoint used here (allergies, rx, preventions)
+ * is scoped by demographicNo — there's no patient-independent single-record
+ * lookup by id, the same systemic limitation as
+ * OscarAppointmentRepository.findById. `findById` on these three
+ * repositories throws rather than guessing; fixing this for real would mean
+ * threading patientId into the detail API routes, which is a bigger,
+ * separate change than this step.
+ */
+export class OscarPrescriptionRepository implements PrescriptionRepository {
+  constructor(
+    private readonly client: OscarClient,
+    private readonly clinicId: string,
+    private readonly identities: PatientClinicIdentityStore
+  ) {}
+
+  async findAll(patientId?: string): Promise<Prescription[]> {
+    if (!patientId) {
+      throw new Error(
+        'OscarPrescriptionRepository.findAll requires a patientId — OSCAR has no "list everything" endpoint.'
+      );
+    }
+
+    const identity = await this.identities.find(patientId, this.clinicId);
+
+    if (!identity) {
+      return [];
+    }
+
+    const [current, archived] = await Promise.all([
+      this.client.get(
+        `/rx/drugs/current/${encodeURIComponent(identity.externalPatientId)}`
+      ) as Promise<OscarPaginated<OscarDrug>>,
+      this.client.get(
+        `/rx/drugs/archived/${encodeURIComponent(identity.externalPatientId)}`
+      ) as Promise<OscarPaginated<OscarDrug>>,
+    ]);
+
+    return [...current.content, ...archived.content]
+      .map((drug) => oscarDrugToPrescription(drug, patientId))
+      .sort((a, b) => (b.authoredOn ?? '').localeCompare(a.authoredOn ?? ''));
+  }
+
+  async findById(_id: string): Promise<PrescriptionDetail | null> {
+    throw new Error(
+      'OscarPrescriptionRepository.findById is not implemented — OSCAR has no patient-independent single-prescription lookup.'
+    );
+  }
+}
+
+export class OscarImmunizationRepository implements ImmunizationRepository {
+  constructor(
+    private readonly client: OscarClient,
+    private readonly clinicId: string,
+    private readonly identities: PatientClinicIdentityStore
+  ) {}
+
+  async findAll(patientId?: string): Promise<Vaccination[]> {
+    if (!patientId) {
+      throw new Error(
+        'OscarImmunizationRepository.findAll requires a patientId — OSCAR has no "list everything" endpoint.'
+      );
+    }
+
+    const identity = await this.identities.find(patientId, this.clinicId);
+
+    if (!identity) {
+      return [];
+    }
+
+    const response = (await this.client.get(
+      `/preventions/immunizations/${encodeURIComponent(identity.externalPatientId)}`
+    )) as OscarPreventionResponse;
+
+    return (response.preventions ?? [])
+      .map((prevention) => oscarPreventionToVaccination(prevention, patientId))
+      .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
+  }
+
+  async findById(_id: string): Promise<VaccinationDetail | null> {
+    throw new Error(
+      'OscarImmunizationRepository.findById is not implemented — OSCAR has no patient-independent single-immunization lookup.'
+    );
+  }
+}
+
+/**
+ * 'allergy' uses the clean `/allergies/active` mapping; 'condition' uses
+ * `/dxRegisty/getDiseaseRegistry`, confirmed live but with an UNVERIFIED
+ * populated item shape (see design doc §10 / deferred-items.md §6) — kept
+ * defensive on purpose. findById on either kind throws: same systemic
+ * "no patient-independent single-record lookup" limitation as
+ * prescriptions/immunizations, not a silent empty/wrong result.
+ */
+export class OscarHealthConditionRepository implements HealthConditionRepository {
+  constructor(
+    private readonly client: OscarClient,
+    private readonly clinicId: string,
+    private readonly identities: PatientClinicIdentityStore
+  ) {}
+
+  async findAll(patientId?: string): Promise<HealthRecordEntry[]> {
+    if (!patientId) {
+      throw new Error(
+        'OscarHealthConditionRepository.findAll requires a patientId — OSCAR has no "list everything" endpoint.'
+      );
+    }
+
+    const identity = await this.identities.find(patientId, this.clinicId);
+
+    if (!identity) {
+      return [];
+    }
+
+    const [allergyResponse, conditions] = await Promise.all([
+      this.client.get('/allergies/active', {
+        query: { demographicNo: identity.externalPatientId },
+      }) as Promise<OscarAllergyResponse>,
+      this.client.get('/dxRegisty/getDiseaseRegistry', {
+        query: { demographicNo: identity.externalPatientId },
+      }) as Promise<OscarDiseaseRegistryItem[]>,
+    ]);
+
+    const allergyEntries = (allergyResponse.allergies ?? []).map((allergy) =>
+      oscarAllergyToEntry(allergy, patientId)
+    );
+    const conditionEntries = (conditions ?? []).map((item) =>
+      oscarDiseaseRegistryItemToEntry(item, patientId)
+    );
+
+    return [...conditionEntries, ...allergyEntries].sort((a, b) =>
+      (b.recordedDate ?? '').localeCompare(a.recordedDate ?? '')
+    );
+  }
+
+  async findById(_id: string, kind: HealthRecordKind): Promise<HealthRecordDetail | null> {
+    throw new Error(
+      `OscarHealthConditionRepository.findById is not implemented for ${kind} — OSCAR has no patient-independent single-record lookup.`
+    );
+  }
+}
+
+export class OscarTestResultRepository implements TestResultRepository {
+  constructor(
+    private readonly client: OscarClient,
+    private readonly clinicId: string,
+    private readonly identities: PatientClinicIdentityStore
+  ) {}
+
+  async findAll(patientId?: string): Promise<LabResult[]> {
+    if (!patientId) {
+      throw new Error(
+        'OscarTestResultRepository.findAll requires a patientId — OSCAR has no "list everything" endpoint.'
+      );
+    }
+
+    const identity = await this.identities.find(patientId, this.clinicId);
+
+    if (!identity) {
+      return [];
+    }
+
+    const response = (await this.client.get('/labs/hl7LabsByDemographicNo', {
+      query: { demographicNo: identity.externalPatientId, offset: '0', limit: '100' },
+    })) as OscarHl7LabsResponse;
+
+    return (response.messages ?? [])
+      .map((message) => oscarHl7LabMessageToLabResult(message, patientId))
+      .sort((a, b) => (b.effectiveDate ?? '').localeCompare(a.effectiveDate ?? ''));
+  }
+
+  async findById(_id: string): Promise<LabResultDetail | null> {
+    throw new Error(
+      'OscarTestResultRepository.findById is not implemented — OSCAR has no patient-independent single-result lookup.'
+    );
+  }
+}
+
+/**
+ * No verified clean OSCAR REST resource exists for listing documents (the
+ * `/demographics/basic/{id}?includes[]=documents` lead proved unreliable —
+ * see design doc §10 / deferred-items.md §5) — both methods throw an
+ * explicit error rather than a silent empty list indistinguishable from
+ * "this patient has no documents".
+ */
+export class OscarDocumentRepository implements DocumentRepository {
+  async findAll(_patientId?: string): Promise<DocumentRecord[]> {
+    throw new Error(
+      'Documents are not available for OSCAR-linked clinics — no verified clean REST resource (see design doc §10).'
+    );
+  }
+
+  async findById(_id: string): Promise<DocumentDetail | null> {
+    throw new Error(
+      'Documents are not available for OSCAR-linked clinics — no verified clean REST resource (see design doc §10).'
+    );
   }
 }

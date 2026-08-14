@@ -6,6 +6,19 @@ import type {
   Patient,
 } from '../types/models';
 import type {
+  DocumentDetail,
+  DocumentRecord,
+  HealthRecordDetail,
+  HealthRecordEntry,
+  HealthRecordKind,
+  LabResult,
+  LabResultDetail,
+  Prescription,
+  PrescriptionDetail,
+  Vaccination,
+  VaccinationDetail,
+} from '../types/health-records';
+import type {
   CreateAppointmentInput,
   CreatePatientInput,
 } from '../validation/schemas';
@@ -37,8 +50,49 @@ export interface AppointmentRepository {
   ): Promise<Appointment | null>;
 }
 
+export interface PrescriptionRepository {
+  findAll(patientId?: string): Promise<Prescription[]>;
+  findById(id: string): Promise<PrescriptionDetail | null>;
+}
+
+export interface ImmunizationRepository {
+  findAll(patientId?: string): Promise<Vaccination[]>;
+  findById(id: string): Promise<VaccinationDetail | null>;
+}
+
+/**
+ * Covers Condition + AllergyIntolerance together (one "health conditions"
+ * feature on the frontend) — `kind` discriminates which one findById needs to
+ * re-fetch. See docs/oscar/new-approach/docs-oscar-new-approach.md §1: only
+ * the 'allergy' kind has a clean OSCAR mapping; 'condition' is a flagged gap.
+ */
+export interface HealthConditionRepository {
+  findAll(patientId?: string): Promise<HealthRecordEntry[]>;
+  findById(id: string, kind: HealthRecordKind): Promise<HealthRecordDetail | null>;
+}
+
+export interface TestResultRepository {
+  findAll(patientId?: string): Promise<LabResult[]>;
+  findById(id: string): Promise<LabResultDetail | null>;
+}
+
+/**
+ * No verified clean OSCAR REST resource exists for documents (see design
+ * doc §10) — findAll/findById throw for OSCAR rather than returning a
+ * silent empty list indistinguishable from "no documents".
+ */
+export interface DocumentRepository {
+  findAll(patientId?: string): Promise<DocumentRecord[]>;
+  findById(id: string): Promise<DocumentDetail | null>;
+}
+
 export interface MedicalRepositories {
   patients: PatientRepository;
   doctors: DoctorRepository;
   appointments: AppointmentRepository;
+  prescriptions: PrescriptionRepository;
+  immunizations: ImmunizationRepository;
+  healthConditions: HealthConditionRepository;
+  testResults: TestResultRepository;
+  documents: DocumentRepository;
 }

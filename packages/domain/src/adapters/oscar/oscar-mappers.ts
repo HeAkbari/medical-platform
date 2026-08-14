@@ -1,7 +1,21 @@
 import type { Appointment, AppointmentStatus, Doctor } from '../../types/models';
 import type {
+  AllergyDetail,
+  HealthRecordEntry,
+  LabResult,
+  Prescription,
+  PrescriptionDetail,
+  Vaccination,
+  VaccinationDetail,
+} from '../../types/health-records';
+import type {
+  OscarAllergy,
   OscarAppointmentTo1,
   OscarDayApptItem,
+  OscarDiseaseRegistryItem,
+  OscarDrug,
+  OscarHl7LabMessage,
+  OscarPrevention,
   OscarProvider,
   OscarProviderPeriodAppsTo,
 } from './oscar-types';
@@ -102,5 +116,170 @@ export function oscarDayApptToDomain(item: OscarDayApptItem, fallbackDate: strin
     notes: item.notes || null,
     createdAt: '',
     patientName: item.name,
+  };
+}
+
+// --- Allergies (verified live, see oscar-patient-clinical-data-api-models.md §1) ---
+
+export function oscarAllergyToEntry(
+  allergy: OscarAllergy,
+  platformPatientId: string
+): HealthRecordEntry {
+  return {
+    id: String(allergy.id),
+    kind: 'allergy',
+    name: allergy.description || 'Allergy',
+    clinicalStatus: allergy.archived ? 'Inactive' : 'Active',
+    tag: allergy.severityOfReaction || undefined,
+    recordedDate: allergy.entryDate || allergy.startDate,
+    patientId: platformPatientId,
+  };
+}
+
+export function oscarAllergyToDetail(
+  allergy: OscarAllergy,
+  platformPatientId: string
+): AllergyDetail {
+  return {
+    id: String(allergy.id),
+    kind: 'allergy',
+    name: allergy.description || 'Allergy',
+    categories: [],
+    criticality: allergy.severityOfReaction || undefined,
+    clinicalStatus: allergy.archived ? 'Inactive' : 'Active',
+    onsetDate: allergy.startDate,
+    recordedDate: allergy.entryDate,
+    // OSCAR models one reaction inline per allergy record (no nested list
+    // like FHIR) — surfaced as a single-element array to fit the shared shape.
+    reactions: allergy.reaction
+      ? [
+          {
+            manifestations: [allergy.reaction],
+            severity: allergy.severityOfReaction || undefined,
+            description: allergy.onsetOfReaction || undefined,
+          },
+        ]
+      : [],
+    patientId: platformPatientId,
+  };
+}
+
+// --- Prescriptions (verified live, see oscar-patient-clinical-data-api-models.md §3) ---
+
+function drugMedicationName(drug: OscarDrug): string {
+  return drug.customName || drug.brandName || drug.genericName || 'Medication';
+}
+
+function drugDosageInstructions(drug: OscarDrug): string[] {
+  const lines = [drug.instructions, drug.additionalInstructions].filter(
+    (text): text is string => Boolean(text?.trim())
+  );
+
+  if (lines.length > 0) {
+    return lines;
+  }
+
+  const summary = [drug.frequency, drug.route, drug.form].filter(Boolean).join(' ').trim();
+  return summary ? [summary] : [];
+}
+
+export function oscarDrugToPrescription(
+  drug: OscarDrug,
+  platformPatientId: string
+): Prescription {
+  return {
+    id: String(drug.drugId),
+    medication: drugMedicationName(drug),
+    status: drug.archived ? 'archived' : 'active',
+    authoredOn: drug.rxDate || drug.writtenDate,
+    dosageInstructions: drugDosageInstructions(drug),
+    repeatsAllowed: drug.repeats,
+    patientId: platformPatientId,
+    // Raw OSCAR providerNo, not resolved to a platform Doctor.id — this is
+    // optional/display-only metadata, unlike Appointment.doctorId which
+    // drives booking calls and must be the resolvable platform id.
+    prescriberId: drug.providerNo,
+  };
+}
+
+export function oscarDrugToPrescriptionDetail(
+  drug: OscarDrug,
+  platformPatientId: string,
+  prescriberName?: string
+): PrescriptionDetail {
+  return {
+    ...oscarDrugToPrescription(drug, platformPatientId),
+    prescriberName,
+    quantity: drug.quantity != null ? String(drug.quantity) : undefined,
+    expectedSupplyDuration:
+      drug.duration != null ? `${drug.duration} ${drug.durationUnit ?? ''}`.trim() : undefined,
+    validityStart: drug.rxDate,
+    validityEnd: drug.endDate ?? undefined,
+    notes: drug.additionalInstructions || undefined,
+    // No OSCAR concept for dispense history, per design doc's endpoint table.
+    dispenses: [],
+  };
+}
+
+// --- Immunizations (verified live, see oscar-patient-clinical-data-api-models.md §4) ---
+
+export function oscarPreventionToVaccination(
+  prevention: OscarPrevention,
+  platformPatientId: string
+): Vaccination {
+  return {
+    id: String(prevention.id),
+    name: prevention.preventionType || 'Vaccine',
+    status: prevention.refused ? 'refused' : prevention.never ? 'declined' : 'completed',
+    date: prevention.preventionDate,
+    patientId: platformPatientId,
+  };
+}
+
+export function oscarPreventionToDetail(
+  prevention: OscarPrevention,
+  platformPatientId: string
+): VaccinationDetail {
+  return {
+    ...oscarPreventionToVaccination(prevention, platformPatientId),
+    // OSCAR's prevention record has no separate manufacturer/lot/site fields
+    // — targetDiseases is the one honest inference (the prevention type IS
+    // the disease it targets), everything else stays unset rather than guessed.
+    targetDiseases: prevention.preventionType ? [prevention.preventionType] : [],
+  };
+}
+
+// --- Condition, via dxRegisty (endpoint confirmed live, item shape unverified — see design doc §10) ---
+
+export function oscarDiseaseRegistryItemToEntry(
+  item: OscarDiseaseRegistryItem,
+  platformPatientId: string
+): HealthRecordEntry {
+  return {
+    id: String(item.id ?? ''),
+    kind: 'condition',
+    name: item.description || item.dxCode || 'Condition',
+    clinicalStatus: item.status,
+    recordedDate: item.startDate || item.updateDate,
+    patientId: platformPatientId,
+  };
+}
+
+// --- Test results, via hl7LabsByDemographicNo (endpoint confirmed live, item shape unverified — see design doc §10) ---
+
+export function oscarHl7LabMessageToLabResult(
+  message: OscarHl7LabMessage,
+  platformPatientId: string
+): LabResult {
+  return {
+    id: String(message.id ?? ''),
+    name: message.testName || message.labType || 'Lab result',
+    status: message.status || 'unknown',
+    effectiveDate: message.dateTime || message.collectedDate,
+    // No verified field-level result values yet — an empty array is honest
+    // here; fabricating a "values" breakdown from an unconfirmed shape would
+    // be worse than showing none.
+    values: [],
+    patientId: platformPatientId,
   };
 }

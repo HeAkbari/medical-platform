@@ -7,7 +7,23 @@ import {
   type CreateAppointmentInput,
   type Doctor,
   type DoctorRepository,
+  type DocumentDetail,
+  type DocumentRecord,
+  type DocumentRepository,
+  type HealthConditionRepository,
+  type HealthRecordDetail,
+  type HealthRecordEntry,
+  type HealthRecordKind,
+  type ImmunizationRepository,
+  type LabResult,
+  type LabResultDetail,
   type MedicalRepositories,
+  type Prescription,
+  type PrescriptionDetail,
+  type PrescriptionRepository,
+  type TestResultRepository,
+  type Vaccination,
+  type VaccinationDetail,
 } from '@medical-platform/domain';
 import {
   PrismaDoctorExternalIdResolver,
@@ -16,7 +32,12 @@ import {
 } from '@medical-platform/domain/adapters/platform';
 import {
   OscarAppointmentRepository,
+  OscarDocumentRepository,
   OscarDoctorRepository,
+  OscarHealthConditionRepository,
+  OscarImmunizationRepository,
+  OscarPrescriptionRepository,
+  OscarTestResultRepository,
 } from '@medical-platform/domain/adapters/oscar';
 import { getOscarClient, OSCAR_CLINIC_ID } from '@/lib/oscar/client';
 
@@ -74,6 +95,82 @@ class LazyOscarAppointmentRepository implements AppointmentRepository {
   }
 }
 
+class LazyOscarPrescriptionRepository implements PrescriptionRepository {
+  private readonly identities = new PrismaPatientClinicIdentityStore();
+
+  private async repo(): Promise<OscarPrescriptionRepository> {
+    return new OscarPrescriptionRepository(await getOscarClient(), OSCAR_CLINIC_ID, this.identities);
+  }
+
+  async findAll(patientId?: string): Promise<Prescription[]> {
+    return (await this.repo()).findAll(patientId);
+  }
+
+  async findById(id: string): Promise<PrescriptionDetail | null> {
+    return (await this.repo()).findById(id);
+  }
+}
+
+class LazyOscarImmunizationRepository implements ImmunizationRepository {
+  private readonly identities = new PrismaPatientClinicIdentityStore();
+
+  private async repo(): Promise<OscarImmunizationRepository> {
+    return new OscarImmunizationRepository(await getOscarClient(), OSCAR_CLINIC_ID, this.identities);
+  }
+
+  async findAll(patientId?: string): Promise<Vaccination[]> {
+    return (await this.repo()).findAll(patientId);
+  }
+
+  async findById(id: string): Promise<VaccinationDetail | null> {
+    return (await this.repo()).findById(id);
+  }
+}
+
+class LazyOscarHealthConditionRepository implements HealthConditionRepository {
+  private readonly identities = new PrismaPatientClinicIdentityStore();
+
+  private async repo(): Promise<OscarHealthConditionRepository> {
+    return new OscarHealthConditionRepository(await getOscarClient(), OSCAR_CLINIC_ID, this.identities);
+  }
+
+  async findAll(patientId?: string): Promise<HealthRecordEntry[]> {
+    return (await this.repo()).findAll(patientId);
+  }
+
+  async findById(id: string, kind: HealthRecordKind): Promise<HealthRecordDetail | null> {
+    return (await this.repo()).findById(id, kind);
+  }
+}
+
+class LazyOscarTestResultRepository implements TestResultRepository {
+  private readonly identities = new PrismaPatientClinicIdentityStore();
+
+  private async repo(): Promise<OscarTestResultRepository> {
+    return new OscarTestResultRepository(await getOscarClient(), OSCAR_CLINIC_ID, this.identities);
+  }
+
+  async findAll(patientId?: string): Promise<LabResult[]> {
+    return (await this.repo()).findAll(patientId);
+  }
+
+  async findById(id: string): Promise<LabResultDetail | null> {
+    return (await this.repo()).findById(id);
+  }
+}
+
+class LazyOscarDocumentRepository implements DocumentRepository {
+  private readonly repo = new OscarDocumentRepository();
+
+  async findAll(patientId?: string): Promise<DocumentRecord[]> {
+    return this.repo.findAll(patientId);
+  }
+
+  async findById(id: string): Promise<DocumentDetail | null> {
+    return this.repo.findById(id);
+  }
+}
+
 function createOscarRepositories(): MedicalRepositories {
   return {
     // Patient identity is platform-owned regardless of EMR (see
@@ -82,6 +179,13 @@ function createOscarRepositories(): MedicalRepositories {
     patients: new PrismaPatientRepository(),
     doctors: new LazyOscarDoctorRepository(),
     appointments: new LazyOscarAppointmentRepository(),
+    prescriptions: new LazyOscarPrescriptionRepository(),
+    immunizations: new LazyOscarImmunizationRepository(),
+    healthConditions: new LazyOscarHealthConditionRepository(),
+    testResults: new LazyOscarTestResultRepository(),
+    // OscarDocumentRepository needs no OscarClient (always throws — no
+    // verified endpoint), so no lazy wrapper needed here.
+    documents: new LazyOscarDocumentRepository(),
   };
 }
 
