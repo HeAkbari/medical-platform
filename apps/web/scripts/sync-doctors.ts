@@ -14,6 +14,7 @@
  */
 import { decryptSecret, prisma } from '@medical-platform/db';
 import { OscarClient, OscarDoctorRepository } from '@medical-platform/domain/adapters/oscar';
+import type { MapFacility } from '../src/features/map/types';
 
 const CLINIC_ID = process.env.OSCAR_CLINIC_ID ?? 'sponsor-clinic';
 
@@ -43,6 +44,12 @@ async function main(): Promise<void> {
 
   const doctors = await new OscarDoctorRepository(client).findAll();
 
+  // Facility linkage is optional (deferred-items.md #1) — a clinic can be
+  // synced before any Facility row is linked to it, `clinicName` just stays
+  // unset until one is.
+  const facilityRow = await prisma.facility.findUnique({ where: { clinicId: CLINIC_ID } });
+  const clinicName = facilityRow ? (facilityRow.data as unknown as MapFacility).name : undefined;
+
   for (const doctor of doctors) {
     await prisma.doctor.upsert({
       where: {
@@ -59,6 +66,7 @@ async function main(): Promise<void> {
         specialty: doctor.specialty,
         email: doctor.email,
         phone: doctor.phone,
+        clinicName,
       },
       update: {
         firstName: doctor.firstName,
@@ -66,6 +74,7 @@ async function main(): Promise<void> {
         specialty: doctor.specialty,
         email: doctor.email,
         phone: doctor.phone,
+        clinicName,
         syncedAt: new Date(),
       },
     });

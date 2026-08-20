@@ -1,7 +1,6 @@
 'use client';
 
 import { cn } from '@/components/ui/cn';
-import { getTempDoctorImageUrl } from '@/features/doctors/data/temp-doctor-images';
 
 const sizeClasses = {
   sm: 'h-10 w-10 text-xs',
@@ -13,13 +12,13 @@ const sizeClasses = {
 type AvatarSize = keyof typeof sizeClasses;
 
 /**
- * TEMP-aware avatar: shows `/dr-images` headshot when mapped, else initials.
- * Remove temp image usage with `temp-doctor-images.ts` later.
+ * Photo support is intentionally deferred (no source yet — see
+ * docs/oscar/new-approach/deferred-items.md) — always shows initials.
  */
 export function PhysicianAvatar({
   firstName,
   lastName,
-  doctorId,
+  doctorId: _doctorId,
   size = 'md',
   shape = 'rounded',
   className,
@@ -31,30 +30,7 @@ export function PhysicianAvatar({
   shape?: 'rounded' | 'circle';
   className?: string;
 }) {
-  const src = getTempDoctorImageUrl({
-    id: doctorId,
-    firstName,
-    lastName,
-  });
-
   const shapeClass = shape === 'circle' ? 'rounded-full' : 'rounded-xl';
-
-  if (src) {
-    return (
-      // eslint-disable-next-line @next/next/no-img-element -- temp local public assets
-      <img
-        src={src}
-        alt=""
-        className={cn(
-          'shrink-0 object-cover',
-          sizeClasses[size],
-          shapeClass,
-          className,
-        )}
-        aria-hidden="true"
-      />
-    );
-  }
 
   return (
     <div

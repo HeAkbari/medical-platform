@@ -1,19 +1,43 @@
-/** `GET /providerService/providers` (XML list) / `.../provider/{id}` (JSON) — verified live against the sponsor sandbox. */
+/**
+ * `GET /providerService/providers_json` (paginated list, `OscarPaginated<OscarProvider>`)
+ * / `.../provider/{id}` (single object) — verified live against the sponsor
+ * sandbox. `providers_json` replaced the WADL-default `providers` endpoint,
+ * which only ever produced XML.
+ */
 export interface OscarProvider {
   providerNo: number | string;
   firstName: string;
   lastName: string;
-  providerType: string;
-  specialty: string;
-  email: string;
+  name?: string;
+  comments?: string;
   phone: string;
+  billingNo?: string | null;
   workPhone?: string;
-  status: number | string;
-}
-
-/** `fast-xml-parser` output shape for the `<List><Item>...</Item></List>` wrapper. */
-export interface OscarXmlList<T> {
-  List: { Item: T[] };
+  address?: {
+    province: string | null;
+    postal: string | null;
+    city: string | null;
+    address: string;
+  };
+  team?: string;
+  // `true`/`false` in the verified sample — not the `status` code the design
+  // doc originally guessed at.
+  enabled?: boolean;
+  providerType: string;
+  sex?: string | null;
+  ohipNo?: string | null;
+  specialty: string;
+  dob?: string | null;
+  hsoNo?: string | null;
+  providerActivity?: string;
+  rmaNo?: string | null;
+  signedConfidentiality?: number | null;
+  practitionerNo?: string | null;
+  practitionerNoType?: string | null;
+  email: string;
+  title?: string | null;
+  lastUpdateUser?: string;
+  lastUpdateDate?: number;
 }
 
 /** `POST /schedule/{demographicNo}/appointmentHistory` item — verified shape (endpoint itself currently 500s live, see docs/oscar/new-approach/oscar-appointment-query-apis.md). */

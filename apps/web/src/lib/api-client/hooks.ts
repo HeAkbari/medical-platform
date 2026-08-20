@@ -57,6 +57,18 @@ export function useDoctorsQuery(
   });
 }
 
+export function useDoctorQuery(
+  id: string,
+  options?: Omit<UseQueryOptions<{ data: Doctor }>, 'queryKey' | 'queryFn'>
+) {
+  return useQuery({
+    queryKey: medicalQueryKeys.doctor(id),
+    queryFn: () => medicalApiClient.getDoctor(id),
+    enabled: Boolean(id),
+    ...options,
+  });
+}
+
 export function useAppointmentsQuery(
   filters?: AppointmentQueryInput,
   options?: Omit<

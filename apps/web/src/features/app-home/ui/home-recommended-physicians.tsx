@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Badge, Button, Card } from '@/components/ui';
+import { Button, Card } from '@/components/ui';
 import { PhysicianAvatar } from '@/features/doctors';
 import { getPhysicianBookingHref } from '@/features/physician-booking/lib/routes';
 import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
@@ -12,11 +12,6 @@ import type { Doctor } from '@medical-platform/domain';
 
 const PREVIEW_COUNT = 2;
 const SEE_ALL_HREF = '/find-physician';
-
-const RECOMMENDED_META = [
-  { rating: 4.9, distanceKm: 1.2, sponsored: true },
-  { rating: 4.8, distanceKm: 0.8, sponsored: false },
-] as const;
 
 function StarIcon() {
   return (
@@ -33,15 +28,9 @@ function StarIcon() {
 
 function RecommendedPhysicianCard({
   doctor,
-  rating,
-  distanceKm,
-  sponsored,
   onBook,
 }: {
   doctor: Doctor;
-  rating: number;
-  distanceKm: number;
-  sponsored: boolean;
   onBook: () => void;
 }) {
   return (
@@ -60,18 +49,12 @@ function RecommendedPhysicianCard({
             <p className="truncate text-sm font-semibold text-foreground">
               Dr. {doctor.firstName} {doctor.lastName}
             </p>
-            {sponsored ? (
-              <Badge
-                variant="default"
-                className="shrink-0 px-1.5 py-0 text-[10px] uppercase tracking-wide"
-              >
-                Sponsored
-              </Badge>
+            {doctor.averageRating != null ? (
+              <span className="inline-flex items-center gap-0.5 font-medium text-subtle-foreground text-xs">
+                <StarIcon />
+                {doctor.averageRating.toFixed(1)}
+              </span>
             ) : null}
-            <span className="inline-flex items-center gap-0.5 font-medium text-subtle-foreground text-xs">
-              <StarIcon />
-              {rating.toFixed(1)}
-            </span>
           </div>
           <p className="truncate text-xs text-muted-foreground">
             {doctor.specialty}
@@ -81,15 +64,6 @@ function RecommendedPhysicianCard({
               {doctor.clinicName}
             </p>
           ) : null}
-          {/* <div className="mt-0.5 flex items-center gap-2 text-xs">
-            <span className="inline-flex items-center gap-0.5 font-medium text-subtle-foreground">
-              <StarIcon />
-              {rating.toFixed(1)}
-            </span>
-            <span className="text-faint-foreground">
-              {distanceKm.toFixed(1)} km
-            </span>
-          </div> */}
         </div>
       </Link>
       <Button
@@ -185,16 +159,11 @@ export function HomeRecommendedPhysicians() {
         </Card>
       ) : (
         <ul className="space-y-2">
-          {doctors.map((doctor, index) => {
-            const meta = RECOMMENDED_META[index] ?? RECOMMENDED_META[1];
-
+          {doctors.map((doctor) => {
             return (
               <li key={doctor.id} className="h-[4.5rem]">
                 <RecommendedPhysicianCard
                   doctor={doctor}
-                  rating={meta.rating}
-                  distanceKm={meta.distanceKm}
-                  sponsored={meta.sponsored}
                   onBook={() => handleBook(doctor.id)}
                 />
               </li>

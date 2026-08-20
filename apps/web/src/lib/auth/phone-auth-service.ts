@@ -73,6 +73,7 @@ async function buildAuthenticatedUser(
     phone: patient.phone,
     firstName: patient.firstName,
     lastName: patient.lastName,
+    dateOfBirth: patient.dateOfBirth,
     patientId: patient.id,
     role: Roles.PATIENT,
     claims: RoleClaims[Roles.PATIENT],

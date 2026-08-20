@@ -2,10 +2,12 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import { createAppointmentSchema } from '@medical-platform/domain/validation';
 import { Button, Card, ErrorState, LoadingState } from '@/components/ui';
 import { cn } from '@/components/ui/cn';
 import { PhysicianAvatar } from '@/features/doctors';
-import { useBackNavigation, useDoctorsQuery } from '@/hooks';
+import { useBackNavigation, useCreateAppointmentMutation, useDoctorsQuery } from '@/hooks';
+import { useAuth } from '@/lib/auth';
 
 const MONTH_NAMES = [
   'January',
@@ -86,9 +88,20 @@ interface PhysicianBookingPageProps {
   doctorId: string;
 }
 
+/** Parses a 12-hour label like "2:30 PM" into 24-hour {hour, minute}. */
+function parseSlotLabel(slot: string): { hour: number; minute: number } {
+  const [time, period] = slot.split(' ');
+  const [hourStr, minuteStr] = time.split(':');
+  let hour = Number(hourStr) % 12;
+  if (period === 'PM') hour += 12;
+  return { hour, minute: Number(minuteStr) };
+}
+
 export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
   const handleBack = useBackNavigation(`/physicians/${doctorId}`);
   const { data, isLoading, isError } = useDoctorsQuery();
+  const { user } = useAuth();
+  const createMutation = useCreateAppointmentMutation();
 
   const doctor = useMemo(
     () => data?.data.find((d) => d.id === doctorId),
@@ -102,6 +115,45 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [visitType, setVisitType] = useState<VisitType>('walkIn');
   const [reasonNote, setReasonNote] = useState('');
+  const [formError, setFormError] = useState<string | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  async function handleConfirm() {
+    if (!user || !selectedDay || !selectedSlot) return;
+
+    setFormError(null);
+    const { hour, minute } = parseSlotLabel(selectedSlot);
+    const scheduledAt = new Date(
+      currentYear,
+      currentMonth,
+      selectedDay,
+      hour,
+      minute,
+    ).toISOString();
+
+    const parsed = createAppointmentSchema.safeParse({
+      patientId: user.patientId,
+      doctorId,
+      scheduledAt,
+      durationMinutes: 30,
+      reason: reasonNote.trim() || 'Appointment',
+      notes: null,
+    });
+
+    if (!parsed.success) {
+      setFormError(parsed.error.issues[0]?.message ?? 'Invalid booking details');
+      return;
+    }
+
+    try {
+      await createMutation.mutateAsync(parsed.data);
+      setIsSubmitted(true);
+    } catch (error) {
+      setFormError(
+        error instanceof Error ? error.message : 'Could not create appointment',
+      );
+    }
+  }
 
   const availableDays = useMemo(
     () => getMockAvailableDays(currentYear, currentMonth, visitType),
@@ -149,6 +201,24 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
 
   if (isLoading) return <LoadingState label="Loading booking..." />;
   if (isError || !doctor) return <ErrorState message="Physician not found." />;
+  if (!user) return <ErrorState message="Sign in to book an appointment." />;
+
+  if (isSubmitted) {
+    return (
+      <div className="rounded-xl border border-brand-subtle bg-brand-muted px-4 py-6 text-center">
+        <p className="font-medium text-brand-darker">Appointment booked</p>
+        <p className="mt-1 text-sm text-brand-dark">
+          Your appointment with Dr. {doctor.firstName} {doctor.lastName} has
+          been created.
+        </p>
+        <Link href="/appointments" className="mt-4 block">
+          <Button variant="secondary" fullWidth>
+            View appointments
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   const firstAvailableLabel = 'Today · 2:30 PM';
 
@@ -422,14 +492,19 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
         />
       </Card>
 
+      {formError ? <p className="text-sm text-red-600">{formError}</p> : null}
+
       <Button
         fullWidth
         className="min-h-10"
-        disabled={!selectedDay || !selectedSlot}
+        disabled={!selectedDay || !selectedSlot || createMutation.isPending}
+        onClick={handleConfirm}
       >
-        {selectedDay && selectedSlot
-          ? `Confirm — ${MONTH_NAMES[currentMonth]} ${selectedDay} · ${selectedSlot}`
-          : 'Select a date and time'}
+        {createMutation.isPending
+          ? 'Booking...'
+          : selectedDay && selectedSlot
+            ? `Confirm — ${MONTH_NAMES[currentMonth]} ${selectedDay} · ${selectedSlot}`
+            : 'Select a date and time'}
       </Button>
     </div>
   );

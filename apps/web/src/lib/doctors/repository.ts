@@ -1,6 +1,12 @@
 import 'server-only';
 import { prisma } from '@medical-platform/db';
-import type { Doctor } from '@medical-platform/domain';
+import type {
+  Doctor,
+  DoctorClinicAddress,
+  DoctorReview,
+  DoctorWorkingHours,
+} from '@medical-platform/domain';
+import type { MapFacility } from '@/features/map/types';
 
 export interface DoctorDirectoryRepository {
   findAll(): Promise<Doctor[]>;
@@ -9,6 +15,7 @@ export interface DoctorDirectoryRepository {
 
 interface DoctorRow {
   id: string;
+  clinicId: string;
   firstName: string;
   lastName: string;
   specialty: string;
@@ -40,6 +47,42 @@ function toDomainDoctor(row: DoctorRow): Doctor {
   };
 }
 
+interface DoctorDetailRow extends DoctorRow {
+  reviews: DoctorReview[];
+}
+
+/** Populated only for `findById` (see class doc) — a live join against
+ * whichever Facility row is linked to this doctor's clinic, if any. */
+interface ClinicInfo {
+  clinicAddress?: DoctorClinicAddress;
+  workingHours?: DoctorWorkingHours;
+  languages?: string[];
+}
+
+async function resolveClinicInfo(clinicId: string): Promise<ClinicInfo> {
+  const facilityRow = await prisma.facility.findUnique({ where: { clinicId } });
+
+  if (!facilityRow) {
+    return {};
+  }
+
+  const facility = facilityRow.data as unknown as MapFacility;
+
+  return {
+    clinicAddress: facility.address,
+    workingHours: facility.hours,
+    languages: facility.languages,
+  };
+}
+
+function toDomainDoctorDetail(row: DoctorDetailRow, clinicInfo: ClinicInfo): Doctor {
+  return {
+    ...toDomainDoctor(row),
+    reviews: row.reviews,
+    ...clinicInfo,
+  };
+}
+
 /**
  * Doctor directory browsing (Find Physician, Physician Info, rating) reads
  * only from our own database — never live from an EMR. Populated by a
@@ -60,9 +103,23 @@ export class PrismaDoctorDirectoryRepository implements DoctorDirectoryRepositor
   async findById(id: string): Promise<Doctor | null> {
     const row = await prisma.doctor.findUnique({
       where: { id },
-      include: { reviews: { select: { rating: true } } },
+      include: {
+        reviews: { select: { rating: true, comment: true, authorName: true, createdAt: true } },
+      },
     });
 
-    return row ? toDomainDoctor(row) : null;
+    if (!row) {
+      return null;
+    }
+
+    const clinicInfo = await resolveClinicInfo(row.clinicId);
+    const reviews: DoctorReview[] = row.reviews.map((review) => ({
+      rating: review.rating,
+      comment: review.comment ?? undefined,
+      authorName: review.authorName ?? undefined,
+      createdAt: review.createdAt.toISOString(),
+    }));
+
+    return toDomainDoctorDetail({ ...row, reviews }, clinicInfo);
   }
 }

@@ -1,6 +1,5 @@
 import { createHmac } from 'node:crypto';
 import { Agent as HttpsAgent, request as httpsRequest } from 'node:https';
-import { XMLParser } from 'fast-xml-parser';
 import OAuth from 'oauth-1.0a';
 
 export interface OscarClientConfig {
@@ -20,21 +19,7 @@ export interface OscarClientConfig {
 
 export interface OscarRequestOptions {
   query?: Record<string, string>;
-  /**
-   * Most endpoints produce JSON, but a few WADL-generated ones (e.g.
-   * `/providerService/providers`) only produce XML — verified per-endpoint
-   * against the live sandbox, not assumed. Default 'json'.
-   */
-  format?: 'json' | 'xml';
 }
-
-// OSCAR's XML list responses follow a `<List><Item>...</Item></List>`
-// wrapper (JAXB-style) — force `Item` to always parse as an array, even with
-// a single result, so callers can always `.map()` over it.
-const xmlParser = new XMLParser({
-  ignoreAttributes: false,
-  isArray: (name) => name === 'Item',
-});
 
 export class OscarHttpError extends Error {
   constructor(
@@ -152,8 +137,6 @@ export class OscarClient {
     options?: OscarRequestOptions,
     body?: unknown
   ): Promise<unknown> {
-    const format = options?.format ?? 'json';
-    const accept = format === 'xml' ? 'application/xml' : 'application/json';
     const url = this.buildUrl(path, options?.query);
     const authHeader = this.oauth.toHeader(
       this.oauth.authorize({ url, method }, this.token)
@@ -161,7 +144,7 @@ export class OscarClient {
 
     const headers: Record<string, string> = {
       ...authHeader,
-      Accept: accept,
+      Accept: 'application/json',
       ...(body ? { 'Content-Type': 'application/json' } : {}),
     };
     const requestBody = body ? JSON.stringify(body) : undefined;
@@ -191,6 +174,6 @@ export class OscarClient {
       return null;
     }
 
-    return format === 'xml' ? xmlParser.parse(response.body) : JSON.parse(response.body);
+    return JSON.parse(response.body);
   }
 }

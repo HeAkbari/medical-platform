@@ -6,6 +6,7 @@ export interface AuthenticatedUser {
   phone: string;
   firstName: string;
   lastName: string;
+  dateOfBirth?: string;
   patientId: string;
   role: Roles;
   claims: string[];

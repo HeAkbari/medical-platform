@@ -2,6 +2,7 @@ export {
   usePatientsQuery,
   usePatientQuery,
   useDoctorsQuery,
+  useDoctorQuery,
   useAppointmentsQuery,
   useCreateAppointmentMutation,
 } from '@/lib/api-client';

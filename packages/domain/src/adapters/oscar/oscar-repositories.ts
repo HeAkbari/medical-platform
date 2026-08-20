@@ -53,19 +53,30 @@ import type {
   OscarProvider,
   OscarProviderPeriodAppsTo,
   OscarSchedulingResponse,
-  OscarXmlList,
 } from './oscar-types';
+
+// OSCAR's own pseudo-provider account for internal/system use — never a real
+// bookable physician. Verified live in the sponsor sandbox's provider list
+// (providerType: "system"). Filtered out here, not at the mapper level,
+// since it's a directory-sync concern, not a shape-mapping one.
+const SYSTEM_PROVIDER_NO = '-1';
 
 export class OscarDoctorRepository implements DoctorRepository {
   constructor(private readonly client: OscarClient) {}
 
   async findAll(): Promise<Doctor[]> {
-    // Verified live: this endpoint only produces XML (406 on Accept: json).
-    const result = (await this.client.get('/providerService/providers', {
-      format: 'xml',
-    })) as OscarXmlList<OscarProvider>;
+    // Verified live: providers_json (unlike the WADL-default `providers`,
+    // which only ever produces XML).
+    const result = (await this.client.get(
+      '/providerService/providers_json'
+    )) as OscarPaginated<OscarProvider>;
 
-    return result.List.Item.map((provider) => oscarToDoctor(provider));
+    return result.content
+      .filter(
+        (provider) =>
+          provider.enabled !== false && String(provider.providerNo) !== SYSTEM_PROVIDER_NO
+      )
+      .map((provider) => oscarToDoctor(provider));
   }
 
   async findById(id: string): Promise<Doctor | null> {

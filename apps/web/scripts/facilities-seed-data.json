@@ -1158,5 +1158,55 @@
     ],
     "lastVerifiedAt": "2026-05-28T10:00:00.000Z",
     "supportsBooking": false
+  },
+  {
+    "id": "fac-sponsor-clinic",
+    "name": "Fairfield Family Medical Clinic",
+    "hours": {
+      "friday": "9:00 AM – 5:00 PM",
+      "monday": "9:00 AM – 5:00 PM",
+      "sunday": "Closed",
+      "tuesday": "9:00 AM – 5:00 PM",
+      "saturday": "Closed",
+      "thursday": "9:00 AM – 5:00 PM",
+      "wednesday": "9:00 AM – 5:00 PM"
+    },
+    "phone": "+1-250-555-0301",
+    "source": "mock",
+    "actions": [
+      "navigate",
+      "call",
+      "book"
+    ],
+    "address": {
+      "city": "Victoria",
+      "street": "1321 Fairfield Rd",
+      "province": "BC",
+      "postalCode": "V8S 1H3"
+    },
+    "category": "family-practice",
+    "position": [
+      48.4228,
+      -123.3512
+    ],
+    "province": "BC",
+    "whyOnMap": "Sponsor clinic — placeholder details pending real data from the clinic",
+    "isOpenNow": true,
+    "languages": [
+      "English"
+    ],
+    "subcategory": "Family Practice",
+    "superCategory": "primary-care",
+    "coverageBadges": [
+      "provincially-insured",
+      "accepting-new-patients",
+      "referral-not-required"
+    ],
+    "lastVerifiedAt": "2026-08-20T00:00:00.000Z",
+    "supportsBooking": true,
+    "serviceOfferings": [
+      "general-family-physician"
+    ],
+    "acceptingNewPatients": true
   }
 ]

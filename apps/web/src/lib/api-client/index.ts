@@ -4,6 +4,7 @@ export {
   usePatientsQuery,
   usePatientQuery,
   useDoctorsQuery,
+  useDoctorQuery,
   useAppointmentsQuery,
   useCreateAppointmentMutation,
 } from './hooks';

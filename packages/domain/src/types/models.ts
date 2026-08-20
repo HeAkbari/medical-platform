@@ -25,7 +25,36 @@ export interface Doctor {
   // read as "rated zero stars" rather than "not yet rated".
   averageRating?: number;
   reviewCount?: number;
+  // Individual reviews (id-lookup only, see PrismaDoctorDirectoryRepository
+  // .findById — omitted from findAll to keep the list payload light).
+  // Empty until a real review-submission path exists; that's an honest
+  // "no reviews yet", not a bug.
+  reviews?: DoctorReview[];
+  // Denormalized from the linked Facility row (see docs-oscar-new-approach.md
+  // §5/deferred-items.md #1) — undefined until that clinic's Facility row is
+  // linked via clinicId.
+  clinicAddress?: DoctorClinicAddress;
+  workingHours?: DoctorWorkingHours;
+  languages?: string[];
 }
+
+export interface DoctorReview {
+  rating: number;
+  comment?: string;
+  authorName?: string;
+  createdAt: string;
+}
+
+export interface DoctorClinicAddress {
+  street: string;
+  city: string;
+  province: string;
+  postalCode: string;
+}
+
+export type DoctorWorkingHours =
+  | { monday: string; tuesday: string; wednesday: string; thursday: string; friday: string; saturday: string; sunday: string }
+  | '24/7';
 
 export type AppointmentStatus = 'scheduled' | 'completed' | 'cancelled';
 

@@ -26,7 +26,7 @@ endpointهای REST سرور واقعی **OSCAR EMR 19** (کلینیک اسپا�
 | Client | `OscarClient` در `packages/domain/src/adapters/oscar/oscar-client.ts` |
 | Auth | OAuth 1.0a سه‌مرحله‌ای، امضای HMAC-SHA1 به‌ازای هر درخواست (کتابخانه‌ی `oauth-1.0a`)، بدون session/cookie |
 | اعتبارنامه‌ها | جدول رمزنگاری‌شده‌ی `ClinicCredential` (AES-256-GCM، کلید در `CREDENTIALS_ENCRYPTION_KEY`) — نگاه کن به `packages/domain/src/adapters/platform/clinic-credentials.ts` |
-| فرمت | `application/json` (پیش‌فرض)؛ فقط `providerService/providers` استثنائاً `application/xml` است |
+| فرمت | `application/json` — همه‌ی endpointها، از جمله دایرکتوری پزشکان (`OscarClient` دیگر هیچ پشتیبانی XML ندارد) |
 | صفحه‌بندی | `offset`/`limit` روی query — نه `Bundle`+`entry[]` مثل FHIR |
 | HTTP | `node:https` مستقیم (نه `fetch`) با `https.Agent({rejectUnauthorized:false})` وقتی `allowSelfSignedCert` است — نگاه کن به کامنت‌های `oscar-client.ts` درباره‌ی چرا |
 
@@ -65,8 +65,16 @@ endpointهای REST سرور واقعی **OSCAR EMR 19** (کلینیک اسپا�
 
 | مسیر | متد | وضعیت | استفاده |
 |------|-----|-------|---------|
-| `/providerService/providers` | `GET` (فقط XML، `Accept: application/xml`) | ✅ تأییدشده زنده | لیست کامل پزشکان — فقط توسط `scripts/sync-doctors.ts` (job دوره‌ای) صدا زده می‌شود، نه در مسیر خواندنِ زنده‌ی کاربر |
+| `/providerService/providers_json` | `GET` (JSON، `OscarPaginated<OscarProvider>`) | ✅ تأییدشده زنده — نمونه‌ی پرشده‌ی واقعی دیده شده (۲۰۲۶-۰۸-۲۰) | لیست کامل پزشکان — فقط توسط `scripts/sync-doctors.ts` (job دوره‌ای) صدا زده می‌شود، نه در مسیر خواندنِ زنده‌ی کاربر. ردیف با `providerNo: "-1"` (`providerType: "system"`) همیشه فیلتر می‌شود؛ ردیف‌های `enabled: false` هم همین‌طور. |
 | `/providerService/provider/{id}` | `GET` | ✅ تأییدشده زنده (۲۰۰ با بدنه‌ی خالی برای id نامعتبر) | `findDetailById` نوبت (resolve نام/تخصص پزشک) |
+
+> **تغییر نسبت به طرح اولیه:** مسیر پیش‌فرض WADL (`/providerService/providers`)
+> فقط XML تولید می‌کرد؛ کلینیک اسپانسر معادل JSONِ آن،
+> `/providerService/providers_json`، را معرفی کرد که دقیقاً همان
+> shape استانداردِ `OscarPaginated<T>` بقیه‌ی endpointهای صفحه‌بندی‌شده را
+> دارد. به همین خاطر پشتیبانی XML از `OscarClient` (و وابستگی
+> `fast-xml-parser`) کاملاً حذف شد — دیگر هیچ endpointی در استفاده به آن
+> نیاز ندارد.
 
 **مسیر خواندن (Find Physician، Physician Info، rating) هیچ‌وقت مستقیم OSCAR
 را صدا نمی‌زند** — فقط از جدول `Doctor` در Postgres خودمان می‌خواند
@@ -175,7 +183,7 @@ endpoint پیش‌بینی شده بود، **کنار گذاشته شد** — ب
 
 ## جمع‌بندی endpointهای OSCAR در حال استفاده
 
-**خواندن:** `providerService/providers` (XML) · `providerService/provider/{id}` ·
+**خواندن:** `providerService/providers_json` · `providerService/provider/{id}` ·
 `schedule/{demographicNo}/appointmentHistory` · `schedule/fetchProviderAppts/...` ·
 `schedule/{providerNo}/day/{date}` · `allergies/active` ·
 `dxRegisty/getDiseaseRegistry` · `rx/drugs/current/{demographicNo}` ·
@@ -199,7 +207,7 @@ endpoint پیش‌بینی شده بود، **کنار گذاشته شد** — ب
 
 | route اپ | عملیات OSCAR پشت آن |
 |----------|---------------------|
-| `GET /api/v1/doctors` | جدول `Doctor` (Postgres) — پر شده توسط `providerService/providers` در job دوره‌ای |
+| `GET /api/v1/doctors` | جدول `Doctor` (Postgres) — پر شده توسط `providerService/providers_json` در job دوره‌ای |
 | `GET /api/v1/doctors/{id}` | جدول `Doctor` (Postgres) |
 | `POST /api/v1/patients/link-clinic` | `POST /demographics/matchDemographic` |
 | `GET/POST /api/v1/appointments` | `schedule/{demographicNo}/appointmentHistory` \| `schedule/fetchProviderAppts/...` \| `schedule/{providerNo}/day/{date}` \| `POST /schedule/add` |

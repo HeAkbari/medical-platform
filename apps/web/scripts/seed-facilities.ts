@@ -14,17 +14,30 @@ import { join } from 'node:path';
 import { prisma, type Prisma } from '@medical-platform/db';
 import type { MapFacility } from '../src/features/map/types';
 
+// Duplicated from apps/web/src/lib/oscar/client.ts (not imported — that file
+// has `import 'server-only'`, which throws outside a Next.js request, same
+// reason scripts/sync-doctors.ts inlines its own copy of this constant.
+const OSCAR_CLINIC_ID = process.env.OSCAR_CLINIC_ID ?? 'sponsor-clinic';
+
+// No real facility data from the sponsor clinic yet (deferred-items.md #1) —
+// this placeholder id is linked to OSCAR_CLINIC_ID below so Doctor.clinicName
+// and Physician Info's clinic address/hours/languages have *something* to
+// join against; swap its fields in facilities-seed-data.json for the real
+// clinic details once the clinic provides them, no code change needed.
+const SPONSOR_CLINIC_FACILITY_ID = 'fac-sponsor-clinic';
+
 async function main(): Promise<void> {
   const seedPath = join(import.meta.dirname, 'facilities-seed-data.json');
   const facilities: MapFacility[] = JSON.parse(readFileSync(seedPath, 'utf8'));
 
   for (const facility of facilities) {
     const data = facility as unknown as Prisma.InputJsonValue;
+    const clinicId = facility.id === SPONSOR_CLINIC_FACILITY_ID ? OSCAR_CLINIC_ID : null;
 
     await prisma.facility.upsert({
       where: { id: facility.id },
-      create: { id: facility.id, data },
-      update: { data },
+      create: { id: facility.id, data, clinicId },
+      update: { data, clinicId },
     });
   }
 

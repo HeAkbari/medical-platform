@@ -9,4 +9,10 @@ model Facility {
   data      Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Links this Facility row to the clinicId used by ClinicCredential/Doctor
+  // (see docs-oscar-new-approach.md §5 / deferred-items.md #1). Nullable and
+  // unique-when-set: most Facility rows are unrelated map data with no EMR
+  // behind them; at most one row represents a given clinic's real address.
+  clinicId String? @unique
 }

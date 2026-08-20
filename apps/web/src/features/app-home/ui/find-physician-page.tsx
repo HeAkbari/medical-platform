@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
-  Badge,
   EmptyState,
   ErrorState,
   LoadingState,
@@ -120,7 +119,7 @@ export function FindPhysicianPage() {
         <EmptyState title="No physicians match your search" />
       ) : (
         <ul className="space-y-3">
-          {doctors.map((doctor, index) => (
+          {doctors.map((doctor) => (
             <li key={doctor.id}>
               <Link
                 href={`/physicians/${doctor.id}`}
@@ -139,9 +138,6 @@ export function FindPhysicianPage() {
                     <p className="font-semibold text-foreground">
                       Dr. {doctor.firstName} {doctor.lastName}
                     </p>
-                    {index === 0 ? (
-                      <Badge variant="warning">Sponsored</Badge>
-                    ) : null}
                   </div>
                   <p className="mt-0.5 text-sm text-brand">{doctor.specialty}</p>
                   {doctor.clinicName ? (

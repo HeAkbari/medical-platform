@@ -148,12 +148,12 @@ export function ProfileHubPage() {
           <ProfileField label="First Name" value={user.firstName} />
           <ProfileField label="Last Name" value={user.lastName} />
           <ProfileField label="Gender" value={undefined} />
-          <ProfileField label="Date of Birth" value={undefined} />
+          <ProfileField label="Date of Birth" value={user.dateOfBirth} />
         </div>
 
         <SectionDivider title="Healthcare & Contact" />
         <div className="divide-y divide-border">
-          <ProfileField label="Healthcare Number" value="0000000081" masked />
+          <ProfileField label="Healthcare Number" value={undefined} masked />
           <ProfileField label="Phone" value={user.phone} />
           <ProfileField label="Email" value={user.email ?? undefined} />
         </div>

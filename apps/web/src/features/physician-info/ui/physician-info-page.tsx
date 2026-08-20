@@ -1,15 +1,21 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo } from 'react';
 import { Button, Card, ErrorState, LoadingState } from '@/components/ui';
 import { PhysicianAvatar } from '@/features/doctors';
 import { useHealthcareTeamStore } from '@/features/healthcare-team/store/healthcare-team-store';
-import {
-  DEFAULT_PHYSICIAN_EXTRAS,
-  type PhysicianExtras,
-} from '@/features/physician-info/data/mock-physician-extras';
-import { useBackNavigation, useDoctorsQuery } from '@/hooks';
+import { useBackNavigation, useDoctorQuery } from '@/hooks';
+import type { DoctorWorkingHours } from '@medical-platform/domain';
+
+const WORKING_HOURS_ROWS: { key: keyof Exclude<DoctorWorkingHours, '24/7'>; label: string }[] = [
+  { key: 'monday', label: 'Monday' },
+  { key: 'tuesday', label: 'Tuesday' },
+  { key: 'wednesday', label: 'Wednesday' },
+  { key: 'thursday', label: 'Thursday' },
+  { key: 'friday', label: 'Friday' },
+  { key: 'saturday', label: 'Saturday' },
+  { key: 'sunday', label: 'Sunday' },
+];
 
 function StarRating({ rating }: { rating: number }) {
   const full = Math.floor(rating);
@@ -44,18 +50,13 @@ interface PhysicianInfoPageProps {
 
 export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
   const handleBack = useBackNavigation('/find-physician');
-  const { data, isLoading, isError } = useDoctorsQuery();
+  const { data, isLoading, isError } = useDoctorQuery(doctorId);
   const familyPhysicianId = useHealthcareTeamStore((s) => s.familyPhysicianId);
   const teamMemberIds = useHealthcareTeamStore((s) => s.teamMemberIds);
   const addTeamMember = useHealthcareTeamStore((s) => s.addTeamMember);
   const removeTeamMember = useHealthcareTeamStore((s) => s.removeTeamMember);
 
-  const doctor = useMemo(
-    () => data?.data.find((d) => d.id === doctorId),
-    [data?.data, doctorId],
-  );
-
-  const extras: PhysicianExtras = DEFAULT_PHYSICIAN_EXTRAS;
+  const doctor = data?.data;
 
   const isFamilyPhysician = familyPhysicianId === doctorId;
   const isInTeam = teamMemberIds.includes(doctorId);
@@ -109,15 +110,18 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
               Your assigned family physician
             </p>
           ) : null}
-          <div className="mt-2 flex items-center justify-center gap-2">
-            <StarRating rating={extras.rating} />
-            <span className="text-sm text-muted-foreground">
-              {extras.rating} ({extras.reviewCount} reviews)
-            </span>
-          </div>
-          <p className="mt-1 text-xs text-faint-foreground">
-            {extras.yearsOfExperience} years of experience
-          </p>
+          {doctor.averageRating != null ? (
+            <div className="mt-2 flex items-center justify-center gap-2">
+              <StarRating rating={doctor.averageRating} />
+              <span className="text-sm text-muted-foreground">
+                {doctor.averageRating.toFixed(1)} ({doctor.reviewCount} reviews)
+              </span>
+            </div>
+          ) : (
+            <p className="mt-2 text-sm text-faint-foreground italic">
+              Not yet rated
+            </p>
+          )}
         </div>
       </div>
 
@@ -139,61 +143,75 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
       </div>
 
       {/* Clinic */}
-      <Card>
-        <p className="text-xs font-semibold uppercase tracking-wider text-faint-foreground">
-          Clinic
-        </p>
-        <p className="mt-1 font-medium text-foreground">
-          {doctor.clinicName ?? extras.clinicName}
-        </p>
-        <a
-          href={`https://maps.google.com/?q=${encodeURIComponent(extras.clinicAddress)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-0.5 block text-sm text-brand underline-offset-2 hover:underline"
-        >
-          {extras.clinicAddress} →
-        </a>
-      </Card>
+      {doctor.clinicName || doctor.clinicAddress ? (
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-wider text-faint-foreground">
+            Clinic
+          </p>
+          {doctor.clinicName ? (
+            <p className="mt-1 font-medium text-foreground">{doctor.clinicName}</p>
+          ) : null}
+          {doctor.clinicAddress ? (
+            <a
+              href={`https://maps.google.com/?q=${encodeURIComponent(
+                `${doctor.clinicAddress.street}, ${doctor.clinicAddress.city}, ${doctor.clinicAddress.province} ${doctor.clinicAddress.postalCode}`,
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-0.5 block text-sm text-brand underline-offset-2 hover:underline"
+            >
+              {doctor.clinicAddress.street}, {doctor.clinicAddress.city} →
+            </a>
+          ) : null}
+        </Card>
+      ) : null}
 
       {/* Languages */}
-      <Card>
-        <p className="text-xs font-semibold uppercase tracking-wider text-faint-foreground">
-          Languages
-        </p>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {extras.languages.map((lang) => (
-            <span
-              key={lang}
-              className="rounded-full bg-brand-muted px-2.5 py-1 text-xs font-medium text-brand-dark"
-            >
-              {lang}
-            </span>
-          ))}
-        </div>
-      </Card>
+      {doctor.languages && doctor.languages.length > 0 ? (
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-wider text-faint-foreground">
+            Languages
+          </p>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {doctor.languages.map((lang) => (
+              <span
+                key={lang}
+                className="rounded-full bg-brand-muted px-2.5 py-1 text-xs font-medium text-brand-dark"
+              >
+                {lang}
+              </span>
+            ))}
+          </div>
+        </Card>
+      ) : null}
 
       {/* Working hours */}
-      <Card>
-        <p className="text-xs font-semibold uppercase tracking-wider text-faint-foreground">
-          Working Hours
-        </p>
-        <ul className="mt-2 space-y-1.5">
-          {extras.workingHours.map((row) => (
-            <li
-              key={row.day}
-              className="flex items-center justify-between gap-2"
-            >
-              <span className="text-sm text-foreground">{row.day}</span>
-              <span
-                className={`text-sm ${row.hours ? 'text-muted-foreground' : 'text-faint-foreground italic'}`}
-              >
-                {row.hours ?? 'Closed'}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </Card>
+      {doctor.workingHours ? (
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-wider text-faint-foreground">
+            Working Hours
+          </p>
+          {doctor.workingHours === '24/7' ? (
+            <p className="mt-2 text-sm text-muted-foreground">Open 24/7</p>
+          ) : (
+            <ul className="mt-2 space-y-1.5">
+              {WORKING_HOURS_ROWS.map(({ key, label }) => {
+                const hours = doctor.workingHours === '24/7' ? null : doctor.workingHours?.[key];
+                return (
+                  <li key={key} className="flex items-center justify-between gap-2">
+                    <span className="text-sm text-foreground">{label}</span>
+                    <span
+                      className={`text-sm ${hours && hours !== 'Closed' ? 'text-muted-foreground' : 'text-faint-foreground italic'}`}
+                    >
+                      {hours ?? 'Closed'}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </Card>
+      ) : null}
 
       {/* Reviews */}
       <Card>
@@ -201,38 +219,46 @@ export function PhysicianInfoPage({ doctorId }: PhysicianInfoPageProps) {
           <p className="text-xs font-semibold uppercase tracking-wider text-faint-foreground">
             Reviews
           </p>
-          <div className="flex items-center gap-1.5">
-            <StarRating rating={extras.rating} />
-            <span className="text-sm font-medium text-foreground">
-              {extras.rating}
-            </span>
-          </div>
+          {doctor.averageRating != null ? (
+            <div className="flex items-center gap-1.5">
+              <StarRating rating={doctor.averageRating} />
+              <span className="text-sm font-medium text-foreground">
+                {doctor.averageRating.toFixed(1)}
+              </span>
+            </div>
+          ) : null}
         </div>
-        <ul className="mt-3 space-y-3">
-          {extras.reviews.map((review) => (
-            <li
-              key={review.id}
-              className="rounded-xl border border-border bg-muted/40 p-3"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-sm font-medium text-foreground">
-                  {review.authorName}
-                </span>
-                <StarRating rating={review.rating} />
-              </div>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                {review.comment}
-              </p>
-              <p className="mt-1 text-xs text-faint-foreground">
-                {new Date(review.date).toLocaleDateString(undefined, {
-                  month: 'short',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
-              </p>
-            </li>
-          ))}
-        </ul>
+        {doctor.reviews && doctor.reviews.length > 0 ? (
+          <ul className="mt-3 space-y-3">
+            {doctor.reviews.map((review, index) => (
+              <li
+                key={index}
+                className="rounded-xl border border-border bg-muted/40 p-3"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-medium text-foreground">
+                    {review.authorName ?? 'Anonymous'}
+                  </span>
+                  <StarRating rating={review.rating} />
+                </div>
+                {review.comment ? (
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                    {review.comment}
+                  </p>
+                ) : null}
+                <p className="mt-1 text-xs text-faint-foreground">
+                  {new Date(review.createdAt).toLocaleDateString(undefined, {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-3 text-sm text-faint-foreground italic">No reviews yet</p>
+        )}
       </Card>
     </div>
   );
