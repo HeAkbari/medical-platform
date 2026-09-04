@@ -13,6 +13,7 @@ import {
   useCancelAppointmentMutation,
 } from '../hooks/use-appointment-detail';
 import type { AppointmentDetail } from '../data/appointment-detail';
+import { formatClinicDateTime, formatClinicTime } from '@/lib/format-time';
 
 function statusVariant(status: string) {
   if (status === 'completed') {
@@ -25,24 +26,11 @@ function statusVariant(status: string) {
 }
 
 function formatDateTime(value?: string): string {
-  if (!value) {
-    return '';
-  }
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
+  return value ? formatClinicDateTime(value) : '';
 }
 
 function formatTime(value?: string): string {
-  if (!value) {
-    return '';
-  }
-  const date = new Date(value);
-  return Number.isNaN(date.getTime())
-    ? value
-    : date.toLocaleTimeString(undefined, {
-        hour: 'numeric',
-        minute: '2-digit',
-      });
+  return value ? formatClinicTime(value) : '';
 }
 
 function Field({ label, value }: { label: string; value?: string }) {

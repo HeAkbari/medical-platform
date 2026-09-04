@@ -9,6 +9,11 @@ import type {
   CreateAppointmentInput,
 } from '@medical-platform/domain/validation';
 
+export interface AvailableSlot {
+  start: string;
+  durationMinutes: number;
+}
+
 export class MedicalApiClient {
   constructor(private readonly baseUrl = '') {}
 
@@ -44,6 +49,36 @@ export class MedicalApiClient {
   async getDoctor(id: string): Promise<{ data: Doctor }> {
     const response = await fetch(this.buildUrl(`/api/v1/doctors/${id}`));
     return response.json() as Promise<{ data: Doctor }>;
+  }
+
+  /** `month` here is 0-indexed (JS `Date` convention, matches every caller's internal calendar state) — converted to the 1-indexed value the HTTP API expects right at this boundary, so a human reading the request URL sees `month=8` for August, not `month=7`. */
+  async getDoctorWorkingDays(
+    id: string,
+    year: number,
+    month: number,
+    visitType: string
+  ): Promise<{ data: { year: number; month: number; workingDays: number[] } }> {
+    const response = await fetch(
+      this.buildUrl(`/api/v1/doctors/${id}/availability`, {
+        year: String(year),
+        month: String(month + 1),
+        visitType,
+      })
+    );
+    return response.json() as Promise<{
+      data: { year: number; month: number; workingDays: number[] };
+    }>;
+  }
+
+  async getDoctorAvailableSlots(
+    id: string,
+    date: string,
+    visitType: string
+  ): Promise<{ data: { date: string; slots: AvailableSlot[] } }> {
+    const response = await fetch(
+      this.buildUrl(`/api/v1/doctors/${id}/availability`, { date, visitType })
+    );
+    return response.json() as Promise<{ data: { date: string; slots: AvailableSlot[] } }>;
   }
 
   async getAppointments(

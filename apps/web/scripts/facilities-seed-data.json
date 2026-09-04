@@ -1161,7 +1161,7 @@
   },
   {
     "id": "fac-sponsor-clinic",
-    "name": "Fairfield Family Medical Clinic",
+    "name": "Sponsor Clinic",
     "hours": {
       "friday": "9:00 AM – 5:00 PM",
       "monday": "9:00 AM – 5:00 PM",
@@ -1171,7 +1171,7 @@
       "thursday": "9:00 AM – 5:00 PM",
       "wednesday": "9:00 AM – 5:00 PM"
     },
-    "phone": "+1-250-555-0301",
+    "phone": "+1-250-555-0100",
     "source": "mock",
     "actions": [
       "navigate",
@@ -1180,14 +1180,14 @@
     ],
     "address": {
       "city": "Victoria",
-      "street": "1321 Fairfield Rd",
+      "street": "100 Government St",
       "province": "BC",
-      "postalCode": "V8S 1H3"
+      "postalCode": "V8W 1W7"
     },
     "category": "family-practice",
     "position": [
-      48.4228,
-      -123.3512
+      48.4284,
+      -123.3656
     ],
     "province": "BC",
     "whyOnMap": "Sponsor clinic — placeholder details pending real data from the clinic",

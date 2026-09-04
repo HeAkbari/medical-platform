@@ -100,17 +100,52 @@ export function oscarProviderApptToDomain(item: OscarProviderPeriodAppsTo): Appo
   };
 }
 
+/** "10:00 AM" -> {hour: 10, minute: 0} (24-hour). Returns null if unparseable. */
+function parse12HourTime(label: string): { hour: number; minute: number } | null {
+  const match = label.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+
+  if (!match) {
+    return null;
+  }
+
+  let hour = Number(match[1]) % 12;
+
+  if (match[3].toUpperCase() === 'PM') {
+    hour += 12;
+  }
+
+  return { hour, minute: Number(match[2]) };
+}
+
+/** "14m " -> 14. Returns the fallback if no leading number is found. */
+function parseDurationMinutes(duration: string | undefined, fallback: number): number {
+  const match = duration?.match(/\d+/);
+  return match ? Number(match[0]) : fallback;
+}
+
 /**
- * From `GET /schedule/{providerNo}/day/{date}` — field names not yet fully
- * verified live (PatientListApptItemBean), kept defensive on purpose.
+ * From `GET /schedule/{providerNo}/day/{date}` — verified live (2026-09-01).
+ * `fallbackDate` (the request's own `date` path param, e.g. "2026-09-21") is
+ * used rather than `item.date` (an epoch-ms field of unverified meaning) —
+ * we already know and trust the day we asked for. Built with an explicit
+ * `Z` suffix rather than a locale-dependent `new Date(...)` parse — this
+ * keeps it in the same (possibly mislabeled, but internally consistent)
+ * numeric space as `OscarScheduleTimeSlot.date` from the SOAP schedule
+ * template (see oscar-soap-schedule-services.md), which is what this value
+ * gets compared against for booked/free overlap detection.
  */
 export function oscarDayApptToDomain(item: OscarDayApptItem, fallbackDate: string): Appointment {
+  const time = item.startTime ? parse12HourTime(item.startTime) : null;
+  const scheduledAt = time
+    ? `${fallbackDate}T${String(time.hour).padStart(2, '0')}:${String(time.minute).padStart(2, '0')}:00.000Z`
+    : fallbackDate;
+
   return {
     id: String(item.appointmentNo ?? item.id ?? ''),
     patientId: item.demographicNo != null ? String(item.demographicNo) : '',
     doctorId: item.providerNo ?? '',
-    scheduledAt: combineDateTime(item.appointmentDate ?? fallbackDate, item.startTime),
-    durationMinutes: 30,
+    scheduledAt,
+    durationMinutes: parseDurationMinutes(item.duration, 30),
     status: mapOscarAppointmentStatus(item.status),
     reason: '',
     notes: item.notes || null,

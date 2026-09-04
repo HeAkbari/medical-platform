@@ -15,6 +15,8 @@ import {
   LoadingState,
 } from '@/components/ui';
 import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
+import { useAuth } from '@/lib/auth';
+import { formatClinicTime } from '@/lib/format-time';
 import { AppointmentDetailDrawer } from './appointment-detail-drawer';
 
 function statusVariant(status: string) {
@@ -29,10 +31,7 @@ function formatRelativeDate(isoDate: string): string {
   const diffMs = date.getTime() - now.getTime();
   const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
 
-  const timeStr = date.toLocaleTimeString(undefined, {
-    hour: 'numeric',
-    minute: '2-digit',
-  });
+  const timeStr = formatClinicTime(isoDate);
 
   if (diffDays === 0) return `Today · ${timeStr}`;
   if (diffDays === 1) return `Tomorrow · ${timeStr}`;
@@ -113,7 +112,14 @@ function AppointmentCard({ appointment, onSelect }: AppointmentCardProps) {
 export function AppointmentsPage() {
   const router = useRouter();
   const { requireAuth } = useRequireAuth();
-  const { data, isLoading, isError } = useAppointmentsQuery();
+  const { user } = useAuth();
+  // Scoped to the signed-in patient — OSCAR has no "list every appointment"
+  // endpoint (unlike mock/fhir, which tolerated an unfiltered call; this
+  // page is under (authenticated), so `user` is expected once auth resolves).
+  const { data, isLoading, isError } = useAppointmentsQuery(
+    { patientId: user?.patientId },
+    { enabled: Boolean(user?.patientId) }
+  );
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   function handleBookAppointment() {

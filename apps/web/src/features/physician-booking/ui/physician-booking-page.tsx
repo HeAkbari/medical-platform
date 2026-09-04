@@ -6,8 +6,16 @@ import { createAppointmentSchema } from '@medical-platform/domain/validation';
 import { Button, Card, ErrorState, LoadingState } from '@/components/ui';
 import { cn } from '@/components/ui/cn';
 import { PhysicianAvatar } from '@/features/doctors';
-import { useBackNavigation, useCreateAppointmentMutation, useDoctorsQuery } from '@/hooks';
+import {
+  useBackNavigation,
+  useCreateAppointmentMutation,
+  useDoctorAvailableSlotsQuery,
+  useDoctorsQuery,
+  useDoctorWorkingDaysQuery,
+} from '@/hooks';
+import type { AvailableSlot } from '@/lib/api-client';
 import { useAuth } from '@/lib/auth';
+import { formatClinicTime } from '@/lib/format-time';
 
 const MONTH_NAMES = [
   'January',
@@ -45,56 +53,14 @@ const VISIT_TYPE_OPTIONS = [
 
 type VisitType = (typeof VISIT_TYPE_OPTIONS)[number]['key'];
 
-/** Mock: available days of the week differ by visit type */
-const MOCK_AVAILABLE_DAYS_OF_WEEK: Record<VisitType, number[]> = {
-  walkIn: [1, 3, 5], // Mon, Wed, Fri — in-clinic slots are limited
-  virtual: [1, 2, 3, 4, 5], // every weekday
-  phone: [2, 4, 6], // Tue, Thu, Sat
-};
-
-function getMockAvailableDays(
-  year: number,
-  month: number,
-  visitType: VisitType,
-): Set<number> {
-  const totalDays = new Date(year, month + 1, 0).getDate();
-  const daysOfWeek = MOCK_AVAILABLE_DAYS_OF_WEEK[visitType];
-  const result = new Set<number>();
-
-  for (let d = 1; d <= totalDays; d++) {
-    const dow = new Date(year, month, d).getDay();
-    if (daysOfWeek.includes(dow)) result.add(d);
-  }
-
-  return result;
+function toDateKey(year: number, month: number, day: number): string {
+  return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 }
 
-const MOCK_TIME_SLOTS = [
-  '9:00 AM',
-  '9:30 AM',
-  '10:00 AM',
-  '10:30 AM',
-  '11:00 AM',
-  '11:30 AM',
-  '1:00 PM',
-  '1:30 PM',
-  '2:00 PM',
-  '2:30 PM',
-  '3:00 PM',
-  '3:30 PM',
-];
+const formatSlotLabel = formatClinicTime;
 
 interface PhysicianBookingPageProps {
   doctorId: string;
-}
-
-/** Parses a 12-hour label like "2:30 PM" into 24-hour {hour, minute}. */
-function parseSlotLabel(slot: string): { hour: number; minute: number } {
-  const [time, period] = slot.split(' ');
-  const [hourStr, minuteStr] = time.split(':');
-  let hour = Number(hourStr) % 12;
-  if (period === 'PM') hour += 12;
-  return { hour, minute: Number(minuteStr) };
 }
 
 export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
@@ -112,30 +78,42 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
-  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<AvailableSlot | null>(null);
+  // Filters real availability by this clinic's real OSCAR schedule codes
+  // (walkIn=67, phone=80) — see VISIT_TYPE_TO_SCHEDULE_CODE in
+  // apps/web/src/lib/doctors/availability.ts. `virtual` has no real code
+  // yet, so it always resolves to an empty schedule (button stays, by
+  // design — see docs/oscar/new-approach/oscar-soap-schedule-services.md).
   const [visitType, setVisitType] = useState<VisitType>('walkIn');
   const [reasonNote, setReasonNote] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const workingDaysQuery = useDoctorWorkingDaysQuery(doctorId, currentYear, currentMonth, visitType);
+  const availableDays = useMemo(
+    () => new Set(workingDaysQuery.data?.data.workingDays ?? []),
+    [workingDaysQuery.data],
+  );
+
+  const selectedDateKey = selectedDay ? toDateKey(currentYear, currentMonth, selectedDay) : null;
+  const slotsQuery = useDoctorAvailableSlotsQuery(doctorId, selectedDateKey, visitType);
+  const todaysSlotsQuery = useDoctorAvailableSlotsQuery(
+    doctorId,
+    toDateKey(today.getFullYear(), today.getMonth(), today.getDate()),
+    visitType,
+  );
+  const firstAvailableToday = todaysSlotsQuery.data?.data.slots[0];
+
   async function handleConfirm() {
-    if (!user || !selectedDay || !selectedSlot) return;
+    if (!user || !selectedSlot) return;
 
     setFormError(null);
-    const { hour, minute } = parseSlotLabel(selectedSlot);
-    const scheduledAt = new Date(
-      currentYear,
-      currentMonth,
-      selectedDay,
-      hour,
-      minute,
-    ).toISOString();
 
     const parsed = createAppointmentSchema.safeParse({
       patientId: user.patientId,
       doctorId,
-      scheduledAt,
-      durationMinutes: 30,
+      scheduledAt: selectedSlot.start,
+      durationMinutes: selectedSlot.durationMinutes,
       reason: reasonNote.trim() || 'Appointment',
       notes: null,
     });
@@ -155,11 +133,6 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
     }
   }
 
-  const availableDays = useMemo(
-    () => getMockAvailableDays(currentYear, currentMonth, visitType),
-    [currentYear, currentMonth, visitType],
-  );
-
   const calendarCells = useMemo(
     () => buildCalendarDays(currentYear, currentMonth),
     [currentYear, currentMonth],
@@ -167,7 +140,6 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
 
   function handleSelectVisitType(key: VisitType) {
     setVisitType(key);
-    setSelectedDay(null);
     setSelectedSlot(null);
   }
 
@@ -219,8 +191,6 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
       </div>
     );
   }
-
-  const firstAvailableLabel = 'Today · 2:30 PM';
 
   return (
     <div className="space-y-2.5">
@@ -309,23 +279,25 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 rounded-xl border border-brand-subtle bg-brand-muted/40 px-2.5 py-2">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          className="h-3.5 w-3.5 shrink-0 text-brand"
-          aria-hidden="true"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 6v6l4 2" strokeLinecap="round" />
-        </svg>
-        <p className="text-xs font-medium text-brand-dark">
-          First available:{' '}
-          <span className="font-semibold">{firstAvailableLabel}</span>
-        </p>
-      </div>
+      {firstAvailableToday ? (
+        <div className="flex items-center gap-2 rounded-xl border border-brand-subtle bg-brand-muted/40 px-2.5 py-2">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            className="h-3.5 w-3.5 shrink-0 text-brand"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l4 2" strokeLinecap="round" />
+          </svg>
+          <p className="text-xs font-medium text-brand-dark">
+            First available today:{' '}
+            <span className="font-semibold">{formatSlotLabel(firstAvailableToday.start)}</span>
+          </p>
+        </div>
+      ) : null}
 
       <Card className="p-3 sm:p-3">
         <div className="mb-2 flex items-center justify-between gap-2">
@@ -447,26 +419,34 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
         {selectedDay ? (
           <div className="mt-3 border-t border-border pt-3">
             <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-faint-foreground">
-              {MONTH_NAMES[currentMonth]} {selectedDay} — Timeslots (PDT)
+              {MONTH_NAMES[currentMonth]} {selectedDay} — Timeslots
             </p>
-            <div className="grid grid-cols-4 gap-1.5">
-              {MOCK_TIME_SLOTS.map((slot) => (
-                <button
-                  key={slot}
-                  type="button"
-                  onClick={() => setSelectedSlot(slot)}
-                  className={`rounded-md border px-1 py-1.5 text-[11px] font-medium transition
-                    ${
-                      selectedSlot === slot
-                        ? 'border-brand bg-brand text-brand-foreground'
-                        : 'border-border text-foreground hover:border-brand-subtle hover:bg-brand-muted'
-                    }
-                  `}
-                >
-                  {slot}
-                </button>
-              ))}
-            </div>
+            {slotsQuery.isLoading ? (
+              <p className="text-[11px] text-faint-foreground">Checking availability...</p>
+            ) : slotsQuery.data?.data.slots.length ? (
+              <div className="grid grid-cols-4 gap-1.5">
+                {slotsQuery.data.data.slots.map((slot) => (
+                  <button
+                    key={slot.start}
+                    type="button"
+                    onClick={() => setSelectedSlot(slot)}
+                    className={`rounded-md border px-1 py-1.5 text-[11px] font-medium transition
+                      ${
+                        selectedSlot?.start === slot.start
+                          ? 'border-brand bg-brand text-brand-foreground'
+                          : 'border-border text-foreground hover:border-brand-subtle hover:bg-brand-muted'
+                      }
+                    `}
+                  >
+                    {formatSlotLabel(slot.start)}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="text-[11px] text-faint-foreground">
+                No open times left on this day.
+              </p>
+            )}
           </div>
         ) : (
           <p className="mt-2 text-[11px] text-faint-foreground">
@@ -503,7 +483,7 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
         {createMutation.isPending
           ? 'Booking...'
           : selectedDay && selectedSlot
-            ? `Confirm — ${MONTH_NAMES[currentMonth]} ${selectedDay} · ${selectedSlot}`
+            ? `Confirm — ${MONTH_NAMES[currentMonth]} ${selectedDay} · ${formatSlotLabel(selectedSlot.start)}`
             : 'Select a date and time'}
       </Button>
     </div>

@@ -10,6 +10,12 @@ export interface ClinicCredential {
   consumerSecret: string;
   accessToken: string;
   accessTokenSecret: string;
+  // WS-Security UsernameToken credential for the clinic's legacy SOAP web
+  // services (a separate auth scheme from the OAuth1 fields above) — see
+  // docs/oscar/new-approach/oscar-soap-schedule-services.md. Undefined for
+  // clinics that don't use this SOAP layer.
+  soapSecurityId?: string;
+  soapSecurityTokenKey?: string;
 }
 
 // Decrypted values are cached in-process (per clinic) rather than
@@ -55,6 +61,10 @@ export async function getClinicCredential(clinicId: string): Promise<ClinicCrede
       consumerSecret: decryptSecret(row.consumerSecretEnc, encryptionKey),
       accessToken: decryptSecret(row.accessTokenEnc, encryptionKey),
       accessTokenSecret: decryptSecret(row.accessTokenSecretEnc, encryptionKey),
+      soapSecurityId: row.soapSecurityId ?? undefined,
+      soapSecurityTokenKey: row.soapSecurityTokenKeyEnc
+        ? decryptSecret(row.soapSecurityTokenKeyEnc, encryptionKey)
+        : undefined,
     };
   } catch {
     // Never leak the raw ciphertext or key material into logs — only which

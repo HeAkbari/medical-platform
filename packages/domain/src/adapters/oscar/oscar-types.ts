@@ -77,17 +77,23 @@ export interface OscarPaginated<T> {
 }
 
 /**
- * `GET /schedule/{providerNo}/day/{date}` item — field names NOT yet fully
- * verified live (see docs/oscar/new-approach/oscar-appointment-query-apis.md);
- * kept loose on purpose until confirmed against real sandbox data.
+ * `GET /schedule/{providerNo}/day/{date}` item — verified live (2026-09-01,
+ * see docs/oscar/new-approach/oscar-appointment-query-apis.md). NOTE: no
+ * `appointmentDate` field despite the old (pre-verification) guess — the day
+ * comes from the request's own `date` path param, not from this item; `date`
+ * here is an epoch-ms timestamp whose exact meaning is unverified and
+ * intentionally unused (see oscarDayApptToDomain). `startTime` is 12-hour
+ * ("10:00 AM"), `duration` is a string like "14m ".
  */
 export interface OscarDayApptItem {
   appointmentNo?: number;
   id?: number;
   providerNo?: string;
   demographicNo?: number;
-  appointmentDate?: string;
+  date?: number;
   startTime?: string;
+  duration?: string;
+  type?: string;
   notes?: string;
   status?: string;
   name?: string;

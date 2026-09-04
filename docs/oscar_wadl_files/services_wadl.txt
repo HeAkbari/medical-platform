@@ -1,0 +1,3721 @@
+<application xmlns="http://wadl.dev.java.net/2009/02" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<grammars>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="unqualified">
+<xs:element name="List" type="oscarSearchResponse"/>
+<xs:element name="OscarJob" type="oscarJobTo1"/>
+<xs:element name="OscarJobType" type="oscarJobTypeTo1"/>
+<xs:element name="ProductLocation" type="productLocationTo1"/>
+<xs:element name="addressTo1" type="addressTo1"/>
+<xs:element name="allergyResponse" type="allergyResponse"/>
+<xs:element name="app" type="appDefinitionTo1"/>
+<xs:element name="appointmentExtResponse" type="appointmentExtResponse"/>
+<xs:element name="appointmentStatusTo1" type="appointmentStatusTo1"/>
+<xs:element name="consultationRequestTo1" type="consultationRequestTo1"/>
+<xs:element name="consultationResponseTo1" type="consultationResponseTo1"/>
+<xs:element name="consultationServiceTo1" type="consultationServiceTo1"/>
+<xs:element name="demographicMergedTo1" type="demographicMergedTo1"/>
+<xs:element name="demographicResponse" type="demographicResponse"/>
+<xs:element name="demographicTo1" type="demographicTo1"/>
+<xs:element name="diagnosisTo1" type="diagnosisTo1"/>
+<xs:element name="documentReviewTo1" type="documentReviewTo1"/>
+<xs:element name="documentTo1" type="documentTo1"/>
+<xs:element name="drug" nillable="true" type="xs:anyType"/>
+<xs:element name="drugLookupResponse" type="drugLookupResponse"/>
+<xs:element name="drugProduct" type="drugProductTo1"/>
+<xs:element name="drugProductResponse" type="drugProductResponse"/>
+<xs:element name="drugProductTemplateResponse" type="drugProductTemplateResponse"/>
+<xs:element name="drugResponse" type="drugResponse"/>
+<xs:element name="drugSearchResponse" type="drugSearchResponse"/>
+<xs:element name="encounterNote" type="noteTo1"/>
+<xs:element name="encounterTemplateResponse" type="encounterTemplateResponse"/>
+<xs:element name="favorite" type="favoriteTo1"/>
+<xs:element name="favoriteResponse" type="favoriteResponse"/>
+<xs:element name="formTo1" type="formTo1"/>
+<xs:element name="formlist" type="formListTo1"/>
+<xs:element name="genericRESTResponse" type="genericRESTResponse"/>
+<xs:element name="groupNoteExt" type="noteExtTo1"/>
+<xs:element name="inbox" type="inboxTo1"/>
+<xs:element name="inboxResponse" type="inboxResponse"/>
+<xs:element name="issue" type="issueTo1"/>
+<xs:element name="item" type="menuItemTo1"/>
+<xs:element name="labResponse" type="labResponse"/>
+<xs:element name="letterheadTo1" type="letterheadTo1"/>
+<xs:element name="measurementResponse" type="measurementResponse"/>
+<xs:element name="menu" type="menuTo1"/>
+<xs:element name="message" type="messageTo1"/>
+<xs:element name="messagingResponse" type="messagingResponse"/>
+<xs:element name="navbarMenu" type="navBarMenuTo1"/>
+<xs:element name="navbarResponse" type="navbarResponse"/>
+<xs:element name="noteIssue" type="noteIssueTo1"/>
+<xs:element name="noteSelection" type="noteSelectionTo1"/>
+<xs:element name="notification" type="notificationTo1"/>
+<xs:element name="oscarJobResponse" type="oscarJobResponse"/>
+<xs:element name="oscarJobTypeResponse" type="oscarJobTypeResponse"/>
+<xs:element name="patientDetailStatusTo1" type="patientDetailStatusTo1"/>
+<xs:element name="patientListApptBean">
+<xs:complexType>
+<xs:sequence>
+<xs:element minOccurs="0" name="template" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="patients" nillable="true" type="patientListApptItemBean"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="patientListApptItemBean" type="patientListApptItemBean"/>
+<xs:element name="personaResponse" type="personaResponse"/>
+<xs:element name="personaRightsResponse" type="personaRightsResponse"/>
+<xs:element name="pharmacyInfoTo1" type="pharmacyInfoTo1"/>
+<xs:element name="post" type="rssItem"/>
+<xs:element name="prescription" type="prescriptionTo1"/>
+<xs:element name="prescriptionResponse" type="prescriptionResponse"/>
+<xs:element name="preventionResponse" type="preventionResponse"/>
+<xs:element name="productLocationResponse" type="productLocationResponse"/>
+<xs:element name="programProviderTo1" type="programProviderTo1"/>
+<xs:element name="programTo1" type="programTo1"/>
+<xs:element name="providerApptsCountResponse" type="providerApptsCountResponse"/>
+<xs:element name="providerPeriodAppsResponse" type="providerPeriodAppsResponse"/>
+<xs:element name="referralResponse" type="referralResponse"/>
+<xs:element name="rssResponse" type="rssResponse"/>
+<xs:element name="schedulingResponse" type="schedulingResponse"/>
+<xs:element name="securityObject" type="securityObjectTo1"/>
+<xs:element name="statusValueTo1" type="statusValueTo1"/>
+<xs:element name="summary" type="summaryTo1"/>
+<xs:element name="summaryItem" type="summaryItemTo1"/>
+<xs:element name="tickler" type="ticklerTo1"/>
+<xs:element name="ticklerComment" type="ticklerCommentTo1"/>
+<xs:element name="ticklerLink" type="ticklerLinkTo1"/>
+<xs:element name="ticklerNote" type="ticklerNoteTo1"/>
+<xs:element name="ticklerNoteResponse" type="ticklerNoteResponse"/>
+<xs:element name="ticklerResponse" type="ticklerResponse"/>
+<xs:element name="ticklerUpdate" type="ticklerUpdateTo1"/>
+<xs:element name="userRole" nillable="true" type="xs:anyType"/>
+<xs:complexType name="documentTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="abnormal" type="xs:boolean"/>
+<xs:element minOccurs="0" name="appointmentNo" type="xs:int"/>
+<xs:element minOccurs="0" name="contentDateTime" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="contentType" type="xs:string"/>
+<xs:element minOccurs="0" name="creator" type="xs:string"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+<xs:element minOccurs="0" name="docClass" type="xs:string"/>
+<xs:element minOccurs="0" name="fileContents" type="xs:base64Binary"/>
+<xs:element minOccurs="0" name="fileName" type="xs:string"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="numberOfPages" type="xs:int"/>
+<xs:element minOccurs="0" name="observationDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="programId" type="xs:int"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element name="public1" type="xs:int"/>
+<xs:element minOccurs="0" name="reportMedia" type="xs:string"/>
+<xs:element minOccurs="0" name="responsible" type="xs:string"/>
+<xs:element minOccurs="0" name="restrictToProgram" type="xs:boolean"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="reviews" nillable="true" type="documentReviewTo1"/>
+<xs:element minOccurs="0" name="sentDateTime" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="source" type="xs:string"/>
+<xs:element minOccurs="0" name="sourceFacility" type="xs:string"/>
+<xs:element name="status" type="xs:unsignedShort"/>
+<xs:element minOccurs="0" name="subClass" type="xs:string"/>
+<xs:element minOccurs="0" name="type" type="xs:string"/>
+<xs:element minOccurs="0" name="updateDateTime" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="xml" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="documentReviewTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="dateTimeReviewed" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="documentNo" type="xs:int"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="reviewer" type="providerTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="providerTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="address" type="addressTo1"/>
+<xs:element minOccurs="0" name="billingNo" type="xs:string"/>
+<xs:element minOccurs="0" name="comments" type="xs:string"/>
+<xs:element minOccurs="0" name="dob" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="email" type="xs:string"/>
+<xs:element name="enabled" type="xs:boolean"/>
+<xs:element minOccurs="0" name="firstName" type="xs:string"/>
+<xs:element minOccurs="0" name="hsoNo" type="xs:string"/>
+<xs:element minOccurs="0" name="lastName" type="xs:string"/>
+<xs:element minOccurs="0" name="lastUpdateDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="lastUpdateUser" type="xs:string"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="ohipNo" type="xs:string"/>
+<xs:element minOccurs="0" name="phone" type="xs:string"/>
+<xs:element minOccurs="0" name="practitionerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="practitionerNoType" type="xs:string"/>
+<xs:element minOccurs="0" name="providerActivity" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="providerType" type="xs:string"/>
+<xs:element minOccurs="0" name="rmaNo" type="xs:string"/>
+<xs:element minOccurs="0" name="sex" type="sex1"/>
+<xs:element minOccurs="0" name="signedConfidentiality" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="specialty" type="xs:string"/>
+<xs:element minOccurs="0" name="team" type="xs:string"/>
+<xs:element minOccurs="0" name="title" type="xs:string"/>
+<xs:element minOccurs="0" name="workPhone" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="addressTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="address" type="xs:string"/>
+<xs:element minOccurs="0" name="city" type="xs:string"/>
+<xs:element minOccurs="0" name="postal" type="xs:string"/>
+<xs:element minOccurs="0" name="province" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="patientListApptItemBean">
+<xs:sequence>
+<xs:element minOccurs="0" name="appointmentNo" type="xs:int"/>
+<xs:element minOccurs="0" name="date" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="reason" type="xs:string"/>
+<xs:element minOccurs="0" name="startTime" type="xs:string"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="oscarJobResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="jobs" nillable="true" type="oscarJobTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="oscarJobTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="cronExpression" type="xs:string"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+<xs:element name="enabled" type="xs:boolean"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="nextPlannedExecutionDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="oscarJobType" type="oscarJobTypeTo1"/>
+<xs:element name="oscarJobTypeId" type="xs:int"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="oscarJobTypeTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="className" type="xs:string"/>
+<xs:element name="currentlyValid" type="xs:boolean"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+<xs:element name="enabled" type="xs:boolean"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="nextPlannedExecutionDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="updated" type="xs:dateTime"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="providerPeriodAppsResponse">
+<xs:complexContent>
+<xs:extension base="abstractSearchResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="content">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="ProviderPeriodApps" type="providerPeriodAppsTo"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="abstractSearchResponse">
+<xs:sequence>
+<xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+<xs:element name="limit" type="xs:int"/>
+<xs:element name="offset" type="xs:int"/>
+<xs:element minOccurs="0" name="query" type="xs:string"/>
+<xs:element minOccurs="0" name="timestamp" type="xs:dateTime"/>
+<xs:element name="total" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="providerPeriodAppsTo">
+<xs:sequence>
+<xs:element minOccurs="0" name="appointmentDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="appointmentNo" type="xs:int"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="lastUpdateUser" type="xs:string"/>
+<xs:element minOccurs="0" name="location" type="xs:string"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="notes" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="resources" type="xs:string"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+<xs:element minOccurs="0" name="updateDatetime" type="xs:long"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="demographicResponse">
+<xs:complexContent>
+<xs:extension base="abstractSearchResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="content">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="demographic" type="demographicTo1"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="demographicTo1">
+<xs:sequence>
+<xs:element name="activeCount" type="xs:int"/>
+<xs:element minOccurs="0" name="address" type="addressTo1"/>
+<xs:element minOccurs="0" name="admissionProgramId" type="xs:int"/>
+<xs:element minOccurs="0" name="age" type="ageTo1"/>
+<xs:element minOccurs="0" name="alert" type="xs:string"/>
+<xs:element minOccurs="0" name="alias" type="xs:string"/>
+<xs:element minOccurs="0" name="alternativePhone" type="xs:string"/>
+<xs:element minOccurs="0" name="anonymous" type="xs:string"/>
+<xs:element minOccurs="0" name="chartNo" type="xs:string"/>
+<xs:element minOccurs="0" name="children" type="xs:string"/>
+<xs:element minOccurs="0" name="citizenship" type="xs:string"/>
+<xs:element minOccurs="0" name="countryOfOrigin" type="xs:string"/>
+<xs:element minOccurs="0" name="dateJoined" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="dateOfBirth" type="xs:dateTime"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="demoContactPros" nillable="true" type="demographicContactFewTo1"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="demoContacts" nillable="true" type="demographicContactFewTo1"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="displayName" type="xs:string"/>
+<xs:element minOccurs="0" name="dobDay" type="xs:string"/>
+<xs:element minOccurs="0" name="dobMonth" type="xs:string"/>
+<xs:element minOccurs="0" name="dobYear" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="doctors" nillable="true" type="providerTo1"/>
+<xs:element minOccurs="0" name="effDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="email" type="xs:string"/>
+<xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="extras" nillable="true" type="demographicExtTo1"/>
+<xs:element minOccurs="0" name="familyDoctor" type="xs:string"/>
+<xs:element minOccurs="0" name="firstName" type="xs:string"/>
+<xs:element minOccurs="0" name="hcRenewDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="hcType" type="xs:string"/>
+<xs:element minOccurs="0" name="hin" type="xs:string"/>
+<xs:element name="hsAlertCount" type="xs:int"/>
+<xs:element minOccurs="0" name="lastName" type="xs:string"/>
+<xs:element minOccurs="0" name="lastUpdateDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="lastUpdateUser" type="xs:string"/>
+<xs:element minOccurs="0" name="links" type="xs:string"/>
+<xs:element minOccurs="0" name="midwife" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="midwives" nillable="true" type="providerTo1"/>
+<xs:element minOccurs="0" name="myOscarUserName" type="xs:string"/>
+<xs:element minOccurs="0" name="newsletter" type="xs:string"/>
+<xs:element minOccurs="0" name="notes" type="xs:string"/>
+<xs:element minOccurs="0" name="nurse" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="nurses" nillable="true" type="providerTo1"/>
+<xs:element minOccurs="0" name="officialLanguage" type="xs:string"/>
+<xs:element minOccurs="0" name="onWaitingListSinceDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="patientStatus" type="xs:string"/>
+<xs:element minOccurs="0" name="patientStatusDate" type="xs:dateTime"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="patientStatusList" nillable="true" type="statusValueTo1"/>
+<xs:element minOccurs="0" name="pcnIndicator" type="xs:string"/>
+<xs:element minOccurs="0" name="phone" type="xs:string"/>
+<xs:element minOccurs="0" name="previousAddress" type="addressTo1"/>
+<xs:element minOccurs="0" name="provider" type="providerTo1"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="referralDoctors" nillable="true" type="professionalSpecialistTo1"/>
+<xs:element minOccurs="0" name="resident" type="xs:string"/>
+<xs:element minOccurs="0" name="rosterDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="rosterStatus" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="rosterStatusList" nillable="true" type="statusValueTo1"/>
+<xs:element minOccurs="0" name="rosterTerminationDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="rosterTerminationReason" type="xs:string"/>
+<xs:element minOccurs="0" name="sex" type="xs:string"/>
+<xs:element minOccurs="0" name="sexDesc" type="xs:string"/>
+<xs:element minOccurs="0" name="sin" type="xs:string"/>
+<xs:element minOccurs="0" name="sourceOfIncome" type="xs:string"/>
+<xs:element minOccurs="0" name="spokenLanguage" type="xs:string"/>
+<xs:element minOccurs="0" name="title" type="xs:string"/>
+<xs:element minOccurs="0" name="ver" type="xs:string"/>
+<xs:element minOccurs="0" name="waitingListID" type="xs:int"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="waitingListNames" nillable="true" type="waitingListNameTo1"/>
+<xs:element minOccurs="0" name="waitingListNote" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ageTo1">
+<xs:sequence>
+<xs:element name="days" type="xs:int"/>
+<xs:element name="months" type="xs:int"/>
+<xs:element name="years" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="demographicContactFewTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="category" type="xs:string"/>
+<xs:element minOccurs="0" name="ec" type="xs:string"/>
+<xs:element minOccurs="0" name="firstName" type="xs:string"/>
+<xs:element minOccurs="0" name="lastName" type="xs:string"/>
+<xs:element minOccurs="0" name="phone" type="xs:string"/>
+<xs:element minOccurs="0" name="role" type="xs:string"/>
+<xs:element minOccurs="0" name="sdm" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="demographicExtTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="dateCreated" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element name="hidden" type="xs:boolean"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="key" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="value" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="statusValueTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="value" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="professionalSpecialistTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="annotation" type="xs:string"/>
+<xs:element minOccurs="0" name="departmentId" type="xs:int"/>
+<xs:element minOccurs="0" name="eformId" type="xs:int"/>
+<xs:element minOccurs="0" name="emailAddress" type="xs:string"/>
+<xs:element minOccurs="0" name="faxNumber" type="xs:string"/>
+<xs:element minOccurs="0" name="firstName" type="xs:string"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="institutionId" type="xs:int"/>
+<xs:element minOccurs="0" name="lastName" type="xs:string"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="phoneNumber" type="xs:string"/>
+<xs:element minOccurs="0" name="professionalLetters" type="xs:string"/>
+<xs:element minOccurs="0" name="referralNo" type="xs:string"/>
+<xs:element minOccurs="0" name="specialtyType" type="xs:string"/>
+<xs:element minOccurs="0" name="streetAddress" type="xs:string"/>
+<xs:element minOccurs="0" name="webSite" type="xs:string"/>
+<xs:element minOccurs="0" name="eDataOscarKey" type="xs:string"/>
+<xs:element minOccurs="0" name="eDataServiceKey" type="xs:string"/>
+<xs:element minOccurs="0" name="eDataServiceName" type="xs:string"/>
+<xs:element minOccurs="0" name="eDataUrl" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="waitingListNameTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="createDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="groupNo" type="xs:string"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="isHistory" type="xs:string"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="inboxResponse">
+<xs:complexContent>
+<xs:extension base="abstractSearchResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="content">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" ref="inbox"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="inboxTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="dateReceived" type="xs:string"/>
+<xs:element minOccurs="0" name="demographicName" type="xs:string"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="discipline" type="xs:string"/>
+<xs:element minOccurs="0" name="hin" type="xs:string"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="priority" type="xs:string"/>
+<xs:element minOccurs="0" name="source" type="xs:string"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="notificationTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="author" type="xs:string"/>
+<xs:element minOccurs="0" name="authorId" type="xs:string"/>
+<xs:element minOccurs="0" name="body" type="xs:string"/>
+<xs:element minOccurs="0" name="createdAt" type="xs:string"/>
+<xs:element minOccurs="0" name="referenceURL" type="xs:string"/>
+<xs:element minOccurs="0" name="summary" type="xs:string"/>
+<xs:element minOccurs="0" name="uuid" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="noteSelectionTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="moreNotes" type="xs:boolean"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="notelist" nillable="true" type="noteTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="noteTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="appointmentNo" type="xs:int"/>
+<xs:element name="archived" type="xs:boolean"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="assignedIssues" nillable="true" type="caseManagementIssueTo1"/>
+<xs:element name="cpp" type="xs:boolean"/>
+<xs:element name="document" type="xs:boolean"/>
+<xs:element minOccurs="0" name="editable" type="xs:boolean"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="editorNames" nillable="true" type="xs:string"/>
+<xs:element name="eformData" type="xs:boolean"/>
+<xs:element name="encounterForm" type="xs:boolean"/>
+<xs:element minOccurs="0" name="encounterTime" type="xs:string"/>
+<xs:element minOccurs="0" name="encounterTransportationTime" type="xs:string"/>
+<xs:element minOccurs="0" name="encounterType" type="xs:string"/>
+<xs:element name="groupNote" type="xs:boolean"/>
+<xs:element minOccurs="0" name="hasHistory" type="xs:boolean"/>
+<xs:element name="invoice" type="xs:boolean"/>
+<xs:element minOccurs="0" name="isSigned" type="xs:boolean"/>
+<xs:element minOccurs="0" name="isVerified" type="xs:boolean"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="issueDescriptions" nillable="true" type="xs:string"/>
+<xs:element minOccurs="0" name="location" type="xs:string"/>
+<xs:element minOccurs="0" name="locked" type="xs:boolean"/>
+<xs:element minOccurs="0" name="note" type="xs:string"/>
+<xs:element minOccurs="0" name="noteId" type="xs:int"/>
+<xs:element minOccurs="0" name="observationDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="position" type="xs:int"/>
+<xs:element minOccurs="0" name="programName" type="xs:string"/>
+<xs:element minOccurs="0" name="providerName" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element name="readOnly" type="xs:boolean"/>
+<xs:element minOccurs="0" name="remoteFacilityId" type="xs:int"/>
+<xs:element minOccurs="0" name="revision" type="xs:string"/>
+<xs:element minOccurs="0" name="roleName" type="xs:string"/>
+<xs:element name="rxAnnotation" type="xs:boolean"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+<xs:element minOccurs="0" name="summaryCode" type="xs:string"/>
+<xs:element name="ticklerNote" type="xs:boolean"/>
+<xs:element minOccurs="0" name="updateDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="uuid" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="caseManagementIssueTo1">
+<xs:sequence>
+<xs:element name="acute" type="xs:boolean"/>
+<xs:element name="certain" type="xs:boolean"/>
+<xs:element minOccurs="0" name="demographic_no" type="xs:string"/>
+<xs:element minOccurs="0" name="id" type="xs:long"/>
+<xs:element minOccurs="0" ref="issue"/>
+<xs:element name="issue_id" type="xs:long"/>
+<xs:element name="major" type="xs:boolean"/>
+<xs:element minOccurs="0" name="program_id" type="xs:int"/>
+<xs:element name="resolved" type="xs:boolean"/>
+<xs:element minOccurs="0" name="type" type="xs:string"/>
+<xs:element name="unchecked" type="xs:boolean"/>
+<xs:element name="unsaved" type="xs:boolean"/>
+<xs:element minOccurs="0" name="update_date" type="xs:dateTime"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="issueTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="code" type="xs:string"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+<xs:element minOccurs="0" name="id" type="xs:long"/>
+<xs:element name="issueChange" type="xs:boolean"/>
+<xs:element minOccurs="0" name="priority" type="xs:string"/>
+<xs:element minOccurs="0" name="role" type="xs:string"/>
+<xs:element minOccurs="0" name="sortOrderId" type="xs:int"/>
+<xs:element minOccurs="0" name="type" type="xs:string"/>
+<xs:element minOccurs="0" name="update_date" type="xs:dateTime"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="allergyResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="allergies" nillable="true" type="allergyTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="allergyTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="agccs" type="xs:int"/>
+<xs:element minOccurs="0" name="agcsp" type="xs:int"/>
+<xs:element minOccurs="0" name="ageOfOnset" type="xs:string"/>
+<xs:element name="archived" type="xs:boolean"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+<xs:element minOccurs="0" name="drugrefId" type="xs:string"/>
+<xs:element minOccurs="0" name="entryDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="hicSeqno" type="xs:int"/>
+<xs:element minOccurs="0" name="hiclSeqno" type="xs:int"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="lastUpdateDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="lifeStage" type="xs:string"/>
+<xs:element minOccurs="0" name="onsetOfReaction" type="xs:string"/>
+<xs:element name="position" type="xs:int"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="reaction" type="xs:string"/>
+<xs:element minOccurs="0" name="regionalIdentifier" type="xs:string"/>
+<xs:element minOccurs="0" name="severityOfReaction" type="xs:string"/>
+<xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="typeCode" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="prescriptionResponse">
+<xs:complexContent>
+<xs:extension base="genericRESTResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="drugs" nillable="true" type="drugTo1"/>
+<xs:element minOccurs="0" ref="prescription"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="genericRESTResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="message" type="xs:string"/>
+<xs:element name="success" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="drugTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="drugId" type="xs:int"/>
+<xs:element minOccurs="0" name="brandName" type="xs:string"/>
+<xs:element minOccurs="0" name="genericName" type="xs:string"/>
+<xs:element minOccurs="0" name="atc" type="xs:string"/>
+<xs:element minOccurs="0" name="regionalIdentifier" type="xs:string"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:int"/>
+<xs:element name="takeMin" type="xs:float"/>
+<xs:element name="takeMax" type="xs:float"/>
+<xs:element minOccurs="0" name="rxDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="frequency" type="xs:string"/>
+<xs:element minOccurs="0" name="duration" type="xs:int"/>
+<xs:element minOccurs="0" name="durationUnit" type="xs:string"/>
+<xs:element minOccurs="0" name="route" type="xs:string"/>
+<xs:element minOccurs="0" name="form" type="xs:string"/>
+<xs:element minOccurs="0" name="method" type="xs:string"/>
+<xs:element minOccurs="0" name="prn" type="xs:boolean"/>
+<xs:element minOccurs="0" name="repeats" type="xs:int"/>
+<xs:element minOccurs="0" name="quantity" type="xs:int"/>
+<xs:element minOccurs="0" name="instructions" type="xs:string"/>
+<xs:element minOccurs="0" name="additionalInstructions" type="xs:string"/>
+<xs:element minOccurs="0" name="archived" type="xs:boolean"/>
+<xs:element minOccurs="0" name="archivedReason" type="xs:string"/>
+<xs:element minOccurs="0" name="archivedDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="strength" type="xs:float"/>
+<xs:element minOccurs="0" name="strengthUnit" type="xs:string"/>
+<xs:element minOccurs="0" name="externalProvider" type="xs:string"/>
+<xs:element minOccurs="0" name="longTerm" type="xs:boolean"/>
+<xs:element minOccurs="0" name="noSubstitutions" type="xs:boolean"/>
+<xs:element minOccurs="0" name="dispenseInternal" type="xs:boolean"/>
+<xs:element minOccurs="0" name="dispenseIntervalNumber" type="xs:int"/>
+<xs:element minOccurs="0" name="refillDuration" type="xs:int"/>
+<xs:element minOccurs="0" name="refillQuantity" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="prescriptionTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="scriptId" type="xs:int"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:int"/>
+<xs:element minOccurs="0" name="datePrescribed" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="datePrinted" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="textView" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="demographicMergedTo1">
+<xs:sequence>
+<xs:element name="deleted" type="xs:int"/>
+<xs:element name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="lastUpdateDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="lastUpdateUser" type="xs:string"/>
+<xs:element name="mergedTo" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="noteIssueTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="annotation_attrib" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="assignedCMIssues" nillable="true" type="caseManagementIssueTo1"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="assignedIssues" nillable="true" type="issueTo1"/>
+<xs:element minOccurs="0" ref="encounterNote"/>
+<xs:element minOccurs="0" ref="groupNoteExt"/>
+<xs:element minOccurs="0" ref="issue"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="noteExtTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="ageAtOnset" type="xs:string"/>
+<xs:element minOccurs="0" name="dateValue" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="exposureDetail" type="xs:string"/>
+<xs:element minOccurs="0" name="hideCpp" type="xs:string"/>
+<xs:element minOccurs="0" name="id" type="xs:long"/>
+<xs:element minOccurs="0" name="keyVal" type="xs:string"/>
+<xs:element minOccurs="0" name="lifeStage" type="xs:string"/>
+<xs:element minOccurs="0" name="noteId" type="xs:long"/>
+<xs:element minOccurs="0" name="problemDesc" type="xs:string"/>
+<xs:element minOccurs="0" name="problemStatus" type="xs:string"/>
+<xs:element minOccurs="0" name="procedureDate" type="xs:string"/>
+<xs:element minOccurs="0" name="relationship" type="xs:string"/>
+<xs:element minOccurs="0" name="resolutionDate" type="xs:string"/>
+<xs:element minOccurs="0" name="startDate" type="xs:string"/>
+<xs:element minOccurs="0" name="treatment" type="xs:string"/>
+<xs:element minOccurs="0" name="value" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="referralResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="services" nillable="true" type="consultationServiceTo1"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="specialists" nillable="true" type="professionalSpecialistTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="consultationServiceTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="active" type="xs:string"/>
+<xs:element minOccurs="0" name="serviceDesc" type="xs:string"/>
+<xs:element minOccurs="0" name="serviceId" type="xs:int"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="specialists" nillable="true" type="professionalSpecialistTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="drugProductTemplateResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="templates" nillable="true" type="drugProductTemplateTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="drugProductTemplateTo1">
+<xs:sequence>
+<xs:element name="amount" type="xs:int"/>
+<xs:element minOccurs="0" name="code" type="xs:string"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="favoriteTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="favoriteId" type="xs:int"/>
+<xs:element minOccurs="0" name="brandName" type="xs:string"/>
+<xs:element minOccurs="0" name="genericName" type="xs:string"/>
+<xs:element minOccurs="0" name="atc" type="xs:string"/>
+<xs:element minOccurs="0" name="favoriteName" type="xs:string"/>
+<xs:element minOccurs="0" name="regionalIdentifier" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:int"/>
+<xs:element name="takeMin" type="xs:float"/>
+<xs:element name="takeMax" type="xs:float"/>
+<xs:element minOccurs="0" name="frequency" type="xs:string"/>
+<xs:element minOccurs="0" name="duration" type="xs:int"/>
+<xs:element minOccurs="0" name="durationUnit" type="xs:string"/>
+<xs:element minOccurs="0" name="quantity" type="xs:int"/>
+<xs:element minOccurs="0" name="route" type="xs:string"/>
+<xs:element minOccurs="0" name="form" type="xs:string"/>
+<xs:element minOccurs="0" name="method" type="xs:string"/>
+<xs:element minOccurs="0" name="prn" type="xs:boolean"/>
+<xs:element minOccurs="0" name="repeats" type="xs:int"/>
+<xs:element minOccurs="0" name="instructions" type="xs:string"/>
+<xs:element minOccurs="0" name="strength" type="xs:float"/>
+<xs:element minOccurs="0" name="strengthUnit" type="xs:string"/>
+<xs:element minOccurs="0" name="externalProvider" type="xs:string"/>
+<xs:element minOccurs="0" name="longTerm" type="xs:boolean"/>
+<xs:element minOccurs="0" name="noSubstitutions" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="preventionResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="preventions" nillable="true" type="preventionTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="preventionTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="creatorProviderNo" type="xs:string"/>
+<xs:element name="deleted" type="xs:boolean"/>
+<xs:element minOccurs="0" name="demographicId" type="xs:int"/>
+<xs:element name="ineligible" type="xs:boolean"/>
+<xs:element minOccurs="0" name="lastUpdateDate" type="xs:dateTime"/>
+<xs:element name="never" type="xs:boolean"/>
+<xs:element minOccurs="0" name="nextDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="preventionDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="preventionType" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element name="refused" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="consultationResponseTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="allergies" type="xs:string"/>
+<xs:element minOccurs="0" name="appointmentDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="appointmentNote" type="xs:string"/>
+<xs:element minOccurs="0" name="appointmentTime" type="xs:dateTime"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="attachments" nillable="true" type="consultationAttachmentTo1"/>
+<xs:element minOccurs="0" name="clinicalInfo" type="xs:string"/>
+<xs:element minOccurs="0" name="concurrentProblems" type="xs:string"/>
+<xs:element minOccurs="0" name="currentMeds" type="xs:string"/>
+<xs:element minOccurs="0" name="demographic" type="demographicTo1"/>
+<xs:element minOccurs="0" name="examination" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="faxList" nillable="true" type="faxConfigTo1"/>
+<xs:element minOccurs="0" name="followUpDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="impression" type="xs:string"/>
+<xs:element minOccurs="0" name="letterheadAddress" type="xs:string"/>
+<xs:element minOccurs="0" name="letterheadFax" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="letterheadList" nillable="true" type="letterheadTo1"/>
+<xs:element minOccurs="0" name="letterheadName" type="xs:string"/>
+<xs:element minOccurs="0" name="letterheadPhone" type="xs:string"/>
+<xs:element minOccurs="0" name="plan" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="referralDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="referralReason" type="xs:string"/>
+<xs:element minOccurs="0" name="referringDoctor" type="professionalSpecialistTo1"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="referringDoctorList" nillable="true" type="professionalSpecialistTo1"/>
+<xs:element minOccurs="0" name="responseDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="sendTo" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="sendToList" nillable="true" type="xs:string"/>
+<xs:element minOccurs="0" name="signatureImg" type="xs:string"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+<xs:element minOccurs="0" name="urgency" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="consultationAttachmentTo1">
+<xs:sequence>
+<xs:element name="attached" type="xs:boolean"/>
+<xs:element minOccurs="0" name="displayName" type="xs:string"/>
+<xs:element name="documentNo" type="xs:int"/>
+<xs:element minOccurs="0" name="documentType" type="xs:string"/>
+<xs:element minOccurs="0" name="documentTypeDisplay" type="xs:string"/>
+<xs:element minOccurs="0" name="shortName" type="xs:string"/>
+<xs:element minOccurs="0" name="url" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="faxConfigTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="faxNumber" type="xs:string"/>
+<xs:element minOccurs="0" name="faxUser" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="letterheadTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="address" type="xs:string"/>
+<xs:element minOccurs="0" name="id" type="xs:string"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="phone" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="drugProductResponse">
+<xs:complexContent>
+<xs:extension base="abstractSearchResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="content">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" ref="drugProduct"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="drugProductTo1">
+<xs:sequence>
+<xs:element name="amount" type="xs:int"/>
+<xs:element minOccurs="0" name="code" type="xs:string"/>
+<xs:element minOccurs="0" name="dispensingEvent" type="xs:int"/>
+<xs:element minOccurs="0" name="expiryDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="location" type="xs:int"/>
+<xs:element minOccurs="0" name="lotNumber" type="xs:string"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="labResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="messages" nillable="true" type="hl7TextMessageTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="hl7TextMessageTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="base64EncodedeMessage" type="xs:string"/>
+<xs:element minOccurs="0" name="created" type="xs:dateTime"/>
+<xs:element name="fileUploadCheckId" type="xs:int"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="serviceName" type="xs:string"/>
+<xs:element minOccurs="0" name="type" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="messagingResponse">
+<xs:complexContent>
+<xs:extension base="abstractSearchResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="content">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="messages" type="messageTo1"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="messageTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="dateOfMessage" type="xs:string"/>
+<xs:element minOccurs="0" name="demographicName" type="xs:string"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="fromName" type="xs:string"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="message" type="xs:string"/>
+<xs:element minOccurs="0" name="subject" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="patientDetailStatusTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="billregion" type="xs:string"/>
+<xs:element name="conformanceFeaturesEnabled" type="xs:boolean"/>
+<xs:element minOccurs="0" name="defaultView" type="xs:string"/>
+<xs:element minOccurs="0" name="hospitalView" type="xs:string"/>
+<xs:element name="integratorAllSynced" type="xs:boolean"/>
+<xs:element name="integratorEnabled" type="xs:boolean"/>
+<xs:element name="integratorOffline" type="xs:boolean"/>
+<xs:element name="macPHRIdsSet" type="xs:boolean"/>
+<xs:element name="macPHRLoggedIn" type="xs:boolean"/>
+<xs:element minOccurs="0" name="macPHRVerificationLevel" type="xs:string"/>
+<xs:element name="showEmploymentStatus" type="xs:boolean"/>
+<xs:element name="showPrimaryCarePhysicianCheck" type="xs:boolean"/>
+<xs:element name="workflowEnhance" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="personaRightsResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="privileges" nillable="true" type="userPrivilegeTo1"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="roles" nillable="true" type="userRoleTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="userPrivilegeTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="objectName" type="xs:string"/>
+<xs:element minOccurs="0" name="privilege" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="userRoleTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="roleId" type="xs:int"/>
+<xs:element minOccurs="0" name="roleName" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="securityObjectTo1">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="menuTo1">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="items" nillable="true" type="menuItemTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="menuItemTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="dropdown" type="xs:boolean"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="dropdownItems" nillable="true" type="menuItemTo1"/>
+<xs:element minOccurs="0" name="extra" type="xs:string"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="label" type="xs:string"/>
+<xs:element minOccurs="0" name="newWindowName" type="xs:string"/>
+<xs:element minOccurs="0" name="state" type="xs:string"/>
+<xs:element minOccurs="0" name="url" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="diagnosisTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="code" type="xs:string"/>
+<xs:element minOccurs="0" name="codingSystem" type="xs:string"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="schedulingResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="appointment" type="appointmentTo1"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="appointments" nillable="true" type="appointmentTo1"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="reasons" nillable="true" type="lookupListItemTo1"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="statuses" nillable="true" type="appointmentStatusTo1"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="types" nillable="true" type="appointmentTypeTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="appointmentTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="appointmentDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="billing" type="xs:string"/>
+<xs:element minOccurs="0" name="bookingSource" type="bookingSource"/>
+<xs:element minOccurs="0" name="createDateTime" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="creator" type="xs:string"/>
+<xs:element minOccurs="0" name="creatorSecurityId" type="xs:int"/>
+<xs:element minOccurs="0" name="demographic" type="demographic"/>
+<xs:element name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="importedStatus" type="xs:string"/>
+<xs:element minOccurs="0" name="lastUpdateUser" type="xs:string"/>
+<xs:element minOccurs="0" name="location" type="xs:string"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="notes" type="xs:string"/>
+<xs:element name="programId" type="xs:int"/>
+<xs:element minOccurs="0" name="provider" type="provider"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="reason" type="xs:string"/>
+<xs:element minOccurs="0" name="reasonCode" type="xs:int"/>
+<xs:element minOccurs="0" name="remarks" type="xs:string"/>
+<xs:element minOccurs="0" name="resources" type="xs:string"/>
+<xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+<xs:element minOccurs="0" name="style" type="xs:string"/>
+<xs:element minOccurs="0" name="type" type="xs:string"/>
+<xs:element minOccurs="0" name="updateDateTime" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="urgency" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="demographic">
+<xs:complexContent>
+<xs:extension base="abstractModel">
+<xs:sequence>
+<xs:element name="activeCount" type="xs:int"/>
+<xs:element minOccurs="0" name="address" type="xs:string"/>
+<xs:element minOccurs="0" name="alias" type="xs:string"/>
+<xs:element minOccurs="0" name="anonymous" type="xs:string"/>
+<xs:element minOccurs="0" name="cellPhone" type="xs:string"/>
+<xs:element minOccurs="0" name="chartNo" type="xs:string"/>
+<xs:element minOccurs="0" name="children" type="xs:string"/>
+<xs:element minOccurs="0" name="citizenship" type="xs:string"/>
+<xs:element minOccurs="0" name="city" type="xs:string"/>
+<xs:element minOccurs="0" name="countryOfOrigin" type="xs:string"/>
+<xs:element minOccurs="0" name="dateJoined" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="dateOfBirth" type="xs:string"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="effDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="email" type="xs:string"/>
+<xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="extras" nillable="true" type="demographicExt"/>
+<xs:element minOccurs="0" name="familyDoctor" type="xs:string"/>
+<xs:element minOccurs="0" name="familyPhysician" type="xs:string"/>
+<xs:element minOccurs="0" name="firstName" type="xs:string"/>
+<xs:element minOccurs="0" name="formattedDob" type="xs:string"/>
+<xs:element minOccurs="0" name="formattedEffDate" type="xs:string"/>
+<xs:element minOccurs="0" name="formattedRenewDate" type="xs:string"/>
+<xs:element minOccurs="0" name="hcRenewDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="hcType" type="xs:string"/>
+<xs:element minOccurs="0" name="headRecord" type="xs:int"/>
+<xs:element minOccurs="0" name="hin" type="xs:string"/>
+<xs:element name="hsAlertCount" type="xs:int"/>
+<xs:element minOccurs="0" name="lastName" type="xs:string"/>
+<xs:element minOccurs="0" name="lastUpdateDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="lastUpdateUser" type="xs:string"/>
+<xs:element minOccurs="0" name="links" type="xs:string"/>
+<xs:element minOccurs="0" name="monthOfBirth" type="xs:string"/>
+<xs:element minOccurs="0" name="myOscarUserName" type="xs:string"/>
+<xs:element minOccurs="0" name="newsletter" type="xs:string"/>
+<xs:element minOccurs="0" name="officialLanguage" type="xs:string"/>
+<xs:element minOccurs="0" name="patientStatus" type="xs:string"/>
+<xs:element minOccurs="0" name="patientStatusDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="pcnIndicator" type="xs:string"/>
+<xs:element minOccurs="0" name="phone" type="xs:string"/>
+<xs:element minOccurs="0" name="phone2" type="xs:string"/>
+<xs:element minOccurs="0" name="phoneComment" type="xs:string"/>
+<xs:element minOccurs="0" name="postal" type="xs:string"/>
+<xs:element minOccurs="0" name="prefName" type="xs:string"/>
+<xs:element minOccurs="0" name="previousAddress" type="xs:string"/>
+<xs:element minOccurs="0" name="provider" type="provider"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="province" type="xs:string"/>
+<xs:element minOccurs="0" name="rosterDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="rosterStatus" type="xs:string"/>
+<xs:element minOccurs="0" name="rosterTerminationDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="rosterTerminationReason" type="xs:string"/>
+<xs:element minOccurs="0" name="sex" type="xs:string"/>
+<xs:element minOccurs="0" name="sexDesc" type="xs:string"/>
+<xs:element minOccurs="0" name="sin" type="xs:string"/>
+<xs:element minOccurs="0" name="sourceOfIncome" type="xs:string"/>
+<xs:element minOccurs="0" name="spokenLanguage" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="subRecord" nillable="true" type="xs:int"/>
+<xs:element minOccurs="0" name="title" type="xs:string"/>
+<xs:element minOccurs="0" name="ver" type="xs:string"/>
+<xs:element minOccurs="0" name="yearOfBirth" type="xs:string"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType abstract="true" name="abstractModel">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="demographicExt">
+<xs:complexContent>
+<xs:extension base="abstractModel">
+<xs:sequence>
+<xs:element minOccurs="0" name="dateCreated" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="demographic" type="demographic"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element name="hidden" type="xs:boolean"/>
+<xs:element minOccurs="0" name="key" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="value" type="xs:string"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="provider">
+<xs:complexContent>
+<xs:extension base="abstractModel">
+<xs:sequence>
+<xs:element minOccurs="0" name="address" type="xs:string"/>
+<xs:element minOccurs="0" name="billingNo" type="xs:string"/>
+<xs:element minOccurs="0" name="comments" type="xs:string"/>
+<xs:element minOccurs="0" name="dob" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="email" type="xs:string"/>
+<xs:element minOccurs="0" name="firstName" type="xs:string"/>
+<xs:element minOccurs="0" name="hsoNo" type="xs:string"/>
+<xs:element minOccurs="0" name="lastName" type="xs:string"/>
+<xs:element minOccurs="0" name="lastUpdateDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="lastUpdateUser" type="xs:string"/>
+<xs:element minOccurs="0" name="ohipNo" type="xs:string"/>
+<xs:element minOccurs="0" name="phone" type="xs:string"/>
+<xs:element minOccurs="0" name="practitionerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="practitionerNoType" type="xs:string"/>
+<xs:element minOccurs="0" name="providerActivity" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="providerType" type="xs:string"/>
+<xs:element minOccurs="0" name="rmaNo" type="xs:string"/>
+<xs:element minOccurs="0" name="sex" type="xs:string"/>
+<xs:element minOccurs="0" name="signedConfidentiality" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="specialty" type="xs:string"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+<xs:element minOccurs="0" name="supervisor" type="xs:string"/>
+<xs:element minOccurs="0" name="team" type="xs:string"/>
+<xs:element minOccurs="0" name="title" type="xs:string"/>
+<xs:element minOccurs="0" name="workPhone" type="xs:string"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="lookupListItemTo1">
+<xs:sequence>
+<xs:element name="active" type="xs:boolean"/>
+<xs:element minOccurs="0" name="createdBy" type="xs:string"/>
+<xs:element minOccurs="0" name="dateCreated" type="xs:dateTime"/>
+<xs:element name="displayOrder" type="xs:int"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="label" type="xs:string"/>
+<xs:element minOccurs="0" name="lookupListId" type="xs:int"/>
+<xs:element minOccurs="0" name="value" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="appointmentStatusTo1">
+<xs:sequence>
+<xs:element name="active" type="xs:int"/>
+<xs:element minOccurs="0" name="color" type="xs:string"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+<xs:element name="editable" type="xs:int"/>
+<xs:element minOccurs="0" name="icon" type="xs:string"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="shortLetterColour" type="xs:string"/>
+<xs:element minOccurs="0" name="shortLetters" type="xs:string"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="appointmentTypeTo1">
+<xs:sequence>
+<xs:element name="duration" type="xs:int"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="location" type="xs:string"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="notes" type="xs:string"/>
+<xs:element minOccurs="0" name="reason" type="xs:string"/>
+<xs:element minOccurs="0" name="resources" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="summaryTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="displayName" type="xs:string"/>
+<xs:element minOccurs="0" name="displaySize" type="xs:string"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="summaryCode" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="summaryItem" nillable="true" type="summaryItemTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="summaryItemTo1">
+<xs:sequence>
+<xs:element name="abnormalFlag" type="xs:boolean"/>
+<xs:element minOccurs="0" name="action" type="xs:string"/>
+<xs:element minOccurs="0" name="classification" type="xs:string"/>
+<xs:element minOccurs="0" name="date" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="displayName" type="xs:string"/>
+<xs:element minOccurs="0" name="editor" type="xs:string"/>
+<xs:element minOccurs="0" name="extra" type="xs:anyType"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="indicatorClass" type="xs:string"/>
+<xs:element minOccurs="0" name="noteId" type="xs:long"/>
+<xs:element minOccurs="0" name="type" type="xs:string"/>
+<xs:element minOccurs="0" name="warning" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ticklerNoteResponse">
+<xs:sequence>
+<xs:element minOccurs="0" ref="ticklerNote"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ticklerNoteTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="editor" type="xs:string"/>
+<xs:element minOccurs="0" name="note" type="xs:string"/>
+<xs:element minOccurs="0" name="noteId" type="xs:int"/>
+<xs:element minOccurs="0" name="observationDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="revision" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ticklerResponse">
+<xs:complexContent>
+<xs:extension base="abstractSearchResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="content">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" ref="tickler"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="ticklerTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="creator" type="xs:string"/>
+<xs:element minOccurs="0" name="creatorName" type="xs:string"/>
+<xs:element minOccurs="0" name="demographicName" type="xs:string"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="message" type="xs:string"/>
+<xs:element minOccurs="0" name="priority" type="priority"/>
+<xs:element minOccurs="0" name="program" type="programTo1"/>
+<xs:element minOccurs="0" name="programId" type="xs:int"/>
+<xs:element minOccurs="0" name="serviceDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="status" type="status"/>
+<xs:element minOccurs="0" name="statusName" type="xs:string"/>
+<xs:element minOccurs="0" name="taskAssignedTo" type="xs:string"/>
+<xs:element minOccurs="0" name="taskAssignedToName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="ticklerComments" nillable="true" type="ticklerCommentTo1"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="ticklerLinks" nillable="true" type="ticklerLinkTo1"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="ticklerUpdates" nillable="true" type="ticklerUpdateTo1"/>
+<xs:element minOccurs="0" name="updateDate" type="xs:dateTime"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="programTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="abstinenceSupport" type="xs:string"/>
+<xs:element minOccurs="0" name="address" type="xs:string"/>
+<xs:element minOccurs="0" name="ageMax" type="xs:int"/>
+<xs:element minOccurs="0" name="ageMin" type="xs:int"/>
+<xs:element name="alcohol" type="xs:boolean"/>
+<xs:element name="allowBatchAdmission" type="xs:boolean"/>
+<xs:element name="allowBatchDischarge" type="xs:boolean"/>
+<xs:element name="bedProgramAffiliated" type="xs:boolean"/>
+<xs:element minOccurs="0" name="bedProgramLinkId" type="xs:int"/>
+<xs:element minOccurs="0" name="capacity_actual" type="xs:int"/>
+<xs:element minOccurs="0" name="capacity_funding" type="xs:int"/>
+<xs:element minOccurs="0" name="capacity_space" type="xs:int"/>
+<xs:element minOccurs="0" name="defaultServiceRestrictionDays" type="xs:int"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+<xs:element minOccurs="0" name="email" type="xs:string"/>
+<xs:element minOccurs="0" name="emailNotificationAddressesCsv" type="xs:string"/>
+<xs:element minOccurs="0" name="emergencyNumber" type="xs:string"/>
+<xs:element minOccurs="0" name="enableEncounterTime" type="xs:boolean"/>
+<xs:element minOccurs="0" name="enableEncounterTransportationTime" type="xs:boolean"/>
+<xs:element minOccurs="0" name="exclusiveView" type="xs:string"/>
+<xs:element minOccurs="0" name="facilityDesc" type="xs:string"/>
+<xs:element name="facilityId" type="xs:int"/>
+<xs:element minOccurs="0" name="fax" type="xs:string"/>
+<xs:element name="firstNation" type="xs:boolean"/>
+<xs:element minOccurs="0" name="functionalCentreId" type="xs:string"/>
+<xs:element minOccurs="0" name="genderDesc" type="xs:string"/>
+<xs:element name="hic" type="xs:boolean"/>
+<xs:element name="holdingTank" type="xs:boolean"/>
+<xs:element name="housing" type="xs:boolean"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="intakeProgram" type="xs:int"/>
+<xs:element minOccurs="0" name="lastReferralNotification" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="lastUpdateDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="lastUpdateUser" type="xs:string"/>
+<xs:element minOccurs="0" name="location" type="xs:string"/>
+<xs:element minOccurs="0" name="manOrWoman" type="xs:string"/>
+<xs:element minOccurs="0" name="maxAllowed" type="xs:int"/>
+<xs:element minOccurs="0" name="maximumServiceRestrictionDays" type="xs:int"/>
+<xs:element name="mentalHealth" type="xs:boolean"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="numOfIntakes" type="xs:int"/>
+<xs:element minOccurs="0" name="numOfMembers" type="xs:int"/>
+<xs:element minOccurs="0" name="orgCd" type="xs:string"/>
+<xs:element minOccurs="0" name="phone" type="xs:string"/>
+<xs:element name="physicalHealth" type="xs:boolean"/>
+<xs:element minOccurs="0" name="programStatus" type="xs:string"/>
+<xs:element minOccurs="0" name="queueSize" type="xs:int"/>
+<xs:element minOccurs="0" name="shelter" type="lookupCodeValue"/>
+<xs:element minOccurs="0" name="shelterId" type="xs:int"/>
+<xs:element minOccurs="0" name="siteSpecificField" type="xs:string"/>
+<xs:element minOccurs="0" name="totalUsedRoom" type="xs:int"/>
+<xs:element name="transgender" type="xs:boolean"/>
+<xs:element minOccurs="0" name="type" type="xs:string"/>
+<xs:element minOccurs="0" name="url" type="xs:string"/>
+<xs:element name="userDefined" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="lookupCodeValue">
+<xs:sequence>
+<xs:element name="active" type="xs:boolean"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="associates" nillable="true" type="xs:anyType"/>
+<xs:element minOccurs="0" name="buf1" type="xs:string"/>
+<xs:element minOccurs="0" name="buf2" type="xs:string"/>
+<xs:element minOccurs="0" name="buf3" type="xs:string"/>
+<xs:element minOccurs="0" name="buf4" type="xs:string"/>
+<xs:element minOccurs="0" name="buf5" type="xs:string"/>
+<xs:element minOccurs="0" name="buf6" type="xs:string"/>
+<xs:element minOccurs="0" name="buf7" type="xs:string"/>
+<xs:element minOccurs="0" name="buf8" type="xs:string"/>
+<xs:element minOccurs="0" name="buf9" type="xs:string"/>
+<xs:element minOccurs="0" name="code" type="xs:string"/>
+<xs:element minOccurs="0" name="codeTree" type="xs:string"/>
+<xs:element minOccurs="0" name="codecsv" type="xs:string"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+<xs:element minOccurs="0" name="lastUpdateDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="lastUpdateUser" type="xs:string"/>
+<xs:element minOccurs="0" name="note" type="xs:string"/>
+<xs:element name="orderByIndex" type="xs:int"/>
+<xs:element minOccurs="0" name="parentCode" type="xs:string"/>
+<xs:element minOccurs="0" name="prefix" type="xs:string"/>
+<xs:element name="selectable" type="xs:boolean"/>
+<xs:element minOccurs="0" name="shortDesc" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ticklerCommentTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="message" type="xs:string"/>
+<xs:element minOccurs="0" name="providerName" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="updateDate" type="xs:dateTime"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ticklerLinkTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="tableId" type="xs:long"/>
+<xs:element minOccurs="0" name="tableName" type="xs:string"/>
+<xs:element minOccurs="0" name="ticklerNo" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ticklerUpdateTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="assignedTo" type="xs:string"/>
+<xs:element minOccurs="0" name="priority" type="xs:string"/>
+<xs:element minOccurs="0" name="providerName" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="serviceDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="status" type="status"/>
+<xs:element minOccurs="0" name="updateDate" type="xs:dateTime"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="appDefinitionTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="active" type="xs:boolean"/>
+<xs:element minOccurs="0" name="added" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="addedBy" type="xs:string"/>
+<xs:element minOccurs="0" name="appType" type="xs:string"/>
+<xs:element minOccurs="0" name="authenticated" type="xs:boolean"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="drugSearchResponse">
+<xs:complexContent>
+<xs:extension base="abstractSearchResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="content">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" ref="drug"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="formListTo1">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="list" nillable="true" type="formTo1"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="formTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="date" type="xs:dateTime"/>
+<xs:element name="demographicNo" type="xs:int"/>
+<xs:element name="formId" type="xs:int"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="showLatestFormOnly" type="xs:boolean"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+<xs:element minOccurs="0" name="subject" type="xs:string"/>
+<xs:element minOccurs="0" name="type" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="consultationRequestTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="allergies" type="xs:string"/>
+<xs:element minOccurs="0" name="appointmentDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="appointmentTime" type="xs:dateTime"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="attachments" nillable="true" type="consultationAttachmentTo1"/>
+<xs:element minOccurs="0" name="clinicalInfo" type="xs:string"/>
+<xs:element minOccurs="0" name="concurrentProblems" type="xs:string"/>
+<xs:element minOccurs="0" name="currentMeds" type="xs:string"/>
+<xs:element minOccurs="0" name="demographicId" type="xs:int"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="faxList" nillable="true" type="faxConfigTo1"/>
+<xs:element minOccurs="0" name="followUpDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="letterheadAddress" type="xs:string"/>
+<xs:element minOccurs="0" name="letterheadFax" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="letterheadList" nillable="true" type="letterheadTo1"/>
+<xs:element minOccurs="0" name="letterheadName" type="xs:string"/>
+<xs:element minOccurs="0" name="letterheadPhone" type="xs:string"/>
+<xs:element name="patientWillBook" type="xs:boolean"/>
+<xs:element minOccurs="0" name="professionalSpecialist" type="professionalSpecialistTo1"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="reasonForReferral" type="xs:string"/>
+<xs:element minOccurs="0" name="referralDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="sendTo" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="sendToList" nillable="true" type="xs:string"/>
+<xs:element minOccurs="0" name="serviceId" type="xs:int"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="serviceList" nillable="true" type="consultationServiceTo1"/>
+<xs:element minOccurs="0" name="signatureImg" type="xs:string"/>
+<xs:element minOccurs="0" name="siteName" type="xs:string"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+<xs:element minOccurs="0" name="statusText" type="xs:string"/>
+<xs:element minOccurs="0" name="urgency" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="oscarJobTypeResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="types" nillable="true" type="oscarJobTypeTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType final="extension restriction" name="providerTransfer">
+<xs:sequence>
+<xs:element minOccurs="0" name="address" type="xs:string"/>
+<xs:element minOccurs="0" name="billingNo" type="xs:string"/>
+<xs:element minOccurs="0" name="comments" type="xs:string"/>
+<xs:element minOccurs="0" name="dob" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="email" type="xs:string"/>
+<xs:element minOccurs="0" name="firstName" type="xs:string"/>
+<xs:element minOccurs="0" name="hsoNo" type="xs:string"/>
+<xs:element minOccurs="0" name="lastName" type="xs:string"/>
+<xs:element minOccurs="0" name="ohipNo" type="xs:string"/>
+<xs:element minOccurs="0" name="phone" type="xs:string"/>
+<xs:element minOccurs="0" name="practitionerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="practitionerNoType" type="xs:string"/>
+<xs:element minOccurs="0" name="providerActivity" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="providerType" type="xs:string"/>
+<xs:element minOccurs="0" name="rmaNo" type="xs:string"/>
+<xs:element minOccurs="0" name="sex" type="xs:string"/>
+<xs:element minOccurs="0" name="signedConfidentiality" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="specialty" type="xs:string"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+<xs:element minOccurs="0" name="team" type="xs:string"/>
+<xs:element minOccurs="0" name="title" type="xs:string"/>
+<xs:element minOccurs="0" name="workPhone" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="encounterTemplateResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="templates" nillable="true" type="encounterTemplateTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="encounterTemplateTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="createdDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="creatorProviderNo" type="xs:string"/>
+<xs:element minOccurs="0" name="encounterTemplateName" type="xs:string"/>
+<xs:element minOccurs="0" name="encounterTemplateValue" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="rssItem">
+<xs:sequence>
+<xs:element minOccurs="0" name="agree" type="xs:boolean"/>
+<xs:element minOccurs="0" name="agreeCount" type="xs:long"/>
+<xs:element minOccurs="0" name="agreeId" type="xs:long"/>
+<xs:element minOccurs="0" name="authenticatek2a" type="xs:boolean"/>
+<xs:element minOccurs="0" name="author" type="xs:string"/>
+<xs:element minOccurs="0" name="body" type="xs:string"/>
+<xs:element minOccurs="0" name="commentCount" type="xs:long"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="comments" nillable="true" type="rssItem"/>
+<xs:element minOccurs="0" name="disagree" type="xs:boolean"/>
+<xs:element minOccurs="0" name="disagreeCount" type="xs:long"/>
+<xs:element minOccurs="0" name="id" type="xs:long"/>
+<xs:element minOccurs="0" name="link" type="xs:string"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="postId" type="xs:long"/>
+<xs:element minOccurs="0" name="publishedDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="significance" type="xs:string"/>
+<xs:element minOccurs="0" name="title" type="xs:string"/>
+<xs:element minOccurs="0" name="type" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="pharmacyInfoTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="addDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="address" type="addressTo1"/>
+<xs:element minOccurs="0" name="email" type="xs:string"/>
+<xs:element minOccurs="0" name="fax" type="xs:string"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="notes" type="xs:string"/>
+<xs:element minOccurs="0" name="phone1" type="xs:string"/>
+<xs:element minOccurs="0" name="phone2" type="xs:string"/>
+<xs:element minOccurs="0" name="serviceLocationIdentifier" type="xs:string"/>
+<xs:element minOccurs="0" name="status" type="xs:unsignedShort"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="rssResponse">
+<xs:complexContent>
+<xs:extension base="abstractSearchResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="content">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="messages" type="rssItem"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="productLocationResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="productLocations" nillable="true" type="productLocationTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="productLocationTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="appointmentExtResponse">
+<xs:complexContent>
+<xs:extension base="abstractSearchResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="content">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="appointmentExt" type="appointmentExtTo"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="appointmentExtTo">
+<xs:sequence>
+<xs:element minOccurs="0" name="appointmentDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="appointmentNo" type="xs:int"/>
+<xs:element minOccurs="0" name="demoCell" type="xs:string"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="email" type="xs:string"/>
+<xs:element minOccurs="0" name="firstName" type="xs:string"/>
+<xs:element minOccurs="0" name="lastName" type="xs:string"/>
+<xs:element minOccurs="0" name="location" type="xs:string"/>
+<xs:element minOccurs="0" name="notes" type="xs:string"/>
+<xs:element minOccurs="0" name="phone" type="xs:string"/>
+<xs:element minOccurs="0" name="phone2" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="reminderPreference" type="xs:string"/>
+<xs:element minOccurs="0" name="resources" type="xs:string"/>
+<xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+<xs:element minOccurs="0" name="hPhoneExt" type="xs:string"/>
+<xs:element minOccurs="0" name="wPhoneExt" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="providerApptsCountResponse">
+<xs:complexContent>
+<xs:extension base="abstractSearchResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="content">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="ProviderApptsCount" type="providerApptsCountTo"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="providerApptsCountTo">
+<xs:sequence>
+<xs:element minOccurs="0" name="appointmentCount" type="xs:long"/>
+<xs:element minOccurs="0" name="providerName" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="measurementResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="drugLookupResponse">
+<xs:complexContent>
+<xs:extension base="genericRESTResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="drugs" nillable="true" type="drugSearchTo1"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="drugSearchTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="regionalId" type="xs:int"/>
+<xs:element minOccurs="0" name="atc" type="xs:string"/>
+<xs:element minOccurs="0" name="form" type="xs:string"/>
+<xs:element minOccurs="0" name="active" type="xs:boolean"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="category" type="xs:int"/>
+<xs:element minOccurs="0" name="genericName" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="components" nillable="true" type="drugComponentTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="drugComponentTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="strength" type="xs:double"/>
+<xs:element minOccurs="0" name="unit" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="navbarResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="currentProgram" type="programProviderTo1"/>
+<xs:element minOccurs="0" name="menus" type="navBarMenuTo1"/>
+<xs:element minOccurs="0" name="programDomain">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="program" type="programProviderTo1"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="programProviderTo1">
+<xs:sequence>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="program" type="programTo1"/>
+<xs:element minOccurs="0" name="programId" type="xs:int"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="roleId" type="xs:int"/>
+<xs:element minOccurs="0" name="roleName" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="navBarMenuTo1">
+<xs:sequence>
+<xs:element minOccurs="0" ref="menu"/>
+<xs:element minOccurs="0" name="messengerMenu" type="menuTo1"/>
+<xs:element minOccurs="0" name="moreMenu" type="menuTo1"/>
+<xs:element minOccurs="0" name="patientSearchMenu" type="menuTo1"/>
+<xs:element minOccurs="0" name="userMenu" type="menuTo1"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="oscarSearchResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="Item" type="xs:anyType"/>
+<xs:element name="limit" type="xs:int"/>
+<xs:element name="offset" type="xs:int"/>
+<xs:element minOccurs="0" name="timestamp" type="xs:dateTime"/>
+<xs:element name="total" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="favoriteResponse">
+<xs:complexContent>
+<xs:extension base="genericRESTResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="drugs" nillable="true" type="favoriteTo1"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="drugResponse">
+<xs:complexContent>
+<xs:extension base="genericRESTResponse">
+<xs:sequence>
+<xs:element minOccurs="0" ref="drug"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="personaResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="dashboardPreferences" type="dashboardPreferences"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="patientListMoreTabItems" nillable="true" type="patientList"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="patientListTabItems" nillable="true" type="patientList"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="dashboardPreferences">
+<xs:sequence>
+<xs:element name="expiredTicklersOnly" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="patientList">
+<xs:sequence>
+<xs:element minOccurs="0" name="httpType" type="xs:string"/>
+<xs:element name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="label" type="xs:string"/>
+<xs:element minOccurs="0" name="template" type="xs:string"/>
+<xs:element minOccurs="0" name="url" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:simpleType name="sex1">
+<xs:restriction base="xs:string">
+<xs:enumeration value="M"/>
+<xs:enumeration value="F"/>
+</xs:restriction>
+</xs:simpleType>
+<xs:simpleType name="bookingSource">
+<xs:restriction base="xs:string">
+<xs:enumeration value="OSCAR"/>
+<xs:enumeration value="MYOSCAR_SELF_BOOKING"/>
+</xs:restriction>
+</xs:simpleType>
+<xs:simpleType name="priority">
+<xs:restriction base="xs:string">
+<xs:enumeration value="High"/>
+<xs:enumeration value="Normal"/>
+<xs:enumeration value="Low"/>
+</xs:restriction>
+</xs:simpleType>
+<xs:simpleType name="status">
+<xs:restriction base="xs:string">
+<xs:enumeration value="A"/>
+<xs:enumeration value="C"/>
+<xs:enumeration value="D"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>
+</grammars>
+<resources base="https://example.com/oscar/ws/services">
+<resource path="/oauth">
+<resource path="/info">
+<method name="GET">
+<response>
+<representation mediaType="application/json">
+<param name="result" style="plain" type="xs:string"/>
+</representation>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/pharmacies/">
+<method name="GET">
+<request>
+<param name="offset" style="query" type="xs:int"/>
+<param name="limit" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+<method name="POST">
+<request>
+<representation mediaType="application/xml"/>
+</request>
+<response>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+<method name="PUT">
+<request>
+<representation mediaType="application/xml"/>
+</request>
+<response>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+<resource path="{pharmacyId}">
+<param name="pharmacyId" style="template" type="xs:int"/>
+<method name="DELETE">
+<request/>
+<response>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/demographics">
+<method name="GET">
+<request>
+<param name="offset" style="query" type="xs:int"/>
+<param name="limit" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+<method name="PUT">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+<resource path="/quickSearch">
+<method name="GET">
+<request>
+<param name="query" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/search">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+<param name="startIndex" style="query" type="xs:int"/>
+<param name="itemsToReturn" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/searchIntegrator">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+<param name="itemsToReturn" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/summary/{demographicNo}">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/{dataId}">
+<param name="dataId" style="template" type="xs:int"/>
+<method name="DELETE">
+<request/>
+<response>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/schedule">
+<resource path="/add">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/appointment/{id}/updateStatus">
+<param name="id" style="template" type="xs:int"/>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/appointment/{id}/updateType">
+<param name="id" style="template" type="xs:int"/>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/day/{date}">
+<param name="date" style="template" type="xs:string"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/deleteAppointment">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/fetchDays/{sDate}/{eDate}/{providers}">
+<param name="sDate" style="template" type="xs:string"/>
+<param name="eDate" style="template" type="xs:string"/>
+<param name="providers" style="template" type="xs:string"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/fetchMonthly/{providerNo}/{year}/{month}">
+<param name="year" style="template" type="xs:int"/>
+<param name="month" style="template" type="xs:int"/>
+<param name="providerNo" style="template" type="xs:string"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/fetchProviderAppts/{providerNo}/{sDate}/{eDate}">
+<param name="providerNo" style="template" type="xs:string"/>
+<param name="sDate" style="template" type="xs:string"/>
+<param name="eDate" style="template" type="xs:string"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/fetchProvidersApptsCount/{sDate}/{eDate}">
+<param name="sDate" style="template" type="xs:string"/>
+<param name="eDate" style="template" type="xs:string"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getAppointment">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/reasons">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/statuses">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/types">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/updateAppointment">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/{demographicNo}/appointmentHistory">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="POST">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/{providerNo}/day/{date}">
+<param name="providerNo" style="template" type="xs:string"/>
+<param name="date" style="template" type="xs:string"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<!--  Dynamic subresource  -->
+<resource path="/appointment/{id}/updateUrgency">
+<param name="id" style="template" type="xs:int"/>
+</resource>
+</resource>
+<resource path="/demographics/merge">
+<method name="DELETE">
+<request>
+<param name="parentId" style="query" type="xs:int"/>
+<param name="childsId" style="query" type="xs:int"/>
+</request>
+<response status="204"/>
+</method>
+<method name="PUT">
+<request>
+<param name="parentId" style="query" type="xs:int"/>
+<param name="childId" style="query" type="xs:int"/>
+</request>
+<response status="204"/>
+</method>
+<resource path="/{parentId}">
+<param name="parentId" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/messaging">
+<resource path="/count">
+<method name="GET">
+<request>
+<param name="demoAttachedOnly" style="query" type="xs:boolean"/>
+</request>
+<response>
+<representation mediaType="application/xml">
+<param name="result" style="plain" type="xs:int"/>
+</representation>
+</response>
+</method>
+</resource>
+<resource path="/unread">
+<method name="GET">
+<request>
+<param name="startIndex" style="query" type="xs:int"/>
+<param name="limit" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/inbox">
+<resource path="/mine">
+<method name="GET">
+<request>
+<param name="limit" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/mine/count">
+<method name="GET">
+<response>
+<representation mediaType="application/xml">
+<param name="result" style="plain" type="xs:int"/>
+</representation>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/tickler">
+<resource path="/add">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/complete">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/delete">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/mine">
+<method name="GET">
+<request>
+<param name="limit" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/search">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+<param name="startIndex" style="query" type="xs:int"/>
+<param name="limit" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/textSuggestions">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/ticklers">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/update">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/{demographicNo}/count/overdue">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json">
+<param name="result" style="plain" type="xs:int"/>
+</representation>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/rx">
+<resource path="/discontinue">
+<method name="POST">
+<request>
+<param name="drugId" style="query" type="xs:int"/>
+<param name="reason" style="query" type="xs:string"/>
+<param name="demographicNo" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+</resource>
+<resource path="/drugs{status : (/status)?}">
+<param name="status" style="template" type="xs:string"/>
+<method name="GET">
+<request>
+<param name="demographicNo" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/favorites">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+<representation mediaType="application/xml"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+</resource>
+<resource path="/history">
+<method name="GET">
+<request>
+<param name="id" style="query" type="xs:int"/>
+<param name="demographicNo" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+</resource>
+<resource path="/new">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+<representation mediaType="application/xml"/>
+<param name="demographicNo" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+</resource>
+<resource path="/prescribe">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+<representation mediaType="application/xml"/>
+<param name="demographicNo" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+</resource>
+<resource path="/update">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+<representation mediaType="application/xml"/>
+<param name="demographicNo" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+</resource>
+<resource path="/{demographicNo}/print/{rxNo}">
+<param name="demographicNo" style="template" type="xs:int"/>
+<param name="rxNo" style="template" type="xs:int"/>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/pdf"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/rxlookup">
+<resource path="/details">
+<method name="GET">
+<request>
+<param name="id" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/parse">
+<method name="POST">
+<request>
+<param name="input" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/octet-stream"/>
+</response>
+</method>
+</resource>
+<resource path="/search">
+<method name="GET">
+<request>
+<param name="string" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/providerService/">
+<resource path="getActiveTeams">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="getRecentDemographicsViewed">
+<method name="GET">
+<request>
+<param name="startIndex" style="query" type="xs:int"/>
+<param name="itemsToReturn" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="getRecentDemographicsViewedAfterDateIncluded">
+<method name="GET">
+<request>
+<param name="startIndex" style="query" type="xs:int"/>
+<param name="itemsToReturn" style="query" type="xs:int"/>
+<param name="date" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="provider/me">
+<method name="GET">
+<response>
+<representation mediaType="application/json">
+<param name="result" style="plain" type="xs:string"/>
+</representation>
+</response>
+</method>
+</resource>
+<resource path="provider/{id}">
+<param name="id" style="template" type="xs:string"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/xml"/>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="providerjson/{id}">
+<param name="id" style="template" type="xs:string"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/xml">
+<param name="result" style="plain" type="xs:string"/>
+</representation>
+</response>
+</method>
+</resource>
+<resource path="providers">
+<method name="GET">
+<response>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+</resource>
+<resource path="providers/bad">
+<method name="GET">
+<response>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+</resource>
+<resource path="providers/search">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+<param name="startIndex" style="query" type="xs:int"/>
+<param name="itemsToReturn" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="providers_json">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="settings/get">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="settings/{providerNo}/save">
+<param name="providerNo" style="template" type="xs:string"/>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/patientDetailStatusService">
+<resource path="/getStatus">
+<method name="GET">
+<request>
+<param name="demographicNo" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/isUniqueHC">
+<method name="GET">
+<request>
+<param name="hin" style="query" type="xs:string"/>
+<param name="demographicNo" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/validateHC">
+<method name="GET">
+<request>
+<param name="hin" style="query" type="xs:string"/>
+<param name="ver" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/rssproxy">
+<resource path="/rss">
+<method name="GET">
+<request>
+<param name="key" style="query" type="xs:string"/>
+<param name="startPoint" style="query" type="xs:string"/>
+<param name="numberOfRows" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/persona">
+<resource path="/dashboardMenu">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/hasRight">
+<method name="GET">
+<request>
+<param name="objectName" style="query" type="xs:string"/>
+<param name="privilege" style="query" type="xs:string"/>
+<param name="demographicNo" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/hasRights">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/isAllowedAccessToPatientRecord">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/navbar">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/patientList/config">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/patientLists">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/preferences">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/rights">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/setDefaultProgramInDomain">
+<method name="GET">
+<request>
+<param name="programId" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/xml"/>
+</response>
+</method>
+</resource>
+<resource path="/updatePreference">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/updatePreferences">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/forms">
+<resource path="/allEForms">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/allEncounterForms">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getAllK2AEForms">
+<method name="POST">
+<request>
+<representation mediaType="application/json">
+<param name="request" style="plain" type="xs:string"/>
+</representation>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getFavouriteFormGroup">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getFormGroups">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getK2AEForm">
+<method name="POST">
+<request>
+<representation mediaType="application/json">
+<param name="request" style="plain" type="xs:string"/>
+</representation>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/groupNames">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/selectedEncounterForms">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/{demographicNo}/all">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="GET">
+<request>
+<param name="heading" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/{demographicNo}/completedEncounterForms">
+<param name="demographicNo" style="template" type="xs:string"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/{demographicNo}/formOptions">
+<param name="demographicNo" style="template" type="xs:string"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/jobs">
+<resource path="/all">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/cancelJob">
+<method name="GET">
+<request>
+<param name="jobId" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/disableJob">
+<method name="GET">
+<request>
+<param name="jobId" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/enableJob">
+<method name="GET">
+<request>
+<param name="jobId" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/job/{jobId}">
+<param name="jobId" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/jobType/{jobTypeId}">
+<param name="jobTypeId" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/saveCrontabExpression">
+<method name="POST">
+<request>
+<representation mediaType="application/x-www-form-urlencoded"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/saveJob">
+<method name="POST">
+<request>
+<representation mediaType="application/x-www-form-urlencoded"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/saveJobType">
+<method name="POST">
+<request>
+<representation mediaType="application/x-www-form-urlencoded"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/types/all">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/types/current">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/notes">
+<resource path="/checkEditNoteNew">
+<method name="POST">
+<request>
+<param name="noteUUID" style="query" type="xs:string"/>
+<param name="userId" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getGroupNoteExt/{noteId}">
+<param name="noteId" style="template" type="xs:long"/>
+<method name="POST">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getIssueById/{issueId}">
+<param name="issueId" style="template" type="xs:int"/>
+<method name="POST">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getIssueId/{issueCode}">
+<param name="issueCode" style="template" type="xs:string"/>
+<method name="POST">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getIssueNote/{noteId}">
+<param name="noteId" style="template" type="xs:int"/>
+<method name="POST">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/removeEditingNoteFlag">
+<method name="POST">
+<request>
+<param name="noteUUID" style="query" type="xs:string"/>
+<param name="userId" style="query" type="xs:string"/>
+</request>
+<response status="204"/>
+</method>
+</resource>
+<resource path="/searchIssues">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+<param name="startIndex" style="query" type="xs:int"/>
+<param name="itemsToReturn" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/setEditingNoteFlag">
+<method name="POST">
+<request>
+<param name="noteUUID" style="query" type="xs:string"/>
+<param name="userId" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/ticklerGetNote/{ticklerNo}">
+<param name="ticklerNo" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/ticklerSaveNote">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/{demographicNo}/all">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="POST">
+<request>
+<param name="numToReturn" style="query" default="20" type="xs:int"/>
+<param name="offset" style="query" default="0" type="xs:int"/>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/{demographicNo}/getCurrentNote">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/{demographicNo}/save">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/{demographicNo}/saveIssueNote">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/{demographicNo}/tmpSave">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/productDispensing">
+<method name="GET">
+<response>
+<representation mediaType="application/xml">
+<param name="result" style="plain" type="xs:string"/>
+</representation>
+</response>
+</method>
+<resource path="/deleteDrugProduct/{drugProductId}">
+<param name="drugProductId" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/drugProduct/{drugProductId}">
+<param name="drugProductId" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/drugProductTemplates">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/drugProducts">
+<method name="GET">
+<request>
+<param name="offset" style="query" type="xs:int"/>
+<param name="limit" style="query" type="xs:int"/>
+<param name="limitByName" style="query" type="xs:string"/>
+<param name="limitByLot" style="query" type="xs:string"/>
+<param name="limitByLocation" style="query" type="xs:string"/>
+<param name="availableOnly" style="query" type="xs:boolean"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/drugProducts/byCode">
+<method name="GET">
+<request>
+<param name="offset" style="query" type="xs:int"/>
+<param name="limit" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/drugProducts/uniqueLots">
+<method name="GET">
+<request>
+<param name="name" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/drugProducts/uniqueNames">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/productLocations">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/saveDrugProduct">
+<method name="POST">
+<request>
+<representation mediaType="application/x-www-form-urlencoded"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/status/{drugId}">
+<param name="drugId" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/recordUX/">
+<resource path="searchTemplates">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+<param name="startIndex" style="query" type="xs:int"/>
+<param name="itemsToReturn" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="template">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="{demographicNo}/fullSummary/{summaryCode}">
+<param name="demographicNo" style="template" type="xs:int"/>
+<param name="summaryCode" style="template" type="xs:string"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="{demographicNo}/getAllergies">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="{demographicNo}/getFamilyHistory">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="{demographicNo}/getMedicalHistory">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="{demographicNo}/getOngoingConcerns">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="{demographicNo}/getOtherMeds">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="{demographicNo}/getPreventions">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="{demographicNo}/getReminders">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="{demographicNo}/getRiskFactors">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="{demographicNo}/print">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="GET">
+<request>
+<param name="printOps" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/pdf"/>
+</response>
+</method>
+</resource>
+<resource path="{demographicNo}/recordMenu">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="{demographicNo}/summary/{summaryName}">
+<param name="demographicNo" style="template" type="xs:int"/>
+<param name="summaryName" style="template" type="xs:string"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/reporting/">
+<resource path="demographicSets/demographicSet/{name}">
+<param name="name" style="template" type="xs:string"/>
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="demographicSets/list">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="demographicSets/patientList">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="eformReportTool/add">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="eformReportTool/list">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="eformReportTool/markLatest">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="eformReportTool/populate">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="eformReportTool/remove">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/billing">
+<resource path="/billingRegion">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/defaultView">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/uniqueServiceTypes">
+<method name="GET">
+<request>
+<param name="type" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/status">
+<resource path="/checkIfAuthed">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/program">
+<resource path="/patientList">
+<method name="GET">
+<request>
+<param name="programNo" style="query" type="xs:string"/>
+<param name="day" style="query" type="xs:string"/>
+<param name="startIndex" style="query" type="xs:int"/>
+<param name="numToReturn" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/programList">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/consults">
+<resource path="/eSendRequest">
+<method name="GET">
+<request>
+<param name="requestId" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getProfessionalSpecialist">
+<method name="GET">
+<request>
+<param name="specId" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getReferralPathwaysByService">
+<method name="GET">
+<request>
+<param name="serviceName" style="query" type="xs:string"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getRequest">
+<method name="GET">
+<request>
+<param name="requestId" style="query" type="xs:int"/>
+<param name="demographicId" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getRequestAttachments">
+<method name="GET">
+<request>
+<param name="requestId" style="query" type="xs:int"/>
+<param name="demographicId" style="query" type="xs:int"/>
+<param name="attached" style="query" type="xs:boolean"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getResponse">
+<method name="GET">
+<request>
+<param name="responseId" style="query" type="xs:int"/>
+<param name="demographicNo" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getResponseAttachments">
+<method name="GET">
+<request>
+<param name="responseId" style="query" type="xs:int"/>
+<param name="demographicNo" style="query" type="xs:int"/>
+<param name="attached" style="query" type="xs:boolean"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/saveRequest">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/saveResponse">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/searchRequests">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/searchResponses">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/app">
+<resource path="/K2AActive/">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/K2AInit/">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/comment">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/comment/{commentId}">
+<param name="commentId" style="template" type="xs:string"/>
+<method name="DELETE">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getApps/">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/allergies">
+<resource path="/active">
+<method name="GET">
+<request>
+<param name="demographicNo" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/preventions">
+<resource path="/active">
+<method name="GET">
+<request>
+<param name="demographicNo" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/reportByTemplate">
+<resource path="/K2AActive/">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/K2AUrl/">
+<method name="GET">
+<response>
+<representation mediaType="application/json">
+<param name="result" style="plain" type="xs:string"/>
+</representation>
+</response>
+</method>
+</resource>
+<resource path="/allReports">
+<method name="GET">
+<response>
+<representation mediaType="application/json">
+<param name="result" style="plain" type="xs:string"/>
+</representation>
+</response>
+</method>
+</resource>
+<resource path="/getReportById/{id}">
+<param name="id" style="template" type="xs:string"/>
+<method name="POST">
+<request/>
+<response>
+<representation mediaType="application/json">
+<param name="result" style="plain" type="xs:string"/>
+</representation>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/resources">
+<resource path="/K2AActive/">
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/clinicalconnect">
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="text/plain">
+<param name="result" style="plain" type="xs:string"/>
+</representation>
+</response>
+</method>
+</resource>
+<resource path="/currentLuCodesVersion">
+<method name="GET">
+<response>
+<representation mediaType="application/json">
+<param name="result" style="plain" type="xs:string"/>
+</representation>
+</response>
+</method>
+</resource>
+<resource path="/currentPreventionRulesVersion">
+<method name="GET">
+<response>
+<representation mediaType="application/json">
+<param name="result" style="plain" type="xs:string"/>
+</representation>
+</response>
+</method>
+</resource>
+<resource path="/loadLuCodesById/{id}">
+<param name="id" style="template" type="xs:string"/>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json">
+<param name="result" style="plain" type="xs:string"/>
+</representation>
+</response>
+</method>
+</resource>
+<resource path="/loadPreventionRulesById/{id}">
+<param name="id" style="template" type="xs:string"/>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json">
+<param name="result" style="plain" type="xs:string"/>
+</representation>
+</response>
+</method>
+</resource>
+<resource path="/luCodesList">
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/notifications">
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/notifications/ack/">
+<param name="id" style="template" type="xs:string"/>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/notifications/number">
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/notifications/readmore">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/preventionRulesList">
+<method name="GET">
+<request/>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/dxRegisty">
+<resource path="/findLikeIssue">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/getDiseaseRegistry">
+<method name="GET">
+<request>
+<param name="demographicNo" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/quickLists">
+<method name="GET">
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/{demographicNo}/add">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/labs">
+<resource path="/hl7LabsByDemographicNo">
+<method name="GET">
+<request>
+<param name="demographicNo" style="query" type="xs:int"/>
+<param name="offset" style="query" type="xs:int"/>
+<param name="limit" style="query" type="xs:int"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/measurements">
+<resource path="/{demographicNo}">
+<param name="demographicNo" style="template" type="xs:int"/>
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+<resource path="/document">
+<resource path="/saveDocumentToDemographic">
+<method name="POST">
+<request>
+<representation mediaType="application/json"/>
+</request>
+<response>
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resource>
+</resources>
+</application>

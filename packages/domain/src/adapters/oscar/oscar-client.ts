@@ -1,6 +1,7 @@
 import { createHmac } from 'node:crypto';
-import { Agent as HttpsAgent, request as httpsRequest } from 'node:https';
+import { Agent as HttpsAgent } from 'node:https';
 import OAuth from 'oauth-1.0a';
+import { performHttpsRequest, type RawHttpsResponse } from './oscar-https';
 
 export interface OscarClientConfig {
   baseUrl: string;
@@ -30,57 +31,6 @@ export class OscarHttpError extends Error {
     super(message);
     this.name = 'OscarHttpError';
   }
-}
-
-interface RawHttpsResponse {
-  status: number;
-  body: string;
-}
-
-// A relaxed-TLS agent is reused across requests for this client (cheap,
-// keeps connection pooling working) — only ever constructed when the clinic
-// is explicitly configured with allowSelfSignedCert.
-function performHttpsRequest(
-  url: string,
-  method: string,
-  headers: Record<string, string>,
-  body: string | undefined,
-  agent: HttpsAgent | undefined
-): Promise<RawHttpsResponse> {
-  return new Promise((resolve, reject) => {
-    const target = new URL(url);
-
-    const req = httpsRequest(
-      {
-        protocol: target.protocol,
-        hostname: target.hostname,
-        port: target.port || 443,
-        path: `${target.pathname}${target.search}`,
-        method,
-        headers,
-        agent,
-      },
-      (res) => {
-        const chunks: Buffer[] = [];
-        res.on('data', (chunk: Buffer) => chunks.push(chunk));
-        res.on('end', () => {
-          resolve({
-            status: res.statusCode ?? 0,
-            body: Buffer.concat(chunks).toString('utf8'),
-          });
-        });
-        res.on('error', reject);
-      }
-    );
-
-    req.on('error', reject);
-
-    if (body) {
-      req.write(body);
-    }
-
-    req.end();
-  });
 }
 
 export class OscarClient {

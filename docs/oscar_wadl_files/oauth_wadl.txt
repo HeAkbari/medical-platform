@@ -1,0 +1,59 @@
+<application xmlns="http://wadl.dev.java.net/2009/02" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<grammars/>
+<resources base="https://example.com/oscar/ws/oauth">
+<resource path="/initiate">
+<method name="GET">
+<response>
+<representation mediaType="application/x-www-form-urlencoded"/>
+</response>
+</method>
+<method name="POST">
+<response>
+<representation mediaType="application/x-www-form-urlencoded"/>
+</response>
+</method>
+</resource>
+<resource path="/token">
+<method name="GET">
+<response>
+<representation mediaType="application/x-www-form-urlencoded"/>
+</response>
+</method>
+<method name="POST">
+<response>
+<representation mediaType="application/x-www-form-urlencoded"/>
+</response>
+</method>
+</resource>
+<resource path="/authorize">
+<method name="GET">
+<response>
+<representation mediaType="application/xhtml+xml"/>
+<representation mediaType="text/html"/>
+<representation mediaType="application/xml"/>
+<representation mediaType="application/json"/>
+</response>
+</method>
+<resource path="/decision">
+<method name="GET">
+<response>
+<representation mediaType="application/xhtml+xml"/>
+<representation mediaType="text/html"/>
+<representation mediaType="application/x-www-form-urlencoded"/>
+<representation mediaType="application/xml;qs=0.9"/>
+<representation mediaType="application/json;qs=0.9"/>
+</response>
+</method>
+<method name="POST">
+<response>
+<representation mediaType="application/xhtml+xml"/>
+<representation mediaType="text/html"/>
+<representation mediaType="application/x-www-form-urlencoded"/>
+<representation mediaType="application/xml;qs=0.9"/>
+<representation mediaType="application/json;qs=0.9"/>
+</response>
+</method>
+</resource>
+</resource>
+</resources>
+</application>

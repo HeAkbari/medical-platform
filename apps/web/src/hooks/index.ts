@@ -3,6 +3,8 @@ export {
   usePatientQuery,
   useDoctorsQuery,
   useDoctorQuery,
+  useDoctorWorkingDaysQuery,
+  useDoctorAvailableSlotsQuery,
   useAppointmentsQuery,
   useCreateAppointmentMutation,
 } from '@/lib/api-client';
