@@ -1,0 +1,1739 @@
+{
+  "info": {
+    "_postman_id": "8f2a1c4e-6b3d-4a2f-9e1a-5d7c0b9f3a11",
+    "name": "OSCAR EMR 19 - SOAP Services (All 14)",
+    "description": "Full catalog of this OSCAR install's legacy SOAP layer (WS-Security UsernameToken), discovered via https://<host>:8443/oscar/ws/?wsdl. Auth is username/password (LoginService.login2), not client id/token (OAuth1) like the REST collection. Run '01. LoginService > Login (login2)' once - its test script auto-fills soapSecurityId/soapSecurityTokenKey, which every other request embeds in a wsse:UsernameToken header directly in the raw XML body (Postman has no native WS-Security auth type). See docs/oscar/new-approach/oscar-soap-schedule-services.md for verified samples and background. Requests marked WRITE actually change data in OSCAR - do not run without the project owner's explicit go-ahead. Many operations were never live-tested; argN names reflect the WSDL exactly (no javadoc names available) - edit placeholder values before running.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "00. Setup",
+      "item": [
+        {
+          "name": "Reset SOAP Session Values",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "['soapSecurityId','soapSecurityTokenKey']",
+                  "  .forEach(k => pm.environment.set(k, ''));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}",
+            "description": "Clears the captured securityId/securityTokenKey while preserving environment variable definitions."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "01. LoginService",
+      "item": [
+        {
+          "name": "Login (login2)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const text = pm.response.text();",
+                  "const idMatch = text.match(/<securityId>(\\d+)<\\/securityId>/);",
+                  "const keyMatch = text.match(/<securityTokenKey>([^<]+)<\\/securityTokenKey>/);",
+                  "pm.test('login2 succeeded', () => pm.expect(idMatch).to.not.be.null);",
+                  "if (idMatch) pm.environment.set('soapSecurityId', idMatch[1]);",
+                  "if (keyMatch) pm.environment.set('soapSecurityTokenKey', keyMatch[1]);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\">\n  <soapenv:Header/>\n  <soapenv:Body>\n    <ws:login2>\n      <arg0>{{oscarUsername}}</arg0>\n      <arg1>{{oscarPassword}}</arg1>\n    </ws:login2>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/LoginService",
+            "description": "Returns a STABLE securityId/securityTokenKey (does not expire/rotate). Requires a dedicated integration account with Pin(remote) Enable=OFF. Run this first."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02. ScheduleService",
+      "item": [
+        {
+          "name": "getDayWorkSchedule (verified)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getDayWorkSchedule>\n      <arg0>{{providerNo}}</arg0>\n      <arg1>{{scheduleDate}}</arg1>\n    </ws:getDayWorkSchedule>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "getDayWorkSchedule(providerNo, date) -> {holiday, timeSlotDurationMin, timeSlots[]:{date,scheduleCode}}. Real per-day schedule template."
+          },
+          "response": []
+        },
+        {
+          "name": "getScheduleTemplateCodes (verified)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getScheduleTemplateCodes/>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "No params. Full list of schedule codes (e.g. 67/80 = clinic/phone appointment)."
+          },
+          "response": []
+        },
+        {
+          "name": "getAppointmentTypes (clinic-wide)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAppointmentTypes/>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "No params. appointmentTypeTransfer[]{duration,id,location,name,notes,reason,resources} - clinic-wide, unlike BookingWs.getAppointmentTypesByProvider which faults."
+          },
+          "response": []
+        },
+        {
+          "name": "testTimeZone (resolve UTC vs local ambiguity)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:testTimeZone_1492_05_12_18_26_32>\n      <arg0>true</arg0>\n    </ws:testTimeZone_1492_05_12_18_26_32>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "NEVER LIVE TESTED. arg0 likely useGMTTime. Returns a single dateTime - compare against getSystemInfo>getServerTime and your wall clock to finally resolve whether OSCAR's Z-suffixed timestamps are real UTC or mislabeled clinic-local time."
+          },
+          "response": []
+        },
+        {
+          "name": "getAppointment (by id)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAppointment>\n      <arg0>{{appointmentId}}</arg0>\n    </ws:getAppointment>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "NEVER LIVE TESTED. getAppointment(id:int) -> appointmentTransfer. Set appointmentId to a real appointment id first."
+          },
+          "response": []
+        },
+        {
+          "name": "getAppointment2 (by id, with useGMTTime)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAppointment2>\n      <arg0>{{appointmentId}}</arg0>\n      <arg1>true</arg1>\n    </ws:getAppointment2>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "NEVER LIVE TESTED. Same as getAppointment but arg1=useGMTTime lets you request real UTC timestamps explicitly."
+          },
+          "response": []
+        },
+        {
+          "name": "getAppointmentsForProvider",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAppointmentsForProvider>\n      <arg0>{{providerNo}}</arg0>\n      <arg1>{{scheduleDate}}</arg1>\n    </ws:getAppointmentsForProvider>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "NEVER LIVE TESTED. getAppointmentsForProvider(providerNo, date) -> appointmentTransfer[]. Potential SOAP replacement for REST GET /schedule/{providerNo}/day/{date} (booked appointments only)."
+          },
+          "response": []
+        },
+        {
+          "name": "getAppointmentsForProvider2 (with useGMTTime)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAppointmentsForProvider2>\n      <arg0>{{providerNo}}</arg0>\n      <arg1>{{scheduleDate}}</arg1>\n      <arg2>true</arg2>\n    </ws:getAppointmentsForProvider2>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "NEVER LIVE TESTED. arg2=useGMTTime."
+          },
+          "response": []
+        },
+        {
+          "name": "getAppointmentsForPatient",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAppointmentsForPatient>\n      <arg0>{{demographicNo}}</arg0>\n      <arg1>{{offset}}</arg1>\n      <arg2>{{itemsToReturn}}</arg2>\n    </ws:getAppointmentsForPatient>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "NEVER LIVE TESTED. arg0=demographicNo(int); arg1/arg2 likely offset/limit (unconfirmed)."
+          },
+          "response": []
+        },
+        {
+          "name": "getAppointmentsForPatient2 (with useGMTTime)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAppointmentsForPatient2>\n      <arg0>{{demographicNo}}</arg0>\n      <arg1>{{offset}}</arg1>\n      <arg2>{{itemsToReturn}}</arg2>\n      <arg3>true</arg3>\n    </ws:getAppointmentsForPatient2>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "NEVER LIVE TESTED. arg3=useGMTTime."
+          },
+          "response": []
+        },
+        {
+          "name": "getAppointmentsByDemographicIdAfter",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAppointmentsByDemographicIdAfter>\n      <lastUpdate>{{lastUpdate}}</lastUpdate>\n      <demographicId>{{demographicNo}}</demographicId>\n      <useGMTTime>true</useGMTTime>\n    </ws:getAppointmentsByDemographicIdAfter>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "NEVER LIVE TESTED. Sync-style: all appointments for a patient updated after lastUpdate."
+          },
+          "response": []
+        },
+        {
+          "name": "getAppointmentsForDateRangeAndProvider",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAppointmentsForDateRangeAndProvider>\n      <arg0>{{scheduleDate}}</arg0>\n      <arg1>{{endDate}}</arg1>\n      <arg2>{{providerNo}}</arg2>\n    </ws:getAppointmentsForDateRangeAndProvider>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "NEVER LIVE TESTED. arg0=startDate, arg1=endDate, arg2=providerNo."
+          },
+          "response": []
+        },
+        {
+          "name": "getAppointmentsForDateRangeAndProvider2 (with useGMTTime)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAppointmentsForDateRangeAndProvider2>\n      <arg0>{{scheduleDate}}</arg0>\n      <arg1>{{endDate}}</arg1>\n      <arg2>{{providerNo}}</arg2>\n      <arg3>true</arg3>\n    </ws:getAppointmentsForDateRangeAndProvider2>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "NEVER LIVE TESTED. arg3=useGMTTime."
+          },
+          "response": []
+        },
+        {
+          "name": "getAppointmentsUpdatedAfterDate",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAppointmentsUpdatedAfterDate>\n      <arg0>{{lastUpdate}}</arg0>\n      <arg1>{{itemsToReturn}}</arg1>\n      <arg2>true</arg2>\n    </ws:getAppointmentsUpdatedAfterDate>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "NEVER LIVE TESTED. arg1 likely max-rows, arg2=useGMTTime."
+          },
+          "response": []
+        },
+        {
+          "name": "getAppointmentArchivesUpdatedAfterDate",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAppointmentArchivesUpdatedAfterDate>\n      <arg0>{{lastUpdate}}</arg0>\n      <arg1>{{itemsToReturn}}</arg1>\n      <arg2>true</arg2>\n    </ws:getAppointmentArchivesUpdatedAfterDate>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "NEVER LIVE TESTED. Cancelled/deleted appointment history."
+          },
+          "response": []
+        },
+        {
+          "name": "getAllDemographicIdByProgramProvider",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAllDemographicIdByProgramProvider>\n      <arg0>{{programId}}</arg0>\n      <arg1>{{providerNo}}</arg1>\n    </ws:getAllDemographicIdByProgramProvider>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "NEVER LIVE TESTED. Program Management related - likely not needed for our use case."
+          },
+          "response": []
+        },
+        {
+          "name": "getAppointmentsByProgramProviderDemographicDate",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAppointmentsByProgramProviderDemographicDate>\n      <arg0>{{programId}}</arg0>\n      <arg1>{{providerNo}}</arg1>\n      <arg2>{{demographicNo}}</arg2>\n      <arg3>{{lastUpdate}}</arg3>\n      <arg4>{{itemsToReturn}}</arg4>\n      <arg5>true</arg5>\n    </ws:getAppointmentsByProgramProviderDemographicDate>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "NEVER LIVE TESTED. Program Management related - all 5 args optional per WSDL (minOccurs=0 except last two)."
+          },
+          "response": []
+        },
+        {
+          "name": "addAppointment (WRITE - unverified, never run)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:addAppointment>\n      <arg0>\n        <demographicNo>{{demographicNo}}</demographicNo>\n        <providerNo>{{providerNo}}</providerNo>\n        <appointmentStartDateTime>{{scheduleDate}}</appointmentStartDateTime>\n        <appointmentEndDateTime>{{endDate}}</appointmentEndDateTime>\n        <reason></reason>\n        <notes></notes>\n        <status>t</status>\n        <programId>0</programId>\n      </arg0>\n    </ws:addAppointment>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "WARNING: WRITES a real appointment if it succeeds. NEVER LIVE TESTED. addAppointment(appointmentTransfer) -> new id (int). This could be the SOAP replacement for REST POST /schedule/add - only try this after the REST booking path is confirmed working, as a comparison. Do not run against the real clinic without the project owner's explicit go-ahead."
+          },
+          "response": []
+        },
+        {
+          "name": "updateAppointment (WRITE - unverified, never run)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:updateAppointment>\n      <arg0>\n        <id>{{appointmentId}}</id>\n        <demographicNo>{{demographicNo}}</demographicNo>\n        <providerNo>{{providerNo}}</providerNo>\n        <appointmentStartDateTime>{{scheduleDate}}</appointmentStartDateTime>\n        <appointmentEndDateTime>{{endDate}}</appointmentEndDateTime>\n        <status>c</status>\n        <programId>0</programId>\n      </arg0>\n    </ws:updateAppointment>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ScheduleService",
+            "description": "WARNING: WRITES/modifies a real appointment if it succeeds. NEVER LIVE TESTED. updateAppointment(appointmentTransfer) -> void. Do not run against the real clinic without the project owner's explicit go-ahead."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03. BookingService",
+      "item": [
+        {
+          "name": "getAppointmentTypesByProvider (known to fault)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAppointmentTypesByProvider>\n      <arg0>{{providerNo}}</arg0>\n    </ws:getAppointmentTypesByProvider>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/BookingService",
+            "description": "Verified live 2026-09-01: generic SOAP Fault for providerNo=104, even with correct auth. Deprioritized - ScheduleService.getScheduleTemplateCodes covers what we need."
+          },
+          "response": []
+        },
+        {
+          "name": "getExternalAppointmentTypes",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getExternalAppointmentTypes>\n      <arg0>{{providerNo}}</arg0>\n    </ws:getExternalAppointmentTypes>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/BookingService",
+            "description": "Verified live 2026-09-01 with arg0=104: auth passes, but returns empty (no <return>)."
+          },
+          "response": []
+        },
+        {
+          "name": "findAppointment (unverified semantics)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:findAppointment>\n      <arg0>{{findAppointmentBookingTypeId}}</arg0>\n      <arg1>{{providerNo}}</arg1>\n      <arg2>{{scheduleDate}}</arg2>\n    </ws:findAppointment>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/BookingService",
+            "description": "NEVER LIVE TESTED - per project decision, not needed. Best guess: arg0=booking type id, arg1=providerNo, arg2=search start date."
+          },
+          "response": []
+        },
+        {
+          "name": "bookAppointment (WRITE - unverified, never run)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:bookAppointment>\n      <arg0>{{bookAppointmentArg0}}</arg0>\n      <arg1>{{bookAppointmentArg1}}</arg1>\n    </ws:bookAppointment>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/BookingService",
+            "description": "WARNING: WRITES a real appointment if it succeeds. NEVER LIVE TESTED - not needed (real booking goes through REST POST /schedule/add). Do not run without the project owner's explicit go-ahead."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04. DemographicService",
+      "item": [
+        {
+          "name": "getDemographic (by id)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getDemographic>\n      <arg0>{{demographicNo}}</arg0>\n    </ws:getDemographic>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "NEVER LIVE TESTED. getDemographic(demographicNo:int) -> demographicTransfer (includes hin field)."
+          },
+          "response": []
+        },
+        {
+          "name": "getDemographic2 (by id, richer transfer)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getDemographic2>\n      <arg0>{{demographicNo}}</arg0>\n    </ws:getDemographic2>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "NEVER LIVE TESTED. Same as getDemographic but demographicTransfer2 (more fields: alias, citizenship, spokenLanguage, ...)."
+          },
+          "response": []
+        },
+        {
+          "name": "getDemographics (batch by ids)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getDemographics>\n      <arg0>{{demographicNo}}</arg0>\n    </ws:getDemographics>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "NEVER LIVE TESTED. arg0 repeats (maxOccurs=unbounded) - add more <arg0> elements for multiple ids."
+          },
+          "response": []
+        },
+        {
+          "name": "searchDemographicByName",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:searchDemographicByName>\n      <arg0>{{searchName}}</arg0>\n      <arg1>{{offset}}</arg1>\n      <arg2>{{itemsToReturn}}</arg2>\n    </ws:searchDemographicByName>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "NEVER LIVE TESTED. arg0=name search string; arg1/arg2 likely offset/limit."
+          },
+          "response": []
+        },
+        {
+          "name": "searchDemographicsByAttributes (possible matchDemographic replacement)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:searchDemographicsByAttributes>\n      <arg0></arg0>\n      <arg1></arg1>\n      <arg2></arg2>\n      <arg3></arg3>\n      <arg4>{{dobForMatch}}</arg4>\n      <arg5></arg5>\n      <arg6></arg6>\n      <arg7></arg7>\n      <arg8></arg8>\n      <arg9>{{hinForMatch}}</arg9>\n      <arg10>0</arg10>\n      <arg11>{{itemsToReturn}}</arg11>\n    </ws:searchDemographicsByAttributes>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "NEVER LIVE TESTED. 12 args, meanings NOT confirmed - arg3 is a gender enum (M/F/T/O/U), arg4 is a dateTime (likely DOB), rest are strings/ints. Guessed here: arg4=DOB, arg9=HIN (both placeholders, positions unconfirmed - try different arg slots for HIN if this returns nothing). This is the leading candidate for a SOAP equivalent of REST POST /demographics/matchDemographic used by LinkPatientToClinicUseCase - test carefully before relying on it."
+          },
+          "response": []
+        },
+        {
+          "name": "getDemographicByMyOscarUserName",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getDemographicByMyOscarUserName>\n      <arg0></arg0>\n    </ws:getDemographicByMyOscarUserName>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "NEVER LIVE TESTED. Not relevant to us (MyOSCAR patient portal username, a different system)."
+          },
+          "response": []
+        },
+        {
+          "name": "getActiveDemographicsAfter",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getActiveDemographicsAfter>\n      <lastUpdate>{{lastUpdate}}</lastUpdate>\n      <fields></fields>\n    </ws:getActiveDemographicsAfter>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "NEVER LIVE TESTED. Sync-style bulk export; fields likely a comma-separated field-selection string (optional)."
+          },
+          "response": []
+        },
+        {
+          "name": "getActiveDemographicsAfter2 (richer transfer)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getActiveDemographicsAfter2>\n      <lastUpdate>{{lastUpdate}}</lastUpdate>\n      <fields></fields>\n    </ws:getActiveDemographicsAfter2>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "NEVER LIVE TESTED. Same as getActiveDemographicsAfter but demographicTransfer2."
+          },
+          "response": []
+        },
+        {
+          "name": "getConsentedDemographicIdsAfter",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getConsentedDemographicIdsAfter>\n      <lastUpdate>{{lastUpdate}}</lastUpdate>\n    </ws:getConsentedDemographicIdsAfter>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "NEVER LIVE TESTED. Not relevant to us (patient portal consent tracking)."
+          },
+          "response": []
+        },
+        {
+          "name": "getDemographicIdsWithMyOscarAccounts",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getDemographicIdsWithMyOscarAccounts>\n      <startDemographicIdExclusive>0</startDemographicIdExclusive>\n      <itemsToReturn>{{itemsToReturn}}</itemsToReturn>\n    </ws:getDemographicIdsWithMyOscarAccounts>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "NEVER LIVE TESTED. Not relevant to us (MyOSCAR patient portal)."
+          },
+          "response": []
+        },
+        {
+          "name": "getAdmittedDemographicIdsByProgramProvider",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAdmittedDemographicIdsByProgramProvider>\n      <arg0>{{programId}}</arg0>\n      <arg1>{{providerNo}}</arg1>\n    </ws:getAdmittedDemographicIdsByProgramProvider>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "NEVER LIVE TESTED. Program Management related - likely not needed."
+          },
+          "response": []
+        },
+        {
+          "name": "isPhrVerifiedToSendMessages",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:isPhrVerifiedToSendMessages>\n      <arg0>{{demographicNo}}</arg0>\n    </ws:isPhrVerifiedToSendMessages>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "NEVER LIVE TESTED. Not relevant to us (MyOSCAR patient portal PHR verification)."
+          },
+          "response": []
+        },
+        {
+          "name": "isPhrVerifiedToSendMedicalData",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:isPhrVerifiedToSendMedicalData>\n      <arg0>{{demographicNo}}</arg0>\n    </ws:isPhrVerifiedToSendMedicalData>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "NEVER LIVE TESTED. Not relevant to us (MyOSCAR patient portal)."
+          },
+          "response": []
+        },
+        {
+          "name": "getLatestPhrVerificationByDemographic",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getLatestPhrVerificationByDemographic>\n      <arg0>{{demographicNo}}</arg0>\n    </ws:getLatestPhrVerificationByDemographic>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "NEVER LIVE TESTED. Not relevant to us (MyOSCAR patient portal)."
+          },
+          "response": []
+        },
+        {
+          "name": "writePHRId (WRITE - unverified, never run)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:writePHRId>\n      <demographicNo>{{demographicNo}}</demographicNo>\n      <phrId></phrId>\n    </ws:writePHRId>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DemographicService",
+            "description": "WARNING: WRITES data if it succeeds. NEVER LIVE TESTED. Not relevant to us (MyOSCAR patient portal linking)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05. ProviderService",
+      "item": [
+        {
+          "name": "getProviders",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getProviders>\n      <arg0>false</arg0>\n    </ws:getProviders>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ProviderService",
+            "description": "NEVER LIVE TESTED. getProviders(includeDisabled:boolean) -> providerTransfer[] (all providers, no id filter - filter client-side). Potential SOAP replacement for the REST doctor directory sync (scripts/sync-doctors.ts)."
+          },
+          "response": []
+        },
+        {
+          "name": "getProviders2",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getProviders2>\n      <arg0>false</arg0>\n    </ws:getProviders2>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ProviderService",
+            "description": "NEVER LIVE TESTED. Same shape as getProviders (both use providerTransfer per this WSDL) - unclear what differs; try both."
+          },
+          "response": []
+        },
+        {
+          "name": "getLoggedInProviderTransfer",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getLoggedInProviderTransfer/>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ProviderService",
+            "description": "NEVER LIVE TESTED. No params - returns the provider record for whichever account is behind soapSecurityId/soapSecurityTokenKey. Useful sanity check for which integration account is actually authenticated."
+          },
+          "response": []
+        },
+        {
+          "name": "getProviderProperties",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getProviderProperties>\n      <arg0>{{providerNo}}</arg0>\n      <arg1></arg1>\n    </ws:getProviderProperties>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ProviderService",
+            "description": "NEVER LIVE TESTED. arg0=providerNo(string), arg1 likely a property name filter (optional)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "06. FacilityService",
+      "item": [
+        {
+          "name": "getAllFacilities",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAllFacilities>\n      <arg0>false</arg0>\n    </ws:getAllFacilities>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/FacilityService",
+            "description": "NEVER LIVE TESTED. arg0=includeDisabled(boolean). facilityTransfer is mostly system config flags, not address/hours."
+          },
+          "response": []
+        },
+        {
+          "name": "getDefaultFacility",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getDefaultFacility/>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/FacilityService",
+            "description": "NEVER LIVE TESTED. No params."
+          },
+          "response": []
+        },
+        {
+          "name": "getDefaultFacilities",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getDefaultFacilities/>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/FacilityService",
+            "description": "NEVER LIVE TESTED. No params. Note: WSDL types this as returning a single facilityTransfer, not an array, despite the plural name."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "07. DocumentService",
+      "item": [
+        {
+          "name": "getDocument (by id, includes fileContents)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getDocument>\n      <arg0>{{recordId}}</arg0>\n    </ws:getDocument>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DocumentService",
+            "description": "NEVER LIVE TESTED. getDocument(documentNo:int) -> documentTransfer, which includes fileContents (base64Binary) - the actual file bytes. Strong candidate to resolve deferred-items.md item 8 (Documents confirmed unavailable via REST)."
+          },
+          "response": []
+        },
+        {
+          "name": "getDocumentsByDemographicIdAfter",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getDocumentsByDemographicIdAfter>\n      <lastUpdate>{{lastUpdate}}</lastUpdate>\n      <demographicId>{{demographicNo}}</demographicId>\n    </ws:getDocumentsByDemographicIdAfter>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DocumentService",
+            "description": "NEVER LIVE TESTED. Likely the main list-documents-for-a-patient call (our Documents health-record feature)."
+          },
+          "response": []
+        },
+        {
+          "name": "getDocumentsUpdateAfterDate",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getDocumentsUpdateAfterDate>\n      <arg0>{{lastUpdate}}</arg0>\n      <arg1>{{itemsToReturn}}</arg1>\n    </ws:getDocumentsUpdateAfterDate>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DocumentService",
+            "description": "NEVER LIVE TESTED. Clinic-wide sync-style call, not scoped to one patient."
+          },
+          "response": []
+        },
+        {
+          "name": "getDocumentsByProgramProviderDemographicDate",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getDocumentsByProgramProviderDemographicDate>\n      <arg0>{{programId}}</arg0>\n      <arg1>{{providerNo}}</arg1>\n      <arg2>{{demographicNo}}</arg2>\n      <arg3>{{lastUpdate}}</arg3>\n      <arg4>{{itemsToReturn}}</arg4>\n    </ws:getDocumentsByProgramProviderDemographicDate>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DocumentService",
+            "description": "NEVER LIVE TESTED. Program Management related - all args optional except last two per WSDL."
+          },
+          "response": []
+        },
+        {
+          "name": "getProvidersThatHaveAcknowledgedDocument",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getProvidersThatHaveAcknowledgedDocument>\n      <arg0>{{recordId}}</arg0>\n    </ws:getProvidersThatHaveAcknowledgedDocument>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/DocumentService",
+            "description": "NEVER LIVE TESTED. arg0=documentNo(int). Not relevant to us (clinical review workflow, not patient-facing)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "08. PrescriptionService",
+      "item": [
+        {
+          "name": "getPrescription (by id)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getPrescription>\n      <arg0>{{recordId}}</arg0>\n    </ws:getPrescription>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/PrescriptionService",
+            "description": "NEVER LIVE TESTED. getPrescription(id:int) -> prescriptionTransfer{drugs[]: full dosage/duration/route/frequency/refill details} - richer than the current REST shape."
+          },
+          "response": []
+        },
+        {
+          "name": "getPrescriptionsByDemographicIdAfter",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getPrescriptionsByDemographicIdAfter>\n      <lastUpdate>{{lastUpdate}}</lastUpdate>\n      <demographicId>{{demographicNo}}</demographicId>\n    </ws:getPrescriptionsByDemographicIdAfter>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/PrescriptionService",
+            "description": "NEVER LIVE TESTED. Likely the main list-prescriptions-for-a-patient call (our Prescriptions health-record feature)."
+          },
+          "response": []
+        },
+        {
+          "name": "getPrescriptionUpdatedAfterDate",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getPrescriptionUpdatedAfterDate>\n      <arg0>{{lastUpdate}}</arg0>\n      <arg1>{{itemsToReturn}}</arg1>\n    </ws:getPrescriptionUpdatedAfterDate>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/PrescriptionService",
+            "description": "NEVER LIVE TESTED. Clinic-wide sync-style call."
+          },
+          "response": []
+        },
+        {
+          "name": "getPrescriptionsByProgramProviderDemographicDate",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getPrescriptionsByProgramProviderDemographicDate>\n      <arg0>{{programId}}</arg0>\n      <arg1>{{providerNo}}</arg1>\n      <arg2>{{demographicNo}}</arg2>\n      <arg3>{{lastUpdate}}</arg3>\n      <arg4>{{itemsToReturn}}</arg4>\n    </ws:getPrescriptionsByProgramProviderDemographicDate>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/PrescriptionService",
+            "description": "NEVER LIVE TESTED. Program Management related."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "09. AllergyService",
+      "item": [
+        {
+          "name": "getAllergy (by id)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAllergy>\n      <arg0>{{recordId}}</arg0>\n    </ws:getAllergy>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/AllergyService",
+            "description": "NEVER LIVE TESTED. getAllergy(id:int) -> allergyTransfer."
+          },
+          "response": []
+        },
+        {
+          "name": "getAllergiesByDemographicIdAfter",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAllergiesByDemographicIdAfter>\n      <lastUpdate>{{lastUpdate}}</lastUpdate>\n      <demographicId>{{demographicNo}}</demographicId>\n    </ws:getAllergiesByDemographicIdAfter>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/AllergyService",
+            "description": "NEVER LIVE TESTED. Likely the main list-allergies-for-a-patient call (our Health Conditions/Allergies feature)."
+          },
+          "response": []
+        },
+        {
+          "name": "getAllergiesUpdatedAfterDate",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAllergiesUpdatedAfterDate>\n      <arg0>{{lastUpdate}}</arg0>\n      <arg1>{{itemsToReturn}}</arg1>\n    </ws:getAllergiesUpdatedAfterDate>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/AllergyService",
+            "description": "NEVER LIVE TESTED. Clinic-wide sync-style call."
+          },
+          "response": []
+        },
+        {
+          "name": "getAllergiesByProgramProviderDemographicDate",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAllergiesByProgramProviderDemographicDate>\n      <arg0>{{programId}}</arg0>\n      <arg1>{{providerNo}}</arg1>\n      <arg2>{{demographicNo}}</arg2>\n      <arg3>{{lastUpdate}}</arg3>\n      <arg4>{{itemsToReturn}}</arg4>\n    </ws:getAllergiesByProgramProviderDemographicDate>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/AllergyService",
+            "description": "NEVER LIVE TESTED. Program Management related."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "10. MeasurementService",
+      "item": [
+        {
+          "name": "getMeasurement (by id)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getMeasurement>\n      <arg0>{{recordId}}</arg0>\n    </ws:getMeasurement>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/MeasurementService",
+            "description": "NEVER LIVE TESTED. getMeasurement(id:int) -> measurementTransfer (e.g. height/weight/blood pressure readings)."
+          },
+          "response": []
+        },
+        {
+          "name": "getMeasurementsByDemographicIdAfter",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getMeasurementsByDemographicIdAfter>\n      <lastUpdate>{{lastUpdate}}</lastUpdate>\n      <demographicId>{{demographicNo}}</demographicId>\n    </ws:getMeasurementsByDemographicIdAfter>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/MeasurementService",
+            "description": "NEVER LIVE TESTED. Likely the main list-measurements-for-a-patient call."
+          },
+          "response": []
+        },
+        {
+          "name": "getMeasurementsCreatedAfterDate",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getMeasurementsCreatedAfterDate>\n      <arg0>{{lastUpdate}}</arg0>\n      <arg1>{{itemsToReturn}}</arg1>\n    </ws:getMeasurementsCreatedAfterDate>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/MeasurementService",
+            "description": "NEVER LIVE TESTED. Clinic-wide sync-style call."
+          },
+          "response": []
+        },
+        {
+          "name": "getMeasurementsByProgramProviderDemographicDate",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getMeasurementsByProgramProviderDemographicDate>\n      <arg0>{{programId}}</arg0>\n      <arg1>{{providerNo}}</arg1>\n      <arg2>{{demographicNo}}</arg2>\n      <arg3>{{lastUpdate}}</arg3>\n      <arg4>{{itemsToReturn}}</arg4>\n    </ws:getMeasurementsByProgramProviderDemographicDate>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/MeasurementService",
+            "description": "NEVER LIVE TESTED. Program Management related."
+          },
+          "response": []
+        },
+        {
+          "name": "getMeasurementMaps (measurement type definitions)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getMeasurementMaps/>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/MeasurementService",
+            "description": "NEVER LIVE TESTED. No params. measurementMapTransfer{id,identCode,labType,loincCode,name} - the type dictionary (like getScheduleTemplateCodes but for measurements)."
+          },
+          "response": []
+        },
+        {
+          "name": "addMeasurement (WRITE - unverified, never run)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:addMeasurement>\n      <arg0>\n        <demographicId>{{demographicNo}}</demographicId>\n        <providerNo>{{providerNo}}</providerNo>\n        <type></type>\n        <dataField></dataField>\n        <dateObserved>{{scheduleDate}}</dateObserved>\n      </arg0>\n    </ws:addMeasurement>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/MeasurementService",
+            "description": "WARNING: WRITES a real measurement if it succeeds. NEVER LIVE TESTED. Not needed for our read-only use case. Do not run without the project owner's explicit go-ahead."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "11. PreventionService",
+      "item": [
+        {
+          "name": "getPrevention (by id)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getPrevention>\n      <arg0>{{recordId}}</arg0>\n    </ws:getPrevention>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/PreventionService",
+            "description": "NEVER LIVE TESTED. getPrevention(id:int) -> preventionTransfer (vaccinations/screenings)."
+          },
+          "response": []
+        },
+        {
+          "name": "getPreventionsByDemographicIdAfter",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getPreventionsByDemographicIdAfter>\n      <lastUpdate>{{lastUpdate}}</lastUpdate>\n      <demographicId>{{demographicNo}}</demographicId>\n    </ws:getPreventionsByDemographicIdAfter>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/PreventionService",
+            "description": "NEVER LIVE TESTED. Likely the main list-vaccinations-for-a-patient call (our Vaccinations feature)."
+          },
+          "response": []
+        },
+        {
+          "name": "getPreventionsUpdatedAfterDate",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getPreventionsUpdatedAfterDate>\n      <arg0>{{lastUpdate}}</arg0>\n      <arg1>{{itemsToReturn}}</arg1>\n    </ws:getPreventionsUpdatedAfterDate>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/PreventionService",
+            "description": "NEVER LIVE TESTED. Clinic-wide sync-style call."
+          },
+          "response": []
+        },
+        {
+          "name": "getPreventionsByProgramProviderDemographicDate",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getPreventionsByProgramProviderDemographicDate>\n      <arg0>{{programId}}</arg0>\n      <arg1>{{providerNo}}</arg1>\n      <arg2>{{demographicNo}}</arg2>\n      <arg3>{{lastUpdate}}</arg3>\n      <arg4>{{itemsToReturn}}</arg4>\n    </ws:getPreventionsByProgramProviderDemographicDate>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/PreventionService",
+            "description": "NEVER LIVE TESTED. Program Management related."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "12. ProgramService",
+      "item": [
+        {
+          "name": "getAllPrograms",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAllPrograms/>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ProgramService",
+            "description": "NEVER LIVE TESTED. No params. Program/bed management module (Shelter, Housing, etc.) - not currently relevant to any DrFinder feature, documented for completeness."
+          },
+          "response": []
+        },
+        {
+          "name": "getAllProgramProviders",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getAllProgramProviders/>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/ProgramService",
+            "description": "NEVER LIVE TESTED. No params. Not currently relevant, documented for completeness."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "13. LabUploadService (all WRITE - external lab ingestion)",
+      "item": [
+        {
+          "name": "uploadExcelleris (WRITE - never run)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:uploadExcelleris>\n      <file_name></file_name>\n      <contents></contents>\n      <oscar_provider_no>{{providerNo}}</oscar_provider_no>\n    </ws:uploadExcelleris>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/LabUploadService",
+            "description": "WARNING: WRITES a real lab result into OSCAR if it succeeds. NEVER LIVE TESTED. Not relevant to our read-only patient-facing app - documented for completeness only per project policy. Do not run."
+          },
+          "response": []
+        },
+        {
+          "name": "uploadGammaDynacare (WRITE - never run)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:uploadGammaDynacare>\n      <file_name></file_name>\n      <contents></contents>\n      <oscar_provider_no>{{providerNo}}</oscar_provider_no>\n    </ws:uploadGammaDynacare>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/LabUploadService",
+            "description": "WARNING: WRITES data. NEVER LIVE TESTED. Not relevant - documented for completeness. Do not run."
+          },
+          "response": []
+        },
+        {
+          "name": "uploadCML (WRITE - never run)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:uploadCML>\n      <file_name></file_name>\n      <contents></contents>\n      <oscar_provider_no>{{providerNo}}</oscar_provider_no>\n    </ws:uploadCML>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/LabUploadService",
+            "description": "WARNING: WRITES data. NEVER LIVE TESTED. Not relevant - documented for completeness. Do not run."
+          },
+          "response": []
+        },
+        {
+          "name": "uploadIHA (WRITE - never run)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:uploadIHA>\n      <file_name></file_name>\n      <contents></contents>\n      <oscar_provider_no>{{providerNo}}</oscar_provider_no>\n    </ws:uploadIHA>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/LabUploadService",
+            "description": "WARNING: WRITES data. NEVER LIVE TESTED. Not relevant - documented for completeness. Do not run."
+          },
+          "response": []
+        },
+        {
+          "name": "uploadPDF (WRITE - never run)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:uploadPDF>\n      <file_name></file_name>\n      <contents></contents>\n      <oscar_provider_no>{{providerNo}}</oscar_provider_no>\n    </ws:uploadPDF>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/LabUploadService",
+            "description": "WARNING: WRITES data (contents is base64Binary here, unlike the string-typed upload* variants). NEVER LIVE TESTED. Not relevant - documented for completeness. Do not run."
+          },
+          "response": []
+        },
+        {
+          "name": "uploadDocumentReference (WRITE - never run)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:uploadDocumentReference>\n      <file_name></file_name>\n      <contents></contents>\n      <oscar_provider_no>{{providerNo}}</oscar_provider_no>\n    </ws:uploadDocumentReference>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/LabUploadService",
+            "description": "WARNING: WRITES data (base64Binary contents). NEVER LIVE TESTED. Not relevant - documented for completeness. Do not run."
+          },
+          "response": []
+        },
+        {
+          "name": "uploadCDL (WRITE - never run)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:uploadCDL>\n      <file_name></file_name>\n      <contents></contents>\n      <oscar_provider_no>{{providerNo}}</oscar_provider_no>\n    </ws:uploadCDL>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/LabUploadService",
+            "description": "WARNING: WRITES data. NEVER LIVE TESTED. Not relevant - documented for completeness. Do not run."
+          },
+          "response": []
+        },
+        {
+          "name": "uploadLifelabs (WRITE - never run)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:uploadLifelabs>\n      <file_name></file_name>\n      <contents></contents>\n      <oscar_provider_no>{{providerNo}}</oscar_provider_no>\n    </ws:uploadLifelabs>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/LabUploadService",
+            "description": "WARNING: WRITES data. NEVER LIVE TESTED. Not relevant - documented for completeness. Do not run."
+          },
+          "response": []
+        },
+        {
+          "name": "uploadCLS (WRITE - never run)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:uploadCLS>\n      <file_name></file_name>\n      <contents></contents>\n      <oscar_provider_no>{{providerNo}}</oscar_provider_no>\n    </ws:uploadCLS>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/LabUploadService",
+            "description": "WARNING: WRITES data. NEVER LIVE TESTED. Not relevant - documented for completeness. Do not run."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "14. SystemInfoService",
+      "item": [
+        {
+          "name": "getServerTime",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getServerTime/>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/SystemInfoService",
+            "description": "NEVER LIVE TESTED. No params. Compare against your wall clock and testTimeZone in ScheduleService to help resolve the UTC-vs-local-time ambiguity."
+          },
+          "response": []
+        },
+        {
+          "name": "getServerTimeGmtOffset (timezone resolution)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getServerTimeGmtOffset/>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/SystemInfoService",
+            "description": "NEVER LIVE TESTED. No params. Returns an int offset from GMT - the most direct candidate to finally, definitively resolve whether OSCAR's Z-suffixed timestamps are real UTC or mislabeled clinic-local time (the deferred timezone concern noted in physician-booking-page.tsx / oscar-mappers.ts)."
+          },
+          "response": []
+        },
+        {
+          "name": "isAlive",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:isAlive/>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/SystemInfoService",
+            "description": "NEVER LIVE TESTED. No params. Simple health-check ping - good first request to sanity-check auth is working."
+          },
+          "response": []
+        },
+        {
+          "name": "helloWorld",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:helloWorld/>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/SystemInfoService",
+            "description": "NEVER LIVE TESTED. No params. Trivial connectivity check."
+          },
+          "response": []
+        },
+        {
+          "name": "getMaxListReturnSize",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "text/xml; charset=UTF-8" },
+              { "key": "SOAPAction", "value": "" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.oscarehr.org/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n  <soapenv:Header>\n    <wsse:Security>\n      <wsse:UsernameToken>\n        <wsse:Username>{{soapSecurityId}}</wsse:Username>\n        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{{soapSecurityTokenKey}}</wsse:Password>\n      </wsse:UsernameToken>\n    </wsse:Security>\n  </soapenv:Header>\n  <soapenv:Body>\n    <ws:getMaxListReturnSize/>\n  </soapenv:Body>\n</soapenv:Envelope>",
+              "options": { "raw": { "language": "xml" } }
+            },
+            "url": "{{baseUrl}}/ws/SystemInfoService",
+            "description": "NEVER LIVE TESTED. No params. Server-side cap on itemsToReturn-style params used across other services."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

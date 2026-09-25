@@ -1,0 +1,2693 @@
+[
+  {
+    "Category": "00. Setup & OAuth",
+    "Method": "GET",
+    "Path": "/status/checkIfAuthed",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "GET",
+    "Path": "/demographics",
+    "Path Parameters": "",
+    "Query Parameters": "offset, limit",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "POST",
+    "Path": "/demographics",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json, application/xml"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "PUT",
+    "Path": "/demographics",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "GET",
+    "Path": "/demographics/basic/{dataId}",
+    "Path Parameters": "dataId",
+    "Query Parameters": "includes[]",
+    "Consumes": "",
+    "Produces": "application/json, application/xml"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "POST",
+    "Path": "/demographics/matchDemographic",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "POST",
+    "Path": "/demographics/matchDemographicPartial",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "DELETE",
+    "Path": "/demographics/merge",
+    "Path Parameters": "",
+    "Query Parameters": "parentId, childsId",
+    "Consumes": "",
+    "Produces": ""
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "PUT",
+    "Path": "/demographics/merge",
+    "Path Parameters": "",
+    "Query Parameters": "parentId, childId",
+    "Consumes": "",
+    "Produces": ""
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "GET",
+    "Path": "/demographics/merge/{parentId}",
+    "Path Parameters": "parentId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "GET",
+    "Path": "/demographics/quickSearch",
+    "Path Parameters": "",
+    "Query Parameters": "query",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "POST",
+    "Path": "/demographics/search",
+    "Path Parameters": "",
+    "Query Parameters": "startIndex, itemsToReturn",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "POST",
+    "Path": "/demographics/searchIntegrator",
+    "Path Parameters": "",
+    "Query Parameters": "itemsToReturn",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "DELETE",
+    "Path": "/demographics/{dataId}",
+    "Path Parameters": "dataId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "GET",
+    "Path": "/demographics/{dataId}",
+    "Path Parameters": "dataId",
+    "Query Parameters": "includes[]",
+    "Consumes": "",
+    "Produces": "application/json, application/xml"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "GET",
+    "Path": "/patientDetailStatusService/getStatus",
+    "Path Parameters": "",
+    "Query Parameters": "demographicNo",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "GET",
+    "Path": "/patientDetailStatusService/isUniqueHC",
+    "Path Parameters": "",
+    "Query Parameters": "hin, demographicNo",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "GET",
+    "Path": "/patientDetailStatusService/validateHC",
+    "Path Parameters": "",
+    "Query Parameters": "hin, ver",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "GET",
+    "Path": "/program/patientList",
+    "Path Parameters": "",
+    "Query Parameters": "programNo, day, startIndex, numToReturn",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "10. Demographics & Patients",
+    "Method": "GET",
+    "Path": "/program/programList",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "POST",
+    "Path": "/consults/createConsultation",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "GET",
+    "Path": "/consults/eSendRequest",
+    "Path Parameters": "",
+    "Query Parameters": "requestId",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "GET",
+    "Path": "/consults/getEReferAttachments",
+    "Path Parameters": "",
+    "Query Parameters": "demographicNo",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "GET",
+    "Path": "/consults/getProfessionalSpecialist",
+    "Path Parameters": "",
+    "Query Parameters": "specId",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "GET",
+    "Path": "/consults/getReferralPathwaysByService",
+    "Path Parameters": "",
+    "Query Parameters": "serviceName",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "GET",
+    "Path": "/consults/getRequest",
+    "Path Parameters": "",
+    "Query Parameters": "requestId, demographicId, datesAsTimestamp",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "GET",
+    "Path": "/consults/getRequestAttachments",
+    "Path Parameters": "",
+    "Query Parameters": "requestId, demographicId, attached",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "GET",
+    "Path": "/consults/getResponse",
+    "Path Parameters": "",
+    "Query Parameters": "responseId, demographicNo",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "GET",
+    "Path": "/consults/getResponseAttachments",
+    "Path Parameters": "",
+    "Query Parameters": "responseId, demographicNo, attached",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "POST",
+    "Path": "/consults/importEconsult",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "POST",
+    "Path": "/consults/saveRequest",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "POST",
+    "Path": "/consults/saveResponse",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "POST",
+    "Path": "/consults/searchRequests",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "POST",
+    "Path": "/consults/searchResponses",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "100. Consultations",
+    "Method": "POST",
+    "Path": "/consults/updateConsultation",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "110. Ticklers & Messaging",
+    "Method": "GET",
+    "Path": "/messaging/count",
+    "Path Parameters": "",
+    "Query Parameters": "demoAttachedOnly",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "110. Ticklers & Messaging",
+    "Method": "GET",
+    "Path": "/messaging/unread",
+    "Path Parameters": "",
+    "Query Parameters": "startIndex, limit",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "110. Ticklers & Messaging",
+    "Method": "POST",
+    "Path": "/tickler/add",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "110. Ticklers & Messaging",
+    "Method": "POST",
+    "Path": "/tickler/complete",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "110. Ticklers & Messaging",
+    "Method": "POST",
+    "Path": "/tickler/delete",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "110. Ticklers & Messaging",
+    "Method": "GET",
+    "Path": "/tickler/mine",
+    "Path Parameters": "",
+    "Query Parameters": "limit",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "110. Ticklers & Messaging",
+    "Method": "POST",
+    "Path": "/tickler/search",
+    "Path Parameters": "",
+    "Query Parameters": "startIndex, limit",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "110. Ticklers & Messaging",
+    "Method": "GET",
+    "Path": "/tickler/textSuggestions",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "110. Ticklers & Messaging",
+    "Method": "GET",
+    "Path": "/tickler/ticklers",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "110. Ticklers & Messaging",
+    "Method": "POST",
+    "Path": "/tickler/update",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "110. Ticklers & Messaging",
+    "Method": "GET",
+    "Path": "/tickler/{demographicNo}/count/overdue",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "GET",
+    "Path": "/reportByTemplate/K2AActive",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "GET",
+    "Path": "/reportByTemplate/K2AUrl",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "GET",
+    "Path": "/reportByTemplate/allReports",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "POST",
+    "Path": "/reportByTemplate/getReportById/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "GET",
+    "Path": "/reporting/demographicSets/demographicSet/{name}",
+    "Path Parameters": "name",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "GET",
+    "Path": "/reporting/demographicSets/list",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "POST",
+    "Path": "/reporting/demographicSets/patientList",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "POST",
+    "Path": "/reporting/eformReportTool/add",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "GET",
+    "Path": "/reporting/eformReportTool/list",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "POST",
+    "Path": "/reporting/eformReportTool/markLatest",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "POST",
+    "Path": "/reporting/eformReportTool/populate",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "POST",
+    "Path": "/reporting/eformReportTool/remove",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "POST",
+    "Path": "/reporting/preventionReport/dectivateReport/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "GET",
+    "Path": "/reporting/preventionReport/getList",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "POST",
+    "Path": "/reporting/preventionReport/getReport/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "POST",
+    "Path": "/reporting/preventionReport/runReport/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "120. Reporting",
+    "Method": "POST",
+    "Path": "/reporting/preventionReport/saveNew",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "GET",
+    "Path": "/resources/K2AActive",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "GET",
+    "Path": "/resources/clinicalconnect",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "text/plain"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "GET",
+    "Path": "/resources/currentLuCodesVersion",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "GET",
+    "Path": "/resources/currentPreventionRulesVersion",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "POST",
+    "Path": "/resources/loadLuCodesById/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "POST",
+    "Path": "/resources/loadPreventionRulesById/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "GET",
+    "Path": "/resources/luCodesList",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "GET",
+    "Path": "/resources/notifications",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "POST",
+    "Path": "/resources/notifications/ack",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "GET",
+    "Path": "/resources/notifications/number",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "POST",
+    "Path": "/resources/notifications/readmore",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "GET",
+    "Path": "/resources/preventionRulesList",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "GET",
+    "Path": "/rssproxy/rss",
+    "Path Parameters": "",
+    "Query Parameters": "key, startPoint, numberOfRows",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "POST",
+    "Path": "/surveillance/addSurveyFromK2A/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "GET",
+    "Path": "/surveillance/allLoadedSurveillanceConfigs",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "POST",
+    "Path": "/surveillance/createJob/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "POST",
+    "Path": "/surveillance/disableResource/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "GET",
+    "Path": "/surveillance/download/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "text/plain"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "POST",
+    "Path": "/surveillance/enableResource/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "POST",
+    "Path": "/surveillance/generateExport/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "GET",
+    "Path": "/surveillance/getExportFiles/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "POST",
+    "Path": "/surveillance/getSurvey/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "POST",
+    "Path": "/surveillance/setExportAsSent/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "GET",
+    "Path": "/surveillance/surveillanceConfigList",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "POST",
+    "Path": "/surveillance/updateSurvey/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "130. Resources & Surveillance",
+    "Method": "POST",
+    "Path": "/surveillance/updateSurveyFromK2A/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "POST",
+    "Path": "/app/AcceptAppointmentConsent",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "GET",
+    "Path": "/app/K2AActive",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "POST",
+    "Path": "/app/K2AInit",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "GET",
+    "Path": "/app/PHRActive",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "GET",
+    "Path": "/app/PHRActive/consentGiven/{demographicNo}",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "POST",
+    "Path": "/app/PHRActive/consentGiven/{demographicNo}",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "GET",
+    "Path": "/app/PHRActiveAndAppointmentConfigured",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "GET",
+    "Path": "/app/PHRActiveAndConsentConfigured",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "POST",
+    "Path": "/app/PHRAuditSetup",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "GET",
+    "Path": "/app/PHREmailInvite/{demographicId}",
+    "Path Parameters": "demographicId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "POST",
+    "Path": "/app/PHRInit",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "POST",
+    "Path": "/app/comment",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "DELETE",
+    "Path": "/app/comment/{commentId}",
+    "Path Parameters": "commentId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "GET",
+    "Path": "/app/getApps",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "GET",
+    "Path": "/app/openPHRWindow/{windowName}",
+    "Path Parameters": "windowName",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "GET",
+    "Path": "/app/providerChartLaunchItems",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "GET",
+    "Path": "/app/providerLaunchItems",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "POST",
+    "Path": "/consentService/consentType",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "GET",
+    "Path": "/consentService/consentType/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "140. Applications & Consent",
+    "Method": "GET",
+    "Path": "/consentService/consentTypes",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/dhdr/UAO/list/{providerNo}",
+    "Path Parameters": "providerNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "POST",
+    "Path": "/dhdr/archiveUAO/{providerNo}/{id}",
+    "Path Parameters": "providerNo, id",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "POST",
+    "Path": "/dhdr/createUAO/{providerNo}",
+    "Path Parameters": "providerNo",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/dhdr/getAllGatewayLogs",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/dhdr/getConsentOveride",
+    "Path Parameters": "",
+    "Query Parameters": "demographicNo",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/dhdr/getGatewayLogs",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/dhdr/getGatewayLogs/{providerNo}",
+    "Path Parameters": "providerNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/dhdr/getGatewayLogsByExternalSystem/{systemType}",
+    "Path Parameters": "systemType",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/dhdr/getPreviousGatewayLogs",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/dhdr/getTokenExpireTime",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "POST",
+    "Path": "/dhdr/logConsentOveride/{demographicNo}/{uniqueToken}",
+    "Path Parameters": "demographicNo, uniqueToken",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "POST",
+    "Path": "/dhdr/logConsentOverrideCancelRefuse/{demographicNo}",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/dhdr/muteDisclaimer/{disclaimerType}",
+    "Path Parameters": "disclaimerType",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/dhdr/openClinicalConnect/{demographicNo}",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "POST",
+    "Path": "/dhdr/searchByDemographicNo2",
+    "Path Parameters": "",
+    "Query Parameters": "demographicNo, offset, limit",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/dhdr/showDisclaimer/{disclaimerType}",
+    "Path Parameters": "disclaimerType",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "POST",
+    "Path": "/dhdr/{demographicNo}/print/{view}",
+    "Path Parameters": "demographicNo, view",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/pdf"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/jobs/all",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/jobs/cancelJob",
+    "Path Parameters": "",
+    "Query Parameters": "jobId",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/jobs/disableJob",
+    "Path Parameters": "",
+    "Query Parameters": "jobId",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/jobs/enableJob",
+    "Path Parameters": "",
+    "Query Parameters": "jobId",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/jobs/job/{jobId}",
+    "Path Parameters": "jobId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/jobs/jobType/{jobTypeId}",
+    "Path Parameters": "jobTypeId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "POST",
+    "Path": "/jobs/saveCrontabExpression",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/x-www-form-urlencoded",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "POST",
+    "Path": "/jobs/saveJob",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/x-www-form-urlencoded",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "POST",
+    "Path": "/jobs/saveJobType",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/x-www-form-urlencoded",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/jobs/types/all",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "150. Jobs & Administration",
+    "Method": "GET",
+    "Path": "/jobs/types/current",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/persona/dashboardMenu",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/persona/hasRight",
+    "Path Parameters": "",
+    "Query Parameters": "objectName, privilege, demographicNo",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "POST",
+    "Path": "/persona/hasRights",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "POST",
+    "Path": "/persona/isAllowedAccessToPatientRecord",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/persona/navbar",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/persona/patientList/config",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "POST",
+    "Path": "/persona/patientList/config",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/persona/patientLists",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "POST",
+    "Path": "/persona/preferences",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/persona/rights",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/persona/setDefaultProgramInDomain",
+    "Path Parameters": "",
+    "Query Parameters": "programId",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "POST",
+    "Path": "/persona/updatePreference",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "POST",
+    "Path": "/persona/updatePreferences",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/providerService/getActiveTeams",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/providerService/getRecentDemographicsViewed",
+    "Path Parameters": "",
+    "Query Parameters": "startIndex, itemsToReturn",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/providerService/getRecentDemographicsViewedAfterDateIncluded",
+    "Path Parameters": "",
+    "Query Parameters": "startIndex, itemsToReturn, date",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/providerService/provider/me",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/providerService/provider/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/xml, application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/providerService/providerjson/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/providerService/providers",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/providerService/providers/bad",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "POST",
+    "Path": "/providerService/providers/search",
+    "Path Parameters": "",
+    "Query Parameters": "startIndex, itemsToReturn",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/providerService/providers_json",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/providerService/settings/get",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "POST",
+    "Path": "/providerService/settings/{providerNo}/save",
+    "Path Parameters": "providerNo",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "20. Providers & Persona",
+    "Method": "GET",
+    "Path": "/providerService/suggestProviderNo",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "POST",
+    "Path": "/schedule/add",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "POST",
+    "Path": "/schedule/appointment/{id}/updateStatus",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "POST",
+    "Path": "/schedule/appointment/{id}/updateType",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "POST",
+    "Path": "/schedule/appointmentDxLink/add",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "POST",
+    "Path": "/schedule/appointmentDxLink/disable/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "POST",
+    "Path": "/schedule/appointmentDxLink/list",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "GET",
+    "Path": "/schedule/codes",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "GET",
+    "Path": "/schedule/day/{date}",
+    "Path Parameters": "date",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "POST",
+    "Path": "/schedule/deleteAppointment",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "GET",
+    "Path": "/schedule/fetchDays/{sDate}/{eDate}/{providers}",
+    "Path Parameters": "sDate, eDate, providers",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "GET",
+    "Path": "/schedule/fetchMonthly/{providerNo}/{year}/{month}",
+    "Path Parameters": "year, month, providerNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "GET",
+    "Path": "/schedule/fetchProviderAppts/{providerNo}/{sDate}/{eDate}",
+    "Path Parameters": "providerNo, sDate, eDate",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "GET",
+    "Path": "/schedule/fetchProvidersApptsCount/{sDate}/{eDate}",
+    "Path Parameters": "sDate, eDate",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "POST",
+    "Path": "/schedule/getAppointment",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "GET",
+    "Path": "/schedule/reasons",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "POST",
+    "Path": "/schedule/searchConfig/add",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "GET",
+    "Path": "/schedule/searchConfig/byProvider/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "POST",
+    "Path": "/schedule/searchConfig/disable/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "POST",
+    "Path": "/schedule/searchConfig/enable/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "GET",
+    "Path": "/schedule/searchConfig/list",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "GET",
+    "Path": "/schedule/searchConfig/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "POST",
+    "Path": "/schedule/searchConfig/{id}",
+    "Path Parameters": "id",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "GET",
+    "Path": "/schedule/statuses",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "GET",
+    "Path": "/schedule/types",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "POST",
+    "Path": "/schedule/updateAppointment",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "POST",
+    "Path": "/schedule/{demographicNo}/appointmentHistory",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "30. Appointments & Scheduling",
+    "Method": "GET",
+    "Path": "/schedule/{providerNo}/day/{date}",
+    "Path Parameters": "providerNo, date",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/dxRegisty/findLikeIssue",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/dxRegisty/getDiseaseRegistry",
+    "Path Parameters": "",
+    "Query Parameters": "demographicNo",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/dxRegisty/quickLists",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/dxRegisty/{demographicNo}/add",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/notes/checkEditNoteNew",
+    "Path Parameters": "",
+    "Query Parameters": "noteUUID, userId",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/notes/getGroupNoteExt/{noteId}",
+    "Path Parameters": "noteId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/notes/getIssueById/{issueId}",
+    "Path Parameters": "issueId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/notes/getIssueId/{issueCode}",
+    "Path Parameters": "issueCode",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/notes/getIssueNote/{noteId}",
+    "Path Parameters": "noteId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/notes/removeEditingNoteFlag",
+    "Path Parameters": "",
+    "Query Parameters": "noteUUID, userId",
+    "Consumes": "",
+    "Produces": ""
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/notes/searchIssues",
+    "Path Parameters": "",
+    "Query Parameters": "startIndex, itemsToReturn",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/notes/setEditingNoteFlag",
+    "Path Parameters": "",
+    "Query Parameters": "noteUUID, userId",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/notes/ticklerGetNote/{ticklerNo}",
+    "Path Parameters": "ticklerNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/notes/ticklerSaveNote",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/notes/{demographicNo}/all",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "numToReturn, offset",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/notes/{demographicNo}/getCurrentNote",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/notes/{demographicNo}/save",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/notes/{demographicNo}/saveIssueNote",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/notes/{demographicNo}/tmpSave",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/recordUX/searchTemplates",
+    "Path Parameters": "",
+    "Query Parameters": "startIndex, itemsToReturn",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "POST",
+    "Path": "/recordUX/template",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/recordUX/{demographicNo}/fullSummary/{summaryCode}",
+    "Path Parameters": "demographicNo, summaryCode",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/recordUX/{demographicNo}/getAllergies",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/recordUX/{demographicNo}/getFamilyHistory",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/recordUX/{demographicNo}/getMedicalHistory",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/recordUX/{demographicNo}/getOngoingConcerns",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/recordUX/{demographicNo}/getOtherMeds",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/recordUX/{demographicNo}/getPreventions",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/recordUX/{demographicNo}/getReminders",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/recordUX/{demographicNo}/getRiskFactors",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/recordUX/{demographicNo}/print",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "printOps",
+    "Consumes": "",
+    "Produces": "application/pdf"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/recordUX/{demographicNo}/recordMenu",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "40. Encounters & Clinical Record",
+    "Method": "GET",
+    "Path": "/recordUX/{demographicNo}/summary/{summaryName}",
+    "Path Parameters": "demographicNo, summaryName",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "POST",
+    "Path": "/eform",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "POST",
+    "Path": "/eform/json",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "GET",
+    "Path": "/eform/{dataId}",
+    "Path Parameters": "dataId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "PUT",
+    "Path": "/eform/{dataId}",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "PUT",
+    "Path": "/eform/{dataId}/json",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "GET",
+    "Path": "/eforms",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "GET",
+    "Path": "/eforms/databaseTags",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "GET",
+    "Path": "/eforms/images",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "GET",
+    "Path": "/forms/allEForms",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "GET",
+    "Path": "/forms/allEncounterForms",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "POST",
+    "Path": "/forms/getAllK2AEForms",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "GET",
+    "Path": "/forms/getFavouriteFormGroup",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "GET",
+    "Path": "/forms/getFormGroups",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "POST",
+    "Path": "/forms/getK2AEForm",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "GET",
+    "Path": "/forms/groupNames",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "GET",
+    "Path": "/forms/selectedEncounterForms",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "GET",
+    "Path": "/forms/{demographicNo}/all",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "heading",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "GET",
+    "Path": "/forms/{demographicNo}/completedEncounterForms",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "50. Documents & Forms",
+    "Method": "GET",
+    "Path": "/forms/{demographicNo}/formOptions",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "60. Measurements & Preventions",
+    "Method": "POST",
+    "Path": "/measurements/{demographicNo}",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "60. Measurements & Preventions",
+    "Method": "POST",
+    "Path": "/measurements/{demographicNo}/save",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "60. Measurements & Preventions",
+    "Method": "GET",
+    "Path": "/preventions/active",
+    "Path Parameters": "",
+    "Query Parameters": "demographicNo",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "60. Measurements & Preventions",
+    "Method": "GET",
+    "Path": "/preventions/immunizations/{demographicNo}",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/allergies/active",
+    "Path Parameters": "",
+    "Query Parameters": "demographicNo",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/pharmacies",
+    "Path Parameters": "",
+    "Query Parameters": "offset, limit",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "POST",
+    "Path": "/pharmacies",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "PUT",
+    "Path": "/pharmacies",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "DELETE",
+    "Path": "/pharmacies/{pharmacyId}",
+    "Path Parameters": "pharmacyId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/pharmacies/{pharmacyId}",
+    "Path Parameters": "pharmacyId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/productDispensing",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/productDispensing/deleteDrugProduct/{drugProductId}",
+    "Path Parameters": "drugProductId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/productDispensing/drugProduct/{drugProductId}",
+    "Path Parameters": "drugProductId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/productDispensing/drugProductTemplates",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/productDispensing/drugProducts",
+    "Path Parameters": "",
+    "Query Parameters": "offset, limit, limitByName, limitByLot, limitByLocation, availableOnly",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/productDispensing/drugProducts/byCode",
+    "Path Parameters": "",
+    "Query Parameters": "offset, limit",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/productDispensing/drugProducts/uniqueLots",
+    "Path Parameters": "",
+    "Query Parameters": "name",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/productDispensing/drugProducts/uniqueNames",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/productDispensing/productLocations",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "POST",
+    "Path": "/productDispensing/saveDrugProduct",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/x-www-form-urlencoded",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/productDispensing/status/{drugId}",
+    "Path Parameters": "drugId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "POST",
+    "Path": "/rx/discontinue",
+    "Path Parameters": "",
+    "Query Parameters": "drugId, reason, demographicNo",
+    "Consumes": "",
+    "Produces": "application/json, application/xml"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "POST",
+    "Path": "/rx/drug/{drugId}",
+    "Path Parameters": "drugId",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json, application/xml"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rx/drugs",
+    "Path Parameters": "",
+    "Query Parameters": "demographicNo",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rx/drugs/all/{demographicNo}",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rx/drugs/archived/{demographicNo}",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rx/drugs/current/{demographicNo}",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rx/drugs/longterm/{demographicNo}",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rx/drugs/{status}/{demographicNo}",
+    "Path Parameters": "status, demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rx/drugs{status}",
+    "Path Parameters": "status",
+    "Query Parameters": "demographicNo",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rx/favorites",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json, application/xml"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "POST",
+    "Path": "/rx/favorites",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json, application/xml",
+    "Produces": "application/json, application/xml"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rx/history",
+    "Path Parameters": "",
+    "Query Parameters": "id, demographicNo",
+    "Consumes": "",
+    "Produces": "application/json, application/xml"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "POST",
+    "Path": "/rx/new",
+    "Path Parameters": "",
+    "Query Parameters": "demographicNo",
+    "Consumes": "application/json, application/xml",
+    "Produces": "application/json, application/xml"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "POST",
+    "Path": "/rx/pharmacy/{demographicNo}",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json, application/xml"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "POST",
+    "Path": "/rx/prescribe",
+    "Path Parameters": "",
+    "Query Parameters": "demographicNo",
+    "Consumes": "application/json, application/xml",
+    "Produces": "application/json, application/xml"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rx/prescriptions",
+    "Path Parameters": "",
+    "Query Parameters": "demographicNo",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rx/recordPrescriptionPrint/{scriptNo}",
+    "Path Parameters": "scriptNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rx/rxStatus",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "POST",
+    "Path": "/rx/update",
+    "Path Parameters": "",
+    "Query Parameters": "demographicNo",
+    "Consumes": "application/json, application/xml",
+    "Produces": "application/json, application/xml"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "POST",
+    "Path": "/rx/{demographicNo}/print/{rxNo}",
+    "Path Parameters": "demographicNo, rxNo",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/pdf"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rx/{demographicNo}/watermark/{rxNo}",
+    "Path Parameters": "demographicNo, rxNo",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "image/png"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rxlookup/details",
+    "Path Parameters": "",
+    "Query Parameters": "id",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rxlookup/drugrefInfo",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "POST",
+    "Path": "/rxlookup/dsMessage/{demographicNo}",
+    "Path Parameters": "demographicNo",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rxlookup/fullSearch",
+    "Path Parameters": "",
+    "Query Parameters": "string",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "POST",
+    "Path": "/rxlookup/hideWarning",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "application/json",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rxlookup/limitedUseCodeLookup/{din}",
+    "Path Parameters": "din",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "POST",
+    "Path": "/rxlookup/parse",
+    "Path Parameters": "",
+    "Query Parameters": "input",
+    "Consumes": "",
+    "Produces": "application/octet-stream"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rxlookup/search",
+    "Path Parameters": "",
+    "Query Parameters": "string",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "70. Prescriptions, Drugs & Pharmacies",
+    "Method": "GET",
+    "Path": "/rxlookup/searchByElement",
+    "Path Parameters": "",
+    "Query Parameters": "string",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "80. Labs & Inbox",
+    "Method": "GET",
+    "Path": "/inbox/mine",
+    "Path Parameters": "",
+    "Query Parameters": "limit",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "80. Labs & Inbox",
+    "Method": "GET",
+    "Path": "/inbox/mine/count",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/xml"
+  },
+  {
+    "Category": "80. Labs & Inbox",
+    "Method": "GET",
+    "Path": "/labs/hl7LabsByDemographicNo",
+    "Path Parameters": "",
+    "Query Parameters": "demographicNo, offset, limit",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "90. Billing",
+    "Method": "GET",
+    "Path": "/billing/billingRegion",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "90. Billing",
+    "Method": "GET",
+    "Path": "/billing/defaultView",
+    "Path Parameters": "",
+    "Query Parameters": "",
+    "Consumes": "",
+    "Produces": "application/json"
+  },
+  {
+    "Category": "90. Billing",
+    "Method": "GET",
+    "Path": "/billing/uniqueServiceTypes",
+    "Path Parameters": "",
+    "Query Parameters": "type",
+    "Consumes": "",
+    "Produces": "application/json"
+  }
+]
