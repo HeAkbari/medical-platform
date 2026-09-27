@@ -6,9 +6,11 @@ import type {
   DoctorRepository,
   HealthConditionRepository,
   ImmunizationRepository,
+  PatientRepository,
   PrescriptionRepository,
   TestResultRepository,
 } from '../../ports/repositories';
+import { EnsurePatientLinkedToClinicUseCase, PatientNotLinkableError } from '../../services/ensure-patient-linked-to-clinic.service';
 import type {
   Appointment,
   AppointmentDetail,
@@ -32,19 +34,23 @@ import type { CreateAppointmentInput } from '../../validation/schemas';
 import { OscarClient } from './oscar-client';
 import {
   oscarAllergyToEntry,
-  oscarAppointmentHistoryToDomain,
-  oscarDayApptToDomain,
   oscarDiseaseRegistryItemToEntry,
   oscarDrugToPrescription,
   oscarHl7LabMessageToLabResult,
   oscarPreventionToVaccination,
   oscarProviderApptToDomain,
+  oscarSoapAppointmentToDomain,
   oscarToDoctor,
 } from './oscar-mappers';
+import {
+  addAppointment,
+  getAppointment as getSoapAppointment,
+  getAppointmentsForPatient,
+  getAppointmentsForProvider,
+} from './oscar-schedule-service';
+import type { OscarSoapClient } from './oscar-soap-client';
 import type {
   OscarAllergyResponse,
-  OscarAppointmentTo1,
-  OscarDayApptItem,
   OscarDiseaseRegistryItem,
   OscarDrug,
   OscarHl7LabsResponse,
@@ -52,7 +58,6 @@ import type {
   OscarPreventionResponse,
   OscarProvider,
   OscarProviderPeriodAppsTo,
-  OscarSchedulingResponse,
 } from './oscar-types';
 
 // OSCAR's own pseudo-provider account for internal/system use — never a real
@@ -90,13 +95,26 @@ export class OscarDoctorRepository implements DoctorRepository {
   }
 }
 
-function splitIsoDateTime(iso: string): { date: string; time: string } {
-  const parsed = new Date(iso);
-  const date = parsed.toISOString().slice(0, 10);
-  const time = parsed.toISOString().slice(11, 16);
-  return { date, time };
+/** `YYYY-MM-DDTHH:mm:ss` — no milliseconds, no timezone suffix, matching every verified SOAP appointment sample. */
+function toNaiveDateTime(date: Date): string {
+  return date.toISOString().replace(/\.\d{3}Z$/, '');
 }
 
+/**
+ * ⚠️ Known likely-broken (2026-09-27), not just "unverified": 'c' is a
+ * real `ScheduleTemplateCode` value ("Clinic Appointment"/"On Call
+ * Clinic" — see oscar-verified-service-catalog.md), confirmed
+ * case-insensitively equal to 'C'. `updateStatus()` below sends this via
+ * REST `/schedule/appointment/{id}/updateStatus`, which — like every
+ * other REST AppointmentManager endpoint tried so far — may well hit the
+ * same "Access Denied"/`_demographic` privilege bug (deferred-items.md
+ * #3), untested. Even if the call succeeds, sending 'c' most likely just
+ * re-tags the appointment as a "Clinic Appointment" *type*, not an
+ * actual cancellation — we have no verified code for a real cancelled
+ * *state*. Do not trust this path until it's been tested live end-to-end
+ * (send cancel, then independently re-fetch via `getAppointment2`/
+ * `getAppointmentsForProvider2` and confirm what actually changed).
+ */
 function toOscarStatusCode(status: AppointmentStatus): string {
   if (status === 'cancelled') {
     return 'c';
@@ -106,18 +124,27 @@ function toOscarStatusCode(status: AppointmentStatus): string {
     return 't';
   }
 
-  // OSCAR's status vocabulary beyond 'cancelled'/'scheduled' isn't verified
-  // live yet (see design doc risk list) — the current UI only ever cancels.
   throw new Error(`Unsupported appointment status for OSCAR: ${status}`);
 }
 
 export class OscarAppointmentRepository implements AppointmentRepository {
+  private readonly ensureLinked: EnsurePatientLinkedToClinicUseCase;
+
   constructor(
     private readonly client: OscarClient,
     private readonly clinicId: string,
     private readonly identities: PatientClinicIdentityStore,
-    private readonly doctors: DoctorExternalIdResolver
-  ) {}
+    private readonly doctors: DoctorExternalIdResolver,
+    private readonly soapClient: OscarSoapClient,
+    patients: PatientRepository
+  ) {
+    this.ensureLinked = new EnsurePatientLinkedToClinicUseCase(
+      identities,
+      patients,
+      soapClient,
+      client
+    );
+  }
 
   /**
    * `doctorId` arriving here is always the platform Doctor.id (from
@@ -143,13 +170,19 @@ export class OscarAppointmentRepository implements AppointmentRepository {
         return [];
       }
 
-      const response = (await this.client.post(
-        `/schedule/${encodeURIComponent(identity.externalPatientId)}/appointmentHistory`
-      )) as OscarSchedulingResponse;
-
-      return (response.appointments ?? []).map((item) =>
-        oscarAppointmentHistoryToDomain(item, filters.patientId as string)
+      // REST `POST /schedule/{demographicNo}/appointmentHistory` has a known,
+      // unfixable-client-side OSCAR server bug (always "Access Denied" —
+      // see docs/oscar/new-approach/deferred-items.md #3). SOAP
+      // `getAppointmentsForPatient2` is the verified-working replacement.
+      const items = await getAppointmentsForPatient(
+        this.soapClient,
+        Number(identity.externalPatientId)
       );
+
+      return items.map((item) => ({
+        ...oscarSoapAppointmentToDomain(item),
+        patientId: filters.patientId as string,
+      }));
     }
 
     if (filters?.doctorId) {
@@ -161,11 +194,13 @@ export class OscarAppointmentRepository implements AppointmentRepository {
       }
 
       if (filters.date) {
-        const items = (await this.client.get(
-          `/schedule/${encodeURIComponent(providerNo)}/day/${encodeURIComponent(filters.date)}`
-        )) as OscarDayApptItem[];
+        // REST `GET /schedule/{providerNo}/day/{date}` has the same
+        // unfixable-client-side OSCAR server bug as appointmentHistory/
+        // addAppointment (see deferred-items.md #3) — SOAP
+        // getAppointmentsForProvider2 is the verified-working replacement.
+        const items = await getAppointmentsForProvider(this.soapClient, providerNo, filters.date);
 
-        return items.map((item) => oscarDayApptToDomain(item, filters.date as string));
+        return items.map((item) => oscarSoapAppointmentToDomain(item));
       }
 
       const today = new Date().toISOString().slice(0, 10);
@@ -185,18 +220,27 @@ export class OscarAppointmentRepository implements AppointmentRepository {
     );
   }
 
-  async findById(_id: string): Promise<Appointment | null> {
-    // GET /schedule/getAppointment's exact params/shape aren't verified live
-    // yet — real data first (see docs/oscar/new-approach), not a guess.
-    throw new Error('OscarAppointmentRepository.findById is not implemented yet.');
+  async findById(id: string): Promise<Appointment | null> {
+    // REST has no verified single-appointment lookup (schedule/getAppointment
+    // was never confirmed), but the SOAP ScheduleService.getAppointment2 is —
+    // see docs/oscar/new-approach/oscar-verified-service-catalog.md.
+    const numericId = Number(id);
+
+    if (!Number.isFinite(numericId)) {
+      return null;
+    }
+
+    const appointment = await getSoapAppointment(this.soapClient, numericId);
+
+    return appointment ? oscarSoapAppointmentToDomain(appointment) : null;
   }
 
   /**
-   * Built on top of findById so this starts working automatically once
-   * /schedule/getAppointment is verified — no separate fetch logic to keep
-   * in sync. `location` is intentionally omitted: OSCAR has no Location
-   * concept, and ClinicCredential isn't linked to a Facility yet (see
-   * design doc §5/§6 gap).
+   * Built on top of findById (now backed by SOAP getAppointment2, see
+   * above) — no separate fetch logic to keep in sync. `location` is
+   * intentionally omitted: OSCAR has no Location concept, and
+   * ClinicCredential isn't linked to a Facility yet (see design doc §5/§6
+   * gap).
    */
   async findDetailById(id: string): Promise<AppointmentDetail | null> {
     const appointment = await this.findById(id);
@@ -228,46 +272,55 @@ export class OscarAppointmentRepository implements AppointmentRepository {
   }
 
   async create(input: CreateAppointmentInput): Promise<Appointment> {
-    const identity = await this.identities.find(input.patientId, this.clinicId);
-
-    if (!identity) {
-      throw new Error('Patient is not linked to this clinic — call linkToClinic first.');
-    }
-
     const providerNo = await this.resolveProviderNo(input.doctorId);
 
     if (!providerNo) {
       throw new Error(`Doctor ${input.doctorId} not found in this clinic's directory.`);
     }
 
-    const { date, time } = splitIsoDateTime(input.scheduledAt);
+    // Ensures the patient exists in THIS clinic (the one this doctor
+    // belongs to) — searches OSCAR by name if not already linked, and
+    // provisions a brand-new Demographic (with this doctor added to their
+    // doctor list) if no match is found. See EnsurePatientLinkedToClinicUseCase.
+    const linkResult = await this.ensureLinked.ensure(input.patientId, this.clinicId, {
+      allowCreate: true,
+      targetProviderNo: providerNo,
+    });
 
-    // Body shape provided by the clinic owner from a working Postman request;
-    // not yet exercised live from this codebase.
-    const created = (await this.client.post('/schedule/add', {
+    if (linkResult.status === 'incomplete_profile' || linkResult.status === 'ambiguous_match') {
+      throw new PatientNotLinkableError(linkResult.status);
+    }
+
+    if (linkResult.status === 'not_found') {
+      // Unreachable in practice — `ensure()` only returns `not_found` when
+      // `allowCreate` is false, which is never the case here. Guarded anyway
+      // so this stays a clear error rather than a crash if that changes.
+      throw new Error('EnsurePatientLinkedToClinicUseCase returned not_found with allowCreate: true.');
+    }
+
+    const start = new Date(input.scheduledAt);
+    const end = new Date(start.getTime() + input.durationMinutes * 60000);
+
+    // REST `POST /schedule/add` has the same unfixable-client-side OSCAR
+    // "Access Denied" server bug as appointmentHistory (see
+    // deferred-items.md #3) — SOAP addAppointment is the verified-working
+    // replacement.
+    const id = await addAppointment(this.soapClient, {
+      demographicNo: Number(linkResult.externalPatientId),
       providerNo,
-      appointmentDate: date,
-      startTime: time,
-      demographicNo: Number(identity.externalPatientId),
-      notes: input.notes ?? '',
+      appointmentStartDateTime: toNaiveDateTime(start),
+      appointmentEndDateTime: toNaiveDateTime(end),
       reason: input.reason,
-      location: '',
-      resources: '',
-      type: '',
-      status: 't',
-      duration: input.durationMinutes,
-      urgency: '',
-      reasonCode: 17,
-    })) as OscarAppointmentTo1 | { appointmentNo?: number; id?: number } | null;
-
-    const id = created && 'id' in created && created.id != null
-      ? created.id
-      : created && 'appointmentNo' in created
-        ? created.appointmentNo
-        : undefined;
+      notes: input.notes ?? '',
+      // 'C' (Clinic Appointment) — a real, verified schedule-code value
+      // (see oscar-verified-service-catalog.md), not a state like
+      // "confirmed"/"cancelled". `toOscarStatusCode('scheduled')` ('t' =
+      // Travel) would be semantically wrong for a real patient booking.
+      status: 'C',
+    });
 
     return {
-      id: id != null ? String(id) : '',
+      id: String(id),
       patientId: input.patientId,
       doctorId: input.doctorId,
       scheduledAt: input.scheduledAt,

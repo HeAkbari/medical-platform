@@ -49,6 +49,12 @@ export function PhoneAuthDrawer() {
   const [lastName, setLastName] = useState(DEV_AUTH_DEFAULTS.lastName);
   const [dateOfBirth, setDateOfBirth] = useState(DEV_AUTH_DEFAULTS.dateOfBirth);
   const [email, setEmail] = useState(DEV_AUTH_DEFAULTS.email);
+  // Optional, completed-later fields — only firstName/lastName are required.
+  const [healthNumber, setHealthNumber] = useState('');
+  const [addressLine, setAddressLine] = useState('');
+  const [city, setCity] = useState('');
+  const [province, setProvince] = useState('');
+  const [postalCode, setPostalCode] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -83,6 +89,11 @@ export function PhoneAuthDrawer() {
     setLastName(DEV_AUTH_DEFAULTS.lastName);
     setDateOfBirth(DEV_AUTH_DEFAULTS.dateOfBirth);
     setEmail(DEV_AUTH_DEFAULTS.email);
+    setHealthNumber('');
+    setAddressLine('');
+    setCity('');
+    setProvince('');
+    setPostalCode('');
     setFormError(null);
   }
 
@@ -140,12 +151,19 @@ export function PhoneAuthDrawer() {
     setIsSubmitting(true);
 
     try {
+      const optional = (value: string) => value.trim() || undefined;
+
       await registerPatientRequest(registrationToken, {
         firstName,
         lastName,
-        dateOfBirth,
-        email,
+        dateOfBirth: optional(dateOfBirth),
+        email: optional(email),
         phone,
+        healthNumber: optional(healthNumber),
+        addressLine: optional(addressLine),
+        city: optional(city),
+        province: optional(province),
+        postalCode: optional(postalCode),
       });
       await handleAuthenticated();
     } catch (error) {
@@ -302,28 +320,73 @@ export function PhoneAuthDrawer() {
                   </label>
                   <label className="grid gap-2">
                     <span className="text-sm font-medium text-accent-foreground">
-                      Date of birth
+                      Date of birth <span className="text-faint-foreground">(optional)</span>
                     </span>
                     <input
                       type="date"
                       value={dateOfBirth}
                       onChange={(event) => setDateOfBirth(event.target.value)}
                       className={inputClassName}
-                      required
                     />
                   </label>
                   <label className="grid gap-2">
                     <span className="text-sm font-medium text-accent-foreground">
-                      Email
+                      Email <span className="text-faint-foreground">(optional)</span>
                     </span>
                     <input
                       type="email"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       className={inputClassName}
-                      required
                     />
                   </label>
+                  <label className="grid gap-2">
+                    <span className="text-sm font-medium text-accent-foreground">
+                      Health Insurance Number{' '}
+                      <span className="text-faint-foreground">(optional)</span>
+                    </span>
+                    <input
+                      type="text"
+                      value={healthNumber}
+                      onChange={(event) => setHealthNumber(event.target.value)}
+                      className={inputClassName}
+                    />
+                  </label>
+                  <label className="grid gap-2">
+                    <span className="text-sm font-medium text-accent-foreground">
+                      Address <span className="text-faint-foreground">(optional)</span>
+                    </span>
+                    <input
+                      type="text"
+                      value={addressLine}
+                      onChange={(event) => setAddressLine(event.target.value)}
+                      className={inputClassName}
+                      placeholder="Street address"
+                    />
+                  </label>
+                  <div className="grid grid-cols-3 gap-3">
+                    <input
+                      type="text"
+                      value={city}
+                      onChange={(event) => setCity(event.target.value)}
+                      className={inputClassName}
+                      placeholder="City"
+                    />
+                    <input
+                      type="text"
+                      value={province}
+                      onChange={(event) => setProvince(event.target.value)}
+                      className={inputClassName}
+                      placeholder="Province"
+                    />
+                    <input
+                      type="text"
+                      value={postalCode}
+                      onChange={(event) => setPostalCode(event.target.value)}
+                      className={inputClassName}
+                      placeholder="Postal code"
+                    />
+                  </div>
                   {formError ? (
                     <p className="text-sm text-red-600">{formError}</p>
                   ) : null}

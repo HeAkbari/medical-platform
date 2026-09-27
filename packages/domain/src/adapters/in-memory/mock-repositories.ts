@@ -9,6 +9,7 @@ import type {
 import type {
   CreateAppointmentInput,
   CreatePatientInput,
+  UpdatePatientInput,
 } from '../../validation/schemas';
 import type {
   DocumentDetail,
@@ -67,13 +68,29 @@ class JsonPatientRepository implements PatientRepository {
       id: randomUUID(),
       firstName: input.firstName,
       lastName: input.lastName,
-      dateOfBirth: input.dateOfBirth,
-      email: input.email,
+      dateOfBirth: input.dateOfBirth ?? null,
+      email: input.email ?? null,
       phone: input.phone,
+      healthNumber: input.healthNumber ?? null,
+      addressLine: input.addressLine ?? null,
+      city: input.city ?? null,
+      province: input.province ?? null,
+      postalCode: input.postalCode ?? null,
       createdAt: new Date().toISOString(),
     };
 
     this.store.patients.push(patient);
+    return Promise.resolve(patient);
+  }
+
+  update(id: string, input: UpdatePatientInput): Promise<Patient> {
+    const patient = this.store.patients.find((item) => item.id === id);
+
+    if (!patient) {
+      return Promise.reject(new Error(`Patient not found: ${id}`));
+    }
+
+    Object.assign(patient, input);
     return Promise.resolve(patient);
   }
 }

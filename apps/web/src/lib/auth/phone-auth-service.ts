@@ -6,6 +6,8 @@ import {
 } from '@medical-platform/auth';
 import { normalizePhone, type CreatePatientInput } from '@medical-platform/domain';
 import { repositories } from '@/lib/repositories';
+import { OSCAR_CLINIC_ID } from '@/lib/oscar/client';
+import { getEnsurePatientLinkedToClinicUseCase } from '@/lib/oscar/ensure-patient-linked-to-clinic';
 
 const OTP_TTL_MS = 5 * 60 * 1000;
 const REGISTRATION_TTL_MS = 10 * 60 * 1000;
@@ -58,7 +60,7 @@ function getPhoneAuthState(): PhoneAuthState {
   return globalThis.__phoneAuthState;
 }
 
-async function buildAuthenticatedUser(
+export async function buildAuthenticatedUser(
   account: AuthAccount
 ): Promise<AuthenticatedUser | null> {
   const patient = await repositories.patients.findById(account.patientId);
@@ -69,11 +71,16 @@ async function buildAuthenticatedUser(
 
   return {
     id: account.id,
-    email: patient.email,
+    email: patient.email ?? undefined,
     phone: patient.phone,
     firstName: patient.firstName,
     lastName: patient.lastName,
-    dateOfBirth: patient.dateOfBirth,
+    dateOfBirth: patient.dateOfBirth ?? undefined,
+    healthNumber: patient.healthNumber ?? undefined,
+    addressLine: patient.addressLine ?? undefined,
+    city: patient.city ?? undefined,
+    province: patient.province ?? undefined,
+    postalCode: patient.postalCode ?? undefined,
     patientId: patient.id,
     role: Roles.PATIENT,
     claims: RoleClaims[Roles.PATIENT],
@@ -229,6 +236,18 @@ export async function completeRegistration(
     ...input,
     phone: input.phone.trim(),
   });
+
+  // Best-effort: try to find this patient by name in the (currently single)
+  // configured clinic and link them if found. Never blocks registration —
+  // a miss just means they stay unlinked until booking provisions them.
+  // See EnsurePatientLinkedToClinicUseCase / patient-clinic-linking-architecture.md.
+  if (process.env.DATA_SOURCE === 'oscar') {
+    getEnsurePatientLinkedToClinicUseCase()
+      .then((useCase) => useCase.ensure(patient.id, OSCAR_CLINIC_ID, { allowCreate: false }))
+      .catch((error) => {
+        console.error('Post-registration clinic linking failed (non-fatal):', error);
+      });
+  }
 
   const account: AuthAccount = {
     id: randomUUID(),

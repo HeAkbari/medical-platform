@@ -115,6 +115,10 @@ class FhirPatientRepository implements PatientRepository {
     );
     return fhirToPatient(created);
   }
+
+  update(): Promise<Patient> {
+    throw new Error('FhirPatientRepository.update is not implemented — FHIR is a legacy/sandbox path, not actively developed further.');
+  }
 }
 
 class FhirDoctorRepository implements DoctorRepository {

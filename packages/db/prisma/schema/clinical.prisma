@@ -1,12 +1,26 @@
 model Patient {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   firstName   String
   lastName    String
-  dateOfBirth DateTime
-  email       String   @unique
+  // Only firstName/lastName are mandatory at registration (see
+  // docs/oscar/new-approach/patient-clinic-linking-architecture.md) — DOB
+  // and email are collected on profile completion, not at signup.
+  dateOfBirth DateTime?
+  email       String?   @unique
   phone       String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  // Platform-wide (not per-clinic, unlike PatientClinicIdentity.healthNumber
+  // below): these belong to the person, not to their relationship with any
+  // one clinic. Used to seed a new OSCAR Demographic when a patient is
+  // provisioned into a clinic they don't already exist in — never used to
+  // search/match (matching is by firstName+lastName, see
+  // EnsurePatientLinkedToClinicUseCase).
+  healthNumber String?
+  addressLine  String?
+  city         String?
+  province     String?
+  postalCode   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   clinicIdentities PatientClinicIdentity[]
 }

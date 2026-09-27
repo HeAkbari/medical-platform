@@ -1,8 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { Button } from '@/components/ui';
 import { Card } from '@/components/ui/card';
+import { inputClassName } from '@/components/ui/input-styles';
 import { useAuth } from '@/lib/auth';
+import { updateProfileRequest } from '@/lib/auth/auth-api';
 import { usePhoneAuthStore } from '@/features/phone-auth/store/phone-auth-store';
 
 function EyeIcon({ visible }: { visible: boolean }) {
@@ -82,9 +85,181 @@ function MissingFieldsBanner() {
   );
 }
 
+function EditableProfileForm({
+  user,
+  onCancel,
+  onSaved,
+}: {
+  user: {
+    firstName: string;
+    lastName: string;
+    dateOfBirth?: string;
+    email?: string;
+    healthNumber?: string;
+    addressLine?: string;
+    city?: string;
+    province?: string;
+    postalCode?: string;
+  };
+  onCancel: () => void;
+  onSaved: () => Promise<void>;
+}) {
+  const [firstName, setFirstName] = useState(user.firstName);
+  const [lastName, setLastName] = useState(user.lastName);
+  const [dateOfBirth, setDateOfBirth] = useState(user.dateOfBirth ?? '');
+  const [email, setEmail] = useState(user.email ?? '');
+  const [healthNumber, setHealthNumber] = useState(user.healthNumber ?? '');
+  const [addressLine, setAddressLine] = useState(user.addressLine ?? '');
+  const [city, setCity] = useState(user.city ?? '');
+  const [province, setProvince] = useState(user.province ?? '');
+  const [postalCode, setPostalCode] = useState(user.postalCode ?? '');
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(null);
+    setIsSaving(true);
+
+    const optional = (value: string) => value.trim() || undefined;
+
+    try {
+      await updateProfileRequest({
+        firstName,
+        lastName,
+        dateOfBirth: optional(dateOfBirth),
+        email: optional(email),
+        healthNumber: optional(healthNumber),
+        addressLine: optional(addressLine),
+        city: optional(city),
+        province: optional(province),
+        postalCode: optional(postalCode),
+      });
+      await onSaved();
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error ? submitError.message : 'Unable to save profile'
+      );
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  return (
+    <Card>
+      <form onSubmit={handleSubmit} className="grid gap-4 p-1">
+        <SectionDivider title="Personal Details" />
+        <label className="grid gap-2">
+          <span className="text-sm font-medium text-accent-foreground">First Name</span>
+          <input
+            type="text"
+            value={firstName}
+            onChange={(event) => setFirstName(event.target.value)}
+            className={inputClassName}
+            required
+          />
+        </label>
+        <label className="grid gap-2">
+          <span className="text-sm font-medium text-accent-foreground">Last Name</span>
+          <input
+            type="text"
+            value={lastName}
+            onChange={(event) => setLastName(event.target.value)}
+            className={inputClassName}
+            required
+          />
+        </label>
+        <label className="grid gap-2">
+          <span className="text-sm font-medium text-accent-foreground">
+            Date of Birth <span className="text-faint-foreground">(optional)</span>
+          </span>
+          <input
+            type="date"
+            value={dateOfBirth}
+            onChange={(event) => setDateOfBirth(event.target.value)}
+            className={inputClassName}
+          />
+        </label>
+
+        <SectionDivider title="Healthcare & Contact" />
+        <label className="grid gap-2">
+          <span className="text-sm font-medium text-accent-foreground">
+            Email <span className="text-faint-foreground">(optional)</span>
+          </span>
+          <input
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            className={inputClassName}
+          />
+        </label>
+        <label className="grid gap-2">
+          <span className="text-sm font-medium text-accent-foreground">
+            Health Insurance Number{' '}
+            <span className="text-faint-foreground">(optional)</span>
+          </span>
+          <input
+            type="text"
+            value={healthNumber}
+            onChange={(event) => setHealthNumber(event.target.value)}
+            className={inputClassName}
+          />
+        </label>
+        <label className="grid gap-2">
+          <span className="text-sm font-medium text-accent-foreground">
+            Address <span className="text-faint-foreground">(optional)</span>
+          </span>
+          <input
+            type="text"
+            value={addressLine}
+            onChange={(event) => setAddressLine(event.target.value)}
+            className={inputClassName}
+            placeholder="Street address"
+          />
+        </label>
+        <div className="grid grid-cols-3 gap-3">
+          <input
+            type="text"
+            value={city}
+            onChange={(event) => setCity(event.target.value)}
+            className={inputClassName}
+            placeholder="City"
+          />
+          <input
+            type="text"
+            value={province}
+            onChange={(event) => setProvince(event.target.value)}
+            className={inputClassName}
+            placeholder="Province"
+          />
+          <input
+            type="text"
+            value={postalCode}
+            onChange={(event) => setPostalCode(event.target.value)}
+            className={inputClassName}
+            placeholder="Postal code"
+          />
+        </div>
+
+        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+
+        <div className="grid grid-cols-2 gap-3">
+          <Button type="button" variant="secondary" fullWidth onClick={onCancel} disabled={isSaving}>
+            Cancel
+          </Button>
+          <Button type="submit" fullWidth disabled={isSaving}>
+            {isSaving ? 'Saving...' : 'Save'}
+          </Button>
+        </div>
+      </form>
+    </Card>
+  );
+}
+
 export function ProfileHubPage() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, refreshSession } = useAuth();
   const openAuth = usePhoneAuthStore((state) => state.openAuth);
+  const [isEditing, setIsEditing] = useState(false);
 
   if (!isAuthenticated || !user) {
     return (
@@ -123,14 +298,23 @@ export function ProfileHubPage() {
     );
   }
 
-  const hasMissingFields = !user.email;
+  const hasMissingFields = !user.email || !user.dateOfBirth || !user.healthNumber;
 
   return (
     <div className="space-y-4 pb-6">
-      <header>
+      <header className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           Profile
         </h1>
+        {!isEditing ? (
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className="text-sm font-medium text-brand hover:underline"
+          >
+            Edit
+          </button>
+        ) : null}
       </header>
 
       {/* Avatar */}
@@ -140,31 +324,50 @@ export function ProfileHubPage() {
         </div>
       </div>
 
-      {hasMissingFields ? <MissingFieldsBanner /> : null}
+      {!isEditing && hasMissingFields ? <MissingFieldsBanner /> : null}
 
-      <Card>
-        <SectionDivider title="Personal Details" />
-        <div className="divide-y divide-border">
-          <ProfileField label="First Name" value={user.firstName} />
-          <ProfileField label="Last Name" value={user.lastName} />
-          <ProfileField label="Gender" value={undefined} />
-          <ProfileField label="Date of Birth" value={user.dateOfBirth} />
-        </div>
+      {isEditing ? (
+        <EditableProfileForm
+          user={user}
+          onCancel={() => setIsEditing(false)}
+          onSaved={async () => {
+            await refreshSession();
+            setIsEditing(false);
+          }}
+        />
+      ) : (
+        <Card>
+          <SectionDivider title="Personal Details" />
+          <div className="divide-y divide-border">
+            <ProfileField label="First Name" value={user.firstName} />
+            <ProfileField label="Last Name" value={user.lastName} />
+            <ProfileField label="Gender" value={undefined} />
+            <ProfileField label="Date of Birth" value={user.dateOfBirth} />
+          </div>
 
-        <SectionDivider title="Healthcare & Contact" />
-        <div className="divide-y divide-border">
-          <ProfileField label="Healthcare Number" value={undefined} masked />
-          <ProfileField label="Phone" value={user.phone} />
-          <ProfileField label="Email" value={user.email ?? undefined} />
-        </div>
+          <SectionDivider title="Healthcare & Contact" />
+          <div className="divide-y divide-border">
+            <ProfileField label="Healthcare Number" value={user.healthNumber} masked />
+            <ProfileField label="Phone" value={user.phone} />
+            <ProfileField label="Email" value={user.email ?? undefined} />
+            <ProfileField
+              label="Address"
+              value={
+                [user.addressLine, user.city, user.province, user.postalCode]
+                  .filter(Boolean)
+                  .join(', ') || undefined
+              }
+            />
+          </div>
 
-        <SectionDivider title="Extended Health Insurance" />
-        <div className="divide-y divide-border">
-          <ProfileField label="Carrier Number" value={undefined} />
-          <ProfileField label="Contract Number" value={undefined} />
-          <ProfileField label="Member's ID Number" value={undefined} masked />
-        </div>
-      </Card>
+          <SectionDivider title="Extended Health Insurance" />
+          <div className="divide-y divide-border">
+            <ProfileField label="Carrier Number" value={undefined} />
+            <ProfileField label="Contract Number" value={undefined} />
+            <ProfileField label="Member's ID Number" value={undefined} masked />
+          </div>
+        </Card>
+      )}
     </div>
   );
 }

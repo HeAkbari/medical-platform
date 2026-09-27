@@ -39,7 +39,7 @@ import {
   OscarPrescriptionRepository,
   OscarTestResultRepository,
 } from '@medical-platform/domain/adapters/oscar';
-import { getOscarClient, OSCAR_CLINIC_ID } from '@/lib/oscar/client';
+import { getOscarClient, getOscarSoapClient, OSCAR_CLINIC_ID } from '@/lib/oscar/client';
 
 // OscarClient construction needs an async credential lookup (ClinicCredential
 // is decrypted from Postgres, not an env var — see design doc §7/§8), but
@@ -60,13 +60,18 @@ class LazyOscarDoctorRepository implements DoctorRepository {
 class LazyOscarAppointmentRepository implements AppointmentRepository {
   private readonly identities = new PrismaPatientClinicIdentityStore();
   private readonly doctors = new PrismaDoctorExternalIdResolver();
+  private readonly patients = new PrismaPatientRepository();
 
   private async repo(): Promise<OscarAppointmentRepository> {
+    const [client, soapClient] = await Promise.all([getOscarClient(), getOscarSoapClient()]);
+
     return new OscarAppointmentRepository(
-      await getOscarClient(),
+      client,
       OSCAR_CLINIC_ID,
       this.identities,
-      this.doctors
+      this.doctors,
+      soapClient,
+      this.patients
     );
   }
 

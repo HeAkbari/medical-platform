@@ -1,0 +1,136 @@
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ws.oscarehr.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="FacilityWsService" targetNamespace="http://ws.oscarehr.org/">
+<wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.oscarehr.org/" elementFormDefault="unqualified" targetNamespace="http://ws.oscarehr.org/" version="1.0">
+<xs:element name="getAllFacilities" type="tns:getAllFacilities"/>
+<xs:element name="getAllFacilitiesResponse" type="tns:getAllFacilitiesResponse"/>
+<xs:element name="getDefaultFacilities" type="tns:getDefaultFacilities"/>
+<xs:element name="getDefaultFacilitiesResponse" type="tns:getDefaultFacilitiesResponse"/>
+<xs:element name="getDefaultFacility" type="tns:getDefaultFacility"/>
+<xs:element name="getDefaultFacilityResponse" type="tns:getDefaultFacilityResponse"/>
+<xs:complexType name="getAllFacilities">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getAllFacilitiesResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:facilityTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType final="extension restriction" name="facilityTransfer">
+<xs:sequence>
+<xs:element name="allowSims" type="xs:boolean"/>
+<xs:element minOccurs="0" name="contactEmail" type="xs:string"/>
+<xs:element minOccurs="0" name="contactName" type="xs:string"/>
+<xs:element minOccurs="0" name="contactPhone" type="xs:string"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+<xs:element name="disabled" type="xs:boolean"/>
+<xs:element name="enableAnonymous" type="xs:boolean"/>
+<xs:element name="enableDigitalSignatures" type="xs:boolean"/>
+<xs:element name="enableEncounterTime" type="xs:boolean"/>
+<xs:element name="enableEncounterTransportationTime" type="xs:boolean"/>
+<xs:element name="enableGroupNotes" type="xs:boolean"/>
+<xs:element name="enableHealthNumberRegistry" type="xs:boolean"/>
+<xs:element name="enableIntegratedReferrals" type="xs:boolean"/>
+<xs:element name="enableOcanForms" type="xs:boolean"/>
+<xs:element name="hic" type="xs:boolean"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element name="integratorEnabled" type="xs:boolean"/>
+<xs:element minOccurs="0" name="integratorPassword" type="xs:string"/>
+<xs:element minOccurs="0" name="integratorUrl" type="xs:string"/>
+<xs:element minOccurs="0" name="integratorUser" type="xs:string"/>
+<xs:element minOccurs="0" name="lastUpdated" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="ocanServiceOrgNumber" type="xs:string"/>
+<xs:element minOccurs="0" name="orgId" type="xs:int"/>
+<xs:element name="rxInteractionWarningLevel" type="xs:int"/>
+<xs:element minOccurs="0" name="sectorId" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDefaultFacility">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="getDefaultFacilityResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:facilityTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDefaultFacilities">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="getDefaultFacilitiesResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:facilityTransfer"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+</wsdl:types>
+<wsdl:message name="getAllFacilities">
+<wsdl:part element="tns:getAllFacilities" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDefaultFacilityResponse">
+<wsdl:part element="tns:getDefaultFacilityResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getAllFacilitiesResponse">
+<wsdl:part element="tns:getAllFacilitiesResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDefaultFacilities">
+<wsdl:part element="tns:getDefaultFacilities" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDefaultFacility">
+<wsdl:part element="tns:getDefaultFacility" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDefaultFacilitiesResponse">
+<wsdl:part element="tns:getDefaultFacilitiesResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:portType name="FacilityWs">
+<wsdl:operation name="getAllFacilities">
+<wsdl:input message="tns:getAllFacilities" name="getAllFacilities"> </wsdl:input>
+<wsdl:output message="tns:getAllFacilitiesResponse" name="getAllFacilitiesResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDefaultFacility">
+<wsdl:input message="tns:getDefaultFacility" name="getDefaultFacility"> </wsdl:input>
+<wsdl:output message="tns:getDefaultFacilityResponse" name="getDefaultFacilityResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDefaultFacilities">
+<wsdl:input message="tns:getDefaultFacilities" name="getDefaultFacilities"> </wsdl:input>
+<wsdl:output message="tns:getDefaultFacilitiesResponse" name="getDefaultFacilitiesResponse"> </wsdl:output>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="FacilityWsServiceSoapBinding" type="tns:FacilityWs">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="getAllFacilities">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getAllFacilities">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getAllFacilitiesResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDefaultFacility">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getDefaultFacility">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getDefaultFacilityResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDefaultFacilities">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getDefaultFacilities">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getDefaultFacilitiesResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="FacilityWsService">
+<wsdl:port binding="tns:FacilityWsServiceSoapBinding" name="FacilityWsPort">
+<soap:address location="https://129.121.73.62:8443/oscar/ws/FacilityService/"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

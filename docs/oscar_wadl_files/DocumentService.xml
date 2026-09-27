@@ -1,0 +1,234 @@
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ws.oscarehr.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="DocumentWsService" targetNamespace="http://ws.oscarehr.org/">
+<wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.oscarehr.org/" elementFormDefault="unqualified" targetNamespace="http://ws.oscarehr.org/" version="1.0">
+<xs:element name="getDocument" type="tns:getDocument"/>
+<xs:element name="getDocumentResponse" type="tns:getDocumentResponse"/>
+<xs:element name="getDocumentsByDemographicIdAfter" type="tns:getDocumentsByDemographicIdAfter"/>
+<xs:element name="getDocumentsByDemographicIdAfterResponse" type="tns:getDocumentsByDemographicIdAfterResponse"/>
+<xs:element name="getDocumentsByProgramProviderDemographicDate" type="tns:getDocumentsByProgramProviderDemographicDate"/>
+<xs:element name="getDocumentsByProgramProviderDemographicDateResponse" type="tns:getDocumentsByProgramProviderDemographicDateResponse"/>
+<xs:element name="getDocumentsUpdateAfterDate" type="tns:getDocumentsUpdateAfterDate"/>
+<xs:element name="getDocumentsUpdateAfterDateResponse" type="tns:getDocumentsUpdateAfterDateResponse"/>
+<xs:element name="getProvidersThatHaveAcknowledgedDocument" type="tns:getProvidersThatHaveAcknowledgedDocument"/>
+<xs:element name="getProvidersThatHaveAcknowledgedDocumentResponse" type="tns:getProvidersThatHaveAcknowledgedDocumentResponse"/>
+<xs:complexType name="getDocument">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDocumentResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:documentTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType final="extension restriction" name="documentTransfer">
+<xs:sequence>
+<xs:element minOccurs="0" name="appointmentNo" type="xs:int"/>
+<xs:element minOccurs="0" name="contenttype" type="xs:string"/>
+<xs:element minOccurs="0" name="ctlModule" type="xs:string"/>
+<xs:element minOccurs="0" name="ctlModuleId" type="xs:int"/>
+<xs:element minOccurs="0" name="ctlStatus" type="xs:string"/>
+<xs:element minOccurs="0" name="docClass" type="xs:string"/>
+<xs:element minOccurs="0" name="docSubClass" type="xs:string"/>
+<xs:element minOccurs="0" name="doccreator" type="xs:string"/>
+<xs:element minOccurs="0" name="docdesc" type="xs:string"/>
+<xs:element minOccurs="0" name="docfilename" type="xs:string"/>
+<xs:element minOccurs="0" name="doctype" type="xs:string"/>
+<xs:element minOccurs="0" name="documentNo" type="xs:int"/>
+<xs:element minOccurs="0" name="docxml" type="xs:string"/>
+<xs:element minOccurs="0" name="fileContents" type="xs:base64Binary"/>
+<xs:element minOccurs="0" name="numberofpages" type="xs:int"/>
+<xs:element minOccurs="0" name="observationdate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="programId" type="xs:int"/>
+<xs:element name="public1" type="xs:int"/>
+<xs:element minOccurs="0" name="responsible" type="xs:string"/>
+<xs:element minOccurs="0" name="reviewdatetime" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="reviewer" type="xs:string"/>
+<xs:element minOccurs="0" name="source" type="xs:string"/>
+<xs:element minOccurs="0" name="sourceFacility" type="xs:string"/>
+<xs:element name="status" type="xs:unsignedShort"/>
+<xs:element minOccurs="0" name="updatedatetime" type="xs:dateTime"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getProvidersThatHaveAcknowledgedDocument">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getProvidersThatHaveAcknowledgedDocumentResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:providerTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType final="extension restriction" name="providerTransfer">
+<xs:sequence>
+<xs:element minOccurs="0" name="address" type="xs:string"/>
+<xs:element minOccurs="0" name="billingNo" type="xs:string"/>
+<xs:element minOccurs="0" name="comments" type="xs:string"/>
+<xs:element minOccurs="0" name="dob" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="email" type="xs:string"/>
+<xs:element minOccurs="0" name="firstName" type="xs:string"/>
+<xs:element minOccurs="0" name="hsoNo" type="xs:string"/>
+<xs:element minOccurs="0" name="lastName" type="xs:string"/>
+<xs:element minOccurs="0" name="ohipNo" type="xs:string"/>
+<xs:element minOccurs="0" name="phone" type="xs:string"/>
+<xs:element minOccurs="0" name="practitionerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="practitionerNoType" type="xs:string"/>
+<xs:element minOccurs="0" name="providerActivity" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="providerType" type="xs:string"/>
+<xs:element minOccurs="0" name="rmaNo" type="xs:string"/>
+<xs:element minOccurs="0" name="sex" type="xs:string"/>
+<xs:element minOccurs="0" name="signedConfidentiality" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="specialty" type="xs:string"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+<xs:element minOccurs="0" name="team" type="xs:string"/>
+<xs:element minOccurs="0" name="title" type="xs:string"/>
+<xs:element minOccurs="0" name="workPhone" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDocumentsByDemographicIdAfter">
+<xs:sequence>
+<xs:element minOccurs="0" name="lastUpdate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="demographicId" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDocumentsByDemographicIdAfterResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:documentTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDocumentsUpdateAfterDate">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:dateTime"/>
+<xs:element name="arg1" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDocumentsUpdateAfterDateResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:documentTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDocumentsByProgramProviderDemographicDate">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:int"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+<xs:element minOccurs="0" name="arg2" type="xs:int"/>
+<xs:element minOccurs="0" name="arg3" type="xs:dateTime"/>
+<xs:element name="arg4" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDocumentsByProgramProviderDemographicDateResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:documentTransfer"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+</wsdl:types>
+<wsdl:message name="getProvidersThatHaveAcknowledgedDocumentResponse">
+<wsdl:part element="tns:getProvidersThatHaveAcknowledgedDocumentResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDocumentResponse">
+<wsdl:part element="tns:getDocumentResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDocumentsUpdateAfterDateResponse">
+<wsdl:part element="tns:getDocumentsUpdateAfterDateResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDocumentsByProgramProviderDemographicDateResponse">
+<wsdl:part element="tns:getDocumentsByProgramProviderDemographicDateResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDocumentsByDemographicIdAfterResponse">
+<wsdl:part element="tns:getDocumentsByDemographicIdAfterResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDocument">
+<wsdl:part element="tns:getDocument" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getProvidersThatHaveAcknowledgedDocument">
+<wsdl:part element="tns:getProvidersThatHaveAcknowledgedDocument" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDocumentsByDemographicIdAfter">
+<wsdl:part element="tns:getDocumentsByDemographicIdAfter" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDocumentsUpdateAfterDate">
+<wsdl:part element="tns:getDocumentsUpdateAfterDate" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDocumentsByProgramProviderDemographicDate">
+<wsdl:part element="tns:getDocumentsByProgramProviderDemographicDate" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:portType name="DocumentWs">
+<wsdl:operation name="getDocument">
+<wsdl:input message="tns:getDocument" name="getDocument"> </wsdl:input>
+<wsdl:output message="tns:getDocumentResponse" name="getDocumentResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getProvidersThatHaveAcknowledgedDocument">
+<wsdl:input message="tns:getProvidersThatHaveAcknowledgedDocument" name="getProvidersThatHaveAcknowledgedDocument"> </wsdl:input>
+<wsdl:output message="tns:getProvidersThatHaveAcknowledgedDocumentResponse" name="getProvidersThatHaveAcknowledgedDocumentResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDocumentsByDemographicIdAfter">
+<wsdl:input message="tns:getDocumentsByDemographicIdAfter" name="getDocumentsByDemographicIdAfter"> </wsdl:input>
+<wsdl:output message="tns:getDocumentsByDemographicIdAfterResponse" name="getDocumentsByDemographicIdAfterResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDocumentsUpdateAfterDate">
+<wsdl:input message="tns:getDocumentsUpdateAfterDate" name="getDocumentsUpdateAfterDate"> </wsdl:input>
+<wsdl:output message="tns:getDocumentsUpdateAfterDateResponse" name="getDocumentsUpdateAfterDateResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDocumentsByProgramProviderDemographicDate">
+<wsdl:input message="tns:getDocumentsByProgramProviderDemographicDate" name="getDocumentsByProgramProviderDemographicDate"> </wsdl:input>
+<wsdl:output message="tns:getDocumentsByProgramProviderDemographicDateResponse" name="getDocumentsByProgramProviderDemographicDateResponse"> </wsdl:output>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="DocumentWsServiceSoapBinding" type="tns:DocumentWs">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="getDocument">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getDocument">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getDocumentResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getProvidersThatHaveAcknowledgedDocument">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getProvidersThatHaveAcknowledgedDocument">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getProvidersThatHaveAcknowledgedDocumentResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDocumentsByDemographicIdAfter">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getDocumentsByDemographicIdAfter">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getDocumentsByDemographicIdAfterResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDocumentsUpdateAfterDate">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getDocumentsUpdateAfterDate">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getDocumentsUpdateAfterDateResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDocumentsByProgramProviderDemographicDate">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getDocumentsByProgramProviderDemographicDate">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getDocumentsByProgramProviderDemographicDateResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="DocumentWsService">
+<wsdl:port binding="tns:DocumentWsServiceSoapBinding" name="DocumentWsPort">
+<soap:address location="https://129.121.73.62:8443/oscar/ws/DocumentService/"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

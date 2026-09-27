@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { createAppointmentSchema } from '@medical-platform/domain/validation';
 import { Button, Card, ErrorState, LoadingState } from '@/components/ui';
@@ -64,6 +65,7 @@ interface PhysicianBookingPageProps {
 }
 
 export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
+  const router = useRouter();
   const handleBack = useBackNavigation(`/physicians/${doctorId}`);
   const { data, isLoading, isError } = useDoctorsQuery();
   const { user } = useAuth();
@@ -108,6 +110,14 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
     if (!user || !selectedSlot) return;
 
     setFormError(null);
+
+    // A real name + DOB is required to find/provision this patient in the
+    // clinic's EMR (see EnsurePatientLinkedToClinicUseCase) — send them to
+    // complete their profile rather than let the booking call fail.
+    if (!user.firstName.trim() || !user.lastName.trim() || !user.dateOfBirth) {
+      router.push('/profile');
+      return;
+    }
 
     const parsed = createAppointmentSchema.safeParse({
       patientId: user.patientId,
@@ -183,7 +193,7 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
           Your appointment with Dr. {doctor.firstName} {doctor.lastName} has
           been created.
         </p>
-        <Link href="/appointments" className="mt-4 block">
+        <Link href="/services/appointments" className="mt-4 block">
           <Button variant="secondary" fullWidth>
             View appointments
           </Button>

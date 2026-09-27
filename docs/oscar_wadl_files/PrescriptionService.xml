@@ -1,0 +1,222 @@
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ws.oscarehr.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="PrescriptionWsService" targetNamespace="http://ws.oscarehr.org/">
+<wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.oscarehr.org/" elementFormDefault="unqualified" targetNamespace="http://ws.oscarehr.org/" version="1.0">
+<xs:element name="getPrescription" type="tns:getPrescription"/>
+<xs:element name="getPrescriptionResponse" type="tns:getPrescriptionResponse"/>
+<xs:element name="getPrescriptionUpdatedAfterDate" type="tns:getPrescriptionUpdatedAfterDate"/>
+<xs:element name="getPrescriptionUpdatedAfterDateResponse" type="tns:getPrescriptionUpdatedAfterDateResponse"/>
+<xs:element name="getPrescriptionsByDemographicIdAfter" type="tns:getPrescriptionsByDemographicIdAfter"/>
+<xs:element name="getPrescriptionsByDemographicIdAfterResponse" type="tns:getPrescriptionsByDemographicIdAfterResponse"/>
+<xs:element name="getPrescriptionsByProgramProviderDemographicDate" type="tns:getPrescriptionsByProgramProviderDemographicDate"/>
+<xs:element name="getPrescriptionsByProgramProviderDemographicDateResponse" type="tns:getPrescriptionsByProgramProviderDemographicDateResponse"/>
+<xs:complexType name="getPrescriptionsByProgramProviderDemographicDate">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:int"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+<xs:element minOccurs="0" name="arg2" type="xs:int"/>
+<xs:element minOccurs="0" name="arg3" type="xs:dateTime"/>
+<xs:element name="arg4" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getPrescriptionsByProgramProviderDemographicDateResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:prescriptionTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType final="extension restriction" name="prescriptionTransfer">
+<xs:sequence>
+<xs:element minOccurs="0" name="comments" type="xs:string"/>
+<xs:element minOccurs="0" name="datePrescribed" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="datePrinted" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="datesReprinted" type="xs:string"/>
+<xs:element minOccurs="0" name="demographicId" type="xs:int"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="drugs" nillable="true" type="tns:drugTransfer"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="lastUpdateDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="textView" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="drugTransfer">
+<xs:sequence>
+<xs:element name="archived" type="xs:boolean"/>
+<xs:element minOccurs="0" name="archivedDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="archivedReason" type="xs:string"/>
+<xs:element minOccurs="0" name="atc" type="xs:string"/>
+<xs:element minOccurs="0" name="brandName" type="xs:string"/>
+<xs:element minOccurs="0" name="comment" type="xs:string"/>
+<xs:element minOccurs="0" name="createDate" type="xs:dateTime"/>
+<xs:element name="customInstructions" type="xs:boolean"/>
+<xs:element minOccurs="0" name="customName" type="xs:string"/>
+<xs:element minOccurs="0" name="customNote" type="xs:boolean"/>
+<xs:element minOccurs="0" name="demographicId" type="xs:int"/>
+<xs:element minOccurs="0" name="dispenseInterval" type="xs:string"/>
+<xs:element minOccurs="0" name="dosage" type="xs:string"/>
+<xs:element minOccurs="0" name="drugForm" type="xs:string"/>
+<xs:element minOccurs="0" name="durUnit" type="xs:string"/>
+<xs:element minOccurs="0" name="duration" type="xs:string"/>
+<xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="freqCode" type="xs:string"/>
+<xs:element name="gcnSeqNo" type="xs:int"/>
+<xs:element minOccurs="0" name="genericName" type="xs:string"/>
+<xs:element name="hideFromCpp" type="xs:boolean"/>
+<xs:element minOccurs="0" name="hideFromDrugProfile" type="xs:boolean"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="lastRefillDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="lastUpdateDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="longTerm" type="xs:boolean"/>
+<xs:element minOccurs="0" name="method" type="xs:string"/>
+<xs:element name="noSubs" type="xs:boolean"/>
+<xs:element minOccurs="0" name="nonAuthoritative" type="xs:boolean"/>
+<xs:element minOccurs="0" name="outsideProviderName" type="xs:string"/>
+<xs:element minOccurs="0" name="outsideProviderOhip" type="xs:string"/>
+<xs:element name="pastMed" type="xs:boolean"/>
+<xs:element minOccurs="0" name="patientCompliance" type="xs:boolean"/>
+<xs:element minOccurs="0" name="pickupDateTime" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="position" type="xs:int"/>
+<xs:element minOccurs="0" name="priorRxProtocol" type="xs:string"/>
+<xs:element name="prn" type="xs:boolean"/>
+<xs:element minOccurs="0" name="protocol" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="quantity" type="xs:string"/>
+<xs:element minOccurs="0" name="refillDuration" type="xs:int"/>
+<xs:element minOccurs="0" name="refillQuantity" type="xs:int"/>
+<xs:element minOccurs="0" name="regionalIdentifier" type="xs:string"/>
+<xs:element minOccurs="0" name="repeat" type="xs:int"/>
+<xs:element minOccurs="0" name="route" type="xs:string"/>
+<xs:element minOccurs="0" name="rxDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="rxStatus" type="xs:string"/>
+<xs:element minOccurs="0" name="scriptNo" type="xs:int"/>
+<xs:element minOccurs="0" name="special" type="xs:string"/>
+<xs:element minOccurs="0" name="special_instruction" type="xs:string"/>
+<xs:element name="startDateUnknown" type="xs:boolean"/>
+<xs:element name="takeMax" type="xs:float"/>
+<xs:element name="takeMin" type="xs:float"/>
+<xs:element minOccurs="0" name="unit" type="xs:string"/>
+<xs:element minOccurs="0" name="unitName" type="xs:string"/>
+<xs:element minOccurs="0" name="writtenDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="eTreatmentType" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getPrescription">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getPrescriptionResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:prescriptionTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getPrescriptionUpdatedAfterDate">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:dateTime"/>
+<xs:element name="arg1" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getPrescriptionUpdatedAfterDateResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:prescriptionTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getPrescriptionsByDemographicIdAfter">
+<xs:sequence>
+<xs:element minOccurs="0" name="lastUpdate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="demographicId" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getPrescriptionsByDemographicIdAfterResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:prescriptionTransfer"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+</wsdl:types>
+<wsdl:message name="getPrescriptionsByProgramProviderDemographicDateResponse">
+<wsdl:part element="tns:getPrescriptionsByProgramProviderDemographicDateResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getPrescriptionResponse">
+<wsdl:part element="tns:getPrescriptionResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getPrescriptionsByDemographicIdAfter">
+<wsdl:part element="tns:getPrescriptionsByDemographicIdAfter" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getPrescriptionUpdatedAfterDateResponse">
+<wsdl:part element="tns:getPrescriptionUpdatedAfterDateResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getPrescriptionsByProgramProviderDemographicDate">
+<wsdl:part element="tns:getPrescriptionsByProgramProviderDemographicDate" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getPrescription">
+<wsdl:part element="tns:getPrescription" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getPrescriptionUpdatedAfterDate">
+<wsdl:part element="tns:getPrescriptionUpdatedAfterDate" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getPrescriptionsByDemographicIdAfterResponse">
+<wsdl:part element="tns:getPrescriptionsByDemographicIdAfterResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:portType name="PrescriptionWs">
+<wsdl:operation name="getPrescriptionsByProgramProviderDemographicDate">
+<wsdl:input message="tns:getPrescriptionsByProgramProviderDemographicDate" name="getPrescriptionsByProgramProviderDemographicDate"> </wsdl:input>
+<wsdl:output message="tns:getPrescriptionsByProgramProviderDemographicDateResponse" name="getPrescriptionsByProgramProviderDemographicDateResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getPrescription">
+<wsdl:input message="tns:getPrescription" name="getPrescription"> </wsdl:input>
+<wsdl:output message="tns:getPrescriptionResponse" name="getPrescriptionResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getPrescriptionUpdatedAfterDate">
+<wsdl:input message="tns:getPrescriptionUpdatedAfterDate" name="getPrescriptionUpdatedAfterDate"> </wsdl:input>
+<wsdl:output message="tns:getPrescriptionUpdatedAfterDateResponse" name="getPrescriptionUpdatedAfterDateResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getPrescriptionsByDemographicIdAfter">
+<wsdl:input message="tns:getPrescriptionsByDemographicIdAfter" name="getPrescriptionsByDemographicIdAfter"> </wsdl:input>
+<wsdl:output message="tns:getPrescriptionsByDemographicIdAfterResponse" name="getPrescriptionsByDemographicIdAfterResponse"> </wsdl:output>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="PrescriptionWsServiceSoapBinding" type="tns:PrescriptionWs">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="getPrescriptionsByProgramProviderDemographicDate">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getPrescriptionsByProgramProviderDemographicDate">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getPrescriptionsByProgramProviderDemographicDateResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getPrescription">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getPrescription">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getPrescriptionResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getPrescriptionUpdatedAfterDate">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getPrescriptionUpdatedAfterDate">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getPrescriptionUpdatedAfterDateResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getPrescriptionsByDemographicIdAfter">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getPrescriptionsByDemographicIdAfter">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getPrescriptionsByDemographicIdAfterResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="PrescriptionWsService">
+<wsdl:port binding="tns:PrescriptionWsServiceSoapBinding" name="PrescriptionWsPort">
+<soap:address location="https://129.121.73.62:8443/oscar/ws/PrescriptionService/"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

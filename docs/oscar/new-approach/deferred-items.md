@@ -31,25 +31,57 @@ Physician Info دیده می‌شه واقعی نیست. هر وقت اطلاع�
 نشون داده می‌شه، نه صفر یا داده‌ی فیک. مسیر نوشتنِ نظر (submission) هنوز
 وجود نداره — این یک تصمیم محصولی جدا برای بعد است.
 
-## ۳. باگ سرور `POST /schedule/{demographicNo}/appointmentHistory`
+## ۳. باگ سرور `AppointmentManager` روی چند تا REST endpoint — حل شد با جایگزینیِ SOAP
 
-این endpoint همیشه ۵۰۰ می‌گیره — چه با بدنه‌ی خالی، چه با/بدون نوبت واقعی
-برای آن بیمار. تست شد که مستقل از داده بودنه (باگ واقعی سمت سرور OSCAR،
-نه چیزی که با تغییر request حل بشه).
+این آیتم دیگه بلاک‌کننده نیست، ولی به‌عنوان یه الگوی تکرارشونده مستند
+می‌مونه.
 
-**وضعیت:** منتظر بررسی سمت کلینیک/سرور OSCAR. کد سمت ما (`findAll({patientId})`
-در `OscarAppointmentRepository`) همین الان هم درست پیاده شده و به‌محض حل
-باگ سرور، بدون تغییر کد کار خواهد کرد.
+**کشف اولیه (قبل از این هفته):** `POST /schedule/{demographicNo}/appointmentHistory`
+همیشه ۵۰۰ می‌گرفت — چه با بدنه‌ی خالی، چه با/بدون نوبت واقعی. تست شد که
+مستقل از داده بودنه.
 
-## ۴. `OscarAppointmentRepository.findById` پیاده نشده
+**کشف تکمیلی (۲۰۲۶-۰۹-۲۷، موقع تست end-to-end واقعی از طریق اپ):**
+`POST /schedule/add` (ثبت نوبت) هم **دقیقاً همون الگو** رو داد —
+`Access Denied` از `AppointmentManager.addAppointment` (نه
+`getAppointmentHistoryWithoutDeleted`، ولی همون کلاس، همون نوع خطا). یعنی
+این یه باگ سیستماتیک تو کلِ `org.oscarehr.managers.AppointmentManager`ه
+(لایه‌ی REST)، نه مخصوصِ یه متد.
 
-`GET /schedule/getAppointment` هیچ نمونه‌ی پارامتر/پاسخ مستندی نداره.
-`findDetailById` (قدم ۷) روی همین متد ساخته شده، پس با حل این یکی، اون هم
-خودکار درست می‌شه. `updateStatus` (لغو نوبت) هم فعلاً به‌جای رکورد کامل،
-یک نسخه‌ی جزئی برمی‌گردونه چون نمی‌تونه دوباره fetch کنه.
+**کشف سوم (۲۰۲۶-۰۹-۲۷، همون روز):** `GET /schedule/{providerNo}/day/{date}`
+هم همین الگو رو داد — این‌بار دقیقاً `missing required security object
+(_demographic)` (نه «Access Denied» خام)، چون این REST endpoint داخلش
+برای فرمت‌کردنِ اسم نمایشیِ بیمار `DemographicManager.getDemographic` رو
+صدا می‌زنه که خودش یه چک مجوز جدا داره. فقط وقتی اون روز/پزشک یه نوبت
+واقعی داشت این خطا می‌اومد (روزهای بدون نوبت مشکلی نداشتن) — که اول
+گمراه‌کننده بود.
 
-**راه‌حل بعدی:** نمونه‌ی واقعی request/response این endpoint رو از Postman
-یا تست زنده بگیریم.
+**راه‌حل (پیاده‌سازی و تأییدشده‌ی زنده، هر سه مورد):** همه با معادل SOAP
+جایگزین شدن — `findAll({patientId})` → `ScheduleService.getAppointmentsForPatient2`،
+`create()` → `ScheduleService.addAppointment`،
+`findAll({doctorId, date})` → `ScheduleService.getAppointmentsForProvider2`.
+جزئیات کامل تو
+[`oscar-verified-service-catalog.md`](./oscar-verified-service-catalog.md).
+
+**⚠️ هشدار برای بعد:** `updateStatus()` (لغو نوبت) هنوز از REST
+`POST /schedule/appointment/{id}/updateStatus` استفاده می‌کنه و **هنوز
+هیچ‌وقت زنده تست نشده**. با توجه به همین الگوی تکرارشونده، خیلی محتمله
+همین باگ رو هم بده. اگه/وقتی لغو نوبت واقعی تست شد و همین خطا اومد،
+جایگزینش SOAP `ScheduleService.updateAppointment` هست (تأییدشده‌ی زنده،
+نگاه کن کاتالوگ) — با این تفاوت که چون `updateAppointment` یه overwrite
+کامله نه patch جزئی (نکته‌ی ۴ کاتالوگ)، باید اول `getAppointment2` زده
+بشه تا رکورد کامل گرفته بشه، بعد فقط `status` عوض و کل شیء دوباره
+فرستاده بشه.
+
+## ۴. `OscarAppointmentRepository.findById` — حل شد (۲۰۲۶-۰۹-۲۵/۲۶)، نه از طریق REST
+
+**به‌روزرسانی:** این آیتم دیگه باز نیست. `GET /schedule/getAppointment`
+(REST) هیچ‌وقت مستند/حل نشد، ولی به‌جاش SOAP `ScheduleService.getAppointment2`
+تأییدشده‌ی زنده پیدا و پیاده‌سازی شد (نگاه کن
+[`oscar-verified-service-catalog.md`](./oscar-verified-service-catalog.md))
+— `findById` الان واقعاً پیاده‌ست، مستقل از باگ آیتم ۳ بالا. `findDetailById`
+هم طبقش خودکار کار می‌کنه. `updateStatus` هنوز به‌خاطر یه دلیل دیگه (نه این
+آیتم) یه نسخه‌ی جزئی برمی‌گردونه — می‌شه بعداً همون‌جا هم از `getAppointment2`
+برای fetch دوباره استفاده کرد.
 
 ## ۵. محدودیت سیستمی OSCAR: هیچ lookup تک‌آیتمی مستقل از بیمار نداره
 

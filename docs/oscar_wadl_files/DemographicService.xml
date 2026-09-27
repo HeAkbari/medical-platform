@@ -1,0 +1,641 @@
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ws.oscarehr.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="DemographicWsService" targetNamespace="http://ws.oscarehr.org/">
+<wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.oscarehr.org/" elementFormDefault="unqualified" targetNamespace="http://ws.oscarehr.org/" version="1.0">
+<xs:element name="getActiveDemographicsAfter" type="tns:getActiveDemographicsAfter"/>
+<xs:element name="getActiveDemographicsAfter2" type="tns:getActiveDemographicsAfter2"/>
+<xs:element name="getActiveDemographicsAfter2Response" type="tns:getActiveDemographicsAfter2Response"/>
+<xs:element name="getActiveDemographicsAfterResponse" type="tns:getActiveDemographicsAfterResponse"/>
+<xs:element name="getAdmittedDemographicIdsByProgramProvider" type="tns:getAdmittedDemographicIdsByProgramProvider"/>
+<xs:element name="getAdmittedDemographicIdsByProgramProviderResponse" type="tns:getAdmittedDemographicIdsByProgramProviderResponse"/>
+<xs:element name="getConsentedDemographicIdsAfter" type="tns:getConsentedDemographicIdsAfter"/>
+<xs:element name="getConsentedDemographicIdsAfterResponse" type="tns:getConsentedDemographicIdsAfterResponse"/>
+<xs:element name="getDemographic" type="tns:getDemographic"/>
+<xs:element name="getDemographic2" type="tns:getDemographic2"/>
+<xs:element name="getDemographic2Response" type="tns:getDemographic2Response"/>
+<xs:element name="getDemographicByMyOscarUserName" type="tns:getDemographicByMyOscarUserName"/>
+<xs:element name="getDemographicByMyOscarUserNameResponse" type="tns:getDemographicByMyOscarUserNameResponse"/>
+<xs:element name="getDemographicIdsWithMyOscarAccounts" type="tns:getDemographicIdsWithMyOscarAccounts"/>
+<xs:element name="getDemographicIdsWithMyOscarAccountsResponse" type="tns:getDemographicIdsWithMyOscarAccountsResponse"/>
+<xs:element name="getDemographicResponse" type="tns:getDemographicResponse"/>
+<xs:element name="getDemographics" type="tns:getDemographics"/>
+<xs:element name="getDemographicsResponse" type="tns:getDemographicsResponse"/>
+<xs:element name="getLatestPhrVerificationByDemographic" type="tns:getLatestPhrVerificationByDemographic"/>
+<xs:element name="getLatestPhrVerificationByDemographicResponse" type="tns:getLatestPhrVerificationByDemographicResponse"/>
+<xs:element name="isPhrVerifiedToSendMedicalData" type="tns:isPhrVerifiedToSendMedicalData"/>
+<xs:element name="isPhrVerifiedToSendMedicalDataResponse" type="tns:isPhrVerifiedToSendMedicalDataResponse"/>
+<xs:element name="isPhrVerifiedToSendMessages" type="tns:isPhrVerifiedToSendMessages"/>
+<xs:element name="isPhrVerifiedToSendMessagesResponse" type="tns:isPhrVerifiedToSendMessagesResponse"/>
+<xs:element name="searchDemographicByName" type="tns:searchDemographicByName"/>
+<xs:element name="searchDemographicByNameResponse" type="tns:searchDemographicByNameResponse"/>
+<xs:element name="searchDemographicsByAttributes" type="tns:searchDemographicsByAttributes"/>
+<xs:element name="searchDemographicsByAttributesResponse" type="tns:searchDemographicsByAttributesResponse"/>
+<xs:element name="writePHRId" type="tns:writePHRId"/>
+<xs:element name="writePHRIdResponse" type="tns:writePHRIdResponse"/>
+<xs:complexType name="isPhrVerifiedToSendMessages">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="isPhrVerifiedToSendMessagesResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="writePHRId">
+<xs:sequence>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="phrId" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="writePHRIdResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getLatestPhrVerificationByDemographic">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getLatestPhrVerificationByDemographicResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:phrVerificationTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType final="extension restriction" name="phrVerificationTransfer">
+<xs:sequence>
+<xs:element minOccurs="0" name="archived" type="xs:boolean"/>
+<xs:element minOccurs="0" name="comments" type="xs:string"/>
+<xs:element minOccurs="0" name="createdDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+<xs:element minOccurs="0" name="parentGuardian" type="xs:boolean"/>
+<xs:element minOccurs="0" name="photoId" type="xs:boolean"/>
+<xs:element minOccurs="0" name="phrUserName" type="xs:string"/>
+<xs:element minOccurs="0" name="verificationBy" type="xs:string"/>
+<xs:element minOccurs="0" name="verificationDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="verificationLevel" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="isPhrVerifiedToSendMedicalData">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="isPhrVerifiedToSendMedicalDataResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getConsentedDemographicIdsAfter">
+<xs:sequence>
+<xs:element minOccurs="0" name="lastUpdate" type="xs:dateTime"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getConsentedDemographicIdsAfterResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getActiveDemographicsAfter2">
+<xs:sequence>
+<xs:element minOccurs="0" name="lastUpdate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="fields" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getActiveDemographicsAfter2Response">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:demographicTransfer2"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType final="extension restriction" name="demographicTransfer2">
+<xs:sequence>
+<xs:element minOccurs="0" name="activeCount" type="xs:int"/>
+<xs:element minOccurs="0" name="address" type="xs:string"/>
+<xs:element minOccurs="0" name="alias" type="xs:string"/>
+<xs:element minOccurs="0" name="anonymous" type="xs:string"/>
+<xs:element minOccurs="0" name="chartNo" type="xs:string"/>
+<xs:element minOccurs="0" name="children" type="xs:string"/>
+<xs:element minOccurs="0" name="citizenship" type="xs:string"/>
+<xs:element minOccurs="0" name="city" type="xs:string"/>
+<xs:element minOccurs="0" name="consentToUseEmailForCare" type="xs:boolean"/>
+<xs:element minOccurs="0" name="countryOfOrigin" type="xs:string"/>
+<xs:element minOccurs="0" name="dateJoined" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="dateOfBirth" type="xs:string"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="displayName" type="xs:string"/>
+<xs:element minOccurs="0" name="effDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="email" type="xs:string"/>
+<xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="familyDoctor" type="xs:string"/>
+<xs:element minOccurs="0" name="firstName" type="xs:string"/>
+<xs:element minOccurs="0" name="hcRenewDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="hcType" type="xs:string"/>
+<xs:element minOccurs="0" name="headRecord" type="xs:int"/>
+<xs:element minOccurs="0" name="hin" type="xs:string"/>
+<xs:element minOccurs="0" name="hsAlertCount" type="xs:int"/>
+<xs:element minOccurs="0" name="lastName" type="xs:string"/>
+<xs:element minOccurs="0" name="lastUpdateDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="lastUpdateUser" type="xs:string"/>
+<xs:element minOccurs="0" name="links" type="xs:string"/>
+<xs:element minOccurs="0" name="middleNames" type="xs:string"/>
+<xs:element minOccurs="0" name="monthOfBirth" type="xs:string"/>
+<xs:element minOccurs="0" name="myOscarUserName" type="xs:string"/>
+<xs:element minOccurs="0" name="newsletter" type="xs:string"/>
+<xs:element minOccurs="0" name="officialLanguage" type="xs:string"/>
+<xs:element minOccurs="0" name="patientStatus" type="xs:string"/>
+<xs:element minOccurs="0" name="patientStatusDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="pcnIndicator" type="xs:string"/>
+<xs:element minOccurs="0" name="phone" type="xs:string"/>
+<xs:element minOccurs="0" name="phone2" type="xs:string"/>
+<xs:element minOccurs="0" name="postal" type="xs:string"/>
+<xs:element minOccurs="0" name="previousAddress" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="province" type="xs:string"/>
+<xs:element minOccurs="0" name="residentialAddress" type="xs:string"/>
+<xs:element minOccurs="0" name="residentialCity" type="xs:string"/>
+<xs:element minOccurs="0" name="residentialPostal" type="xs:string"/>
+<xs:element minOccurs="0" name="residentialProvince" type="xs:string"/>
+<xs:element minOccurs="0" name="rosterDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="rosterEnrolledTo" type="xs:string"/>
+<xs:element minOccurs="0" name="rosterStatus" type="xs:string"/>
+<xs:element minOccurs="0" name="rosterTerminationDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="rosterTerminationReason" type="xs:string"/>
+<xs:element minOccurs="0" name="sex" type="xs:string"/>
+<xs:element minOccurs="0" name="sexDesc" type="xs:string"/>
+<xs:element minOccurs="0" name="sin" type="xs:string"/>
+<xs:element minOccurs="0" name="sourceOfIncome" type="xs:string"/>
+<xs:element minOccurs="0" name="spokenLanguage" type="xs:string"/>
+<xs:element minOccurs="0" name="title" type="xs:string"/>
+<xs:element minOccurs="0" name="ver" type="xs:string"/>
+<xs:element minOccurs="0" name="yearOfBirth" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getAdmittedDemographicIdsByProgramProvider">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:int"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getAdmittedDemographicIdsByProgramProviderResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDemographic">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDemographicResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:demographicTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType final="extension restriction" name="demographicTransfer">
+<xs:sequence>
+<xs:element minOccurs="0" name="activeCount" type="xs:int"/>
+<xs:element minOccurs="0" name="address" type="xs:string"/>
+<xs:element minOccurs="0" name="alias" type="xs:string"/>
+<xs:element minOccurs="0" name="anonymous" type="xs:string"/>
+<xs:element minOccurs="0" name="chartNo" type="xs:string"/>
+<xs:element minOccurs="0" name="children" type="xs:string"/>
+<xs:element minOccurs="0" name="citizenship" type="xs:string"/>
+<xs:element minOccurs="0" name="city" type="xs:string"/>
+<xs:element minOccurs="0" name="dateJoined" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="dateOfBirth" type="xs:string"/>
+<xs:element minOccurs="0" name="demographicNo" type="xs:int"/>
+<xs:element minOccurs="0" name="displayName" type="xs:string"/>
+<xs:element minOccurs="0" name="effDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="email" type="xs:string"/>
+<xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="familyDoctor" type="xs:string"/>
+<xs:element minOccurs="0" name="firstName" type="xs:string"/>
+<xs:element minOccurs="0" name="hcRenewDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="hcType" type="xs:string"/>
+<xs:element minOccurs="0" name="headRecord" type="xs:int"/>
+<xs:element minOccurs="0" name="hin" type="xs:string"/>
+<xs:element minOccurs="0" name="hsAlertCount" type="xs:int"/>
+<xs:element minOccurs="0" name="lastName" type="xs:string"/>
+<xs:element minOccurs="0" name="lastUpdateDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="lastUpdateUser" type="xs:string"/>
+<xs:element minOccurs="0" name="links" type="xs:string"/>
+<xs:element minOccurs="0" name="monthOfBirth" type="xs:string"/>
+<xs:element minOccurs="0" name="myOscarUserName" type="xs:string"/>
+<xs:element minOccurs="0" name="officialLanguage" type="xs:string"/>
+<xs:element minOccurs="0" name="patientStatus" type="xs:string"/>
+<xs:element minOccurs="0" name="patientStatusDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="pcnIndicator" type="xs:string"/>
+<xs:element minOccurs="0" name="phone" type="xs:string"/>
+<xs:element minOccurs="0" name="phone2" type="xs:string"/>
+<xs:element minOccurs="0" name="postal" type="xs:string"/>
+<xs:element minOccurs="0" name="previousAddress" type="xs:string"/>
+<xs:element minOccurs="0" name="providerNo" type="xs:string"/>
+<xs:element minOccurs="0" name="province" type="xs:string"/>
+<xs:element minOccurs="0" name="rosterDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="rosterStatus" type="xs:string"/>
+<xs:element minOccurs="0" name="rosterTerminationDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="rosterTerminationReason" type="xs:string"/>
+<xs:element minOccurs="0" name="sex" type="xs:string"/>
+<xs:element minOccurs="0" name="sexDesc" type="xs:string"/>
+<xs:element minOccurs="0" name="sin" type="xs:string"/>
+<xs:element minOccurs="0" name="sourceOfIncome" type="xs:string"/>
+<xs:element minOccurs="0" name="spokenLanguage" type="xs:string"/>
+<xs:element minOccurs="0" name="title" type="xs:string"/>
+<xs:element minOccurs="0" name="ver" type="xs:string"/>
+<xs:element minOccurs="0" name="yearOfBirth" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDemographicIdsWithMyOscarAccounts">
+<xs:sequence>
+<xs:element minOccurs="0" name="startDemographicIdExclusive" type="xs:int"/>
+<xs:element name="itemsToReturn" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDemographicIdsWithMyOscarAccountsResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getActiveDemographicsAfter">
+<xs:sequence>
+<xs:element minOccurs="0" name="lastUpdate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="fields" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getActiveDemographicsAfterResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:demographicTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="searchDemographicByName">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element name="arg1" type="xs:int"/>
+<xs:element name="arg2" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="searchDemographicByNameResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:demographicTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDemographicByMyOscarUserName">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDemographicByMyOscarUserNameResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:demographicTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDemographics">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDemographicsResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:demographicTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDemographic2">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getDemographic2Response">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:demographicTransfer2"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="searchDemographicsByAttributes">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+<xs:element minOccurs="0" name="arg2" type="xs:string"/>
+<xs:element minOccurs="0" name="arg3" type="tns:gender"/>
+<xs:element minOccurs="0" name="arg4" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="arg5" type="xs:string"/>
+<xs:element minOccurs="0" name="arg6" type="xs:string"/>
+<xs:element minOccurs="0" name="arg7" type="xs:string"/>
+<xs:element minOccurs="0" name="arg8" type="xs:string"/>
+<xs:element minOccurs="0" name="arg9" type="xs:string"/>
+<xs:element name="arg10" type="xs:int"/>
+<xs:element name="arg11" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="searchDemographicsByAttributesResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:demographicTransfer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:simpleType name="gender">
+<xs:restriction base="xs:string">
+<xs:enumeration value="M"/>
+<xs:enumeration value="F"/>
+<xs:enumeration value="T"/>
+<xs:enumeration value="O"/>
+<xs:enumeration value="U"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>
+</wsdl:types>
+<wsdl:message name="isPhrVerifiedToSendMessages">
+<wsdl:part element="tns:isPhrVerifiedToSendMessages" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="writePHRId">
+<wsdl:part element="tns:writePHRId" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getLatestPhrVerificationByDemographicResponse">
+<wsdl:part element="tns:getLatestPhrVerificationByDemographicResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getLatestPhrVerificationByDemographic">
+<wsdl:part element="tns:getLatestPhrVerificationByDemographic" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="isPhrVerifiedToSendMessagesResponse">
+<wsdl:part element="tns:isPhrVerifiedToSendMessagesResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getConsentedDemographicIdsAfter">
+<wsdl:part element="tns:getConsentedDemographicIdsAfter" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDemographicsResponse">
+<wsdl:part element="tns:getDemographicsResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDemographicIdsWithMyOscarAccountsResponse">
+<wsdl:part element="tns:getDemographicIdsWithMyOscarAccountsResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getAdmittedDemographicIdsByProgramProviderResponse">
+<wsdl:part element="tns:getAdmittedDemographicIdsByProgramProviderResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getActiveDemographicsAfterResponse">
+<wsdl:part element="tns:getActiveDemographicsAfterResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getActiveDemographicsAfter">
+<wsdl:part element="tns:getActiveDemographicsAfter" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="searchDemographicsByAttributesResponse">
+<wsdl:part element="tns:searchDemographicsByAttributesResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="writePHRIdResponse">
+<wsdl:part element="tns:writePHRIdResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDemographicByMyOscarUserName">
+<wsdl:part element="tns:getDemographicByMyOscarUserName" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDemographics">
+<wsdl:part element="tns:getDemographics" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDemographic2">
+<wsdl:part element="tns:getDemographic2" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="isPhrVerifiedToSendMedicalDataResponse">
+<wsdl:part element="tns:isPhrVerifiedToSendMedicalDataResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getConsentedDemographicIdsAfterResponse">
+<wsdl:part element="tns:getConsentedDemographicIdsAfterResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="isPhrVerifiedToSendMedicalData">
+<wsdl:part element="tns:isPhrVerifiedToSendMedicalData" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDemographicByMyOscarUserNameResponse">
+<wsdl:part element="tns:getDemographicByMyOscarUserNameResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDemographic2Response">
+<wsdl:part element="tns:getDemographic2Response" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getActiveDemographicsAfter2">
+<wsdl:part element="tns:getActiveDemographicsAfter2" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getAdmittedDemographicIdsByProgramProvider">
+<wsdl:part element="tns:getAdmittedDemographicIdsByProgramProvider" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDemographic">
+<wsdl:part element="tns:getDemographic" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDemographicIdsWithMyOscarAccounts">
+<wsdl:part element="tns:getDemographicIdsWithMyOscarAccounts" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getDemographicResponse">
+<wsdl:part element="tns:getDemographicResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="searchDemographicByName">
+<wsdl:part element="tns:searchDemographicByName" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="searchDemographicByNameResponse">
+<wsdl:part element="tns:searchDemographicByNameResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getActiveDemographicsAfter2Response">
+<wsdl:part element="tns:getActiveDemographicsAfter2Response" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="searchDemographicsByAttributes">
+<wsdl:part element="tns:searchDemographicsByAttributes" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:portType name="DemographicWs">
+<wsdl:operation name="isPhrVerifiedToSendMessages">
+<wsdl:input message="tns:isPhrVerifiedToSendMessages" name="isPhrVerifiedToSendMessages"> </wsdl:input>
+<wsdl:output message="tns:isPhrVerifiedToSendMessagesResponse" name="isPhrVerifiedToSendMessagesResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="writePHRId">
+<wsdl:input message="tns:writePHRId" name="writePHRId"> </wsdl:input>
+<wsdl:output message="tns:writePHRIdResponse" name="writePHRIdResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getLatestPhrVerificationByDemographic">
+<wsdl:input message="tns:getLatestPhrVerificationByDemographic" name="getLatestPhrVerificationByDemographic"> </wsdl:input>
+<wsdl:output message="tns:getLatestPhrVerificationByDemographicResponse" name="getLatestPhrVerificationByDemographicResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="isPhrVerifiedToSendMedicalData">
+<wsdl:input message="tns:isPhrVerifiedToSendMedicalData" name="isPhrVerifiedToSendMedicalData"> </wsdl:input>
+<wsdl:output message="tns:isPhrVerifiedToSendMedicalDataResponse" name="isPhrVerifiedToSendMedicalDataResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getConsentedDemographicIdsAfter">
+<wsdl:input message="tns:getConsentedDemographicIdsAfter" name="getConsentedDemographicIdsAfter"> </wsdl:input>
+<wsdl:output message="tns:getConsentedDemographicIdsAfterResponse" name="getConsentedDemographicIdsAfterResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getActiveDemographicsAfter2">
+<wsdl:input message="tns:getActiveDemographicsAfter2" name="getActiveDemographicsAfter2"> </wsdl:input>
+<wsdl:output message="tns:getActiveDemographicsAfter2Response" name="getActiveDemographicsAfter2Response"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getAdmittedDemographicIdsByProgramProvider">
+<wsdl:input message="tns:getAdmittedDemographicIdsByProgramProvider" name="getAdmittedDemographicIdsByProgramProvider"> </wsdl:input>
+<wsdl:output message="tns:getAdmittedDemographicIdsByProgramProviderResponse" name="getAdmittedDemographicIdsByProgramProviderResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDemographic">
+<wsdl:input message="tns:getDemographic" name="getDemographic"> </wsdl:input>
+<wsdl:output message="tns:getDemographicResponse" name="getDemographicResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDemographicIdsWithMyOscarAccounts">
+<wsdl:input message="tns:getDemographicIdsWithMyOscarAccounts" name="getDemographicIdsWithMyOscarAccounts"> </wsdl:input>
+<wsdl:output message="tns:getDemographicIdsWithMyOscarAccountsResponse" name="getDemographicIdsWithMyOscarAccountsResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getActiveDemographicsAfter">
+<wsdl:input message="tns:getActiveDemographicsAfter" name="getActiveDemographicsAfter"> </wsdl:input>
+<wsdl:output message="tns:getActiveDemographicsAfterResponse" name="getActiveDemographicsAfterResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="searchDemographicByName">
+<wsdl:input message="tns:searchDemographicByName" name="searchDemographicByName"> </wsdl:input>
+<wsdl:output message="tns:searchDemographicByNameResponse" name="searchDemographicByNameResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDemographicByMyOscarUserName">
+<wsdl:input message="tns:getDemographicByMyOscarUserName" name="getDemographicByMyOscarUserName"> </wsdl:input>
+<wsdl:output message="tns:getDemographicByMyOscarUserNameResponse" name="getDemographicByMyOscarUserNameResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDemographics">
+<wsdl:input message="tns:getDemographics" name="getDemographics"> </wsdl:input>
+<wsdl:output message="tns:getDemographicsResponse" name="getDemographicsResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDemographic2">
+<wsdl:input message="tns:getDemographic2" name="getDemographic2"> </wsdl:input>
+<wsdl:output message="tns:getDemographic2Response" name="getDemographic2Response"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="searchDemographicsByAttributes">
+<wsdl:input message="tns:searchDemographicsByAttributes" name="searchDemographicsByAttributes"> </wsdl:input>
+<wsdl:output message="tns:searchDemographicsByAttributesResponse" name="searchDemographicsByAttributesResponse"> </wsdl:output>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="DemographicWsServiceSoapBinding" type="tns:DemographicWs">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="isPhrVerifiedToSendMessages">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="isPhrVerifiedToSendMessages">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="isPhrVerifiedToSendMessagesResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="writePHRId">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="writePHRId">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="writePHRIdResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="isPhrVerifiedToSendMedicalData">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="isPhrVerifiedToSendMedicalData">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="isPhrVerifiedToSendMedicalDataResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getLatestPhrVerificationByDemographic">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getLatestPhrVerificationByDemographic">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getLatestPhrVerificationByDemographicResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getActiveDemographicsAfter2">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getActiveDemographicsAfter2">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getActiveDemographicsAfter2Response">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getConsentedDemographicIdsAfter">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getConsentedDemographicIdsAfter">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getConsentedDemographicIdsAfterResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getAdmittedDemographicIdsByProgramProvider">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getAdmittedDemographicIdsByProgramProvider">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getAdmittedDemographicIdsByProgramProviderResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDemographic">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getDemographic">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getDemographicResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDemographicIdsWithMyOscarAccounts">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getDemographicIdsWithMyOscarAccounts">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getDemographicIdsWithMyOscarAccountsResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getActiveDemographicsAfter">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getActiveDemographicsAfter">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getActiveDemographicsAfterResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="searchDemographicByName">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="searchDemographicByName">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="searchDemographicByNameResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDemographicByMyOscarUserName">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getDemographicByMyOscarUserName">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getDemographicByMyOscarUserNameResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDemographics">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getDemographics">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getDemographicsResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getDemographic2">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getDemographic2">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getDemographic2Response">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="searchDemographicsByAttributes">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="searchDemographicsByAttributes">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="searchDemographicsByAttributesResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="DemographicWsService">
+<wsdl:port binding="tns:DemographicWsServiceSoapBinding" name="DemographicWsPort">
+<soap:address location="https://129.121.73.62:8443/oscar/ws/DemographicService/"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

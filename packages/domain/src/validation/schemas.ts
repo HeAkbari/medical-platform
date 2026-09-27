@@ -31,17 +31,44 @@ export const appointmentQuerySchema = z.object({
 export type CreateAppointmentInput = z.infer<typeof createAppointmentSchema>;
 export type AppointmentQueryInput = z.infer<typeof appointmentQuerySchema>;
 
+const dobSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date of birth must use YYYY-MM-DD format');
+
+// Only firstName/lastName are mandatory at registration — everything else is
+// completed later from the profile page. See
+// docs/oscar/new-approach/patient-clinic-linking-architecture.md.
 export const createPatientSchema = z.object({
   firstName: z.string().min(2).max(80),
   lastName: z.string().min(2).max(80),
-  dateOfBirth: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date of birth must use YYYY-MM-DD format'),
-  email: z.string().email(),
+  dateOfBirth: dobSchema.optional(),
+  email: z.string().email().optional(),
   phone: z.string().min(8).max(20),
+  healthNumber: z.string().min(1).max(50).optional(),
+  addressLine: z.string().min(1).max(200).optional(),
+  city: z.string().min(1).max(100).optional(),
+  province: z.string().min(1).max(100).optional(),
+  postalCode: z.string().min(1).max(20).optional(),
 });
 
 export type CreatePatientInput = z.infer<typeof createPatientSchema>;
+
+// Partial profile-completion update — same optional fields as
+// createPatientSchema minus phone (not user-editable; it's the OTP-verified
+// identity), all still optional so a caller can PATCH just one field.
+export const updatePatientSchema = z.object({
+  firstName: z.string().min(2).max(80).optional(),
+  lastName: z.string().min(2).max(80).optional(),
+  dateOfBirth: dobSchema.optional(),
+  email: z.string().email().optional(),
+  healthNumber: z.string().min(1).max(50).optional(),
+  addressLine: z.string().min(1).max(200).optional(),
+  city: z.string().min(1).max(100).optional(),
+  province: z.string().min(1).max(100).optional(),
+  postalCode: z.string().min(1).max(20).optional(),
+});
+
+export type UpdatePatientInput = z.infer<typeof updatePatientSchema>;
 
 export const sendOtpSchema = z.object({
   phone: z.string().min(8).max(20),
@@ -55,14 +82,3 @@ export const verifyOtpSchema = z.object({
 export const completeRegistrationSchema = createPatientSchema.extend({
   registrationToken: z.string().uuid(),
 });
-
-// Collected lazily at first clinic-linking need (e.g. booking), never at
-// registration — see docs/oscar/new-approach/patient-clinic-linking-architecture.md.
-export const linkPatientToClinicSchema = z.object({
-  healthNumber: z.string().min(1).max(50),
-  dateOfBirth: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date of birth must use YYYY-MM-DD format'),
-});
-
-export type LinkPatientToClinicRequestBody = z.infer<typeof linkPatientToClinicSchema>;

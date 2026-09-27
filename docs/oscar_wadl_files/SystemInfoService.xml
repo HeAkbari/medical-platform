@@ -1,0 +1,162 @@
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ws.oscarehr.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="SystemInfoWsService" targetNamespace="http://ws.oscarehr.org/">
+<wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.oscarehr.org/" elementFormDefault="unqualified" targetNamespace="http://ws.oscarehr.org/" version="1.0">
+<xs:element name="getMaxListReturnSize" type="tns:getMaxListReturnSize"/>
+<xs:element name="getMaxListReturnSizeResponse" type="tns:getMaxListReturnSizeResponse"/>
+<xs:element name="getServerTime" type="tns:getServerTime"/>
+<xs:element name="getServerTimeGmtOffset" type="tns:getServerTimeGmtOffset"/>
+<xs:element name="getServerTimeGmtOffsetResponse" type="tns:getServerTimeGmtOffsetResponse"/>
+<xs:element name="getServerTimeResponse" type="tns:getServerTimeResponse"/>
+<xs:element name="helloWorld" type="tns:helloWorld"/>
+<xs:element name="helloWorldResponse" type="tns:helloWorldResponse"/>
+<xs:element name="isAlive" type="tns:isAlive"/>
+<xs:element name="isAliveResponse" type="tns:isAliveResponse"/>
+<xs:complexType name="getMaxListReturnSize">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="getMaxListReturnSizeResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getServerTime">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="getServerTimeResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:dateTime"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="helloWorld">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="helloWorldResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getServerTimeGmtOffset">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="getServerTimeGmtOffsetResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="isAlive">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="isAliveResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+</wsdl:types>
+<wsdl:message name="getMaxListReturnSize">
+<wsdl:part element="tns:getMaxListReturnSize" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getServerTime">
+<wsdl:part element="tns:getServerTime" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="helloWorld">
+<wsdl:part element="tns:helloWorld" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getServerTimeResponse">
+<wsdl:part element="tns:getServerTimeResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="helloWorldResponse">
+<wsdl:part element="tns:helloWorldResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="isAliveResponse">
+<wsdl:part element="tns:isAliveResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getMaxListReturnSizeResponse">
+<wsdl:part element="tns:getMaxListReturnSizeResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getServerTimeGmtOffset">
+<wsdl:part element="tns:getServerTimeGmtOffset" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getServerTimeGmtOffsetResponse">
+<wsdl:part element="tns:getServerTimeGmtOffsetResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="isAlive">
+<wsdl:part element="tns:isAlive" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:portType name="SystemInfoWs">
+<wsdl:operation name="getMaxListReturnSize">
+<wsdl:input message="tns:getMaxListReturnSize" name="getMaxListReturnSize"> </wsdl:input>
+<wsdl:output message="tns:getMaxListReturnSizeResponse" name="getMaxListReturnSizeResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getServerTime">
+<wsdl:input message="tns:getServerTime" name="getServerTime"> </wsdl:input>
+<wsdl:output message="tns:getServerTimeResponse" name="getServerTimeResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="helloWorld">
+<wsdl:input message="tns:helloWorld" name="helloWorld"> </wsdl:input>
+<wsdl:output message="tns:helloWorldResponse" name="helloWorldResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getServerTimeGmtOffset">
+<wsdl:input message="tns:getServerTimeGmtOffset" name="getServerTimeGmtOffset"> </wsdl:input>
+<wsdl:output message="tns:getServerTimeGmtOffsetResponse" name="getServerTimeGmtOffsetResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="isAlive">
+<wsdl:input message="tns:isAlive" name="isAlive"> </wsdl:input>
+<wsdl:output message="tns:isAliveResponse" name="isAliveResponse"> </wsdl:output>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="SystemInfoWsServiceSoapBinding" type="tns:SystemInfoWs">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="getMaxListReturnSize">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getMaxListReturnSize">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getMaxListReturnSizeResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getServerTime">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getServerTime">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getServerTimeResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="helloWorld">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="helloWorld">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="helloWorldResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="getServerTimeGmtOffset">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="getServerTimeGmtOffset">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="getServerTimeGmtOffsetResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="isAlive">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="isAlive">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="isAliveResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="SystemInfoWsService">
+<wsdl:port binding="tns:SystemInfoWsServiceSoapBinding" name="SystemInfoWsPort">
+<soap:address location="https://129.121.73.62:8443/oscar/ws/SystemInfoService/"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

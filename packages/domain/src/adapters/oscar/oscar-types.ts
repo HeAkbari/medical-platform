@@ -1,4 +1,32 @@
 /**
+ * `POST /demographics` request body — verified live (2026-09-25), see
+ * docs/oscar/new-approach/oscar-verified-service-catalog.md. `doctors`
+ * really does persist (it just isn't reflected in the immediate response —
+ * a follow-up GET shows it). `sex` defaults to `'U'` (Unknown, a real OSCAR
+ * value) since this app doesn't collect gender.
+ */
+export interface OscarDemographicCreateInput {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: number;
+  dobYear: string;
+  dobMonth: string;
+  dobDay: string;
+  sex: string;
+  hin: string;
+  chartNo: string;
+  email: string;
+  phone: string;
+  address: {
+    address: string;
+    city: string;
+    province: string;
+    postal: string;
+  };
+  doctors: { providerNo: string }[];
+}
+
+/**
  * `GET /providerService/providers_json` (paginated list, `OscarPaginated<OscarProvider>`)
  * / `.../provider/{id}` (single object) — verified live against the sponsor
  * sandbox. `providers_json` replaced the WADL-default `providers` endpoint,

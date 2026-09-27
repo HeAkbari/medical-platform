@@ -79,9 +79,14 @@ export function fhirToPatient(resource: FhirPatient): Patient {
     id: resource.id ?? '',
     firstName: first,
     lastName: last,
-    dateOfBirth: resource.birthDate ?? '',
-    email: contactValue(resource.telecom, 'email'),
+    dateOfBirth: resource.birthDate ?? null,
+    email: contactValue(resource.telecom, 'email') || null,
     phone: contactValue(resource.telecom, 'phone'),
+    healthNumber: null,
+    addressLine: null,
+    city: null,
+    province: null,
+    postalCode: null,
     createdAt: resource.meta?.lastUpdated ?? '',
   };
 }

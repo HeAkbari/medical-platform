@@ -17,6 +17,18 @@ export interface AvailableSlot {
 export class MedicalApiClient {
   constructor(private readonly baseUrl = '') {}
 
+  private async parseJson<T>(response: Response): Promise<T> {
+    const body = (await response.json().catch(() => null)) as
+      | (T & { message?: string })
+      | null;
+
+    if (!response.ok) {
+      throw new Error(body?.message ?? `Request failed with status ${response.status}`);
+    }
+
+    return body as T;
+  }
+
   private buildUrl(path: string, query?: Record<string, string | undefined>) {
     const url = new URL(`${this.baseUrl}${path}`, 'http://localhost');
 
@@ -33,22 +45,22 @@ export class MedicalApiClient {
 
   async getPatients(): Promise<ApiListResponse<Patient>> {
     const response = await fetch(this.buildUrl('/api/v1/patients'));
-    return response.json() as Promise<ApiListResponse<Patient>>;
+    return this.parseJson<ApiListResponse<Patient>>(response);
   }
 
   async getPatient(id: string): Promise<{ data: Patient }> {
     const response = await fetch(this.buildUrl(`/api/v1/patients/${id}`));
-    return response.json() as Promise<{ data: Patient }>;
+    return this.parseJson<{ data: Patient }>(response);
   }
 
   async getDoctors(): Promise<ApiListResponse<Doctor>> {
     const response = await fetch(this.buildUrl('/api/v1/doctors'));
-    return response.json() as Promise<ApiListResponse<Doctor>>;
+    return this.parseJson<ApiListResponse<Doctor>>(response);
   }
 
   async getDoctor(id: string): Promise<{ data: Doctor }> {
     const response = await fetch(this.buildUrl(`/api/v1/doctors/${id}`));
-    return response.json() as Promise<{ data: Doctor }>;
+    return this.parseJson<{ data: Doctor }>(response);
   }
 
   /** `month` here is 0-indexed (JS `Date` convention, matches every caller's internal calendar state) — converted to the 1-indexed value the HTTP API expects right at this boundary, so a human reading the request URL sees `month=8` for August, not `month=7`. */
@@ -65,9 +77,9 @@ export class MedicalApiClient {
         visitType,
       })
     );
-    return response.json() as Promise<{
+    return this.parseJson<{
       data: { year: number; month: number; workingDays: number[] };
-    }>;
+    }>(response);
   }
 
   async getDoctorAvailableSlots(
@@ -78,7 +90,7 @@ export class MedicalApiClient {
     const response = await fetch(
       this.buildUrl(`/api/v1/doctors/${id}/availability`, { date, visitType })
     );
-    return response.json() as Promise<{ data: { date: string; slots: AvailableSlot[] } }>;
+    return this.parseJson<{ data: { date: string; slots: AvailableSlot[] } }>(response);
   }
 
   async getAppointments(
@@ -91,7 +103,7 @@ export class MedicalApiClient {
         date: query?.date,
       })
     );
-    return response.json() as Promise<ApiListResponse<Appointment>>;
+    return this.parseJson<ApiListResponse<Appointment>>(response);
   }
 
   async createAppointment(
@@ -102,7 +114,7 @@ export class MedicalApiClient {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(input),
     });
-    return response.json() as Promise<{ data: Appointment }>;
+    return this.parseJson<{ data: Appointment }>(response);
   }
 }
 

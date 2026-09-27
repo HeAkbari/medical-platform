@@ -21,6 +21,7 @@ import type {
 import type {
   CreateAppointmentInput,
   CreatePatientInput,
+  UpdatePatientInput,
 } from '../validation/schemas';
 
 export interface PatientRepository {
@@ -28,6 +29,7 @@ export interface PatientRepository {
   findById(id: string): Promise<Patient | null>;
   findByPhone(phone: string): Promise<Patient | null>;
   create(input: CreatePatientInput): Promise<Patient>;
+  update(id: string, input: UpdatePatientInput): Promise<Patient>;
 }
 
 export interface DoctorRepository {

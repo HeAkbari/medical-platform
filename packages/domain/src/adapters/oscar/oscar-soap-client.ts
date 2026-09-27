@@ -19,7 +19,11 @@ export interface OscarSoapClientConfig {
   allowSelfSignedCert?: boolean;
 }
 
-export type OscarSoapService = 'LoginService' | 'ScheduleService' | 'BookingService';
+export type OscarSoapService =
+  | 'LoginService'
+  | 'ScheduleService'
+  | 'BookingService'
+  | 'DemographicService';
 
 export class OscarSoapFaultError extends Error {
   constructor(
@@ -105,7 +109,13 @@ export class OscarSoapClient {
 
     const headers: Record<string, string> = {
       'Content-Type': 'text/xml; charset=UTF-8',
-      SOAPAction: '""',
+      // A truly empty header, NOT the literal two-character string `""` —
+      // verified live (2026-09-27) that OSCAR's CXF stack accepts a request
+      // with a bare empty SOAPAction header (`SOAPAction;` in curl) but
+      // rejects the same request (with identical credentials) when this
+      // header's value is the literal string `""`, failing WS-Security
+      // auth (`FailedAuthentication`) despite the credentials being valid.
+      SOAPAction: '',
     };
 
     const attempt = () =>

@@ -89,11 +89,11 @@ endpointهای REST سرور واقعی **OSCAR EMR 19** (کلینیک اسپا�
 
 | مسیر | متد | وضعیت | استفاده |
 |------|-----|-------|---------|
-| `/schedule/{demographicNo}/appointmentHistory` | `POST` | 🟡 پیاده‌شده — **باگ سرور شناخته‌شده: همیشه ۵۰۰** (نگاه کن به `deferred-items.md` #۳) | `findAll({patientId})` |
+| `/schedule/{demographicNo}/appointmentHistory` | `POST` | ❌ **کنار گذاشته شد** — باگ دائمی/رفع‌نشدنیِ سمت سرور OSCAR (همیشه `500 Access Denied`، `deferred-items.md` #۳). جایگزین شد با SOAP `ScheduleService.getAppointmentsForPatient2` (تأییدشده زنده، نگاه کن `oscar-verified-service-catalog.md`) | ~~`findAll({patientId})`~~ → حالا از SOAP استفاده می‌کنه |
 | `/schedule/fetchProviderAppts/{providerNo}/{sDate}/{eDate}` | `GET` (صفحه‌بندی‌شده) | 🟡 پیاده‌شده، تست زنده نشده | `findAll({doctorId})` بدون تاریخ مشخص (بازه‌ی ۹۰ روز) |
-| `/schedule/{providerNo}/day/{date}` | `GET` | 🟡 پیاده‌شده، تست زنده نشده | `findAll({doctorId, date})` |
-| `/schedule/getAppointment` | `GET` | ❌ پیاده نشده — شکل پارامتر/پاسخ هیچ‌وقت مستند نشده | `findById` (و به‌تبع آن `findDetailById`) فعلاً throw می‌کنند |
-| `/schedule/add` | `POST` | 🟡 پیاده‌شده (بدنه از نمونه‌ی Postman صاحب پروژه)، هیچ‌وقت زنده اجرا نشده | `create` (رزرو نوبت) |
+| `/schedule/{providerNo}/day/{date}` | `GET` | ❌ **کنار گذاشته شد (۲۰۲۶-۰۹-۲۷)** — همون باگ دائمیِ خانواده‌ی `deferred-items.md` #۳، این‌بار `missing required security object (_demographic)` از یه lookup داخلیِ فرمت‌کردن اسم بیمار. جایگزین شد با SOAP `getAppointmentsForProvider2` (تأییدشده زنده) | ~~`findAll({doctorId, date})`~~ → حالا از SOAP استفاده می‌کنه |
+| `/schedule/getAppointment` | `GET` | ❌ کنار گذاشته شد — شکل پارامتر/پاسخ هیچ‌وقت مستند نشده؛ جایگزین شد با SOAP `getAppointment2` (تأییدشده زنده و پیاده‌سازی‌شده) | `findById`/`findDetailById` حالا از SOAP استفاده می‌کنن |
+| `/schedule/add` | `POST` | ❌ **کنار گذاشته شد (۲۰۲۶-۰۹-۲۷)** — همون باگ دائمیِ `AppointmentManager` («Access Denied»، `deferred-items.md` #۳). جایگزین شد با SOAP `ScheduleService.addAppointment` (تأییدشده زنده) | ~~`create`~~ → حالا از SOAP استفاده می‌کنه |
 | `/schedule/appointment/{id}/updateStatus` | `POST` (`{status: 'c'|'t'}`) | 🟡 پیاده‌شده، هیچ‌وقت زنده اجرا نشده | `updateStatus` (لغو نوبت) |
 
 نکات: `doctorId` ورودی همیشه Doctor.id پلتفرمی است — قبل از هر تماس OSCAR با
@@ -165,7 +165,14 @@ endpoint پیش‌بینی شده بود، **کنار گذاشته شد** — ب
 
 | مسیر | متد | وضعیت | استفاده |
 |------|-----|-------|---------|
-| `/demographics/{dataId}?includes[]=documents` | `GET` | ❌ تأییدشده که در دسترس نیست — ۴۰۱ غیرقابل‌اعتماد، حتی بعد از چند روش encode | — |
+| `/demographics/{dataId}?includes[]=documents` | `GET` | ❌ تأییدشده که در دسترس نیست — ۴۰۱ غیرقابل‌اعتماد، حتی بعد از چند روش encode[^2] | — |
+
+[^2]: این ۴۰۱ با credential قدیمی (`oscardoc`، بدون هیچ مجوزی روی
+    `_demographic` — نگاه کن `deferred-items.md` #۱۴) گرفته شده بود،
+    احتمالاً همون کمبود مجوز، نه خودِ مسیر. با credential جدید،
+    `GET /demographics/{demographicNo}` (بدون `basic/`، مسیر ساده‌تر و
+    حتی در WADL هم مستند نیست) به‌صورت زنده تست شد و کار کرد — نگاه کن
+    `oscar-verified-service-catalog.md`.
 
 `findAll`/`findById` هر دو صراحتاً خطای «در دسترس نیست» می‌دهند — نه لیست
 خالیِ گمراه‌کننده. جزئیات حادثه‌ی auth مرتبط در `deferred-items.md` #۸.
@@ -184,7 +191,8 @@ endpoint پیش‌بینی شده بود، **کنار گذاشته شد** — ب
 ## جمع‌بندی endpointهای OSCAR در حال استفاده
 
 **خواندن:** `providerService/providers_json` · `providerService/provider/{id}` ·
-`schedule/{demographicNo}/appointmentHistory` · `schedule/fetchProviderAppts/...` ·
+~~`schedule/{demographicNo}/appointmentHistory`~~ (کنار گذاشته شد، جایگزینِ
+SOAP داره) · `schedule/fetchProviderAppts/...` ·
 `schedule/{providerNo}/day/{date}` · `allergies/active` ·
 `dxRegisty/getDiseaseRegistry` · `rx/drugs/current/{demographicNo}` ·
 `rx/drugs/archived/{demographicNo}` · `preventions/immunizations/{demographicNo}` ·
@@ -197,9 +205,14 @@ endpoint پیش‌بینی شده بود، **کنار گذاشته شد** — ب
 `schedule/getAppointment`
 
 **هیچ‌وقت پیاده نشد (خارج از محدوده طبق سند اصلی):** `demographics/quickSearch`،
-`demographics/search`، `POST /demographics`، `measurements/{demographicNo}`،
+`demographics/search`، `POST /demographics`[^1]، `measurements/{demographicNo}`،
 `notes/*`، `schedule/deleteAppointment`، `rx/prescribe`/`rx/new`/`rx/favorites`،
 و هر endpoint مربوط به billing/eforms/tickler/consults/surveillance/jobs.
+
+[^1]: `POST /demographics` (ایجاد بیمار جدید) به‌صورت زنده تست شد
+    (۲۰۲۶-۰۹-۲۱) — endpoint واقعی و متصل به کد سرور است، ولی با ۵۰۰
+    `missing required security object (_demographic)` شکست خورد (مشکل
+    مجوز provider، نه نبود endpoint). جزئیات در `deferred-items.md` #۱۴.
 
 ---
 
@@ -209,8 +222,9 @@ endpoint پیش‌بینی شده بود، **کنار گذاشته شد** — ب
 |----------|---------------------|
 | `GET /api/v1/doctors` | جدول `Doctor` (Postgres) — پر شده توسط `providerService/providers_json` در job دوره‌ای |
 | `GET /api/v1/doctors/{id}` | جدول `Doctor` (Postgres) |
-| `POST /api/v1/patients/link-clinic` | `POST /demographics/matchDemographic` |
-| `GET/POST /api/v1/appointments` | `schedule/{demographicNo}/appointmentHistory` \| `schedule/fetchProviderAppts/...` \| `schedule/{providerNo}/day/{date}` \| `POST /schedule/add` |
+| ~~`POST /api/v1/patients/link-clinic`~~ | **حذف شد (۲۰۲۶-۰۹-۲۶)** — جایگزین شد با `EnsurePatientLinkedToClinicUseCase` (نام‌محور، نه HIN-محور؛ صدا زده می‌شه از هوک بعد از رجیستر + از داخل `OscarAppointmentRepository.create`)، نگاه کن `oscar-verified-service-catalog.md` و پلن مربوطه |
+| `GET/POST /api/v1/appointments` | `GET`: SOAP `getAppointmentsForPatient2` (patientId) \| `schedule/fetchProviderAppts/...` \| SOAP `getAppointmentsForProvider2` (doctorId+date) — `POST`: `EnsurePatientLinkedToClinicUseCase` (لینک/ایجاد در OSCAR) سپس SOAP `addAppointment` |
+| `GET /api/v1/appointments/{id}` | SOAP `getAppointment2` |
 | `POST /api/v1/appointments/{id}/cancel` | `POST /schedule/appointment/{id}/updateStatus` |
 | `GET /api/v1/appointments/{id}` | ❌ مسدود — `schedule/getAppointment` پیاده نشده |
 | `GET /api/v1/facilities[/{id}]` | جدول `Facility` (Postgres) — بدون تماس OSCAR |
@@ -222,16 +236,25 @@ endpoint پیش‌بینی شده بود، **کنار گذاشته شد** — ب
 
 ---
 
-## یادداشت: یک لایه‌ی سوم و کاملاً جدا هم کشف شد (SOAP، هنوز به کد وصل نشده)
+## یادداشت: یک لایه‌ی سوم و کاملاً جدا هم کشف شد (SOAP)
 
 علاوه بر `ws/services` (این سند) و `ws/rs` (کنار گذاشته شد)، یک سرویس
 **SOAP** قدیمی‌تر هم روی همین نصب OSCAR فعاله (`ws/LoginService`،
 `ws/ScheduleService`، `ws/BookingService`، ...) که برخلاف REST، **قالب
 زمان‌بندی واقعیِ روزانه‌ی هر پزشک** رو می‌ده (`getDayWorkSchedule`) — چیزی
-که هیچ‌جای `ws/services` وجود نداره. تأییدشده زنده، ولی **هنوز به کد این
-اپ وصل نشده** — جزئیات کامل (احرازهویت WS-Security، نمونه‌ی پاسخ‌های
-واقعی، طراحیِ راه‌حل) در
-[`new-approach/oscar-soap-schedule-services.md`](./new-approach/oscar-soap-schedule-services.md).
+که هیچ‌جای `ws/services` وجود نداره. جزئیات کامل (احرازهویت WS-Security،
+نمونه‌ی پاسخ‌های واقعی، طراحیِ راه‌حل) در
+[`new-approach/oscar-soap-schedule-services.md`](./new-approach/oscar-soap-schedule-services.md)؛
+کاتالوگ کامل‌تر و به‌روزتر (با سرویس‌های نوبت‌دهی هم) در
+[`new-approach/oscar-verified-service-catalog.md`](./new-approach/oscar-verified-service-catalog.md).
+
+**✏️ اصلاحیه (۲۰۲۶-۰۹-۲۵): این یادداشت قدیمی گفته بود «هنوز به کد وصل
+نشده» — دیگه درست نیست.** `apps/web/src/lib/doctors/availability.ts`
+الان واقعاً به همین SOAP `ScheduleService` (هم `getDayWorkSchedule` هم
+`getScheduleTemplateCodes`، از طریق
+`packages/domain/src/adapters/oscar/oscar-schedule-service.ts`) وصله و
+`GET /api/v1/doctors/{id}/availability` رو تغذیه می‌کنه — واقعاً زنده و
+پیاده‌سازی‌شده، نه فقط کشف‌شده.
 
 ---
 

@@ -2,9 +2,16 @@ export interface Patient {
   id: string;
   firstName: string;
   lastName: string;
-  dateOfBirth: string;
-  email: string;
+  // Only firstName/lastName are guaranteed at registration — everything
+  // else is completed later from the profile page.
+  dateOfBirth: string | null;
+  email: string | null;
   phone: string;
+  healthNumber: string | null;
+  addressLine: string | null;
+  city: string | null;
+  province: string | null;
+  postalCode: string | null;
   createdAt: string;
 }
 

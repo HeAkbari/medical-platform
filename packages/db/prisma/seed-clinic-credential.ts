@@ -30,6 +30,13 @@ async function main(): Promise<void> {
   const accessToken = requireEnv('SEED_ACCESS_TOKEN');
   const accessTokenSecret = requireEnv('SEED_ACCESS_TOKEN_SECRET');
   const allowSelfSignedCert = process.env.SEED_ALLOW_SELF_SIGNED_CERT === 'true';
+  // Optional: OSCAR's legacy SOAP web services use a completely separate
+  // WS-Security UsernameToken credential (the output of LoginService.login2,
+  // not the OAuth1 fields above) — see
+  // docs/oscar/new-approach/oscar-soap-schedule-services.md. Not every
+  // clinic uses this layer, so both are optional and only written if given.
+  const soapSecurityId = process.env.SEED_SOAP_SECURITY_ID;
+  const soapSecurityTokenKey = process.env.SEED_SOAP_SECURITY_TOKEN_KEY;
 
   const encryptedFields = {
     emrType,
@@ -39,6 +46,10 @@ async function main(): Promise<void> {
     consumerSecretEnc: encryptSecret(consumerSecret, encryptionKey),
     accessTokenEnc: encryptSecret(accessToken, encryptionKey),
     accessTokenSecretEnc: encryptSecret(accessTokenSecret, encryptionKey),
+    ...(soapSecurityId ? { soapSecurityId } : {}),
+    ...(soapSecurityTokenKey
+      ? { soapSecurityTokenKeyEnc: encryptSecret(soapSecurityTokenKey, encryptionKey) }
+      : {}),
   };
 
   await prisma.clinicCredential.upsert({

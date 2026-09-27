@@ -1,5 +1,8 @@
 import type { AuthenticatedUser } from '@medical-platform/auth';
-import type { CreatePatientInput } from '@medical-platform/domain/validation';
+import type {
+  CreatePatientInput,
+  UpdatePatientInput,
+} from '@medical-platform/domain/validation';
 
 interface SessionResponse {
   user: AuthenticatedUser | null;
@@ -72,6 +75,23 @@ export async function registerPatientRequest(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ registrationToken, ...input }),
+  });
+
+  if (!response.ok) {
+    throw new Error(await parseErrorMessage(response));
+  }
+
+  const body = (await response.json()) as RegisterResponse;
+  return body.user;
+}
+
+export async function updateProfileRequest(
+  input: UpdatePatientInput
+): Promise<AuthenticatedUser> {
+  const response = await fetch('/api/v1/patients/me', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
   });
 
   if (!response.ok) {

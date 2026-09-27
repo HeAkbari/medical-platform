@@ -19,6 +19,7 @@ import type {
   OscarProvider,
   OscarProviderPeriodAppsTo,
 } from './oscar-types';
+import type { OscarSoapAppointment } from './oscar-soap-types';
 
 export function oscarToDoctor(provider: OscarProvider, clinicName?: string): Doctor {
   return {
@@ -49,13 +50,29 @@ function combineDateTime(date: string, time?: string): string {
 }
 
 /**
- * OSCAR's appointment status is a single-letter code, clinic-configurable —
- * only 'c' (cancelled) is confirmed so far (see design doc's flagged
- * vocabulary-gap risk). Everything else maps to 'scheduled' until more
- * codes are verified against real data.
+ * ⚠️ REVERTED (2026-09-27): this used to treat `code === 'c'`/`'C'` as
+ * "cancelled" — that was a guess from the original design doc, never
+ * actually verified against a real cancellation. It turned out to be
+ * actively wrong: 'C'/'c' is also the real `ScheduleTemplateCode` value for
+ * "Clinic Appointment"/"On Call Clinic" (see
+ * oscar-verified-service-catalog.md) — and `OscarAppointmentRepository.create`
+ * sets exactly that code on every new booking (a legitimate, active
+ * appointment type, not a cancellation). Treating it as "cancelled" made
+ * every real booking show up as cancelled in the patient's appointment list
+ * — confirmed live (2026-09-27) via `GET /api/v1/appointments?patientId=...`
+ * showing brand-new, never-cancelled bookings as `status: "cancelled"`.
+ *
+ * We do not yet have verified evidence of what code (if any) actually means
+ * "cancelled" for this field — every real code we've seen so far
+ * (`getScheduleTemplateCodes`) is an appointment *type*, not a lifecycle
+ * state. Until that's found and verified live, everything maps to
+ * 'scheduled' — under-reporting cancellation is much safer than the
+ * false-positive this replaced. See `toOscarStatusCode` in
+ * oscar-repositories.ts (the cancel/`updateStatus` write path) for the
+ * matching open risk — it likely doesn't actually cancel anything right now.
  */
-function mapOscarAppointmentStatus(code: string | undefined): AppointmentStatus {
-  return code === 'c' ? 'cancelled' : 'scheduled';
+function mapOscarAppointmentStatus(_code: string | undefined): AppointmentStatus {
+  return 'scheduled';
 }
 
 /** From `POST /schedule/{demographicNo}/appointmentHistory` — used for a specific, already-known platform patient. */
@@ -150,6 +167,37 @@ export function oscarDayApptToDomain(item: OscarDayApptItem, fallbackDate: strin
     reason: '',
     notes: item.notes || null,
     createdAt: '',
+    patientName: item.name,
+  };
+}
+
+/**
+ * From `ScheduleService.getAppointment2` (SOAP) — queried by OSCAR's own
+ * appointment id, so (like `oscarProviderApptToDomain`) we don't reverse-map
+ * `demographicNo`/`providerNo` -> platform patientId/doctorId here (no store
+ * method for that yet); `patientId` here is OSCAR's raw `demographicNo`, not
+ * the platform patient id. Unlike the REST mappers above, this one gets a
+ * real end time from OSCAR, so `durationMinutes` is computed, not guessed.
+ */
+export function oscarSoapAppointmentToDomain(item: OscarSoapAppointment): Appointment {
+  const start = new Date(item.appointmentStartDateTime);
+  const end = new Date(item.appointmentEndDateTime);
+  const durationMinutes =
+    Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())
+      ? 30
+      : Math.max(1, Math.round((end.getTime() - start.getTime()) / 60000));
+
+  return {
+    id: String(item.id),
+    patientId: String(item.demographicNo),
+    doctorId: item.providerNo,
+    scheduledAt: Number.isNaN(start.getTime()) ? item.appointmentStartDateTime : start.toISOString(),
+    durationMinutes,
+    status: mapOscarAppointmentStatus(item.status),
+    reason: item.reason ?? '',
+    notes: item.notes ?? null,
+    createdAt: item.createDateTime ?? '',
+    // Only present on getAppointmentsForPatient2's richer shape, not getAppointment2.
     patientName: item.name,
   };
 }

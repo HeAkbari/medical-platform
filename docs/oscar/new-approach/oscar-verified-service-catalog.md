@@ -163,11 +163,15 @@ Authorization: OAuth ... (OAuth1 HMAC-SHA1، امضای لحظه‌ای — نگ
    فرستادیم mixed-case بود، چیزی که برگشت تماماً حروف بزرگ بود. این باید
    تو نمایش/normalize سمت اپ در نظر گرفته بشه (یا اپ خودش title-case کنه
    قبل نمایش).
-4. **آرایه‌ی `doctors` که فرستادیم نادیده گرفته شد** — یک `providerTo1`
-   کامل (`oscardoc`) تو request بود، ولی response با `doctors: []`
-   برگشت. یعنی این فیلد در مسیر create نوشتنی نیست (احتمالاً association
-   provider-به-demographic باید از یه مسیر جدا مدیریت بشه، نه inline تو
-   بدنه‌ی create).
+4. **✏️ اصلاحیه: آرایه‌ی `doctors` که فرستادیم واقعاً ذخیره شد — فقط
+   پاسخِ همون create نشونش نداد.** اولش فکر می‌کردیم نادیده گرفته می‌شه
+   (چون response با `doctors: []` برگشت با این‌که یک `providerTo1` کامل
+   (`oscardoc`) تو request بود)، ولی صاحب پروژه تأیید کرد که یه `GET`
+   جدا بعد از create نشون داد دکتر واقعاً به لیست اضافه شده بود. یعنی
+   این فیلد **نوشتنی هست**، فقط یه نمونه‌ی دیگه از همون الگوی «echo
+   غیرقابل‌اعتماد تو پاسخِ فوریِ POST/PUT» بود (نگاه کن نکته‌ی ۵ سرویس
+   PUT بالا برای همون الگو با فیلد `provider`) — برای دیدن مقدار واقعی،
+   همیشه باید بعد از create/update یه `GET` جدا زد.
 5. **`patientStatusDate` فرمت انعطاف‌پذیره ولی خروجی نرمالایز می‌شه** —
    ورودی رشته‌ی تاریخ ساده (`"2026-07-16"`) بود، خروجی epoch میلی‌ثانیه
    (`1784160000000`) شد. `dateOfBirth` رو مستقیم به‌صورت epoch میلی‌ثانیه
@@ -778,6 +782,23 @@ positional map کرد:
    (نه پیش‌فرض تصادفی مثل همین `t`/Travel که برای یه نوبت واقعیِ بیمار
    منطقی نیست) رو صریحاً برای `status`/نوع نوبت می‌فرسته.
 
+   **✅ تأیید نهایی و یه باگ واقعی که همین فرض آشکارش کرد (۲۰۲۶-۰۹-۲۷):**
+   بعد از این‌که `create()` رو به SOAP سوییچ کردیم، برای هر نوبتِ جدید
+   `status: 'C'` فرستاده می‌شد (یه انتخاب عمدی، چون `'C'` = «Clinic
+   Appointment»، یه کد معنادار به‌جای `t`/Travel). ولی کدِ اپ (`mapOscarAppointmentStatus`
+   تو `oscar-mappers.ts`) از قبل، از یه سند طراحیِ اولیه، فرض کرده بود
+   `code === 'c'` (بدون حساسیت به بزرگ/کوچیک) یعنی «لغوشده». نتیجه: هر
+   نوبت جدیدی که با `'C'` ساخته می‌شد، تو لیست نوبت‌های بیمار به‌عنوان
+   `status: "cancelled"` نشون داده می‌شد — تأییدشده زنده با
+   `GET /api/v1/appointments?patientId=...` که چند تا نوبتِ کاملاً تازه و
+   هیچ‌وقت لغونشده رو `cancelled` نشون داد. یعنی این فرض قدیمی (`'c'` =
+   لغوشده) **غلط از آب دراومد** — `'c'`/`'C'` فقط یه کد نوع‌نوبته، نه
+   نشونه‌ی لغو. `mapOscarAppointmentStatus` اصلاح شد (فعلاً همیشه
+   `'scheduled'` برمی‌گردونه، چون هنوز هیچ کد تأییدشده‌ای برای «لغوشده»ی
+   واقعی نداریم) — و مسیر نوشتنِ لغو (`toOscarStatusCode`/`updateStatus`)
+   هم به‌عنوان «به احتمال زیاد خراب، نه فقط تست‌نشده» علامت‌گذاری شد،
+   چون همون فرض اشتباه اونجا هم هست.
+
    **✅ به‌روزرسانی نهایی (بعد از تست کامل `updateAppointment` +
    `getAppointment2` پایین): این فرض قطعاً تأیید شد.** `status` دقیقاً
    همون کد نوع‌نوبت‌دهیِ همین جدوله (case-insensitive — OSCAR حروف
@@ -903,7 +924,12 @@ Authorization: OAuth ...
   فقط به‌عنوان «کشف‌شده، هنوز تست نشده» لیست شده بود (خط ۴۰؛ و اونجا
   صریحاً تصمیم گرفته شده بود که رزرو از طریق REST `POST /schedule/add`
   انجام بشه، نه SOAP) — این اولین تست زنده‌ی این عملیات SOAP بود.
-- **وضعیت:** ✅ تأییدشده زنده (۲۰۲۶-۰۹-۲۵)
+- **وضعیت:** ✅ تأییدشده زنده (۲۰۲۶-۰۹-۲۵) — **و از ۲۰۲۶-۰۹-۲۷ عملاً
+  جایگزینِ REST `POST /schedule/add` تو کدِ اپ شد**، چون اون REST endpoint
+  دقیقاً همون باگ «Access Denied» رو داد که `appointmentHistory` می‌داد
+  (نگاه کن [`deferred-items.md`](./deferred-items.md) #۳؛ الگوی تکراری تو
+  کلِ `AppointmentManager`، نه یه متد خاص). `OscarAppointmentRepository.create`
+  حالا مستقیماً از همین عملیات استفاده می‌کنه.
 
 **Request:**
 ```xml
@@ -1024,6 +1050,124 @@ Authorization: OAuth ...
    کل شیء `appointmentTransfer` رو (با تمام فیلدهای فعلیِ درست، گرفته‌شده
    از یه `GET` قبلی) بفرسته — وگرنه فیلدهایی که نفرستاده پاک می‌شن.**
    این دقیقاً شبیه رفتاریه که برای `PUT /demographics` (REST) هم دیدیم.
+
+---
+
+### لیست نوبت‌های یک بیمار — SOAP (جایگزین REST خراب)
+
+- **سرویس/عملیات:** `ScheduleService.getAppointmentsForPatient2(demographicNo, offset, limit, includeArchived)`
+- **کاربرد:** لیست همه‌ی نوبت‌های یک بیمار مشخص. **جایگزین مستقیمِ**
+  REST `POST /schedule/{demographicNo}/appointmentHistory` که یه باگ
+  دائمی و رفع‌نشدنی سمت سرور OSCAR داره (همیشه `500 Access Denied` از
+  `AppointmentManager.getAppointmentHistoryWithoutDeleted` — نگاه کن
+  [`deferred-items.md`](./deferred-items.md) #۳). این باگ سمت کدِ خودِ
+  OSCARه، نه چیزی که با تغییر request حل بشه — پس این SOAP عملیات
+  جایگزین دائمیه، نه یه workaround موقت.
+- **وضعیت:** ✅ تأییدشده زنده (۲۰۲۶-۰۹-۲۶/۲۷) — و **پیاده‌سازی و
+  جایگزین شد** تو `OscarAppointmentRepository.findAll({patientId})`.
+
+**Request:**
+```xml
+<ws:getAppointmentsForPatient2>
+  <arg0>18</arg0>
+  <arg1>0</arg1>
+  <arg2>20</arg2>
+  <arg3>true</arg3>
+</ws:getAppointmentsForPatient2>
+```
+
+**Response نمونه:**
+```xml
+<return>
+    <appointmentEndDateTime>2026-10-01T11:44:00Z</appointmentEndDateTime>
+    <appointmentStartDateTime>2026-10-01T11:30:00Z</appointmentStartDateTime>
+    <createDateTime>2026-09-26T21:09:37Z</createDateTime>
+    <creator>101</creator>
+    <demographicNo>18</demographicNo>
+    <id>19</id>
+    <location></location>
+    <name>RIVERA, JANE</name>
+    <notes></notes>
+    <programId>0</programId>
+    <providerNo>104</providerNo>
+    <reason>Appointment</reason>
+    <remarks></remarks>
+    <resources></resources>
+    <status>t</status>
+    <type></type>
+    <updateDateTime>2026-09-26T21:09:37Z</updateDateTime>
+    <urgency></urgency>
+</return>
+```
+
+**نکات مهم:**
+
+1. **شکل داده غنی‌تر از `getAppointment2` تکی‌ست** — این‌جا `name`
+   (اسم کامل بیمار، برای نمایش مستقیم تو UI)، `location`, `remarks`,
+   `resources`, `type`, `urgency` هم هست — فیلدهایی که تو `getAppointment2`
+   نبودن.
+2. **پارامتر چهارم (`includeArchived`؟) هنوز دقیقاً تأیید نشده** — دقیقاً
+   همون ابهامِ پارامتر دومِ `getAppointment2`. فعلاً `true` می‌فرستیم.
+3. این پیدا شدن دقیقاً همون لحظه‌ای اتفاق افتاد که برای اولین بار کدِ
+   واقعیِ اپ (نه curl دستی) این بخش رو زنده تست کرد و به باگ REST خورد —
+   یه نمونه‌ی خوب از این‌که تست end-to-end واقعی، مشکلاتی رو پیدا می‌کنه
+   که تست‌های تکی‌ی سرویس‌ها (حتی وقتی همه‌شون جدا موفق بودن) نشون نمی‌دن.
+
+---
+
+### نوبت‌های یک پزشک در یک روز مشخص — SOAP (جایگزین REST خراب سوم)
+
+- **سرویس/عملیات:** `ScheduleService.getAppointmentsForProvider2(providerNo, date, includeArchived)`
+- **کاربرد:** لیست نوبت‌های واقعاً رزروشده‌ی یک پزشک در یک روز مشخص —
+  برای کم‌کردن از الگوی کاری کلی (`getDayWorkSchedule`) تا اسلات‌های
+  واقعاً آزاد مشخص بشن. **جایگزین مستقیمِ** REST
+  `GET /schedule/{providerNo}/day/{date}` که همون باگ خانواده‌ی
+  `deferred-items.md` #۳ رو داره — این‌بار خطا از `checkPrivilege` روی
+  `_demographic` میاد، چون این REST endpoint داخلش برای فرمت‌کردنِ اسم
+  نمایشیِ بیمار، `DemographicManager.getDemographic` رو صدا می‌زنه (که
+  خودش یه چک مجوز جدا داره)؛ SOAP اسم بیمار رو مستقیم تو پاسخ می‌ده،
+  بدون این mesh مجوز.
+- **وضعیت:** ✅ تأییدشده زنده (۲۰۲۶-۰۹-۲۷) — **و پیاده‌سازی و جایگزین
+  شد** تو `OscarAppointmentRepository.findAll({doctorId, date})`.
+- **⚠️ توجه مهم:** این فقط نوبت‌های *رزروشده* رو می‌ده، نه الگوی کاریِ
+  کلی — باید همیشه کنار `getDayWorkSchedule` استفاده بشه (یکی «چه
+  ساعتی کار می‌کنه»، اون یکی «کدوم ساعت‌ها الان پره»)، دقیقاً همون
+  ترکیبی که `availability.ts` از قبل هم استفاده می‌کرد.
+
+**Request:**
+```xml
+<ws:getAppointmentsForProvider2>
+  <arg0>104</arg0>
+  <arg1>2026-10-01</arg1>
+  <arg2>true</arg2>
+</ws:getAppointmentsForProvider2>
+```
+
+**Response نمونه (همون شکل غنیِ `appointmentTransfer2` — با `name`):**
+```xml
+<return>
+    <appointmentEndDateTime>2026-10-01T11:44:00Z</appointmentEndDateTime>
+    <appointmentStartDateTime>2026-10-01T11:30:00Z</appointmentStartDateTime>
+    <demographicNo>18</demographicNo>
+    <id>19</id>
+    <name>RIVERA, JANE</name>
+    <providerNo>104</providerNo>
+    <reason>Appointment</reason>
+    <status>t</status>
+</return>
+```
+
+**نکات مهم:**
+
+1. **همون شکل داده‌ی `getAppointmentsForPatient2`** — همون
+   `parseSoapAppointmentRow`ی که قبلاً نوشتیم، بدون تغییر، این‌جا هم
+   کار می‌کنه (فقط query متفاوته: بر اساس provider+date، نه demographicNo).
+2. این سومین موردیه که همون الگوی «REST داخلش یه چک مجوز/Access-Denied
+   جدا داره که SOAP نداره» تکرار شد
+   (`appointmentHistory`, `addAppointment`, حالا `getAppointmentsForDay`)
+   — تقریباً مطمئنیم کل خانواده‌ی endpoint های REST مربوط به
+   `AppointmentManager`/`ScheduleService` (REST) روی این نصب OSCAR با
+   این مشکل مواجه‌ان، درحالی‌که معادل‌های SOAP همیشه کار کردن.
 
 ---
 
