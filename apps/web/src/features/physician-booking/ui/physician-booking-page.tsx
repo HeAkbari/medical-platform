@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createAppointmentSchema } from '@medical-platform/domain/validation';
 import { Button, Card, ErrorState, LoadingState } from '@/components/ui';
 import { cn } from '@/components/ui/cn';
+import { useAuthRedirectStore } from '@/features/auth/store/auth-redirect-store';
 import { PhysicianAvatar } from '@/features/doctors';
 import {
   useBackNavigation,
@@ -68,8 +69,17 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
   const router = useRouter();
   const handleBack = useBackNavigation(`/physicians/${doctorId}`);
   const { data, isLoading, isError } = useDoctorsQuery();
-  const { user } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuth();
+  const setPendingAction = useAuthRedirectStore((state) => state.setPendingAction);
   const createMutation = useCreateAppointmentMutation();
+
+  // replace (not push) so Back from /login returns to the physician page
+  // instead of bouncing straight back here and redirecting again.
+  useEffect(() => {
+    if (isAuthLoading || user) return;
+    setPendingAction({ type: 'navigate', href: `/physicians/${doctorId}/book` });
+    router.replace('/login');
+  }, [isAuthLoading, user, doctorId, router, setPendingAction]);
 
   const doctor = useMemo(
     () => data?.data.find((d) => d.id === doctorId),
@@ -181,9 +191,10 @@ export function PhysicianBookingPage({ doctorId }: PhysicianBookingPageProps) {
     setSelectedSlot(null);
   }
 
+  if (isAuthLoading) return <LoadingState label="Checking session..." />;
+  if (!user) return <LoadingState label="Redirecting to sign in..." />;
   if (isLoading) return <LoadingState label="Loading booking..." />;
   if (isError || !doctor) return <ErrorState message="Physician not found." />;
-  if (!user) return <ErrorState message="Sign in to book an appointment." />;
 
   if (isSubmitted) {
     return (

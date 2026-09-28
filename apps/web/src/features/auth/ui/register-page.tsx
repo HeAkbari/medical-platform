@@ -11,6 +11,7 @@ import {
   registerWithPasswordRequest,
 } from '@/lib/auth/auth-api';
 import { useResolveAuthRedirect } from '@/features/auth/hooks/use-resolve-auth-redirect';
+import { AuthBackButton } from '@/features/auth/ui/auth-back-button';
 
 interface GoogleDraft {
   token: string;
@@ -127,6 +128,12 @@ export function RegisterPage() {
     return (
       <div className="flex min-h-dvh items-center justify-center px-4 py-6 sm:p-6">
         <Card className="w-full max-w-md">
+          <AuthBackButton
+            onBack={() => {
+              setGoogleDraft(null);
+              setFormError(null);
+            }}
+          />
           <CardHeader
             title="Finish your profile"
             description="One more step — we need your phone number to create your account."
@@ -169,6 +176,7 @@ export function RegisterPage() {
   return (
     <div className="flex min-h-dvh items-center justify-center px-4 py-6 sm:p-6">
       <Card className="w-full max-w-md">
+        <AuthBackButton />
         <CardHeader
           title="Create your account"
           description="Sign up to book appointments and manage your care."

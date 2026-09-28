@@ -26,7 +26,9 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
     hasPromptedRef.current = true;
     setPendingAction({ type: 'navigate', href: normalizeAppPath(pathname) });
-    router.push('/login');
+    // replace, not push: Back from /login must not land on this guarded page,
+    // which would immediately redirect to /login again.
+    router.replace('/login');
   }, [isAuthenticated, isLoading, pathname, router, setPendingAction]);
 
   useEffect(() => {

@@ -7,6 +7,7 @@ import { Button, Card, CardHeader } from '@/components/ui';
 import { inputClassName } from '@/components/ui/input-styles';
 import { googleSignInRequest, loginWithPasswordRequest } from '@/lib/auth/auth-api';
 import { useResolveAuthRedirect } from '@/features/auth/hooks/use-resolve-auth-redirect';
+import { AuthBackButton } from '@/features/auth/ui/auth-back-button';
 
 export function LoginPage() {
   const resolveAfterAuth = useResolveAuthRedirect();
@@ -54,6 +55,7 @@ export function LoginPage() {
   return (
     <div className="flex min-h-dvh items-center justify-center px-4 py-6 sm:p-6">
       <Card className="w-full max-w-md">
+        <AuthBackButton />
         <CardHeader title="Sign in" description="Access your patient account." />
 
         <div className="mb-4 flex justify-center">
