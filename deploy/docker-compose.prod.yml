@@ -6,10 +6,10 @@
 #   - PostgreSQL:   internal only (no host port)
 #
 # Usage (from repo root on the server):
-#   docker compose -f deploy/docker-compose.prod.yml up -d --build
+#   docker compose -f deploy/docker-compose.prod.yml --env-file deploy/.env up -d --build
 #   docker compose -f deploy/docker-compose.prod.yml logs -f
 #   docker compose -f deploy/docker-compose.prod.yml down        # keeps data
-#   docker compose -f deploy/docker-compose.prod.yml down -v     # wipes FHIR DB
+#   docker compose -f deploy/docker-compose.prod.yml down -v     # wipes all DBs — irreversible
 
 name: medical-platform
 
@@ -61,6 +61,27 @@ services:
     networks:
       - medical-platform
 
+  # Platform database (ClinicCredential, Facility, Doctor, Patient,
+  # PatientAccount, AuthSession, ...) — see packages/db. Separate from the
+  # `postgres` service above, which only backs the HAPI FHIR sandbox.
+  app-postgres:
+    image: postgres:16
+    container_name: medical-platform-app-postgres
+    environment:
+      POSTGRES_DB: medical_platform
+      POSTGRES_USER: medical_platform
+      POSTGRES_PASSWORD: ${APP_DB_PASSWORD:?APP_DB_PASSWORD must be set in deploy/.env}
+    volumes:
+      - medical-platform-app-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medical_platform -d medical_platform"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    networks:
+      - medical-platform
+
   web:
     build:
       context: ..
@@ -69,21 +90,32 @@ services:
     depends_on:
       hapi-fhir:
         condition: service_healthy
+      app-postgres:
+        condition: service_healthy
     ports:
       - "${WEB_HOST_PORT:-3002}:3001"
     environment:
       NODE_ENV: production
-      DATA_SOURCE: fhir
+      # Sponsor clinic is the real production target — reads/writes live
+      # OSCAR via ClinicCredential (see app-postgres above), not the FHIR
+      # sandbox. Set to "fhir" only to temporarily fall back to the sandbox.
+      DATA_SOURCE: ${DATA_SOURCE:-oscar}
       FHIR_BASE_URL: http://hapi-fhir:8080/fhir
       NEXT_PUBLIC_API_URL: /api
       # HTTP deploy (no TLS yet) — set to "true" after enabling HTTPS
       SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
+      DATABASE_URL: postgresql://medical_platform:${APP_DB_PASSWORD}@app-postgres:5432/medical_platform
+      CREDENTIALS_ENCRYPTION_KEY: ${CREDENTIALS_ENCRYPTION_KEY:?CREDENTIALS_ENCRYPTION_KEY must be set in deploy/.env}
+      OSCAR_CLINIC_ID: ${OSCAR_CLINIC_ID:-sponsor-clinic}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
     restart: unless-stopped
     networks:
       - medical-platform
 
 volumes:
   medical-platform-hapi-pg:
+  medical-platform-app-pg:
 
 networks:
   medical-platform:
