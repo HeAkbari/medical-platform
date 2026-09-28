@@ -13,8 +13,11 @@ RUN bun install --frozen-lockfile
 
 # `bun install` alone never runs Prisma's codegen — without this, @prisma/client
 # has no generated PrismaClient export and the build below fails at the
-# `packages/db` type-check step.
-RUN cd packages/db && bunx prisma generate
+# `packages/db` type-check step. DATABASE_URL is a placeholder: `generate`
+# only reads the schema to emit client code, it never opens a connection —
+# but prisma.config.ts's env('DATABASE_URL') validates presence eagerly at
+# config-load time, before `generate` even runs.
+RUN cd packages/db && DATABASE_URL="postgresql://placeholder:placeholder@localhost:5432/placeholder" bunx prisma generate
 
 ENV NODE_ENV=production
 RUN bun run build:web
