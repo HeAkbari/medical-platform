@@ -11,6 +11,11 @@ COPY scripts ./scripts
 
 RUN bun install --frozen-lockfile
 
+# `bun install` alone never runs Prisma's codegen — without this, @prisma/client
+# has no generated PrismaClient export and the build below fails at the
+# `packages/db` type-check step.
+RUN cd packages/db && bunx prisma generate
+
 ENV NODE_ENV=production
 RUN bun run build:web
 
