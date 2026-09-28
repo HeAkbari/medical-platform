@@ -11,13 +11,19 @@ COPY scripts ./scripts
 
 RUN bun install --frozen-lockfile
 
+# Build-time placeholder only — the real value comes from docker-compose at
+# runtime. Needed for two unrelated reasons: (1) prisma.config.ts's
+# env('DATABASE_URL') validates presence eagerly when the config loads, even
+# for `prisma generate`, which never opens a connection; (2) `next build`'s
+# page-data-collection pass imports every API route module, and
+# packages/db/src/index.ts constructs its PrismaClient at import time —
+# never connects during a build, but throws immediately if the var is unset.
+ENV DATABASE_URL="postgresql://placeholder:placeholder@localhost:5432/placeholder"
+
 # `bun install` alone never runs Prisma's codegen — without this, @prisma/client
 # has no generated PrismaClient export and the build below fails at the
-# `packages/db` type-check step. DATABASE_URL is a placeholder: `generate`
-# only reads the schema to emit client code, it never opens a connection —
-# but prisma.config.ts's env('DATABASE_URL') validates presence eagerly at
-# config-load time, before `generate` even runs.
-RUN cd packages/db && DATABASE_URL="postgresql://placeholder:placeholder@localhost:5432/placeholder" bunx prisma generate
+# `packages/db` type-check step.
+RUN cd packages/db && bunx prisma generate
 
 ENV NODE_ENV=production
 RUN bun run build:web
