@@ -9,7 +9,7 @@ export async function POST() {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get(SESSION_COOKIE_NAME)?.value;
 
-  destroySession(sessionId);
+  await destroySession(sessionId);
 
   return new Response(JSON.stringify({ success: true }), {
     status: 200,

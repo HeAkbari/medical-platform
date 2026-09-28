@@ -9,7 +9,7 @@ import {
   selectUnreadNotificationCount,
   useNotificationsStore,
 } from '@/features/notifications/store/notifications-store';
-import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
+import { useRequireAuth } from '@/features/auth/hooks/use-require-auth';
 import { useAuth } from '@/lib/auth';
 import { HomeScrollProvider } from '@/lib/routing/home-scroll-context';
 import { HomeScrollRestoration } from '@/lib/routing/home-scroll-restoration';

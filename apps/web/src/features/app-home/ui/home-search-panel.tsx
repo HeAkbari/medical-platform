@@ -13,7 +13,7 @@ import {
   type HomeSearchChipTone,
 } from '@/features/app-home/data/home-search';
 import { HomeSearchChipIconGlyph } from '@/features/app-home/ui/home-search-chip-icon';
-import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
+import { useRequireAuth } from '@/features/auth/hooks/use-require-auth';
 import { useDoctorsQuery } from '@/hooks';
 import { useHomeScrollCapture } from '@/lib/routing/home-scroll-context';
 

@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { useHealthcareTeamStore } from '@/features/healthcare-team/store/healthcare-team-store';
 import { useDoctorsQuery } from '@/hooks';
 import { useAuth } from '@/lib/auth';
-import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
+import { useRequireAuth } from '@/features/auth/hooks/use-require-auth';
 import { useHomeScrollCapture } from '@/lib/routing/home-scroll-context';
 
 const HEALTHCARE_TEAM_HREF = '/healthcare-team';

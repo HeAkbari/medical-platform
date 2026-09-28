@@ -3,7 +3,7 @@
 import { Drawer } from 'vaul';
 import { Button } from '@/components/ui';
 import { useMapAppointmentStore } from '@/features/map-appointment/store/map-appointment-store';
-import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
+import { useRequireAuth } from '@/features/auth/hooks/use-require-auth';
 import {
   COVERAGE_BADGE_LABELS,
   MAP_COVERAGE_DISCLAIMER,

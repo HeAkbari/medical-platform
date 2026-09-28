@@ -14,7 +14,7 @@ import {
   ErrorState,
   LoadingState,
 } from '@/components/ui';
-import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
+import { useRequireAuth } from '@/features/auth/hooks/use-require-auth';
 import { useAuth } from '@/lib/auth';
 import { formatClinicTime } from '@/lib/format-time';
 import { AppointmentDetailDrawer } from './appointment-detail-drawer';

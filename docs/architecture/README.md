@@ -77,9 +77,12 @@ erDiagram
 - **PHI (سوابق بالینی واقعی) هرگز این‌جا ذخیره نمی‌شود** — نسخه، آزمایش،
   آلرژی، نوبت، همیشه زنده از OSCAR/FHIR خوانده می‌شوند، هیچ‌وقت cache/persist
   نمی‌شوند. فقط لینک هویتی (`PatientClinicIdentity`) این‌جاست، نه خودِ داده.
-- `User` (در `auth.prisma`) فعلاً مستقل و بی‌سیم است؛ session/OTP هنوز کاملاً
-  **در حافظه‌ی پروسه** نگه‌داری می‌شود (`phone-auth-service.ts`)، نه در
-  Postgres — یک شکاف شناخته‌شده، نه یک تصمیم نهایی.
+- `User` (در `auth.prisma`) فعلاً مستقل و بی‌سیم است — هیچ کدی به آن رفرنس
+  نمی‌دهد. اعتبارسنجی واقعی بیمار روی `PatientAccount` است: یک شناسه‌ی
+  یکتا (`phone`) به‌همراه `passwordHash` (روش رمز عبور) و/یا `googleId`
+  (روش Google) که به `patientId` لینک می‌شود. `AuthSession` هم session را
+  در Postgres نگه می‌دارد — دیگر در حافظه‌ی پروسه نیست، پس ری‌استارت سرور
+  کاربر را لاگ‌اوت نمی‌کند. منطق در `auth-service.ts` است (`apps/web/src/lib/auth`).
 
 ## ۳. ثبت‌نام + لینک‌شدن به کلینیک (Registration flow)
 
@@ -94,7 +97,7 @@ sequenceDiagram
     participant DB as Postgres
     participant OSCAR
 
-    U->>App: ثبت‌نام با OTP تلفن
+    U->>App: ثبت‌نام (Google یا شماره‌همراه+رمزعبور)
     App->>DB: ساخت Patient (بدون تماس با هیچ EMR)
     Note over U,App: بیمار الان می‌تواند در اپ بگردد،<br/>ولی هنوز به هیچ کلینیکی لینک نیست
 

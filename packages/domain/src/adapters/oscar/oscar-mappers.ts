@@ -1,4 +1,9 @@
-import type { Appointment, AppointmentStatus, Doctor } from '../../types/models';
+import type {
+  Appointment,
+  AppointmentStatus,
+  Doctor,
+  DoctorClinicAddress,
+} from '../../types/models';
 import type {
   AllergyDetail,
   HealthRecordEntry,
@@ -21,6 +26,22 @@ import type {
 } from './oscar-types';
 import type { OscarSoapAppointment } from './oscar-soap-types';
 
+/** `undefined` when OSCAR has no real street address on file for this provider (common — see providerjson sample), rather than showing an empty address block. */
+function mapOscarProviderAddress(provider: OscarProvider): DoctorClinicAddress | undefined {
+  const street = provider.address?.address?.trim();
+
+  if (!street) {
+    return undefined;
+  }
+
+  return {
+    street,
+    city: provider.address?.city?.trim() || '',
+    province: provider.address?.province?.trim() || '',
+    postalCode: provider.address?.postal?.trim() || '',
+  };
+}
+
 export function oscarToDoctor(provider: OscarProvider, clinicName?: string): Doctor {
   return {
     id: String(provider.providerNo),
@@ -31,6 +52,7 @@ export function oscarToDoctor(provider: OscarProvider, clinicName?: string): Doc
     phone: provider.phone || provider.workPhone || '',
     createdAt: '',
     clinicName,
+    clinicAddress: mapOscarProviderAddress(provider),
   };
 }
 

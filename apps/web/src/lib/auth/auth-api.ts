@@ -8,15 +8,17 @@ interface SessionResponse {
   user: AuthenticatedUser | null;
 }
 
-interface VerifyOtpResponse {
-  status: 'authenticated' | 'registration_required';
-  user?: AuthenticatedUser;
-  registrationToken?: string;
-  phone?: string;
+interface AuthResponse {
+  user: AuthenticatedUser;
 }
 
-interface RegisterResponse {
-  user: AuthenticatedUser;
+interface GoogleSignInResponse {
+  status: 'authenticated' | 'registration_required';
+  user?: AuthenticatedUser;
+  token?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 async function parseErrorMessage(response: Response): Promise<string> {
@@ -38,50 +40,72 @@ export async function fetchSession(): Promise<AuthenticatedUser | null> {
   return body.user;
 }
 
-export async function sendOtpRequest(phone: string): Promise<void> {
-  const response = await fetch('/api/v1/auth/otp/send', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ phone }),
-  });
-
-  if (!response.ok) {
-    throw new Error(await parseErrorMessage(response));
-  }
-}
-
-export async function verifyOtpRequest(
+export async function loginWithPasswordRequest(
   phone: string,
-  code: string
-): Promise<VerifyOtpResponse> {
-  const response = await fetch('/api/v1/auth/otp/verify', {
+  password: string
+): Promise<AuthenticatedUser> {
+  const response = await fetch('/api/v1/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ phone, code }),
+    body: JSON.stringify({ phone, password }),
   });
 
   if (!response.ok) {
     throw new Error(await parseErrorMessage(response));
   }
 
-  return (await response.json()) as VerifyOtpResponse;
+  const body = (await response.json()) as AuthResponse;
+  return body.user;
 }
 
-export async function registerPatientRequest(
-  registrationToken: string,
-  input: CreatePatientInput
+export async function registerWithPasswordRequest(
+  input: CreatePatientInput & { password: string }
 ): Promise<AuthenticatedUser> {
   const response = await fetch('/api/v1/auth/register', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ registrationToken, ...input }),
+    body: JSON.stringify(input),
   });
 
   if (!response.ok) {
     throw new Error(await parseErrorMessage(response));
   }
 
-  const body = (await response.json()) as RegisterResponse;
+  const body = (await response.json()) as AuthResponse;
+  return body.user;
+}
+
+export async function googleSignInRequest(
+  idToken: string
+): Promise<GoogleSignInResponse> {
+  const response = await fetch('/api/v1/auth/google', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ idToken }),
+  });
+
+  if (!response.ok) {
+    throw new Error(await parseErrorMessage(response));
+  }
+
+  return (await response.json()) as GoogleSignInResponse;
+}
+
+export async function completeGoogleRegistrationRequest(
+  token: string,
+  input: CreatePatientInput
+): Promise<AuthenticatedUser> {
+  const response = await fetch('/api/v1/auth/google/complete', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, ...input }),
+  });
+
+  if (!response.ok) {
+    throw new Error(await parseErrorMessage(response));
+  }
+
+  const body = (await response.json()) as AuthResponse;
   return body.user;
 }
 
@@ -98,7 +122,7 @@ export async function updateProfileRequest(
     throw new Error(await parseErrorMessage(response));
   }
 
-  const body = (await response.json()) as RegisterResponse;
+  const body = (await response.json()) as AuthResponse;
   return body.user;
 }
 

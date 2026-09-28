@@ -1,30 +1,28 @@
-import { verifyOtpSchema } from '@medical-platform/domain/validation';
-import {
-  badRequestResponse,
-  internalErrorResponse,
-  jsonResponse,
-} from '@/lib/api-response';
-import { verifyOtp } from '@/lib/auth/phone-auth-service';
+import { googleSignInSchema } from '@medical-platform/domain/validation';
+import { badRequestResponse, jsonResponse } from '@/lib/api-response';
+import { googleSignIn } from '@/lib/auth/auth-service';
 import { createSessionCookie } from '@/lib/auth/session-cookie';
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as { phone?: string; code?: string };
-    const parsed = verifyOtpSchema.safeParse(body);
+    const body = (await request.json()) as { idToken?: string };
+    const parsed = googleSignInSchema.safeParse(body);
 
     if (!parsed.success) {
       return badRequestResponse(
-        parsed.error.issues[0]?.message ?? 'Invalid verification payload'
+        parsed.error.issues[0]?.message ?? 'Invalid Google sign-in request'
       );
     }
 
-    const result = await verifyOtp(parsed.data.phone, parsed.data.code);
+    const result = await googleSignIn(parsed.data.idToken);
 
     if (result.status === 'registration_required') {
       return jsonResponse({
         status: result.status,
-        registrationToken: result.registrationToken,
-        phone: result.phone,
+        token: result.token,
+        email: result.email,
+        firstName: result.firstName,
+        lastName: result.lastName,
       });
     }
 
@@ -40,7 +38,7 @@ export async function POST(request: Request) {
     );
   } catch (error) {
     const message =
-      error instanceof Error ? error.message : 'Unable to verify code';
+      error instanceof Error ? error.message : 'Unable to sign in with Google';
 
     return badRequestResponse(message);
   }

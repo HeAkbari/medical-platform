@@ -70,15 +70,25 @@ export const updatePatientSchema = z.object({
 
 export type UpdatePatientInput = z.infer<typeof updatePatientSchema>;
 
-export const sendOtpSchema = z.object({
-  phone: z.string().min(8).max(20),
+// 72 = bcrypt's input cap; longer inputs are silently truncated by most
+// implementations, so reject them outright instead.
+const passwordSchema = z.string().min(8).max(72);
+
+export const registerWithPasswordSchema = createPatientSchema.extend({
+  password: passwordSchema,
 });
 
-export const verifyOtpSchema = z.object({
+export type RegisterWithPasswordInput = z.infer<typeof registerWithPasswordSchema>;
+
+export const loginWithPasswordSchema = z.object({
   phone: z.string().min(8).max(20),
-  code: z.string().length(6),
+  password: z.string().min(1),
 });
 
-export const completeRegistrationSchema = createPatientSchema.extend({
-  registrationToken: z.string().uuid(),
+export const googleSignInSchema = z.object({
+  idToken: z.string().min(10),
+});
+
+export const completeGoogleRegistrationSchema = createPatientSchema.extend({
+  token: z.string().uuid(),
 });

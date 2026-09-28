@@ -5,3 +5,49 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// Platform login credentials for a Patient, decoupled from wherever the
+// Patient record itself lives (mock JSON, FHIR server, or OSCAR/Prisma —
+// see apps/web/src/lib/repositories.ts) so credentials always persist in
+// Postgres regardless of DATA_SOURCE. patientId is a loose reference (no
+// FK) to that Patient, mirroring the in-memory AuthAccount it replaces.
+// A Google-only account has passwordHash = null; a password-only account
+// has googleId = null. phone is fixed at creation (never edited after,
+// same as Patient.phone) and duplicated here for a Postgres-native lookup.
+model PatientAccount {
+  id           String   @id @default(uuid())
+  patientId    String   @unique
+  phone        String   @unique
+  passwordHash String?
+  googleId     String?  @unique
+  email        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  sessions AuthSession[]
+}
+
+model AuthSession {
+  id        String   @id @default(uuid())
+  accountId String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  account PatientAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId])
+}
+
+// Short-lived draft for a first-time Google sign-in with no existing
+// account yet — holds the verified Google identity while the user supplies
+// the phone number Patient requires. Mirrors the old OTP flow's
+// registrationToken.
+model PendingGoogleRegistration {
+  token     String   @id @default(uuid())
+  googleId  String
+  email     String?
+  firstName String?
+  lastName  String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}

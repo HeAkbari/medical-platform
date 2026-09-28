@@ -1,12 +1,12 @@
-import { registerWithPasswordSchema } from '@medical-platform/domain/validation';
+import { completeGoogleRegistrationSchema } from '@medical-platform/domain/validation';
 import { badRequestResponse } from '@/lib/api-response';
-import { registerWithPassword } from '@/lib/auth/auth-service';
+import { completeGoogleRegistration } from '@/lib/auth/auth-service';
 import { createSessionCookie } from '@/lib/auth/session-cookie';
 
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as Record<string, string>;
-    const parsed = registerWithPasswordSchema.safeParse(body);
+    const parsed = completeGoogleRegistrationSchema.safeParse(body);
 
     if (!parsed.success) {
       return badRequestResponse(
@@ -14,7 +14,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const result = await registerWithPassword(parsed.data);
+    const { token, ...patientInput } = parsed.data;
+    const result = await completeGoogleRegistration(token, patientInput);
 
     return new Response(
       JSON.stringify({ user: result.user }),

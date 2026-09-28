@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { AppTabShell } from '@/components/layout/app-tab-shell';
 import { AppIntroScreen } from '@/features/home/ui/app-intro-screen';
 import { AppointmentBookingDrawer } from '@/features/appointments/ui/appointment-booking-drawer';
-import { PhoneAuthDrawer } from '@/features/phone-auth/phone-auth-drawer';
 
 const INTRO_STORAGE_KEY = 'medical-platform:intro-seen';
 
@@ -35,7 +34,6 @@ export default function PatientLayout({
   return (
     <>
       <AppTabShell>{children}</AppTabShell>
-      <PhoneAuthDrawer />
       <AppointmentBookingDrawer />
       {showIntro ? <AppIntroScreen onComplete={handleIntroComplete} /> : null}
     </>

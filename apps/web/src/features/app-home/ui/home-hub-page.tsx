@@ -7,7 +7,7 @@ import { HomeRecommendedPhysicians } from '@/features/app-home/ui/home-recommend
 import { HomeSearchPanel } from '@/features/app-home/ui/home-search-panel';
 import { HomeSupportIconGlyph } from '@/features/app-home/ui/home-support-icon';
 import { HealthcareTeamBanner } from '@/features/healthcare-team/ui/healthcare-team-banner';
-import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
+import { useRequireAuth } from '@/features/auth/hooks/use-require-auth';
 import { useHomeScrollCapture } from '@/lib/routing/home-scroll-context';
 import Link from 'next/link';
 

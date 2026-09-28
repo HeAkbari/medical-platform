@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Drawer } from 'vaul';
 import { cn } from '@/components/ui/cn';
@@ -11,7 +12,6 @@ import {
   type NavDrawerIconName,
 } from '@/components/layout/nav-drawer-icon';
 import { COMPLIANCE_LINKS } from '@/features/app-home/data/home-search';
-import { usePhoneAuthStore } from '@/features/phone-auth/store/phone-auth-store';
 import { useSettingsStore } from '@/features/settings/store/settings-store';
 import { useThemeStore } from '@/features/settings/store/theme-store';
 import {
@@ -362,7 +362,7 @@ function NavDrawerContactPanel({ onBack }: { onBack: () => void }) {
 export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
   const drawerDirection = useNavDrawerDirection();
   const { isAuthenticated, logout } = useAuth();
-  const openAuth = usePhoneAuthStore((state) => state.openAuth);
+  const router = useRouter();
   const [panel, setPanel] = useState<NavDrawerPanel>('root');
   const isSubPanel = panel !== 'root';
   const isSettingsPanel = panel === 'settings';
@@ -381,7 +381,7 @@ export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
 
   function handleSignIn() {
     closeDrawer();
-    openAuth({ pendingAction: null });
+    router.push('/login');
   }
 
   async function handleLogout() {

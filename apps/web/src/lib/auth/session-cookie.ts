@@ -4,7 +4,7 @@ import {
   SESSION_MAX_AGE_SECONDS,
   deleteSession,
   getUserBySessionId,
-} from './phone-auth-service';
+} from './auth-service';
 
 export { SESSION_COOKIE_NAME, SESSION_MAX_AGE_SECONDS };
 
@@ -35,10 +35,10 @@ export async function getSessionUser(
   return getUserBySessionId(sessionId);
 }
 
-export function destroySession(sessionId: string | undefined): void {
+export async function destroySession(sessionId: string | undefined): Promise<void> {
   if (!sessionId) {
     return;
   }
 
-  deleteSession(sessionId);
+  await deleteSession(sessionId);
 }

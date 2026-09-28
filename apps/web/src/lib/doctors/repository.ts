@@ -7,6 +7,7 @@ import type {
   DoctorWorkingHours,
 } from '@medical-platform/domain';
 import type { MapFacility } from '@/features/map/types';
+import { fetchLiveDoctorInfo } from '@/lib/doctors/live-doctor-info';
 
 export interface DoctorDirectoryRepository {
   findAll(): Promise<Doctor[]>;
@@ -16,6 +17,7 @@ export interface DoctorDirectoryRepository {
 interface DoctorRow {
   id: string;
   clinicId: string;
+  externalProviderId: string;
   firstName: string;
   lastName: string;
   specialty: string;
@@ -84,11 +86,16 @@ function toDomainDoctorDetail(row: DoctorDetailRow, clinicInfo: ClinicInfo): Doc
 }
 
 /**
- * Doctor directory browsing (Find Physician, Physician Info, rating) reads
- * only from our own database — never live from an EMR. Populated by a
- * periodic sync job (scripts/sync-doctors.ts), not switched by DATA_SOURCE.
- * Availability/booking stays fully live via the existing
- * MedicalRepositories.appointments. See design doc §5.
+ * Doctor directory browsing (`findAll` — Find Physician list) reads only
+ * from our own database, populated by a periodic sync job
+ * (scripts/sync-doctors.ts), not switched by DATA_SOURCE. See design doc §5.
+ *
+ * `findById` (single-doctor detail page) starts from that same DB row, then
+ * best-effort freshens phone/email/specialty/clinicAddress/workingHours
+ * with a live OSCAR read when DATA_SOURCE=oscar (see live-doctor-info.ts) —
+ * the DB row/Facility placeholder is the fallback, not the source of truth,
+ * for a single detail view. Availability/booking stays fully live via the
+ * existing MedicalRepositories.appointments, unrelated to this file.
  */
 export class PrismaDoctorDirectoryRepository implements DoctorDirectoryRepository {
   async findAll(): Promise<Doctor[]> {
@@ -120,6 +127,26 @@ export class PrismaDoctorDirectoryRepository implements DoctorDirectoryRepositor
       createdAt: review.createdAt.toISOString(),
     }));
 
-    return toDomainDoctorDetail({ ...row, reviews }, clinicInfo);
+    const doctor = toDomainDoctorDetail({ ...row, reviews }, clinicInfo);
+
+    // Detail view only (never the list) — freshen with a live OSCAR read
+    // instead of relying solely on the periodic sync/Facility placeholder.
+    // Best-effort: falls back to what we already have on any failure.
+    if (process.env.DATA_SOURCE === 'oscar') {
+      const live = await fetchLiveDoctorInfo(row.externalProviderId);
+
+      if (live) {
+        return {
+          ...doctor,
+          phone: live.phone || doctor.phone,
+          email: live.email || doctor.email,
+          specialty: live.specialty || doctor.specialty,
+          clinicAddress: live.clinicAddress ?? doctor.clinicAddress,
+          workingHours: live.workingHours ?? doctor.workingHours,
+        };
+      }
+    }
+
+    return doctor;
   }
 }

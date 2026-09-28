@@ -6,7 +6,7 @@ import {
   unauthorizedResponse,
 } from '@/lib/api-response';
 import { SESSION_COOKIE_NAME, getSessionUser } from '@/lib/auth/session-cookie';
-import { buildAuthenticatedUser } from '@/lib/auth/phone-auth-service';
+import { buildAuthenticatedUser } from '@/lib/auth/auth-service';
 import { repositories } from '@/lib/repositories';
 import { updatePatientSchema } from '@medical-platform/domain/validation';
 
@@ -43,7 +43,6 @@ export async function PATCH(request: Request) {
     await repositories.patients.update(user.patientId, parsed.data);
     const updatedUser = await buildAuthenticatedUser({
       id: user.id,
-      phone: user.phone,
       patientId: user.patientId,
     });
 

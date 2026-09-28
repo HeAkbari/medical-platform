@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button, Card } from '@/components/ui';
 import { PhysicianAvatar } from '@/features/doctors';
 import { getPhysicianBookingHref } from '@/features/physician-booking/lib/routes';
-import { useRequireAuth } from '@/features/phone-auth/hooks/use-require-auth';
+import { useRequireAuth } from '@/features/auth/hooks/use-require-auth';
 import { useHomeScrollCapture } from '@/lib/routing/home-scroll-context';
 import { useDoctorsQuery } from '@/hooks';
 import type { Doctor } from '@medical-platform/domain';

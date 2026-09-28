@@ -1,12 +1,12 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/components/ui';
 import { Card } from '@/components/ui/card';
 import { inputClassName } from '@/components/ui/input-styles';
 import { useAuth } from '@/lib/auth';
 import { updateProfileRequest } from '@/lib/auth/auth-api';
-import { usePhoneAuthStore } from '@/features/phone-auth/store/phone-auth-store';
 
 function EyeIcon({ visible }: { visible: boolean }) {
   if (visible) {
@@ -258,7 +258,7 @@ function EditableProfileForm({
 
 export function ProfileHubPage() {
   const { user, isAuthenticated, refreshSession } = useAuth();
-  const openAuth = usePhoneAuthStore((state) => state.openAuth);
+  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
   if (!isAuthenticated || !user) {
@@ -281,14 +281,14 @@ export function ProfileHubPage() {
         <div className="flex w-full max-w-xs flex-col gap-3">
           <button
             type="button"
-            onClick={() => openAuth({ pendingAction: null })}
+            onClick={() => router.push('/register')}
             className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-brand px-4 text-sm font-medium text-brand-foreground transition hover:bg-brand-dark active:opacity-80"
           >
             Create an account
           </button>
           <button
             type="button"
-            onClick={() => openAuth({ pendingAction: null })}
+            onClick={() => router.push('/login')}
             className="inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-border px-4 text-sm font-medium text-foreground transition hover:bg-accent active:opacity-80"
           >
             Log in

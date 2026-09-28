@@ -9,7 +9,6 @@ import { MapCategorySelector } from '@/features/map/ui/map-category-selector';
 import { MapEmergencyDisclaimer } from '@/features/map/ui/map-emergency-disclaimer';
 import { MapSearchBar } from '@/features/map/ui/map-search-bar';
 import { MapFilter } from '@/features/map-filter/map-filter';
-import { PhoneAuthDrawer } from '@/features/phone-auth/phone-auth-drawer';
 
 const Map = dynamic(() => import('@/components/map'), {
   ssr: false,
@@ -101,7 +100,6 @@ export function HomePage({
         </>
       ) : null}
       <MapAppointmentDrawer />
-      <PhoneAuthDrawer />
     </div>
   );
 }

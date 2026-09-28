@@ -46,7 +46,7 @@ import { getOscarClient, getOscarSoapClient, OSCAR_CLINIC_ID } from '@/lib/oscar
 // every other repository here is resolved synchronously at module load. These
 // two thin wrappers resolve the client lazily per-call instead of making the
 // whole `repositories` export a Promise, which would ripple into every
-// caller (phone-auth-service, server-services, every API route).
+// caller (auth-service, server-services, every API route).
 class LazyOscarDoctorRepository implements DoctorRepository {
   async findAll(): Promise<Doctor[]> {
     return new OscarDoctorRepository(await getOscarClient()).findAll();
