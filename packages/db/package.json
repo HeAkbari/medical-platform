@@ -11,6 +11,7 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed:clinic-credential": "bun run prisma/seed-clinic-credential.ts",
+    "db:encrypt-soap-credential": "bun run prisma/encrypt-soap-credential.ts",
     "lint": "eslint src"
   },
   "dependencies": {

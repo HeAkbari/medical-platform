@@ -146,6 +146,17 @@ Content-Type: text/xml; charset=UTF-8
 تازه‌کردن مکرر داشته باشه. `securityId` (عدد) و `securityTokenKey` (رشته)
 دقیقاً معادل `Username`/`Password` برای همه‌ی سرویس‌های SOAP دیگه‌ن.
 
+> **⚠️ اصلاح (۲۰۲۶-۰۹-۲۹): «ثابت» فقط در طول یک اجرای Tomcat درسته.** بعد
+> از ری‌استارت Tomcat (سرویس `tomcat9` روی VPS — بعد از OOM، نگاه کن
+> `docs/deployment/VPS-DEPLOY.md` بخش ۱۲)، همه‌ی تماس‌های SOAP اپ (لوکال و
+> سرور) با `ns1:FailedAuthentication` رد شدن، درحالی‌که Postman با credential
+> تازه جواب می‌داد. یعنی توکن ذخیره‌شده در `ClinicCredential` باطل شده بود.
+> **بعد از هر ری‌استارت OSCAR:** دوباره `login2` بزن و توکن جدید رو با
+> `bun run db:encrypt-soap-credential` (در `packages/db`) رمز کن و SQL
+> خروجی‌ش رو روی دیتابیس اپ اجرا کن، بعد اپ رو ری‌استارت کن. راه‌حل پایدار
+> (باز): اپ خودش بعد از `FailedAuthentication`، `login2` رو صدا بزنه — نیاز
+> به نگهداری رمزشده‌ی یوزر/پسورد اکانت integration داره، هنوز تصمیم گرفته نشده.
+
 `login2` (نسبت به `login` ساده) یه `provider` object هم برمی‌گردونه (نام،
 تخصص، و...) — اختیاریه، فقط برای راحتی.
 

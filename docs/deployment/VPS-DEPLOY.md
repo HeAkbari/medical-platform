@@ -685,6 +685,53 @@ curl http://127.0.0.1:3002/en/home   # از خود سرور
 
 اگر لوکال کار می‌کند ولی از بیرون نه → فایروال VPS یا Security Group.
 
+### بعد از build/deploy، OSCAR از دسترس خارج شد (OOM)
+
+**OSCAR روی همین VPS نصب است** — نه داخل Docker: Tomcat سیستمی (سرویس
+`tomcat9`، پورت `8443`، آدرس `https://129.121.73.62:8443/oscar/`) +
+MariaDB سیستمی (سرویس `mariadb`). داخل `docker-compose.prod.yml` نیست.
+
+**علامت:** اپ روی `3002` بالا می‌آید و بخش‌هایی که از دیتابیس خود اپ
+می‌خوانند کار می‌کنند، ولی هر چیزی که از OSCAR می‌خواند خطا می‌دهد و
+`https://129.121.73.62:8443/oscar/index.jsp` باز نمی‌شود.
+
+**علت (تأییدشده ۲۰۲۶-۰۹-۲۹):** `bun install` / `next build` موقع build
+RAM زیادی می‌گیرد؛ RAM سرور تمام می‌شود و OOM killer کرنل پروسه‌ی `java`ِ
+`tomcat9` را kill می‌کند (همان build، HAPI FHIR را هم kill کرد). چون
+`tomcat9` به‌طور پیش‌فرض auto-restart ندارد، OSCAR پایین می‌ماند. در لاگ
+MariaDB هم همان لحظه چندین `Aborted connection` هم‌زمان دیده می‌شود.
+
+```bash
+# تأیید:
+journalctl -k --since today | grep -i -E "oom|killed process"
+# دنبال: Out of memory: Killed process ... (java) با task_memcg=/system.slice/tomcat9.service
+
+# بالا آوردن دوباره:
+systemctl restart tomcat9
+curl -k -s -o /dev/null -w "%{http_code}\n" https://127.0.0.1:8443/oscar/index.jsp   # 200 یا 302
+```
+
+**پیشگیری:**
+
+1. swap اضافه کنید (دستور در [۴.۵](#۴۵-عیب‌یابی-نصب-docker)، ترجیحاً `4G`).
+2. auto-restart برای Tomcat:
+   ```bash
+   mkdir -p /etc/systemd/system/tomcat9.service.d
+   printf '[Service]\nRestart=on-failure\nRestartSec=10\n' > /etc/systemd/system/tomcat9.service.d/restart.conf
+   systemctl daemon-reload
+   ```
+3. HAPI FHIR به‌طور پیش‌فرض اجرا نمی‌شود (از ۲۰۲۶-۰۹-۲۹، حدود ۱ GB RAM
+   آزاد می‌شود). `hapi-fhir` و `postgres` در `docker-compose.prod.yml`
+   پشت profile به اسم `fhir` هستند و `web` دیگر به آن‌ها وابسته نیست. فقط
+   اگر لازم شد: `docker compose ... --profile fhir up -d`. بخش‌های ۷ تا ۹
+   (seed و تست FHIR) فقط با این profile معنی دارند.
+4. یا (اگر swap ممکن نیست) قبل از build موقتاً `systemctl stop tomcat9` و
+   بعد از آن `systemctl start tomcat9` — OSCAR در این فاصله در دسترس نیست.
+
+> خطای `Fail extracting tarball for "@next/swc-linux-x64-gnu"` در
+> `bun install` هم احتمالاً از همین کمبود RAM یا دیسک است — `df -h`،
+> `free -h` و `docker builder prune -f` را چک کنید و دوباره build بگیرید.
+
 ### تداخل با اپ Docker دیگر
 
 ```bash
