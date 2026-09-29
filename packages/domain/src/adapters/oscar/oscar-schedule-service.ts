@@ -166,6 +166,11 @@ export async function getAppointmentsForPatient(
  * just to format the patient's display name; the SOAP call returns the
  * name directly, no separate demographic lookup/privilege check involved).
  * See docs/oscar/new-approach/deferred-items.md #3.
+ *
+ * ⚠️ Unreliable (verified live 2026-09-29): returns bookings for some days
+ * but nothing for other days that do have bookings (REST
+ * `schedule/fetchDays` shows them). No longer used by
+ * OscarAppointmentRepository — kept only for reference/discovery.
  */
 export async function getAppointmentsForProvider(
   client: OscarSoapClient,

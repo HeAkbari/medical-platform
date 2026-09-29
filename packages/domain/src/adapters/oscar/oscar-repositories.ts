@@ -36,6 +36,7 @@ import {
   oscarAllergyToEntry,
   oscarDiseaseRegistryItemToEntry,
   oscarDrugToPrescription,
+  oscarFetchDaysApptToDomain,
   oscarHl7LabMessageToLabResult,
   oscarPreventionToVaccination,
   oscarProviderApptToDomain,
@@ -46,13 +47,13 @@ import {
   addAppointment,
   getAppointment as getSoapAppointment,
   getAppointmentsForPatient,
-  getAppointmentsForProvider,
 } from './oscar-schedule-service';
 import type { OscarSoapClient } from './oscar-soap-client';
 import type {
   OscarAllergyResponse,
   OscarDiseaseRegistryItem,
   OscarDrug,
+  OscarFetchDaysAppt,
   OscarHl7LabsResponse,
   OscarPaginated,
   OscarPreventionResponse,
@@ -196,11 +197,17 @@ export class OscarAppointmentRepository implements AppointmentRepository {
       if (filters.date) {
         // REST `GET /schedule/{providerNo}/day/{date}` has the same
         // unfixable-client-side OSCAR server bug as appointmentHistory/
-        // addAppointment (see deferred-items.md #3) — SOAP
-        // getAppointmentsForProvider2 is the verified-working replacement.
-        const items = await getAppointmentsForProvider(this.soapClient, providerNo, filters.date);
+        // addAppointment (see deferred-items.md #3). SOAP
+        // getAppointmentsForProvider2 replaced it for a while, but turned out
+        // unreliable (verified live 2026-09-29: returns bookings for some
+        // days and nothing for other days that do have bookings), so booked
+        // slots reappeared as free. REST fetchDays returns them for every
+        // day tested — see oscar-verified-service-catalog.md.
+        const response = (await this.client.get(
+          `/schedule/fetchDays/${filters.date}/${filters.date}/${encodeURIComponent(providerNo)}`
+        )) as OscarPaginated<OscarFetchDaysAppt> | null;
 
-        return items.map((item) => oscarSoapAppointmentToDomain(item));
+        return (response?.content ?? []).map(oscarFetchDaysApptToDomain);
       }
 
       const today = new Date().toISOString().slice(0, 10);

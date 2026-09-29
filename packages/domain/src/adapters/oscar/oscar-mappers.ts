@@ -19,6 +19,7 @@ import type {
   OscarDayApptItem,
   OscarDiseaseRegistryItem,
   OscarDrug,
+  OscarFetchDaysAppt,
   OscarHl7LabMessage,
   OscarPrevention,
   OscarProvider,
@@ -136,6 +137,34 @@ export function oscarProviderApptToDomain(item: OscarProviderPeriodAppsTo): Appo
     notes: item.notes || null,
     createdAt: '',
     patientName: item.name,
+  };
+}
+
+/**
+ * From `GET /schedule/fetchDays/{date}/{date}/{providerNo}` — verified live
+ * (2026-09-29). `scheduledAt` is built with an explicit `Z` suffix (not a
+ * locale-dependent parse) so it lands in the same numeric space as
+ * `OscarScheduleTimeSlot.date` from SOAP getDayWorkSchedule, which is what
+ * availability.ts compares it against — same reasoning as
+ * `oscarDayApptToDomain` above. The response has no end time/duration, so
+ * `durationMinutes` falls back to 15: the slot length of every code this app
+ * books (67/'C', 80/'P' — see oscar-verified-service-catalog.md).
+ */
+export function oscarFetchDaysApptToDomain(item: OscarFetchDaysAppt): Appointment {
+  const time = item.startTime.length === 5 ? `${item.startTime}:00` : item.startTime;
+  const name = [item.lastName, item.firstName].filter(Boolean).join(', ');
+
+  return {
+    id: String(item.appointmentNo),
+    patientId: String(item.demographicNo),
+    doctorId: String(item.providerNo),
+    scheduledAt: `${item.appointmentDate}T${time}.000Z`,
+    durationMinutes: 15,
+    status: mapOscarAppointmentStatus(item.status),
+    reason: '',
+    notes: item.notes || null,
+    createdAt: '',
+    patientName: name || undefined,
   };
 }
 

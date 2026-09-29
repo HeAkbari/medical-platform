@@ -1127,8 +1127,15 @@ Authorization: OAuth ...
   نمایشیِ بیمار، `DemographicManager.getDemographic` رو صدا می‌زنه (که
   خودش یه چک مجوز جدا داره)؛ SOAP اسم بیمار رو مستقیم تو پاسخ می‌ده،
   بدون این mesh مجوز.
-- **وضعیت:** ✅ تأییدشده زنده (۲۰۲۶-۰۹-۲۷) — **و پیاده‌سازی و جایگزین
-  شد** تو `OscarAppointmentRepository.findAll({doctorId, date})`.
+- **وضعیت:** ⚠️ **غیرقابل‌اعتماد (۲۰۲۶-۰۹-۲۹)** — قبلاً (۲۰۲۶-۰۹-۲۷) تأیید
+  و تو `OscarAppointmentRepository.findAll({doctorId, date})` استفاده شده
+  بود، ولی تست زنده‌ی بعدی نشون داد برای یه روز نوبت رو برمی‌گردونه و برای
+  یه روز دیگه که واقعاً نوبت داره، هیچی برنمی‌گردونه. نتیجه: اسلات‌های
+  رزروشده دوباره تو فرانت آزاد نشون داده می‌شدن. **از کد حذف شد و با REST
+  `GET /schedule/fetchDays/...` جایگزین شد** (entry بعدی). تابع
+  `getAppointmentsForProvider` فقط برای مرجع نگه داشته شده. علتش هنوز
+  مشخص نیست (شاید به معنی واقعیِ پارامتر boolean سوم ربط داشته باشه که
+  هنوز تأیید نشده).
 - **⚠️ توجه مهم:** این فقط نوبت‌های *رزروشده* رو می‌ده، نه الگوی کاریِ
   کلی — باید همیشه کنار `getDayWorkSchedule` استفاده بشه (یکی «چه
   ساعتی کار می‌کنه»، اون یکی «کدوم ساعت‌ها الان پره»)، دقیقاً همون
@@ -1168,6 +1175,81 @@ Authorization: OAuth ...
    — تقریباً مطمئنیم کل خانواده‌ی endpoint های REST مربوط به
    `AppointmentManager`/`ScheduleService` (REST) روی این نصب OSCAR با
    این مشکل مواجه‌ان، درحالی‌که معادل‌های SOAP همیشه کار کردن.
+
+---
+
+### نوبت‌های یک یا چند پزشک در یک بازه‌ی روزها — REST (جایگزین `getAppointmentsForProvider2`)
+
+- **Endpoint:** `GET /schedule/fetchDays/{sDate}/{eDate}/{providers}`
+- **کاربرد:** لیست نوبت‌های رزروشده‌ی پزشک(ها) بین دو تاریخ. برای یک روز
+  مشخص، `sDate` و `eDate` یکی فرستاده می‌شن. پارامتر `providers` تو WADL
+  به‌صورت جمع اومده (احتمالاً چند providerNo رو قبول می‌کنه، ولی تست نشده).
+- **وضعیت:** ✅ تأییدشده زنده (۲۰۲۶-۰۹-۲۹) — برای هر دو روزی که
+  `getAppointmentsForProvider2` یکی‌شون رو خالی برمی‌گردوند، درست جواب داد.
+  **پیاده‌سازی شد** تو `OscarAppointmentRepository.findAll({doctorId, date})`
+  (mapper: `oscarFetchDaysApptToDomain`). برخلاف بقیه‌ی REST‌های
+  `AppointmentManager`، این یکی به باگ «Access Denied» (deferred-items.md #۳)
+  نخورد. حالت بازه‌ی چندروزه فعلاً سناریوی استفاده نداره.
+
+**Request:**
+```
+GET /schedule/fetchDays/2026-10-05/2026-10-05/104
+Accept: application/json
+Authorization: OAuth ...
+```
+
+**Response:**
+```json
+{
+    "offset": 0,
+    "limit": 0,
+    "total": 0,
+    "timestamp": 1790665324002,
+    "content": [
+        {
+            "appointmentNo": 24,
+            "providerNo": "104",
+            "appointmentDate": "2026-10-05",
+            "startTime": "10:00:00",
+            "demographicNo": 20,
+            "notes": "",
+            "location": null,
+            "resources": null,
+            "status": "C",
+            "lastName": "AKBARI",
+            "firstName": "HESAM",
+            "phone": "+989115994925",
+            "phone2": null,
+            "email": "hesamakbari.rk@gmail.com",
+            "demoCell": null,
+            "reminderPreference": null,
+            "hPhoneExt": null,
+            "wPhoneExt": null
+        }
+    ],
+    "query": null
+}
+```
+
+**نکات مهم:**
+
+1. **wrapper صفحه‌بندی داره ولی `offset`/`limit`/`total` همه صفرن**، حتی
+   وقتی `content` پره. پس به `total` نباید تکیه کرد، فقط `content` رو بخون.
+2. **`startTime` بدون timezone‌ه** (`HH:mm:ss`) و `appointmentDate` جداست.
+   تو mapper با پسوند صریح `Z` ترکیب می‌شن (`2026-10-05T10:00:00.000Z`) تا
+   با `date` اسلات‌های `getDayWorkSchedule` (که `...T10:00:00Z` هستن) قابل
+   مقایسه باشن. این نوبتِ ساعت ۱۰:۰۰ دقیقاً روی اسلات ۱۰:۰۰ افتاد، پس
+   هر دو تو یه فضای زمانی هستن.
+3. **هیچ فیلد زمان پایان/مدت نداره.** فعلاً mapper مدت رو ۱۵ دقیقه فرض
+   می‌کنه (مدت هر دو کدی که اپ رزرو می‌کنه: `67`/`C` و `80`/`P`).
+4. **🔑 کشف جانبی: کد عددیِ SOAP دقیقاً کد ASCII کد حرفیه.** `C` = ۶۷،
+   `P` = ۸۰، `t` = ۱۱۶، `1` = ۴۹ و... هر ۲۳ ردیف جدول «دیکشنری کدهای نوع
+   نوبت‌دهی» بالا با `status.charCodeAt(0)` جور درمیان. یعنی اگه لازم شد مدت
+   واقعیِ یه نوبت از `status` دربیاد، می‌شه `status.charCodeAt(0)` رو تو
+   `getScheduleTemplateCodes` پیدا کرد و `duration` رو خوند. هنوز تو کد
+   استفاده نشده.
+5. اطلاعات تماس بیمار (`phone`, `email`) هم مستقیم تو پاسخ هست. برای
+   محاسبه‌ی اسلات آزاد لازم نیست و map نمی‌شه.
 
 ---
 
@@ -1218,7 +1300,7 @@ create/update/delete بیمار رو مستقیم پیاده کنه (نه فقط
 ### وقت‌های آزاد (Availability)
 | route داخلی | وضعیت | سرویس OSCAR |
 |---|---|---|
-| `GET /api/v1/doctors/{id}/availability` | ✅ **از قبل زنده و پیاده‌سازی‌شده** (`apps/web/src/lib/doctors/availability.ts`) | SOAP `getDayWorkSchedule` + `getScheduleTemplateCodes` (ترکیب‌شده با REST `schedule/{providerNo}/day/{date}` برای کم‌کردن نوبت‌های رزروشده) |
+| `GET /api/v1/doctors/{id}/availability` | ✅ **از قبل زنده و پیاده‌سازی‌شده** (`apps/web/src/lib/doctors/availability.ts`) | SOAP `getDayWorkSchedule` + `getScheduleTemplateCodes` (ترکیب‌شده با REST `schedule/fetchDays/{date}/{date}/{providerNo}` برای کم‌کردن نوبت‌های رزروشده — از ۲۰۲۶-۰۹-۲۹؛ قبلش `schedule/{providerNo}/day/{date}` و بعد SOAP `getAppointmentsForProvider2` بود که هر دو خراب بودن) |
 
 **کاری که این کاتالوگ اضافه کرد:** لیست کامل و به‌روز کدهای
 `getScheduleTemplateCodes`/`schedule/codes` (۲۳ ردیف، نه فقط excerpt

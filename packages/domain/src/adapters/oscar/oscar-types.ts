@@ -97,6 +97,33 @@ export interface OscarProviderPeriodAppsTo {
   name: string;
 }
 
+/**
+ * `GET /schedule/fetchDays/{sDate}/{eDate}/{providers}` item — verified live
+ * (2026-09-29). `startTime` is a naive `HH:mm:ss` (no timezone); there is NO
+ * end time / duration field at all. `status` is the one-character
+ * appointment-type code (e.g. 'C'), same as everywhere else.
+ */
+export interface OscarFetchDaysAppt {
+  appointmentNo: number;
+  providerNo: string;
+  appointmentDate: string;
+  startTime: string;
+  demographicNo: number;
+  notes?: string | null;
+  location?: string | null;
+  resources?: string | null;
+  status?: string;
+  lastName?: string;
+  firstName?: string;
+  phone?: string | null;
+  phone2?: string | null;
+  email?: string | null;
+  demoCell?: string | null;
+  reminderPreference?: string | null;
+  hPhoneExt?: string | null;
+  wPhoneExt?: string | null;
+}
+
 export interface OscarPaginated<T> {
   offset: number;
   limit: number;
